@@ -54,11 +54,12 @@
          seeing a single line of implementation.</p>
     </article>
     <article class="card num" data-n="2">
-      <h3>Immutability &rArr; sharing &rArr; persistence</h3>
-      <p>The three are a chain, and the chain is the whole trick. Remove
-         immutability and sharing becomes aliasing corruption. Remove sharing
-         and persistence costs a full copy per version. We will look at what
-         breaks in each case.</p>
+      <h3>Immutability &rArr; safe sharing &rArr; persistence</h3>
+      <p>A chain of implications, and the middle link carries the weight:
+         sharing is <em>safe</em> when no version can be changed through
+         another version&rsquo;s pointer. Immutability buys that outright.
+         It is not the only way to buy it &mdash; ownership and undetectable
+         mutation also work &mdash; but it is the one a compiler checks.</p>
     </article>
     <article class="card num" data-n="3">
       <h3>A paradigm is not a language</h3>
@@ -86,6 +87,11 @@
     <li><strong>The sharing diagram.</strong> What the heap actually looks
         like when two versions coexist, and what goes wrong when immutability
         or safe sharing is missing.</li>
+    <li><strong>One route, not the only one.</strong> Immutability, encapsulation,
+        ownership, benign effects, copy-on-write &mdash; five ways to keep
+        sharing safe, and which of them a compiler will check for us. We take
+        immutability today and come back for the fourth in sessions&nbsp;5
+        and&nbsp;7.</li>
     <li><strong>Why <code>private</code> and <code>final</code>.</strong>
         Java enforcing by compiler what Python asks for politely; the
         tuples-as-cons construction and the frozen-object trick.</li>
