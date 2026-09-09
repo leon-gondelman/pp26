@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S2 Persistent Data Structures - Programming Paradigms</title>
+<title>S2 Persistent Data Structures - PP26</title>
 <link rel="stylesheet" href="style.css">
 <body>
 <header class="site">
@@ -15,22 +15,158 @@
 <section class="hero">
   <p class="dim">Session 2</p>
   <h1>Persistent Data Structures</h1>
-  <p class="lead">State, sharing, and interface vs implementation.</p>
+  <p class="lead">Structures that keep their past: what they cost, what they buy, and how to spot one from its interface.</p>
 </section>
 
 <section>
   <h2>Materials</h2>
   <ul class="materials"><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — Java queue + written reflection</a></li></ul>
 </section>
-
-<section>
-  <h2>Lecture</h2>
-  <dl><div class="field"><dt>Main topics</dt><dd>Ephemeral vs persistent data structures; immutability implies safe sharing implies persistence; the API difference visible in types.</dd></div><div class="field"><dt>Also</dt><dd>Backtracking and checkpointing; amortized complexity (lab); history of data structures; point-location as motivation.</dd></div><div class="field"><dt>Examples and demos</dt><dd>Stack in C/Java/Python; three OCaml stacks and the .mli pair; empty value vs create().</dd></div><div class="field"><dt>You write</dt><dd>Python, OCaml (light), Java (homework)</dd></div><div class="field"><dt>You only read</dt><dd>C, Clojure</dd></div></dl>
+<section class="story">
+  <h2>The question</h2>
+  <p>An algorithm can be read two ways. As a <em>recipe</em>: do this, then
+     that, and the pot changes as you stir. Or as a <em>definition</em>: this
+     value <em>is</em> that function of those values, and nothing is stirred at
+     all. Most data structures you have written follow the recipe. When you
+     push onto an array-backed stack, the previous stack is gone.</p>
+  <p>That is fine until you need the past. Backtracking needs the state before
+     the wrong turn. Undo needs every state. A search needs the frontier as it
+     was at step 40. The recipe answer is to copy, or to log and replay, and
+     both are expensive enough that we usually give up and redesign around the
+     limitation.</p>
+  <p>There is another answer. If no one may modify a structure, then everyone
+     may share it &mdash; and a &ldquo;new version&rdquo; can be a few new
+     cells pointing into the old one. The past stays alive because nothing ever
+     overwrote it. Structures that work this way are called
+     <strong>persistent</strong>, and this session is about what they cost,
+     what they buy, and how you can tell one from across the room.</p>
 </section>
 
 <section>
-  <h2>Lab</h2>
-  <dl><div class="field"><dt>Pen and paper</dt><dd>Heap diagrams (predict sharing); the banker&#x27;s argument for amortized O(1).</dd></div><div class="field"><dt>Programming</dt><dd>Two-list persistent queue in Python, OCaml, Java against one language-independent spec; amortization-break benchmark.</dd></div></dl>
+  <h2>Three things to take away</h2>
+  <div class="cards">
+    <article class="card num" data-n="1">
+      <h3>Persistence is visible in the type</h3>
+      <p>An operation returning <code>unit</code> or <code>void</code> has
+         changed something you cannot see. One returning a new <code>t</code>
+         hands you the next version and leaves the old one standing. You can
+         read a module&rsquo;s interface and know which world you are in,
+         before seeing a single line of implementation.</p>
+    </article>
+    <article class="card num" data-n="2">
+      <h3>Immutability &rArr; sharing &rArr; persistence</h3>
+      <p>The three are a chain, and the chain is the whole trick. Remove
+         immutability and sharing becomes aliasing corruption. Remove sharing
+         and persistence costs a full copy per version. We will look at what
+         breaks in each case.</p>
+    </article>
+    <article class="card num" data-n="3">
+      <h3>A paradigm is not a language</h3>
+      <p>OCaml ships a mutable <code>Stack</code> and <code>Hashtbl</code> next
+         to its immutable <code>List</code> and <code>Map</code>. Python hides
+         a persistent map inside the standard library. Java gets there with
+         <code>final</code> fields and records. Languages set defaults; you
+         choose the paradigm.</p>
+    </article>
+  </div>
+</section>
+
+<section>
+  <h2>The lecture, in order</h2>
+  <ol class="arc">
+    <li><strong>Recipe or definition.</strong> Two readings of what an
+        algorithm is, and why declarative programming needs the second one.</li>
+    <li><strong>A stack, twice.</strong> The ephemeral array stack in C, with
+        the checkpoint trick <code>oldsp = sp</code> &mdash; and the
+        pop-then-push case where that trick quietly returns the wrong
+        answer.</li>
+    <li><strong>The same stack as a linked list.</strong> In Java, where
+        backtracking stops being a mechanism and becomes just holding on to an
+        old reference.</li>
+    <li><strong>The sharing diagram.</strong> What the heap actually looks
+        like when two versions coexist, and what goes wrong when immutability
+        or safe sharing is missing.</li>
+    <li><strong>Why <code>private</code> and <code>final</code>.</strong>
+        Java enforcing by compiler what Python asks for politely; the
+        tuples-as-cons construction and the frozen-object trick.</li>
+    <li><strong>OCaml enters, read-only.</strong> Two interface files side by
+        side. <code>create : unit -> 'a t</code> against
+        <code>empty : 'a t</code> &mdash; one makes every caller allocate,
+        the other is a single value the whole program can share. That contrast
+        <em>is</em> the immutability argument, in two lines.</li>
+    <li><strong>Where this came from.</strong> Knuth, then the modern era;
+        Okasaki&rsquo;s thesis; and planar point location &mdash; the geometry
+        problem whose solution is &ldquo;share structure between adjacent
+        slabs&rdquo;.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>What you do in the lab</h2>
+  <p>One data structure, specified once, built three times: the
+     <strong>two-list persistent queue</strong>. The stack was easy because
+     <code>push</code> shares everything. A queue adds at one end and removes
+     at the other, so persistence has to be earned.</p>
+  <table class="parts">
+    <tbody>
+      <tr><td class="p">A0</td><td><strong>On paper, before any code.</strong>
+          The representation, the abstraction function, the invariant, and a
+          hand-executed trace. Nine exercises; the last four are homework.</td></tr>
+      <tr><td class="p">A</td><td><strong>Python.</strong> Four holes in
+          <code>pqueue.py</code>, guarded by fourteen tests in three groups:
+          basics, the FIFO contract, then persistence and structural
+          sharing.</td></tr>
+      <tr><td class="p">B</td><td><strong>The payoff.</strong> Your queue
+          drives a maze solver. Swap it for the lecture&rsquo;s stack and
+          breadth-first search becomes depth-first &mdash; without touching the
+          search. A slider scrubs through every frontier the search ever had,
+          because keeping old versions is free.</td></tr>
+      <tr><td class="p">C</td><td><strong>OCaml.</strong> The same queue
+          against a given <code>.mli</code>. Notice what the compiler now
+          checks for you, and what got shorter.</td></tr>
+      <tr><td class="p">D</td><td><strong>Break the bank.</strong> The
+          amortised bound has an assumption hidden in it. Persistence violates
+          that assumption, and a benchmark makes an &ldquo;O(1)&rdquo;
+          operation cost O(n) every single time. The repair needs tools we meet
+          in session&nbsp;5.</td></tr>
+      <tr><td class="p">E</td><td><strong>Java, plus half a page.</strong>
+          Homework. What did each language <em>check</em>, and what did it
+          merely <em>trust</em>?</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Languages this session</h2>
+  <table class="langs">
+    <thead><tr><th>Language</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>C</td><td><span class="tag read">read</span> the ephemeral array
+          stack, and the checkpoint that fails</td></tr>
+      <tr><td>Java</td><td><span class="tag read">read</span> in the lecture,
+          <span class="tag write">write</span> for homework</td></tr>
+      <tr><td>Python</td><td><span class="tag write">write</span> the queue,
+          the solver, the benchmark</td></tr>
+      <tr><td>OCaml</td><td><span class="tag read">read</span> first, then
+          <span class="tag write">write</span> &mdash; the language is
+          introduced here, gently</td></tr>
+    </tbody>
+  </table>
+  <p class="dim">You need no OCaml beforehand. The lecture spends a minute on
+     how to read it and the lab gives you a signature to fill in.</p>
+</section>
+
+<section>
+  <h2>If you want to read further</h2>
+  <ul class="refs">
+    <li>Chris Okasaki, <em>Purely Functional Data Structures</em>, Cambridge
+        University Press, 1998. Chapter&nbsp;5 for amortisation and this exact
+        queue; chapter&nbsp;6 for the lazy repair.</li>
+    <li>Driscoll, Sarnak, Sleator and Tarjan, <em>Making data structures
+        persistent</em>, 1989 &mdash; fat nodes, and the general recipe.</li>
+    <li>Dobkin and Lipton, 1976, for the slab decomposition behind the
+        point-location example.</li>
+  </ul>
 </section>
 
 </main>

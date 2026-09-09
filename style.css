@@ -96,3 +96,39 @@ footer p{max-width:62rem;margin:0 auto;padding:1.2rem 1.5rem;
   background:var(--accent-soft);color:var(--accent);
   border-radius:1em;padding:.15em .6em}
 code{font-size:.9em;background:var(--card);padding:.1em .35em;border-radius:3px}
+
+/* ---- rich session pages ---------------------------------------------- */
+.story p{max-width:38em}
+.story em{font-style:italic}
+.card.num{position:relative;padding-top:2.4rem}
+.card.num::before{content:attr(data-n);position:absolute;top:.7rem;left:1rem;
+  width:1.5rem;height:1.5rem;border-radius:50%;background:var(--accent);
+  color:#fff;font:600 .8rem/1.5rem -apple-system,BlinkMacSystemFont,sans-serif;
+  text-align:center}
+ol.arc{list-style:none;counter-reset:arc;padding:0;margin:0}
+ol.arc li{counter-increment:arc;position:relative;padding:.7rem 0 .7rem 2.6rem;
+  border-bottom:1px solid var(--rule)}
+ol.arc li::before{content:counter(arc);position:absolute;left:0;top:.75rem;
+  width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--rule);
+  background:var(--card);color:var(--dim);
+  font:600 .78rem/1.55rem -apple-system,BlinkMacSystemFont,sans-serif;
+  text-align:center}
+table.parts,table.langs{width:100%;border-collapse:collapse;margin-top:.6rem}
+table.parts td,table.langs td,table.langs th{padding:.6rem;
+  border-bottom:1px solid var(--rule);vertical-align:top}
+table.langs th{text-align:left;font:600 .78rem/1.4 -apple-system,sans-serif;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
+table.parts td.p{width:2.6rem;font:700 .85rem/1.6 -apple-system,sans-serif;
+  color:var(--accent)}
+table.langs td:first-child{width:8rem;font-weight:600}
+.tag.read,.tag.write{font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;border-radius:1em;
+  padding:.12em .55em;margin-right:.3em}
+.tag.read{background:var(--card);color:var(--dim);border:1px solid var(--rule)}
+.tag.write{background:var(--accent);color:#fff}
+ul.refs{list-style:none;padding:0}
+ul.refs li{padding:.55rem 0;border-bottom:1px solid var(--rule);
+  font-size:.94rem;max-width:44em}
+@media (max-width:640px){
+  table.langs td:first-child{width:auto}
+}
