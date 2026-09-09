@@ -678,7 +678,26 @@ make(front, back) = (front, back)</pre>
 
   <div class="col">
     <p>With a mutable queue, answering "show me the frontier as it was at step 40" costs either a deep copy at every step — O(n) space per step, so O(n²) overall — or a replay of the search from the beginning. With a persistent structure it costs a single append, because each new version shares almost all of its structure with the previous one and nothing in the language can reach in and alter what is shared.</p>
+    <p>The list itself is the same list either way &mdash; an array of
+    references, and any language can build one.
+    <strong>Persistence is what makes <code>versions[40]</code> a different
+    value from <code>versions[41]</code>, rather than another alias for one
+    mutating object.</strong> Keep the same list against a mutable queue and
+    every entry in it reads the same, because there is only ever one queue to
+    read.</p>
     <p>That list is what <code>--inspect=40</code> reads: it prints <code>versions[40]</code>, a structure that is still there to be asked. The slider is a different case, and instructive for being so &mdash; a browser cannot hold references into the solver's heap, so <code>--html</code> walks each frontier with <code>to_list</code> and exports the contents. The slider therefore moves between several hundred <em>recordings</em>; <code>--inspect</code> moves between several hundred <em>live structures</em>. Only the second is free, and it is the one that matters: <strong>immutability converts "keep the history" from an expensive feature into a free consequence</strong> &mdash; for any consumer that can hold a reference, which a web page cannot and the rest of our program can.</p>
+
+    <div class="callout">
+      <p><strong>Could the page not share too?</strong> It could. The obstacle
+      is a process boundary, not the browser: pointers do not cross it, only
+      bytes do. But sharing survives serialisation if it is encoded &mdash;
+      emit each cell once with an id, and let each version be a root pointing
+      into that pool. That is how Git ships history: objects once, commits as
+      references into them. On <code>large.txt</code> it would be 2404 cells
+      and 1201 roots instead of 12&thinsp;972 flattened entries. We export the
+      flat version because it is 20&nbsp;KB and ten lines of code. The page
+      could share; we declined.</p>
+    </div>
 
     <h4>3. It is what breaks the amortised bound</h4>
     <p>This is the reason the containers <em>had</em> to be persistent, rather than merely could be.</p>
