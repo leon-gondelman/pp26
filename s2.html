@@ -25,11 +25,11 @@
 <section class="story">
   <h2>The question</h2>
   <p>An algorithm can be read two ways. As a <em>recipe</em>: do this, then
-     that, and the pot changes as you stir. Or as a <em>definition</em>: this
+     that, and the pot changes as we stir. Or as a <em>definition</em>: this
      value <em>is</em> that function of those values, and nothing is stirred at
-     all. Most data structures you have written follow the recipe. When you
-     push onto an array-backed stack, the previous stack is gone.</p>
-  <p>That is fine until you need the past. Backtracking needs the state before
+     all. Most data structures we have written follow the recipe. Push onto an
+     array-backed stack and the previous stack is gone.</p>
+  <p>That is fine until we need the past. Backtracking needs the state before
      the wrong turn. Undo needs every state. A search needs the frontier as it
      was at step 40. The recipe answer is to copy, or to log and replay, and
      both are expensive enough that we usually give up and redesign around the
@@ -39,7 +39,7 @@
      cells pointing into the old one. The past stays alive because nothing ever
      overwrote it. Structures that work this way are called
      <strong>persistent</strong>, and this session is about what they cost,
-     what they buy, and how you can tell one from across the room.</p>
+     what they buy, and how to recognise one from across the room.</p>
 </section>
 
 <section>
@@ -48,10 +48,10 @@
     <article class="card num" data-n="1">
       <h3>Persistence is visible in the type</h3>
       <p>An operation returning <code>unit</code> or <code>void</code> has
-         changed something you cannot see. One returning a new <code>t</code>
-         hands you the next version and leaves the old one standing. You can
-         read a module&rsquo;s interface and know which world you are in,
-         before seeing a single line of implementation.</p>
+         changed something we cannot see. One returning a new <code>t</code>
+         hands us the next version and leaves the old one standing. We can read
+         a module&rsquo;s interface and know which world we are in, before
+         seeing a single line of implementation.</p>
     </article>
     <article class="card num" data-n="2">
       <h3>Immutability &rArr; sharing &rArr; persistence</h3>
@@ -65,7 +65,7 @@
       <p>OCaml ships a mutable <code>Stack</code> and <code>Hashtbl</code> next
          to its immutable <code>List</code> and <code>Map</code>. Python hides
          a persistent map inside the standard library. Java gets there with
-         <code>final</code> fields and records. Languages set defaults; you
+         <code>final</code> fields and records. Languages set defaults; we
          choose the paradigm.</p>
     </article>
   </div>
@@ -81,8 +81,8 @@
         pop-then-push case where that trick quietly returns the wrong
         answer.</li>
     <li><strong>The same stack as a linked list.</strong> In Java, where
-        backtracking stops being a mechanism and becomes just holding on to an
-        old reference.</li>
+        backtracking stops being a mechanism and becomes simply holding on to
+        an old reference.</li>
     <li><strong>The sharing diagram.</strong> What the heap actually looks
         like when two versions coexist, and what goes wrong when immutability
         or safe sharing is missing.</li>
@@ -91,8 +91,8 @@
         tuples-as-cons construction and the frozen-object trick.</li>
     <li><strong>OCaml enters, read-only.</strong> Two interface files side by
         side. <code>create : unit -> 'a t</code> against
-        <code>empty : 'a t</code> &mdash; one makes every caller allocate,
-        the other is a single value the whole program can share. That contrast
+        <code>empty : 'a t</code> &mdash; one makes every caller allocate, the
+        other is a single value the whole program can share. That contrast
         <em>is</em> the immutability argument, in two lines.</li>
     <li><strong>Where this came from.</strong> Knuth, then the modern era;
         Okasaki&rsquo;s thesis; and planar point location &mdash; the geometry
@@ -102,7 +102,7 @@
 </section>
 
 <section>
-  <h2>What you do in the lab</h2>
+  <h2>What we build</h2>
   <p>One data structure, specified once, built three times: the
      <strong>two-list persistent queue</strong>. The stack was easy because
      <code>push</code> shares everything. A queue adds at one end and removes
@@ -116,22 +116,37 @@
           <code>pqueue.py</code>, guarded by fourteen tests in three groups:
           basics, the FIFO contract, then persistence and structural
           sharing.</td></tr>
-      <tr><td class="p">B</td><td><strong>The payoff.</strong> Your queue
-          drives a maze solver. Swap it for the lecture&rsquo;s stack and
-          breadth-first search becomes depth-first &mdash; without touching the
-          search. A slider scrubs through every frontier the search ever had,
-          because keeping old versions is free.</td></tr>
       <tr><td class="p">C</td><td><strong>OCaml.</strong> The same queue
-          against a given <code>.mli</code>. Notice what the compiler now
-          checks for you, and what got shorter.</td></tr>
-      <tr><td class="p">D</td><td><strong>Break the bank.</strong> The
-          amortised bound has an assumption hidden in it. Persistence violates
-          that assumption, and a benchmark makes an &ldquo;O(1)&rdquo;
-          operation cost O(n) every single time. The repair needs tools we meet
-          in session&nbsp;5.</td></tr>
-      <tr><td class="p">E</td><td><strong>Java, plus half a page.</strong>
-          Homework. What did each language <em>check</em>, and what did it
-          merely <em>trust</em>?</td></tr>
+          against a given <code>.mli</code>. Worth noticing what the compiler
+          now checks for us, and what got shorter.</td></tr>
+      <tr><td class="p">E</td><td><strong>Java, and a half-page reflection.</strong>
+          Homework. The same four operations a third time, then half a page for
+          the exam portfolio: what did each language <em>check</em>, and what
+          did it merely <em>trust</em>?</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>What we run and watch</h2>
+  <p>Two parts have nothing to implement. They sit between the
+     implementations &mdash; on the day the order is A, B, C, D &mdash; and
+     they are where the point of the session actually lands.</p>
+  <table class="parts">
+    <tbody>
+      <tr><td class="p">B</td><td><strong>The payoff.</strong> Our queue drives
+          a maze solver. Swapping it for the lecture&rsquo;s stack turns
+          breadth-first search into depth-first, without touching the search:
+          the algorithm never mentions queue or stack, only a frontier. A
+          slider then scrubs through every frontier the search ever had &mdash;
+          nothing was logged, the old versions were simply never destroyed.
+          Nothing to hand in; plenty to notice.</td></tr>
+      <tr><td class="p">D</td><td><strong>Breaking the bank.</strong> The
+          amortised bound has an assumption hidden inside it, and persistence
+          violates it: a benchmark makes an &ldquo;O(1)&rdquo; operation cost
+          O(n) every single time. One sentence to write down &mdash; which
+          assumption? &mdash; and it becomes part of the Part&nbsp;E
+          reflection. The repair needs tools we meet in session&nbsp;5.</td></tr>
     </tbody>
   </table>
 </section>
@@ -152,12 +167,12 @@
           introduced here, gently</td></tr>
     </tbody>
   </table>
-  <p class="dim">You need no OCaml beforehand. The lecture spends a minute on
-     how to read it and the lab gives you a signature to fill in.</p>
+  <p class="dim">No OCaml is needed beforehand. The lecture spends a minute on
+     how to read it, and the lab supplies a signature to fill in.</p>
 </section>
 
 <section>
-  <h2>If you want to read further</h2>
+  <h2>Further reading</h2>
   <ul class="refs">
     <li>Chris Okasaki, <em>Purely Functional Data Structures</em>, Cambridge
         University Press, 1998. Chapter&nbsp;5 for amortisation and this exact
