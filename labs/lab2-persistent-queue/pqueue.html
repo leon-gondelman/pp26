@@ -273,7 +273,7 @@ footer p{margin:0 0 8px; max-width:640px}
   <div class="wrap">
     <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;·&nbsp; <a href="index.html">Lab 2</a> &nbsp;·&nbsp; part A · reading guide</p>
     <h1>Four Holes in a Queue</h1>
-    <p class="standfirst"><code>python/pqueue.py</code> is 94 lines, and four of its functions are missing. This note walks through <strong>what each hole is for</strong>, what the surrounding code already guarantees, and how to know you got it right — without handing you the four bodies. The whole lab hangs off this one file: the maze solver, the OCaml port, and the benchmark all call it.</p>
+    <p class="standfirst"><code>python/pqueue.py</code> is 94 lines, and four of its functions are missing. This note walks through <strong>what each hole is for</strong>, what the surrounding code already guarantees, and how to recognise a correct result — without supplying the four definitions. The whole lab hangs off this one file: the maze solver, the OCaml port, and the benchmark all call it.</p>
     <nav class="toc">
       <a href="#map">01 · the file</a>
       <a href="#rep">02 · the representation</a>
@@ -294,8 +294,8 @@ footer p{margin:0 0 8px; max-width:640px}
 <section id="map">
   <div class="col">
     <p class="kicker">01 — the file</p>
-    <h2>What is given, what is yours</h2>
-    <p class="lede">Only four bodies are missing, and they are ordered so that each one can use the previous. Do them in order — out of order, you will be debugging two things at once.</p>
+    <h2>What is given, and what is left to write</h2>
+    <p class="lede">Four function bodies are missing, ordered so that each may use the one before it. Taken out of order, two unknowns are being debugged at once.</p>
 
     <table class="iface">
       <tr><th>line</th><th>name</th><th class="q">status</th><th>what it is</th></tr>
@@ -306,12 +306,12 @@ footer p{margin:0 0 8px; max-width:640px}
       <tr><td>46</td><td><code>_make</code></td><td class="q">TODO 2</td><td class="prose">The smart constructor that restores the invariant.</td></tr>
       <tr><td>57</td><td><code>enqueue</code></td><td class="q">TODO 3</td><td class="prose">Add at the back. O(1).</td></tr>
       <tr><td>65</td><td><code>dequeue</code></td><td class="q">TODO 4</td><td class="prose">Take from the front, return <em>both</em> the value and the new queue.</td></tr>
-      <tr><td>77</td><td><code>to_list</code></td><td class="dim">given</td><td class="prose">The abstraction function. The tests measure you against it.</td></tr>
+      <tr><td>77</td><td><code>to_list</code></td><td class="dim">given</td><td class="prose">The abstraction function. The tests measure the implementation against it.</td></tr>
       <tr><td>90</td><td><code>from_iter</code></td><td class="dim">given</td><td class="prose">Convenience: enqueue everything in an iterable.</td></tr>
     </table>
 
     <div class="callout q">
-      <p><strong>One rule above all others.</strong> Every operation returns a <em>new</em> queue and leaves its argument exactly as it found it. In Python this is nearly forced on you — tuples are immutable, so you literally cannot write into an existing node. What you <em>can</em> get wrong is rebuilding structure that should have been shared. That is what <code>C_Persistence</code> looks for.</p>
+      <p><strong>One rule above all others.</strong> Every operation returns a <em>new</em> queue and leaves its argument exactly as it found it. In Python it is very nearly enforced: tuples are immutable, so an existing node cannot be written into at all. What remains possible to get wrong is rebuilding structure that should have been shared. That is what <code>C_Persistence</code> looks for.</p>
     </div>
   </div>
 </section>
@@ -322,7 +322,7 @@ footer p{margin:0 0 8px; max-width:640px}
     <p class="kicker">02 — the representation</p>
     <h2>Two lists pretending to be one</h2>
     <p class="lede">A cons-list is the lecture's: <code>None</code> is the empty list, and <code>(head, tail)</code> is a node whose tail is another cons-list. Nothing else. A queue is a pair of them.</p>
-    <p>Cons-lists are only cheap at one end — you can add or remove a head in constant time, and reaching the last element costs a full walk. A FIFO queue needs both ends. The trick is to keep <em>two</em> lists pointing in opposite directions, so that both ends of the queue are somebody's head.</p>
+    <p>Cons-lists are only cheap at one end — a head may be added or removed in constant time, and reaching the last element costs a full walk. A FIFO queue needs both ends. The trick is to keep <em>two</em> lists pointing in opposite directions, so that both ends of the queue are somebody's head.</p>
     <p><code>front</code> holds the oldest elements in the order they will leave. <code>back</code> holds the newest elements <em>reversed</em> — the most recently enqueued one is its head. So the sequence the queue actually represents is:</p>
 
     <figure>
@@ -389,7 +389,7 @@ invariant:   front is None  ⟹  back is None</pre>
         <text class="d-note" x="640" y="200">the two crossings are the reversal</text>
       </svg>
     </div>
-    <figcaption><b>Nobody stores the bottom row.</b> It exists only in <code>to_list</code> and in your head. The queue <em>is</em> the two lists; the sequence is what they mean. Notice the crossing on the right: the back list is stored newest-first, so the last two contents cells come out of it backwards.</figcaption>
+    <figcaption><b>Nobody stores the bottom row.</b> It exists only in <code>to_list</code>, and in the reader's understanding. The queue <em>is</em> the two lists; the sequence is what they mean. Notice the crossing on the right: the back list is stored newest-first, so the last two contents cells come out of it backwards.</figcaption>
   </div>
 </section>
 
@@ -414,7 +414,7 @@ invariant:   front is None  ⟹  back is None</pre>
       </div>
     </figure>
 
-    <p>Take the docstring's permission seriously. You do not need recursion here, and on a large maze recursion would hand you a <code>RecursionError</code> instead of a path. The shape you want is the standard accumulator walk: carry a second cons-list that starts empty, and keep moving the head of the input onto the head of the accumulator until the input is exhausted. Each step is one <code>(head, tail)</code> allocation.</p>
+    <p>Take the docstring's permission seriously. Recursion is not required here, and on a large maze it would yield a <code>RecursionError</code> rather than a path. The shape required is the standard accumulator walk: carry a second cons-list that starts empty, and keep moving the head of the input onto the head of the accumulator until the input is exhausted. Each step is one <code>(head, tail)</code> allocation.</p>
 
     <table class="results">
       <caption>_rev((1, (2, (3, None)))) — trace</caption>
@@ -425,10 +425,10 @@ invariant:   front is None  ⟹  back is None</pre>
       <tr><td class="step">3</td><td>None</td><td class="q">3 → 2 → 1 → None</td></tr>
     </table>
 
-    <p>The accumulator is the return value once the input runs out. Note what <em>doesn't</em> happen in that table: no node of the input is ever altered. The old list is still intact at step 3 — you built a new spine alongside it.</p>
+    <p>The accumulator is the return value once the input runs out. Note what <em>doesn't</em> happen in that table: no node of the input is ever altered. The old list is still intact at step 3 — a new spine was built alongside it.</p>
 
     <h3>Check yourself before moving on</h3>
-    <p><code>_rev(None)</code> must give <code>None</code>, not crash and not <code>(None, None)</code>. Reversing twice must give back an equal list. If you are unsure, open a REPL and try those two before touching <code>_make</code>.</p>
+    <p><code>_rev(None)</code> must give <code>None</code>, not crash and not <code>(None, None)</code>. Reversing twice must give back an equal list. If in doubt, try those two cases in a REPL before touching <code>_make</code>.</p>
   </div>
 </section>
 
@@ -455,7 +455,7 @@ invariant:   front is None  ⟹  back is None</pre>
 
     <p>Two cases, and the branch is on <code>front</code> alone:</p>
     <ul class="marks">
-      <li><b>Front is non-empty.</b> Nothing to fix. Return the pair as it stands — and return the <em>same</em> <code>front</code> object you were handed, not a copy of it. A test checks this with <code>assertIs</code>.</li>
+      <li><b>Front is non-empty.</b> Nothing to fix. Return the pair as it stands — and return the <em>very</em> <code>front</code> object that was passed in, not a copy of it. A test checks this with <code>assertIs</code>.</li>
       <li><b>Front is empty.</b> The invariant demands the back be empty too, so move it: the reversal of <code>back</code> becomes the new front, and the new back is empty. If <code>back</code> was also empty this quietly produces <code>EMPTY</code>, which is exactly right — no special case needed.</li>
     </ul>
   </div>
@@ -520,7 +520,7 @@ invariant:   front is None  ⟹  back is None</pre>
   <div class="col">
     <p class="kicker todo">05 — todo 3</p>
     <h2><code>enqueue(q, x)</code> — add at the back</h2>
-    <p class="lede">One cons and one call. If your version is longer than two lines, you are probably doing work that belongs to <code>_make</code>.</p>
+    <p class="lede">One cons and one call. A version longer than two lines is probably doing work that belongs to <code>_make</code>.</p>
 
     <figure>
       <div class="code">
@@ -556,11 +556,11 @@ front2 is front1   → True</pre>
     ...
 
 front2 is front1   → False</pre>
-        <p><code>to_list</code> would still agree. <code>test_structural_sharing</code> would not: persistence that copies is just an expensive imitation of persistence.</p>
+        <p><code>to_list</code> would still agree. <code>test_structural_sharing</code> would not: persistence that copies is merely an expensive imitation of persistence.</p>
       </div>
     </div>
 
-    <p>And the O(1) claim survives the <code>_make</code> call, which is worth a second of thought. <code>_make</code> only reverses when the front is empty — and when the front is empty, the invariant says the back was empty too, so the list being reversed has exactly the one element you just consed. Constant work, always.</p>
+    <p>And the O(1) claim survives the <code>_make</code> call, which is worth a second of thought. <code>_make</code> only reverses when the front is empty — and when the front is empty, the invariant says the back was empty too, so the list being reversed holds exactly the one element just consed. Constant work, always.</p>
   </div>
 </section>
 
@@ -569,7 +569,7 @@ front2 is front1   → False</pre>
   <div class="col">
     <p class="kicker todo">06 — todo 4</p>
     <h2><code>dequeue(q)</code> — take from the front</h2>
-    <p class="lede">The one operation that returns two things, because a persistent structure cannot hand you the value by mutating itself.</p>
+    <p class="lede">The one operation that returns two things, because a persistent structure cannot surrender the value by mutating itself.</p>
 
     <figure>
       <div class="code">
@@ -582,12 +582,12 @@ front2 is front1   → False</pre>
       </div>
     </figure>
 
-    <p>Three moves. Refuse the empty queue with an <code>IndexError</code> — <code>peek</code> above shows the exact idiom, message and all. Otherwise the head of the front is your value, and the queue you return is built from the front's <em>tail</em> and the untouched back, passed through <code>_make</code>. That call is where the front can run dry and trigger the flip.</p>
+    <p>Three moves. Refuse the empty queue with an <code>IndexError</code> — <code>peek</code> above shows the exact idiom, message and all. Otherwise the head of the front is the value, and the queue returned is built from the front's <em>tail</em> and the untouched back, passed through <code>_make</code>. That call is where the front can run dry and trigger the flip.</p>
 
     <p>The return order matters and is not symmetric: callers all over the lab write <code>x, q = dequeue(q)</code>, value first. Get it backwards and every test in <code>B_FifoContract</code> fails in a confusing way.</p>
 
     <h3>Why the old queue still works afterwards</h3>
-    <p>Nothing in those three moves writes anywhere. The node holding the old head is still there, still pointing at the same tail; you simply stopped referring to it. That is why <code>test_fan_out</code> can dequeue the same version twice and get the same answer both times, then push the two results in different directions. One present, several futures.</p>
+    <p>Nothing in those three moves writes anywhere. The node holding the old head is still there, still pointing at the same tail; we have merely stopped referring to it. That is why <code>test_fan_out</code> can dequeue the same version twice and get the same answer both times, then push the two results in different directions. One present, several futures.</p>
   </div>
 </section>
 
@@ -595,13 +595,13 @@ front2 is front1   → False</pre>
 <section id="tests">
   <div class="col">
     <p class="kicker">07 — the tests</p>
-    <h2>What each test class is actually asking</h2>
-    <p class="lede">The classes are named <code>A_</code>, <code>B_</code>, <code>C_</code> so that unittest runs them in that order. Read a failure as a question about your design, not as a broken assertion.</p>
+    <h2>What each test class asks</h2>
+    <p class="lede">The classes are named <code>A_</code>, <code>B_</code>, <code>C_</code> so that unittest runs them in that order. Read a failure as a question about the design, not as a broken assertion.</p>
 
     <table class="iface">
       <tr><th>class</th><th class="q">asks</th><th>if it fails</th></tr>
       <tr><td><code>A_Basics</code></td><td class="q">does it work at all?</td><td class="prose">Empty cases and the single-element round trip. Usually a missing <code>IndexError</code> or a swapped return order.</td></tr>
-      <tr><td><code>B_FifoContract</code></td><td class="q">is it a queue?</td><td class="prose">FIFO order under interleaving, plus 2000 random operations checked against <code>collections.deque</code>. A mismatch here means the abstraction function and your code disagree — trace the step number it prints.</td></tr>
+      <tr><td><code>B_FifoContract</code></td><td class="q">is it a queue?</td><td class="prose">FIFO order under interleaving, plus 2000 random operations checked against <code>collections.deque</code>. A mismatch here means the abstraction function and the implementation disagree — trace the step number it prints.</td></tr>
       <tr><td><code>B_&hellip;invariant</code></td><td class="q">is the invariant real?</td><td class="prose">500 random operations, asserting after each that an empty front implies an empty back. Fails when something built a queue without going through <code>_make</code>.</td></tr>
       <tr><td><code>C_Persistence</code></td><td class="q">is it persistent?</td><td class="prose">Old versions survive; the same version can be dequeued twice; the front is shared, not copied. <strong>A correct ephemeral queue fails these</strong> — that is the point of the class.</td></tr>
     </table>
@@ -621,10 +621,10 @@ front2 is front1   → False</pre>
 
     <p><b>The banker's argument.</b> Charge every <code>enqueue</code> two coins: one for the cons it actually performs, one deposited on the element itself. An element sits in the back holding its coin. When the front finally runs dry and <code>_make</code> reverses, each element in the back spends its own coin to pay for its own move. No element is ever reversed twice, so <em>n</em> operations cost O(<em>n</em>) in total — constant amortised.</p>
 
-    <p>The argument is airtight, and it quietly assumes something the rest of this lab exists to break: <strong>that each version of the queue is used once</strong>. Coins are spent when an element moves; if you hold on to a version whose reversal is still pending and dequeue it repeatedly, every one of those calls performs the same O(<em>n</em>) reversal and there is only one deposit to pay for all of them.</p>
+    <p>The argument is airtight, and it quietly assumes something the rest of this lab exists to break: <strong>that each version of the queue is used once</strong>. Coins are spent when an element moves; if a version whose reversal is still pending is retained and dequeued repeatedly, every one of those calls performs the same O(<em>n</em>) reversal and there is only one deposit to pay for all of them.</p>
 
     <div class="callout">
-      <p><strong>Part D asks you to do exactly that</strong> in <code>python/bench.py</code>: keep one bad version and re-dequeue it, and watch a supposedly constant-time operation trace out a quadratic curve. Persistence and amortisation do not automatically get along — the fix is a different queue (real-time or banker's), not a different proof.</p>
+      <p><strong>Part D does exactly that</strong> in <code>python/bench.py</code>: keep one bad version and re-dequeue it, and watch a supposedly constant-time operation trace out a quadratic curve. Persistence and amortisation do not automatically get along — the fix is a different queue (real-time or banker's), not a different proof.</p>
     </div>
   </div>
 </section>
@@ -633,33 +633,33 @@ front2 is front1   → False</pre>
 <section id="run">
   <div class="col">
     <p class="kicker">09 — run it</p>
-    <h2>The loop you should be in</h2>
+    <h2>The working loop</h2>
 
     <div class="shell">
       <div><span class="prompt">$ </span>cd python</div>
       <div><span class="prompt">$ </span>python3 -m unittest test_pqueue -v      <span class="c"># after every TODO</span></div>
       <div> </div>
-      <div><span class="c"># once everything is green — your queue drives a real search:</span></div>
+      <div><span class="c"># once everything is green — the queue drives a real search:</span></div>
       <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs</div>
       <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --html=bfs.html   <span class="c"># time travel</span></div>
       <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --inspect=40      <span class="c"># ask an old version</span></div>
     </div>
 
-    <h3>If you are stuck</h3>
+    <h3>When progress stalls</h3>
     <ul class="marks warn">
       <li><b>Everything fails with <code>NotImplementedError</code>.</b> Expected — that is the starting state. Work top to bottom; <code>A_Basics</code> cannot go green until all four are in, because <code>from_iter</code> calls <code>enqueue</code>.</li>
       <li><b><code>test_structural_sharing</code> alone fails.</b> Something rebuilt the front. Look for a <code>_rev</code> call on a path where the front was not empty.</li>
-      <li><b>The invariant test fails.</b> Some queue was constructed as a bare tuple instead of through <code>_make</code>. Grep your file for <code>return (</code>.</li>
+      <li><b>The invariant test fails.</b> Some queue was constructed as a bare tuple instead of through <code>_make</code>. Search the file for <code>return (</code>.</li>
       <li><b><code>RecursionError</code> on the large maze.</b> A recursive <code>_rev</code>. The docstring's suggestion of a loop was not decorative.</li>
       <li><b>Values are right but shifted by one.</b> <code>dequeue</code> rebuilt from <code>front</code> instead of from <code>front[1]</code>.</li>
     </ul>
 
-    <p style="margin-top:26px">Next: <a class="file" href="architecture.html">architecture.html</a> — where this queue sits in the maze solver, and what changes when you swap it for a stack.</p>
+    <p style="margin-top:26px">Next: <a class="file" href="architecture.html">architecture.html</a> — where this queue sits in the maze solver, and what changes when it is exchanged for a stack.</p>
   </div>
 </section>
 
 <footer class="wrap">
-  <p><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> · <a href="index.html">Lab 2</a> · Part A reading guide for <code>python/pqueue.py</code>. The four bodies are deliberately not printed here; if you want to compare afterwards, the reference implementation lives with your instructor.</p>
+  <p><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> · <a href="index.html">Lab 2</a> · Part A reading guide for <code>python/pqueue.py</code>. The four bodies are deliberately not printed here; the reference implementation is held by the instructor, for comparison afterwards.</p>
   <p>Source: <code>python/pqueue.py</code> (94 lines) · tests: <code>python/test_pqueue.py</code> · overview: <code>README.md</code></p>
 </footer>
 

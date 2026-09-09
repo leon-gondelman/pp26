@@ -5,12 +5,12 @@ The search below never says "queue" or "stack". It only says:
     frontier = ops.put(frontier, x)
     x, frontier = ops.take(frontier)
 
-Plug in your persistent queue  -> breadth-first search, shortest path.
+Plug in the persistent queue -> breadth-first search, shortest path.
 Plug in the lecture's stack    -> depth-first search, first path found.
 Same algorithm text; the DATA STRUCTURE decides the paradigm of the search.
 
 Usage:
-    python3 solver.py ../mazes/medium.txt --bfs   # BFS: YOUR persistent queue
+    python3 solver.py ../mazes/medium.txt --bfs   # BFS: the persistent queue
     python3 solver.py ../mazes/medium.txt --dfs   # DFS: the lecture's stack
     python3 solver.py ../mazes/medium.txt         # no flag = --bfs
 
@@ -32,7 +32,7 @@ import render
 # this interface and nothing else, so swapping one bag for the other swaps
 # the paradigm of the search — without touching a line of the algorithm.
 
-# FIFO frontier: your persistent queue (pqueue.py — Part A).
+# FIFO frontier: the persistent queue of pqueue.py (Part A).
 queue_frontier = SimpleNamespace(
     name="BFS (queue frontier)",
     empty=P.EMPTY,
@@ -102,13 +102,13 @@ def main(argv):
         return 2
 
     mz = M.load(args[0])
-    # No flag means --bfs: the default frontier is the one you are building.
+    # No flag means --bfs: the default frontier is the one under construction.
     ops = stack_frontier if "dfs" in flags else queue_frontier
 
     try:
         path, trace, versions = search(mz, ops)
     except NotImplementedError as todo:
-        print(f"--bfs runs on YOUR persistent queue, which is not finished "
+        print(f"--bfs runs on the persistent queue of pqueue.py, not yet finished "
               f"yet ({todo}).\n"
               f"  * fill the TODOs in pqueue.py  (Part A), or\n"
               f"  * run --dfs right now: the stack frontier is provided.",

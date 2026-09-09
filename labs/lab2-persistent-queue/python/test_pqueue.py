@@ -1,6 +1,6 @@
 """Tests for the persistent queue. Run:  python3 -m unittest test_pqueue -v
 
-The tests are ordered the way you should make them pass:
+The tests are ordered in the sequence in which they should be made to pass:
   A_* basics, B_* the FIFO contract, C_* persistence and sharing.
 """
 import random
@@ -67,7 +67,7 @@ class B_FifoContract(unittest.TestCase):
                 self.assertIsNone(back, "invariant broken: empty front, non-empty back")
 
     def test_model_based_random(self):
-        """Your queue must agree with a reference model on 2000 random ops."""
+        """The queue must agree with a reference model on 2000 random ops."""
         rng = random.Random(2026)
         q, model = P.EMPTY, deque()
         for step in range(2000):

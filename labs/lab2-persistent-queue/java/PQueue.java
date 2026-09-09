@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * A persistent FIFO queue built from two cons-lists. YOUR TASK IS HERE.
+ * A persistent FIFO queue built from two cons-lists. THE TASK IS HERE.
  *
  * Note how Java enforces the discipline that Python could only ask for
  * politely: every field is {@code final} (no accidental writes), the node
@@ -83,7 +83,7 @@ public final class PQueue<T> {
     // ------------------------------------------------------------ helpers
 
     /** The abstraction function: the sequence this queue represents.
-     *  Tests compare your implementation against this specification. */
+     *  Tests compare the implementation against this specification. */
     public List<T> toList() {
         List<T> out = new ArrayList<>();
         for (Node<T> n = front; n != null; n = n.tail()) out.add(n.head());

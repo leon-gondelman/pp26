@@ -10,7 +10,7 @@ let section title =
   Printf.printf "\n\027[1m== %s\027[0m\n" title
 
 (* A small helper so we can print lists. It uses higher-order functions,
-   which belong to session 5; today we simply use it. *)
+   which belong to session 5; today we use it as given. *)
 let show l = "[" ^ String.concat "; " (List.map string_of_int l) ^ "]"
 
 (* ------------------------------------------------------------------ 1 *)
@@ -50,7 +50,7 @@ let () =
 
 (* ------------------------------------------------------------------ 3 *)
 (* OCaml is not "the functional language": mutable state is available,
-   we just have to ask for it by name. *)
+   we need only ask for it by name. *)
 
 let counter = ref 0
 
@@ -231,7 +231,7 @@ let () =
 (* ------------------------------------------------------------------ *)
 (* That is the whole language we need.
 
-   The stack was easy: push shares the entire old stack. The lab is the
+   The stack was straightforward: push shares the entire old stack. The lab is the
    FIFO case, where sharing has to be earned -- a queue built from TWO
    lists, so that both ends are cheap.
 

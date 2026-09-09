@@ -27,6 +27,6 @@ val peek : 'a t -> 'a option
 
 val to_list : 'a t -> 'a list
 (** The abstraction function: the sequence [q] represents, front first.
-    Tests compare your implementation against this specification. *)
+    Tests compare the implementation against this specification. *)
 
 val of_list : 'a list -> 'a t

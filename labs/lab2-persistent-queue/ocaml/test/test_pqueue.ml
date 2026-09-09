@@ -1,5 +1,5 @@
 (* Tests for the persistent queue. Run with:  dune runtest
-   Ordered the way you should make them pass:
+   Ordered in the sequence in which they should be made to pass:
    basics -> FIFO contract -> persistence. *)
 
 open Pqueue_lib

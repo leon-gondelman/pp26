@@ -5,7 +5,7 @@
    invariant:       if front = [], then back = []
                     (so peek/dequeue only ever look at front)
 
-   You do not need recursion: List.rev does the one traversal needed.
+   Recursion is not required: List.rev performs the one traversal needed.
    Check progress with:  dune runtest        (from the ocaml/ directory)
    Then try the solver:  dune exec bin/solver.exe -- ../mazes/medium.txt *)
 
@@ -37,6 +37,6 @@ let peek q = match q.front with [] -> None | x :: _ -> Some x
 
 let to_list q = q.front @ List.rev q.back
 
-(* [List.fold_left] is a higher-order function you'll meet properly in
+(* [List.fold_left] is a higher-order function met properly in
    session 5. For today, read this as "enqueue every element of xs". *)
 let of_list xs = List.fold_left (fun q x -> enqueue x q) empty xs

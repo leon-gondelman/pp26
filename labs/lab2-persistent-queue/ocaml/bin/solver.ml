@@ -1,13 +1,13 @@
 (* Maze search, written once, against a FRONTIER interface. Provided.
 
    The search below never says "queue" or "stack" — it only uses the
-   operations in [frontier_ops]. Plug in your persistent queue and it is
+   operations in [frontier_ops]. Plug in the persistent queue and it is
    breadth-first search (shortest path); plug in a bare list used as a
    stack — the lecture's persistent stack — and the SAME search text
    becomes depth-first. The data structure decides the paradigm.
 
    Usage (the same flags as python/solver.py):
-     dune exec bin/solver.exe -- ../mazes/medium.txt --bfs   # YOUR queue
+     dune exec bin/solver.exe -- ../mazes/medium.txt --bfs   # the persistent queue
      dune exec bin/solver.exe -- ../mazes/medium.txt --dfs   # a plain list
      dune exec bin/solver.exe -- ../mazes/medium.txt         # no flag = --bfs
 
@@ -137,7 +137,7 @@ Maze search over a persistent frontier.
 usage: solver <maze-file> [--bfs | --dfs] [--html[=FILE]] [--inspect[=N]]
                           [--no-color]
 
-  --bfs           frontier = YOUR persistent queue (the default)
+  --bfs           frontier = the persistent queue (the default)
   --dfs           frontier = a plain list used as a stack
   --html[=FILE]   write a self-contained time-travel page (search.html)
   --inspect[=N]   print the frontier as it was at step N
@@ -211,7 +211,7 @@ let () =
       exit 2
   | maze_file :: _ ->
       let grid = load_maze maze_file in
-      (* No flag means --bfs: the default frontier is the one you are
+      (* No flag means --bfs: the default frontier is the one under
          building. [go] is used at two different frontier types, which is
          fine — OCaml generalises it. *)
       let go ops =
@@ -219,7 +219,7 @@ let () =
         | outcome -> report grid ops flags outcome; 0
         | exception Failure msg ->
             Printf.eprintf
-              "--bfs runs on YOUR persistent queue, which is not finished \
+              "--bfs runs on the persistent queue of pqueue.ml, not yet finished \
                yet (%s).\n\
               \  * fill the TODOs in lib/pqueue.ml  (Part C), or\n\
               \  * run --dfs right now: the stack frontier is provided.\n"

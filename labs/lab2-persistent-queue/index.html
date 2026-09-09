@@ -515,7 +515,7 @@ ul.refs .where{
     <!-- TODO: point this at the course home page -->
     <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;·&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s2.html">Session 2</a> &nbsp;·&nbsp; lab</p>
     <h1>One Queue, Three Languages</h1>
-    <p class="standfirst">In the lecture you saw a persistent <strong>stack</strong>, where the LIFO case is easy: <code>push</code> shares the whole of the old stack. Today you build the FIFO case, where persistence must be <strong>earned</strong>. You build it once on paper and three times in code — Python, OCaml, Java — from a single language-independent specification, and drop each implementation into the same larger program, a maze solver whose behaviour your data structure decides.</p>
+    <p class="standfirst">In the lecture we saw a persistent <strong>stack</strong>, where the LIFO case is straightforward: <code>push</code> shares the whole of the old stack. Today we build the FIFO case, where persistence must be <strong>earned</strong>. We build it once on paper and three times in code — Python, OCaml, Java — from a single language-independent specification, and place each implementation in the same larger program, a maze solver whose behaviour the data structure decides.</p>
     <nav class="toc">
       <a href="#description">00 · description</a>
       <a href="#structure">01 · the structure</a>
@@ -535,9 +535,9 @@ ul.refs .where{
   <div class="col">
     <p class="kicker">00 — description</p>
     <h2>What this session is for</h2>
-    <p class="lede">A <em>persistent</em> data structure is one in which every operation returns a new version and no existing version is ever modified. The lab asks what that costs, what it buys, and how much of the answer depends on the language you write it in.</p>
+    <p class="lede">A <em>persistent</em> data structure is one in which every operation returns a new version and no existing version is ever modified. The lab asks what that costs, what it buys, and how much of the answer depends on the language in which it is written.</p>
 
-    <p>The vehicle is the classic <strong>two-list queue</strong>: a FIFO queue built from two singly-linked lists, in which the expensive step — reversing one list into the other — is rare enough to be paid for in advance. You will derive its cost with an amortised argument, implement it three times, and then deliberately construct the case in which that argument fails. The failure is not a bug in your implementation; it is a genuine and well-known tension between amortisation and persistence, and meeting it here is the point of the session.</p>
+    <p>The vehicle is the classic <strong>two-list queue</strong>: a FIFO queue built from two singly-linked lists, in which the expensive step — reversing one list into the other — is rare enough to be paid for in advance. We derive its cost with an amortised argument, implement it three times, and then deliberately construct the case in which that argument fails. The failure is not a defect in the implementation; it is a genuine and well-known tension between amortisation and persistence, and meeting it here is the point of the session.</p>
 
     <p>Three things generalise well beyond queues, and are the reason the lab is built this way. First, <strong>a specification can be language-independent while its implementation is not</strong>: one page of pseudocode yields three programs that agree on every observable number and disagree on almost everything else. Second, <strong>immutability turns version history from an expensive feature into a free consequence</strong> — the same property behind undo stacks, git's object model, and time-travelling debuggers. Third, <strong>an amortised bound is a claim about a sequence of operations</strong>, and therefore a claim that persistence is uniquely able to invalidate.</p>
   </div>
@@ -586,7 +586,7 @@ ul.refs .where{
   <div class="col">
     <p class="kicker">01 — before any language</p>
     <h2>The structure, what it drives, and why it is persistent</h2>
-    <p class="lede">A queue is represented by two lists. Three lines and four equations fix everything else in the lab: the search you are about to watch run, and the reason the containers had to be persistent in the first place.</p>
+    <p class="lede">A queue is represented by two lists. Three lines and four equations fix everything else in the lab: the search we are about to watch run, and the reason the containers had to be persistent in the first place.</p>
 
     <h3 class="sub" id="spec">The structure, specified once</h3>
   </div>
@@ -651,8 +651,8 @@ make(front, back) = (front, back)</pre>
   </p>
 
   <div class="col">
-    <p style="margin-top:26px">The outlined cells are the frontier — the contents of your queue or the stack at that instant — and they are the only mechanical difference between the two runs. What that difference produces is the shape of the pale region behind them. BFS spreads outwards evenly, so by the time it first reaches the exit it has necessarily arrived by a shortest route. DFS follows a single thread, commits to a corridor, and returns the first path it finds rather than the best one.</p>
-    <p>Run the slider to the end and compare the two. DFS leaves whole regions of the maze white — never visited at all — and still comes back with a path <strong>28 steps longer</strong> than it needed to be. BFS looks at <strong>66 more cells</strong> and is repaid in the guarantee. Neither behaviour is better; they are different guarantees, and you select between them by choosing a data structure.</p>
+    <p style="margin-top:26px">The outlined cells are the frontier — the contents of the queue or the stack at that instant — and they are the only mechanical difference between the two runs. What that difference produces is the shape of the pale region behind them. BFS spreads outwards evenly, so by the time it first reaches the exit it has necessarily arrived by a shortest route. DFS follows a single thread, commits to a corridor, and returns the first path it finds rather than the best one.</p>
+    <p>Run the slider to the end and compare the two. DFS leaves whole regions of the maze white — never visited at all — and still comes back with a path <strong>28 steps longer</strong> than it needed to be. BFS looks at <strong>66 more cells</strong> and is repaid in the guarantee. Neither behaviour is better; they are different guarantees, and we select between them by choosing a data structure.</p>
   </div>
 
   <div class="col">
@@ -671,7 +671,7 @@ make(front, back) = (front, back)</pre>
       <div class="code-head"><span class="path">the solver, in every language</span><span class="lines">the whole mechanism</span></div>
 <pre>versions = [frontier]
 ...
-<span class="hl">    versions.append(frontier)   <span class="c"># no copy — the old version simply persists</span></span></pre>
+<span class="hl">    versions.append(frontier)   <span class="c"># no copy — the old version persists</span></span></pre>
     </div>
     <figcaption>No replaying, no logging, no snapshots. Retaining an earlier version costs nothing when no operation can modify it.</figcaption>
   </figure>
@@ -686,8 +686,8 @@ make(front, back) = (front, back)</pre>
     <p>Persistence is precisely the power to violate that premise. Retain one version whose <code>front</code> holds a single element and whose <code>back</code> holds a thousand, then call <code>dequeue</code> on <em>that same version</em> a thousand times. Every call triggers the full reversal, because no call can see the work done by the others, and each has an equal right to the coins. The amortised bound collapses to O(n) per operation.</p>
 
     <div class="callout">
-      <p><strong>Why a mutable queue would have hidden this.</strong> You cannot re-take from an old version of a mutable structure, because there are no old versions — the premise holds by construction, and the tension is invisible. Persistence is what exposes it: <em>amortisation</em> reasons about a sequence of operations, and <em>persistence</em> is the freedom to branch out of any sequence. The two are genuinely in conflict.</p>
-      <p>Part D measures the collapse and stops there. The repair — rebuilding the reversal as a lazy computation that is forced once and shared by every version that observes it — needs machinery you meet later.<span class="sn">session 5</span> The omission is deliberate, not an oversight.</p>
+      <p><strong>Why a mutable queue would have hidden this.</strong> One cannot re-take from an old version of a mutable structure, because there are no old versions — the premise holds by construction, and the tension is invisible. Persistence is what exposes it: <em>amortisation</em> reasons about a sequence of operations, and <em>persistence</em> is the freedom to branch out of any sequence. The two are genuinely in conflict.</p>
+      <p>Part D measures the collapse and stops there. The repair — rebuilding the reversal as a lazy computation that is forced once and shared by every version that observes it — needs machinery introduced later.<span class="sn">session 5</span> The omission is deliberate, not an oversight.</p>
     </div>
 
     <p>So the containers had to be persistent because the lab is not really about mazes. The maze is a vehicle: first for making the version history observable, then for making the amortised bound visibly fail. Neither is possible with a mutable queue.</p>
@@ -699,7 +699,7 @@ make(front, back) = (front, back)</pre>
   <div class="col">
     <p class="kicker">02 — before any language</p>
     <h2>The architecture, also specified once</h2>
-    <p class="lede">Your queue is not an exercise in isolation. It is dropped into a maze solver that was written without knowing it would exist, and the seam between them is five names.</p>
+    <p class="lede">The queue is not an exercise in isolation. It is dropped into a maze solver that was written without knowing it would exist, and the seam between them is five names.</p>
   </div>
 
   <div class="figure-wide">
@@ -765,7 +765,7 @@ make(front, back) = (front, back)</pre>
       <li><b>Nothing else about the container is assumed.</b> Not its representation, not its cost, not its ordering. Substituting FIFO for LIFO therefore cannot break the search: the search never had an opinion to break.</li>
       <li><b>The graph is a separate layer again.</b> It reports adjacency and lets the caller sequence the results, which is why the same maze file drives both searches and why neither search can tell which maze generator produced it.<span class="sn">session 7</span></li>
     </ul>
-    <p>From here the lab is that one seam, three times over. You write a single file; a program you did not write changes what it does.</p>
+    <p>From here the lab is that one seam, three times over. We write a single file, and a program we did not write changes its behaviour.</p>
   </div>
 </section>
 
@@ -773,15 +773,15 @@ make(front, back) = (front, back)</pre>
 <section id="parts">
   <div class="col">
     <p class="kicker task">03 — in class</p>
-    <h2>What you build, and in what order<span class="badge">assignment</span></h2>
+    <h2>What we build, and in what order<span class="badge">assignment</span></h2>
     <p class="lede">One structure, built once by hand and then twice at the keyboard. The code parts are guarded by tests; make them pass in order, because the test classes are named so that they run in teaching order and the ones about persistence come last — a correct <em>ephemeral</em> queue passes everything before them.</p>
 
     <h3 class="sub" id="paper">First, away from the keyboard</h3>
-    <p>Fifteen minutes with a pen, before you open an editor. This is the difference between implementing <code>make</code> from understanding and implementing it from guesswork.</p>
-    <p>The handout <a class="file" href="queue-on-paper.pdf">queue-on-paper.pdf</a> walks the structure by hand: enqueue five elements, dequeue until the reversal fires, and draw the cons cells that two versions share. Bring it with you — the pseudocode is projected during the introduction, and every implementation that follows goes faster if the reversal has already been traced once by hand.</p>
+    <p>Fifteen minutes with a pen, before an editor is opened. This is the difference between implementing <code>make</code> from understanding and implementing it from guesswork.</p>
+    <p>The handout <a class="file" href="queue-on-paper.pdf">queue-on-paper.pdf</a> walks the structure by hand: enqueue five elements, dequeue until the reversal fires, and draw the cons cells that two versions share. Bring it along — the pseudocode is projected during the introduction, and every implementation that follows goes faster if the reversal has already been traced once by hand.</p>
 
     <h3 class="sub">Then, at the keyboard</h3>
-    <p>Python first, because it has the fewest obstacles between you and the structure; then the same queue in OCaml, against an interface file that states the specification in the type system. The third implementation, in Java, is homework — <a href="#homework">§05</a>.</p>
+    <p>Python first, because it has the fewest obstacles between us and the structure; then the same queue in OCaml, against an interface file that states the specification in the type system. The third implementation, in Java, is homework — <a href="#homework">§05</a>.</p>
   </div>
 
   <div class="routes two">
@@ -798,9 +798,9 @@ python3 bench.py</pre>
       <p class="links">
         <span><a class="file" href="pqueue.html">pqueue.html</a> — the four holes</span>
         <span><a class="file" href="architecture.html">architecture.html</a> — the wiring</span>
-        <span><a class="file" href="python/pqueue.py">python/pqueue.py</a> — your file</span>
+        <span><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> — the file to edit</span>
       </p>
-      <p class="todo">4 TODOs · <code>--dfs</code> works before you write a line</p>
+      <p class="todo">4 TODOs · <code>--dfs</code> works before a line is written</p>
     </div>
 
     <div class="route ml">
@@ -814,8 +814,8 @@ dune exec bin/solver.exe -- $M --bfs
 dune exec bin/solver.exe -- $M --dfs</pre>
       <p class="links">
         <span><a class="file" href="ocaml-architecture.html">ocaml-architecture.html</a> — the wiring</span>
-        <span><a class="file" href="ocaml/lib/pqueue.mli">ocaml/lib/pqueue.mli</a> — the spec</span>
-        <span><a class="file" href="ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> — your file</span>
+        <span><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.mli">ocaml/lib/pqueue.mli</a> — the spec</span>
+        <span><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> — the file to edit</span>
       </p>
       <p class="todo">3 TODOs · no recursion needed · <code>List.rev</code> is given</p>
     </div>
@@ -825,14 +825,14 @@ dune exec bin/solver.exe -- $M --dfs</pre>
   <div class="col">
     <h3 class="sub">Two flags worth trying in every implementation</h3>
     <ul class="marks">
-      <li><b><code>--inspect=40</code></b> prints the frontier <em>as it was</em> at step 40. Nothing is replayed and nothing is logged; the solver simply kept every version. If this seems unremarkable, work out what it would have cost with a mutable queue.</li>
-      <li><b><code>--html=bfs.html</code></b> writes the page you dragged in <a href="#demo">§01</a>. All three languages emit a byte-identical file, because the page is HTML and JavaScript in every case — a small reminder that the interesting differences between these three programs are not in what they can produce.</li>
+      <li><b><code>--inspect=40</code></b> prints the frontier <em>as it was</em> at step 40. Nothing is replayed and nothing is logged; the solver retained every version. If this seems unremarkable, work out what it would have cost with a mutable queue.</li>
+      <li><b><code>--html=bfs.html</code></b> writes the page dragged in <a href="#demo">§01</a>. All three languages emit a byte-identical file, because the page is HTML and JavaScript in every case — a small reminder that the interesting differences between these three programs are not in what they can produce.</li>
     </ul>
   </div>
 
   <div class="col">
     <h3 class="sub" id="numbers">The check — three implementations, one set of numbers</h3>
-    <p>One specification should produce one behaviour. On <code>mazes/medium.txt</code> all three solvers must agree exactly — including the Java row, which you can only fill in after the homework in <a href="#homework">§05</a>.</p>
+    <p>One specification should produce one behaviour. On <code>mazes/medium.txt</code> all three solvers must agree exactly — including the Java row, which can only be filled in after the homework in <a href="#homework">§05</a>.</p>
 
     <table class="results">
       <caption>solver mazes/medium.txt --bfs | --dfs</caption>
@@ -849,9 +849,9 @@ dune exec bin/solver.exe -- $M --dfs</pre>
         <tr><td>Java</td><td class="q">306</td><td class="q">75</td><td class="s">240</td><td class="s">103</td></tr>
       </tbody>
     </table>
-    <figcaption>If your numbers differ, the implementation differs — the specification does not leave room for a choice here. The commonest cause is a <code>make</code> that reverses eagerly on <code>enqueue</code> instead of lazily on exhaustion: that is a different queue, it passes many of the tests, and it changes what the frontier holds at each step.</figcaption>
+    <figcaption>If the numbers differ, the implementation differs — the specification does not leave room for a choice here. The commonest cause is a <code>make</code> that reverses eagerly on <code>enqueue</code> instead of lazily on exhaustion: that is a different queue, it passes many of the tests, and it changes what the frontier holds at each step.</figcaption>
 
-    <p style="margin-top:26px">The mazes themselves are generated by randomised Kruskal over a union–find structure — an <em>imperative</em> one, deliberately. You will implement it persistently, and regenerate these same mazes from the same seeds, in a later session.<span class="sn">session 7</span></p>
+    <p style="margin-top:26px">The mazes themselves are generated by randomised Kruskal over a union–find structure — an <em>imperative</em> one, deliberately. We implement it persistently, and regenerate these same mazes from the same seeds, in a later session.<span class="sn">session 7</span></p>
   </div>
 </section>
 
@@ -938,13 +938,13 @@ dune exec bin/solver.exe -- $M --dfs</pre>
       </tbody>
     </table>
   </div>
-  <figcaption>Rows are drawn from the files you will actually edit. The margin labels mark ideas introduced here in passing and treated properly in a later session.</figcaption>
+  <figcaption>Rows are drawn from the files actually edited. The margin labels mark ideas introduced here in passing and treated properly in a later session.</figcaption>
 
   <div class="col">
-    <p style="margin-top:28px">Read the last row first, because the hole count <em>is</em> the language difference. OCaml hands you <code>List.rev</code>, so there is no reversal to write and the lab is three holes; Python and Java make you build it out of cons cells. The two rows above it are the same observation running in the opposite direction: OCaml needs no stack module at all, because a list already is one, while Java needs a wrapper class around a queue that the other two use bare. Same architecture, three different amounts of boilerplate — and the boilerplate is not distributed evenly.</p>
+    <p style="margin-top:28px">Read the last row first, because the hole count <em>is</em> the language difference. OCaml supplies <code>List.rev</code>, so there is no reversal to write and the lab is three holes; Python and Java require it to be built out of cons cells. The two rows above it are the same observation running in the opposite direction: OCaml needs no stack module at all, because a list already is one, while Java needs a wrapper class around a queue that the other two use bare. Same architecture, three different amounts of boilerplate — and the boilerplate is not distributed evenly.</p>
 
     <div class="callout">
-      <p><strong>One row worth pausing on.</strong> Java's single shared empty queue is safe only because the structure is persistent — every holder of it is safe precisely because none of them can change it. The type system cannot express that reason, so the code signs for it by hand with <code>@SuppressWarnings("unchecked")</code>. That is a compact example of the general situation: what a language checks, what it merely permits, and what you are left to guarantee yourself.</p>
+      <p><strong>One row worth pausing on.</strong> Java's single shared empty queue is safe only because the structure is persistent — every holder of it is safe precisely because none of them can change it. The type system cannot express that reason, so the code signs for it by hand with <code>@SuppressWarnings("unchecked")</code>. That is a compact example of the general situation: what a language checks, what it merely permits, and what is left to us to guarantee.</p>
     </div>
   </div>
 </section>
@@ -954,7 +954,7 @@ dune exec bin/solver.exe -- $M --dfs</pre>
   <div class="col">
     <p class="kicker task">05 — at home</p>
     <h2>What to finish at home<span class="badge">assignment</span></h2>
-    <p class="lede">One more implementation, in the language that checks the most and provides the least. Start it once the Python and OCaml queues are passing their tests: the third time through is only instructive if the first two are behind you.</p>
+    <p class="lede">One more implementation, in the language that checks the most and provides the least. Start it once the Python and OCaml queues are passing their tests: the third pass is instructive only once the first two are complete.</p>
   </div>
 
   <div class="routes one">
@@ -969,15 +969,15 @@ java MazeSolver $M
 java MazeSolver $M --dfs</pre>
       <p class="links">
         <span class="soon">architecture page — in preparation</span>
-        <span><a class="file" href="java/PQueue.java">java/PQueue.java</a> — your file</span>
-        <span><a class="file" href="java/MazeSolver.java">java/MazeSolver.java</a> — the interface</span>
+        <span><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">java/PQueue.java</a> — the file to edit</span>
+        <span><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/MazeSolver.java">java/MazeSolver.java</a> — the interface</span>
       </p>
       <p class="todo">4 TODOs · what <code>final</code> checks that a convention only asks</p>
     </div>
   </div>
 
   <div class="col">
-    <p style="margin-top:22px">A set of <a class="file" href="homework.ml">OCaml exercises</a> extends Part&nbsp;C beyond the queue itself: nine short problems on lists, recursion, <code>match</code> and <code>option</code>, each starting as a hole, with a self-check that reports what is still to do. They are homework too — and <a class="file" href="tour.ml">tour.ml</a> is the worked tour they follow.</p>
+    <p style="margin-top:22px">A set of <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">OCaml exercises</a> extends Part&nbsp;C beyond the queue itself: nine short problems on lists, recursion, <code>match</code> and <code>option</code>, each starting as a hole, with a self-check that reports what is still to do. They are homework too — and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">tour.ml</a> is the worked tour they follow.</p>
   </div>
 </section>
 
@@ -988,9 +988,9 @@ java MazeSolver $M --dfs</pre>
     <h2>Related work and further reading</h2>
     <p class="lede">The two-list queue is not folklore; it has a literature, a known repair, and industrial descendants. None of the following is required reading for the lab.</p>
     <ul class="refs">
-      <li><b>Chris Okasaki, <em>Purely Functional Data Structures</em> (CUP, 1998; thesis 1996).</b> The standard reference. Chapter 5 is the queue you are building; chapter 6 is the repair for the problem you will hit in Part D, using lazy evaluation and memoisation. His short retrospective ten years on, <a href="http://okasaki.blogspot.com/2008/02/ten-years-of-purely-functional-data.html">Ten Years of Purely Functional Data Structures</a>, is worth the five minutes it takes.
+      <li><b>Chris Okasaki, <em>Purely Functional Data Structures</em> (CUP, 1998; thesis 1996).</b> The standard reference. Chapter 5 is the queue we are building; chapter 6 is the repair for the problem met in Part D, using lazy evaluation and memoisation. His short retrospective ten years on, <a href="http://okasaki.blogspot.com/2008/02/ten-years-of-purely-functional-data.html">Ten Years of Purely Functional Data Structures</a>, is worth the five minutes it takes.
         <span class="where">the amortisation/persistence tension is §5.6 and §6.1</span></li>
-      <li><b>Eric Lippert, <a href="https://ericlippert.com/2007/11/13/immutability-in-c-part-one-kinds-of-immutability/">&ldquo;Immutability in C#&rdquo;</a> (2007–08).</b> Eleven posts building immutable stacks, queues and trees. <a href="https://ericlippert.com/2007/12/10/immutability-in-c-part-four-an-immutable-queue/">Part Four</a> is the queue you are building here, in a fourth language and twenty years earlier — including the observation that a stack is a backwards queue, and the warning that one <code>dequeue</code> can cost O(n). Part One separates the several different things the word <em>immutable</em> is used to mean, which is the distinction the Java column of <a href="#languages">§04</a> turns on.
+      <li><b>Eric Lippert, <a href="https://ericlippert.com/2007/11/13/immutability-in-c-part-one-kinds-of-immutability/">&ldquo;Immutability in C#&rdquo;</a> (2007–08).</b> Eleven posts building immutable stacks, queues and trees. <a href="https://ericlippert.com/2007/12/10/immutability-in-c-part-four-an-immutable-queue/">Part Four</a> is this very queue, in a fourth language and twenty years earlier — including the observation that a stack is a backwards queue, and the warning that one <code>dequeue</code> can cost O(n). Part One separates the several different things the word <em>immutable</em> is used to mean, which is the distinction the Java column of <a href="#languages">§04</a> turns on.
         <span class="where">read Part One, then jump to Part Four</span></li>
       <li><b>Hood &amp; Melville (1981); Kaplan &amp; Tarjan (1995).</b> Queues with <em>worst-case</em> O(1) bounds rather than amortised ones, obtained by incremental rebuilding rather than laziness — the other way out of the same problem.</li>
       <li><b>Driscoll, Sarnak, Sleator &amp; Tarjan, "Making data structures persistent" (1986).</b> Where the vocabulary comes from: <em>partial</em> persistence (old versions readable) versus <em>full</em> persistence (old versions writable). The <code>--inspect</code> flag in this lab uses the partial kind.</li>
@@ -1002,13 +1002,13 @@ java MazeSolver $M --dfs</pre>
 
     <div class="callout">
       <p><strong>A caveat on the BFS/DFS comparison above.</strong> The numbers on this page make DFS look simply better, and on exploration it mostly is: measured over 120 generated mazes (21&times;31, 40 per setting), DFS settled fewer cells than BFS in 36/40 perfect mazes and 39/40 braided ones, and on <code>mazes/large.txt</code> it settles 444 cells against BFS's 1201. What DFS never does is find a <em>shorter</em> path &mdash; 0/40, in every setting.</p>
-      <p>In a perfect maze it does not need to. A maze with no loops is a tree: there is exactly one simple path between start and exit, so both searches return the same path (40/40, identical length) and BFS's guarantee costs about 1.4&times; the exploration while buying nothing. Loops are what give the guarantee value &mdash; at the braid of 0.06 used for these mazes DFS averages 71.8 steps against BFS's 57.0, worst case +52. So the question is never &ldquo;which search is better&rdquo;, but what a worst-case bound is worth on the graph you actually have; the braid parameter is the dial that sets its price.</p>
+      <p>In a perfect maze it does not need to. A maze with no loops is a tree: there is exactly one simple path between start and exit, so both searches return the same path (40/40, identical length) and BFS's guarantee costs about 1.4&times; the exploration while buying nothing. Loops are what give the guarantee value &mdash; at the braid of 0.06 used for these mazes DFS averages 71.8 steps against BFS's 57.0, worst case +52. So the question is never &ldquo;which search is better&rdquo;, but what a worst-case bound is worth on the graph actually at hand; the braid parameter is the dial that sets its price.</p>
     </div>
   </div>
 
   <footer class="col">
     <p><b>Pages in this lab:</b> <a class="file" href="pqueue.html">pqueue.html</a> · <a class="file" href="architecture.html">architecture.html</a> · <a class="file" href="queue-on-paper.pdf">queue-on-paper.pdf</a></p>
-    <p><b>Files:</b> <a class="file" href="python/pqueue.py">python/pqueue.py</a> · <a class="file" href="python/solver.py">python/solver.py</a> · <a class="file" href="python/pstack.py">python/pstack.py</a> · <a class="file" href="python/bench.py">python/bench.py</a> · <a class="file" href="ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> · <a class="file" href="java/PQueue.java">java/PQueue.java</a></p>
+    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">python/solver.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">python/pstack.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/bench.py">python/bench.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">java/PQueue.java</a></p>
     <p style="margin-top:16px">Programming Paradigms, session 2 — persistent versus ephemeral data structures. The demo in <a href="#demo">§01</a> replays a real run of the Python solver on <code>mazes/medium.txt</code>: the frontier drawn at each step is the frontier version the search actually held at that step, exported from the solver's own <code>versions</code> list. Page colours are taken from the solver's terminal palette — xterm blue, gold, green, magenta — reassigned so that each search tints its own trail.</p>
   </footer>
 </section>

@@ -6,7 +6,7 @@ import java.util.Random;
 
 /**
  * Tests for the persistent queue. Run:  javac *.java && java Tests
- * Ordered the way you should make them pass:
+ * Ordered in the sequence in which they should be made to pass:
  * basics -> FIFO contract -> persistence.
  */
 public final class Tests {

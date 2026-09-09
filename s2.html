@@ -82,7 +82,7 @@
         pop-then-push case where that trick quietly returns the wrong
         answer.</li>
     <li><strong>The same stack as a linked list.</strong> In Java, where
-        backtracking stops being a mechanism and becomes simply holding on to
+        backtracking stops being a mechanism and becomes nothing more than holding on to
         an old reference.</li>
     <li><strong>The sharing diagram.</strong> What the heap actually looks
         like when two versions coexist, and what goes wrong when immutability
@@ -131,7 +131,7 @@
 <section>
   <h2>The lab, A to E</h2>
   <p>One data structure, specified once, built three times: the
-     <strong>two-list persistent queue</strong>. The stack was easy because
+     <strong>two-list persistent queue</strong>. The stack was straightforward because
      <code>push</code> shares everything. A queue adds at one end and removes
      at the other, so persistence has to be earned.</p>
   <p><strong>B and D have nothing to implement</strong> &mdash; they are the
@@ -153,8 +153,7 @@
           stack turns breadth-first search into depth-first, without touching
           the search: the algorithm never mentions queue or stack, only a
           frontier. A slider then scrubs through every frontier the search ever
-          had &mdash; nothing was logged, the old versions were simply never
-          destroyed.</td></tr>
+          had &mdash; nothing was logged, the old versions were never destroyed.</td></tr>
       <tr><td class="p">C</td><td><strong>OCaml.</strong> The same queue
           against a given <code>.mli</code>. Worth noticing what the compiler
           now checks for us, and what got shorter.</td></tr>

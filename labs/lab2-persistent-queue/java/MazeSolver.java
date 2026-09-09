@@ -10,7 +10,7 @@ import java.util.Map;
  * Maze search, written once, against a FRONTIER interface. Provided.
  *
  * The search never says "queue" or "stack" — it talks to the Frontier
- * interface. QueueFrontier (your PQueue) makes it breadth-first search;
+ * interface. QueueFrontier (the PQueue) makes it breadth-first search;
  * StackFrontier (a bare cons-list, the lecture's persistent stack) makes
  * the SAME search depth-first. In Java the swap happens through an
  * interface and dynamic dispatch — hold that thought for session 9.
@@ -30,7 +30,7 @@ public final class MazeSolver {
         record Taken(Pos value, Frontier rest) {}
     }
 
-    /** FIFO frontier: your persistent queue. */
+    /** FIFO frontier: the persistent queue. */
     record QueueFrontier(PQueue<Pos> q) implements Frontier {
         public boolean isEmpty() { return q.isEmpty(); }
         public Frontier put(Pos p) { return new QueueFrontier(q.enqueue(p)); }

@@ -373,7 +373,7 @@ footer p{margin:0 0 8px; max-width:640px}
 
         <rect class="d-box-q" x="270" y="194" width="165" height="60" rx="5"/>
         <text class="d-name" x="352" y="218" text-anchor="middle">pqueue.py</text>
-        <text class="d-sub d-sub-q" x="352" y="236" text-anchor="middle">FIFO — yours to write</text>
+        <text class="d-sub d-sub-q" x="352" y="236" text-anchor="middle">FIFO — the one to write</text>
 
         <rect class="d-box-s" x="465" y="194" width="165" height="60" rx="5"/>
         <text class="d-name" x="547" y="218" text-anchor="middle">pstack.py</text>
@@ -405,7 +405,7 @@ footer p{margin:0 0 8px; max-width:640px}
   </div>
 
   <div class="col">
-    <p>Read in reverse, the graph gives the layering. <a class="file" href="python/maze.py">python/maze.py</a> describes a world. <a class="file" href="python/pqueue.py">python/pqueue.py</a> and <a class="file" href="python/pstack.py">python/pstack.py</a> describe two disciplines for holding a collection of items. Neither is aware of the other, and neither is aware of what a search is. <a class="file" href="python/solver.py">python/solver.py</a> is the only file that refers to all of them, and the only one that had to change when the stack was moved into a module of its own.</p>
+    <p>Read in reverse, the graph gives the layering. <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/maze.py">python/maze.py</a> describes a world. <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">python/pstack.py</a> describe two disciplines for holding a collection of items. Neither is aware of the other, and neither is aware of what a search is. <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">python/solver.py</a> is the only file that refers to all of them, and the only one that had to change when the stack was moved into a module of its own.</p>
   </div>
 </section>
 
@@ -414,7 +414,7 @@ footer p{margin:0 0 8px; max-width:640px}
   <div class="col">
     <p class="kicker">02 — layer one</p>
     <h2>The graph knows nothing about search</h2>
-    <p class="lede"><a class="file" href="python/maze.py">maze.py</a> answers exactly one question: given a cell, which cells are one step away?</p>
+    <p class="lede"><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/maze.py">maze.py</a> answers exactly one question: given a cell, which cells are one step away?</p>
   </div>
 
   <figure class="col">
@@ -447,7 +447,7 @@ footer p{margin:0 0 8px; max-width:640px}
   <div class="col">
     <p class="kicker">03 — layer two</p>
     <h2>The algorithm, written once</h2>
-    <p class="lede"><code>search</code> in <a class="file" href="python/solver.py">solver.py</a> never mentions a queue or a stack. It refers only to <code>ops</code>.</p>
+    <p class="lede"><code>search</code> in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">solver.py</a> never mentions a queue or a stack. It refers only to <code>ops</code>.</p>
   </div>
 
   <figure class="col">
@@ -488,7 +488,7 @@ versions = [frontier]
   <div class="compare">
     <div class="panel q">
       <h4>pqueue.py &nbsp;— FIFO</h4>
-      <p class="role">Two cons-lists, <code>(front, back)</code>. Take from the head of <code>front</code>, push onto the head of <code>back</code>. Four TODOs, to be completed by you.</p>
+      <p class="role">Two cons-lists, <code>(front, back)</code>. Take from the head of <code>front</code>, push onto the head of <code>back</code>. Four TODOs remain to be completed.</p>
 <pre>q = (front, back)
 
 <span class="c"># contents = front ++ reverse(back)</span>
@@ -513,7 +513,7 @@ pop(s)          <span class="c"># O(1), allocates nothing</span></pre>
   </div>
 
   <div class="col">
-    <figcaption style="max-width:none">The two files were deliberately written to the same shape; read them side by side. The entire difficulty of Part A is concentrated in one function, <code>pqueue._make</code>, and <a class="file" href="python/pstack.py">pstack.py</a> is there to show what its absence looks like.</figcaption>
+    <figcaption style="max-width:none">The two files were deliberately written to the same shape; read them side by side. The entire difficulty of Part A is concentrated in one function, <code>pqueue._make</code>, and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">pstack.py</a> is there to show what its absence looks like.</figcaption>
   </div>
 </section>
 
@@ -541,7 +541,7 @@ pop(s)          <span class="c"># O(1), allocates nothing</span></pre>
   <figure class="col">
     <div class="code">
       <div class="code-head"><span class="path">python/solver.py</span><span class="lines">lines 36–53</span></div>
-<pre><span class="c"># FIFO frontier: your persistent queue (pqueue.py — Part A).</span>
+<pre><span class="c"># FIFO frontier: the persistent queue of pqueue.py (Part A).</span>
 queue_frontier = SimpleNamespace(
     name="BFS (queue frontier)",
 <span class="hl">    empty=P.EMPTY, put=P.enqueue, take=P.dequeue,</span>
@@ -555,13 +555,13 @@ stack_frontier = SimpleNamespace(
     is_empty=S.is_empty, to_list=S.to_list,
 )</pre>
     </div>
-    <figcaption>Two declarations, structurally identical, differing only in which module the five names come from. That symmetry is the point, and it is the reason the stack was moved out of this file into <a class="file" href="python/pstack.py">pstack.py</a>.</figcaption>
+    <figcaption>Two declarations, structurally identical, differing only in which module the five names come from. That symmetry is the point, and it is the reason the stack was moved out of this file into <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">pstack.py</a>.</figcaption>
   </figure>
 
   <figure class="col">
     <div class="code">
       <div class="code-head"><span class="path">python/solver.py</span><span class="lines">line 113</span></div>
-<pre><span class="c"># No flag means --bfs: the default frontier is the one you are building.</span>
+<pre><span class="c"># No flag means --bfs: the default frontier is the one under construction.</span>
 <span class="hl">ops = stack_frontier if "dfs" in flags else queue_frontier</span></pre>
     </div>
     <figcaption><b>This is the whole of &quot;choosing an algorithm.&quot;</b> A single assignment, made during argument parsing, remote from both the search and the maze.</figcaption>
@@ -585,19 +585,19 @@ stack_frontier = SimpleNamespace(
   <div class="col">
     <div class="shell">
 <div><span class="prompt">$ </span>python3 -m unittest test_pqueue -v      <span class="c"># Part A: make these pass, in order</span></div>
-<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --dfs   <span class="c"># works before you write a line</span></div>
-<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs   <span class="c"># runs on your queue</span></div>
+<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --dfs   <span class="c"># works before a line is written</span></div>
+<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs   <span class="c"># runs on the persistent queue</span></div>
 <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --html=bfs.html</div>
 <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --inspect=40</div>
 <div><span class="prompt">$ </span>python3 bench.py                         <span class="c"># Part D: break the bound</span></div>
     </div>
-    <p style="margin-top:22px"><code>--bfs</code> is the default, and until the four TODOs in <a class="file" href="python/pqueue.py">pqueue.py</a> are completed it reports this plainly rather than failing: <a class="file" href="python/solver.py">solver.py</a> catches the <code>NotImplementedError</code> and directs you back to your own file. Full lab instructions are in <a class="file" href="README.md">README.md</a>.</p>
+    <p style="margin-top:22px"><code>--bfs</code> is the default, and until the four TODOs in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">pqueue.py</a> are completed it reports this plainly rather than failing: <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">solver.py</a> catches the <code>NotImplementedError</code> and directs the reader back to the file in question. Full lab instructions are in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">README.md</a>.</p>
   </div>
 
   <footer class="col">
-    <p><b>Files:</b> <a class="file" href="python/maze.py">maze.py</a> · <a class="file" href="python/solver.py">solver.py</a> · <a class="file" href="python/pqueue.py">pqueue.py</a> · <a class="file" href="python/pstack.py">pstack.py</a> · <a class="file" href="python/render.py">render.py</a> · <a class="file" href="python/test_pqueue.py">test_pqueue.py</a> · <a class="file" href="python/bench.py">bench.py</a></p>
-    <p>Links resolve when this page is opened from the lab folder. The same queue appears again in <a class="file" href="ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> and <a class="file" href="java/PQueue.java">java/PQueue.java</a>; the three are compared on the <a href="index.html#languages">session page</a>.</p>
-    <p style="margin-top:16px">Programming Paradigms, session 2 — persistent vs. ephemeral data structures. Page colours are taken from the solver's own terminal palette in <a class="file" href="python/render.py">render.py</a> — xterm blue, gold, green, magenta — reassigned so that each search tints its own trail: one hue per frontier, pale for explored cells, solid for the path retained.</p>
+    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/maze.py">maze.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">solver.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">pqueue.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">pstack.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/render.py">render.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/test_pqueue.py">test_pqueue.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/bench.py">bench.py</a></p>
+    <p>Links resolve when this page is opened from the lab folder. The same queue appears again in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">java/PQueue.java</a>; the three are compared on the <a href="index.html#languages">session page</a>.</p>
+    <p style="margin-top:16px">Programming Paradigms, session 2 — persistent vs. ephemeral data structures. Page colours are taken from the solver's own terminal palette in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/render.py">render.py</a> — xterm blue, gold, green, magenta — reassigned so that each search tints its own trail: one hue per frontier, pale for explored cells, solid for the path retained.</p>
   </footer>
 </section>
 

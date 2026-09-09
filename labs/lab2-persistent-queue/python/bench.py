@@ -1,4 +1,4 @@
-"""Amortized O(1)... says who? Run me after your queue passes the tests.
+"""Amortized O(1)... says who? Run me once the queue passes its tests.
 
     python3 bench.py
 
@@ -6,7 +6,7 @@ The handout's banker's argument proves dequeue is amortized O(1) — each
 element pays one credit at enqueue to fund its single reversal.
 
 That proof silently assumes each version is dequeued AT MOST ONCE.
-Persistence lets you break the assumption: keep ONE version whose front
+Persistence allows that assumption to be broken: keep ONE version whose front
 is nearly empty, and dequeue that same version k times. Every call
 re-runs the O(n) reversal — the credits were spent k times over.
 

@@ -1,4 +1,4 @@
-"""A persistent FIFO queue built from two cons-lists.  YOUR TASK IS HERE.
+"""A persistent FIFO queue built from two cons-lists.  THE TASK IS HERE.
 
 Cons-lists are exactly the ones from the lecture:
     None                 the empty list
@@ -71,8 +71,8 @@ def dequeue(q):
 
 
 # ---------------------------------------------------------------- helpers
-# Provided. to_list is the ABSTRACTION FUNCTION: the sequence your queue
-# represents. The tests compare your implementation against it.
+# Provided. to_list is the ABSTRACTION FUNCTION: the sequence this
+# queue represents. The tests compare the implementation against it.
 
 def to_list(q):
     front, back = q

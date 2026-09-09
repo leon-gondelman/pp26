@@ -2,12 +2,12 @@
 
 *Programming Paradigms, session 2: persistent vs. ephemeral data structures.*
 
-In the lecture you saw a persistent **stack**: the LIFO case is easy — `push`
-shares the whole old stack. Today you build the FIFO case, where persistence
-must be *earned*: the classic **two-list persistent queue**. You will build it
+In the lecture we saw a persistent **stack**: the LIFO case is straightforward — `push`
+shares the whole old stack. Today we build the FIFO case, where persistence
+must be *earned*: the classic **two-list persistent queue**. We build it
 three times — Python, OCaml, Java — from one language-independent description,
-and drop each one into the same larger program: a maze solver whose behavior
-your data structure decides.
+and place each one in the same larger program: a maze solver whose behaviour
+the data structure decides.
 
 ---
 
@@ -44,7 +44,7 @@ deposited coin. Every element is reversed **at most once**, so n operations
 cost O(n) total: **amortized O(1)**. Remember the highlighted assumption —
 the lab's last part returns to it.
 
-## 2. What you will do
+## 2. What we do
 
 | Part | What | Where | Time |
 |------|------|-------|------|
@@ -73,18 +73,18 @@ correct **ephemeral** one.
 ### Part B — the payoff
 
 ```bash
-python3 solver.py ../mazes/medium.txt --bfs                  # BFS with YOUR queue
+python3 solver.py ../mazes/medium.txt --bfs                  # BFS with the persistent queue
 python3 solver.py ../mazes/medium.txt --dfs                  # one-line swap
 python3 solver.py ../mazes/medium.txt --bfs --html=bfs.html  # time-travel view
 python3 solver.py ../mazes/medium.txt --bfs --inspect=40     # ask an old version
 ```
 
-`--dfs` works before you write a single line — the stack frontier is provided
+`--dfs` works before a single line is written — the stack frontier is provided
 in `python/pstack.py`. Read it: it is the same file shape as `pqueue.py` with
 the same interface, and it has no TODOs, because for a LIFO structure
 persistence is free (`push` shares the *entire* old stack and there is no
 rebalancing step). All the difficulty of Part A lives in `pqueue._make`.
-`--bfs` (also the default if you pass no flag) runs on *your* queue, and until
+`--bfs` (also the default when no flag is passed) runs on *the* queue, and until
 Part A is done it says so instead of crashing.
 
 Open the HTML file and drag the slider. Then look at `solver.py`: the search
@@ -94,7 +94,7 @@ turns breadth-first search into depth-first search **without touching the
 algorithm**. Compare the two explorations and the two path lengths.
 
 `--inspect=40` prints the frontier *as it was* at step 40. No replaying, no
-logging: the solver simply kept every version in a list — keeping old
+logging: the solver retained every version in a list — keeping old
 versions is free when nothing can modify them.
 
 ### Part C — OCaml
@@ -114,9 +114,9 @@ time-travel page, because that page is HTML and JavaScript in both cases.
 
 Read `lib/pqueue.mli` first — it is the lecture's point made syntax:
 `dequeue : 'a t -> ('a * 'a t) option` *returns the value and the new
-version*. You need no recursion: OCaml's built-in lists plus `List.rev`
+version*. No recursion is needed: OCaml's built-in lists plus `List.rev`
 do the work. Notice what became easier than in Python (immutability is the
-default, not a discipline) and what the compiler now checks for you.
+default, not a discipline) and what the compiler now checks on our behalf.
 
 Sanity check across languages: on `mazes/medium.txt` all three solvers
 should report **306 cells explored, path length 75** for BFS — same spec,
@@ -128,8 +128,8 @@ same numbers.
 cd python && python3 bench.py
 ```
 
-The banker's proof assumed each version is dequeued at most once. But your
-queue is persistent — nothing stops a program from dequeuing the *same*
+The banker's proof assumed each version is dequeued at most once. But the
+queue is persistent — nothing prevents a program from dequeuing the *same*
 version a thousand times. The benchmark does exactly that, with a version
 whose `front` is nearly empty. Watch the "amortized O(1)" operation cost
 O(n) *every single time*, and answer in one sentence: **which assumption of
