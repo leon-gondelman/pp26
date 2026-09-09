@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What the Types Are For</title>
+<title>Immutability, Spelled Out</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
@@ -316,15 +316,15 @@ footer p{margin:0 0 8px; max-width:640px}
 
 <header class="masthead">
   <div class="wrap">
-    <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;&middot;&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s2.html">Session 2</a> &nbsp;&middot;&nbsp; <a href="index.html">lab</a> &nbsp;&middot;&nbsp; OCaml &nbsp;&middot;&nbsp; architecture note</p>
-    <h1>What the Types Are For</h1>
-    <p class="standfirst">The OCaml solver walks the same maze as the Python one, from the same language-independent specification, and the two agree cell for cell. This note is about what the OCaml version can <em>state</em> that the Python version can only intend: a boundary written in <code>pqueue.mli</code>, and a frontier whose type the compiler follows. The companion notes are <a href="architecture.html">Three Layers, One Search</a> (Python) and <a href="java-architecture.html">Immutability, Spelled Out</a> (Java).</p>
+    <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;&middot;&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s2.html">Session 2</a> &nbsp;&middot;&nbsp; <a href="index.html">lab</a> &nbsp;&middot;&nbsp; Java &nbsp;&middot;&nbsp; architecture note</p>
+    <h1>Immutability, Spelled Out</h1>
+    <p class="standfirst">The third implementation of the same queue, in the language that states its intentions most explicitly. OCaml is persistent by default and says nothing; Python asks politely with a leading underscore. Java writes the discipline down in four separate keywords, has the compiler check each one &mdash; and then, in exactly one place, runs out of things it can prove and asks us to sign for the rest. The companion notes are <a href="architecture.html">Three Layers, One Search</a> (Python) and <a href="ocaml-architecture.html">What the Types Are For</a> (OCaml).</p>
     <nav class="toc">
       <a href="#shape">01 &middot; the shape</a>
-      <a href="#boundary">02 &middot; the boundary</a>
-      <a href="#algorithm">03 &middot; the algorithm</a>
-      <a href="#frontier">04 &middot; the frontier</a>
-      <a href="#wiring">05 &middot; the wiring</a>
+      <a href="#keywords">02 &middot; four keywords</a>
+      <a href="#empty">03 &middot; the shared empty</a>
+      <a href="#pairs">04 &middot; returning two things</a>
+      <a href="#frontier">05 &middot; the frontier</a>
       <a href="#run">06 &middot; run it</a>
     </nav>
   </div>
@@ -336,147 +336,127 @@ footer p{margin:0 0 8px; max-width:640px}
 <section id="shape">
   <div class="col">
     <p class="kicker">01 &mdash; the shape</p>
-    <h2>Three stanzas, not three imports</h2>
-    <p class="lede">The Python architecture is legible from its <code>import</code> lines. Here it is <em>declared</em>: three small files say what the pieces are and which of them may see which.</p>
+    <h2>Three files and no build system</h2>
+    <p class="lede">Python declared its architecture in import lines and OCaml in dune stanzas. Java declares almost nothing: the compiler is handed every source file at once and works out the rest from the names.</p>
 
     <div class="code">
-      <div class="code-head"><span class="path">ocaml/</span><span class="lines">the dependency direction</span></div>
-<pre>  test/  test_pqueue.ml <span class="c">──┐</span>
-                          <span class="c">├──&gt;</span>  lib/  pqueue.mli   <span class="c">the contract</span>
-  bin/   solver.ml      <span class="c">──┘</span>            pqueue.ml    <span class="c">the implementation</span>
-         render.ml</pre>
+      <div class="code-head"><span class="path">java/</span><span class="lines">the dependency direction</span></div>
+<pre>  Tests.java       <span class="c">──┐</span>
+                     <span class="c">├──&gt;</span>  PQueue.java   <span class="c">the queue: four TODOs</span>
+  MazeSolver.java  <span class="c">──┘</span></pre>
     </div>
 
-    <p>The library depends on nothing in the lab. The executable and the tests both depend on the library, and never on each other. Two files describe that in full:</p>
-
-    <div class="code">
-      <div class="code-head"><span class="path">ocaml/lib/dune</span><span class="lines">and ocaml/bin/dune</span></div>
-<pre>(library
- (name pqueue_lib)
- <span class="hl">(modules pqueue)</span>)
-
-(executable
- (name solver)
- (modules solver render)
- <span class="hl">(libraries pqueue_lib unix)</span>)</pre>
-    </div>
-
-    <ul class="marks">
-      <li><b><code>(modules ...)</code> decides membership.</b> A file belongs to the stanza that names it &mdash; which is why <code>tour.ml</code> and <code>homework.ml</code> sit outside this directory entirely and are run with plain <code>ocaml</code>: they belong to no stanza and dune ignores them.</li>
-      <li><b><code>(libraries ...)</code> is the only dependency we write.</b> Not a list of files, and not an order. Dune reads the sources, works out which module needs which, and compiles them in an order we never state.</li>
-      <li><b>The test stanza is a third client, not a special case.</b> <code>test/dune</code> declares <code>(libraries pqueue_lib)</code> exactly as the executable does. The tests see precisely what any other client sees &mdash; which is the point of the next section.</li>
-    </ul>
+    <p>The same shape as the other two: one structure, two clients, and no dependency between the clients. What differs is that nothing records it. <code>javac *.java</code> compiles the directory; the class named on the <code>java</code> command line supplies <code>main</code>. For three files that is a virtue. It is also why a Java project of any size acquires Maven or Gradle, and why the OCaml lab needed only two lines of dune to say the same thing.</p>
   </div>
 </section>
 
 <!-- ===================== 02 ===================== -->
-<section id="boundary">
+<section id="keywords">
   <div class="col">
-    <p class="kicker">02 &mdash; the boundary</p>
-    <h2>The interface is a file, and the compiler reads it</h2>
-    <p class="lede">Python has <code>_rev</code> and <code>_make</code>: a leading underscore, which asks politely. OCaml has a second file, which does not ask.</p>
+    <p class="kicker">02 &mdash; four keywords</p>
+    <h2>One idea, said four times</h2>
+    <p class="lede">The lecture asked why <code>private</code> and <code>final</code>. This file is the answer at full length: four independent mechanisms, each closing one route back to mutability.</p>
 
     <div class="code">
-      <div class="code-head"><span class="path">ocaml/lib/pqueue.mli</span><span class="lines">what a client may know</span></div>
-<pre><span class="hl">type 'a t</span>                                 <span class="c">(* no definition given *)</span>
+      <div class="code-head"><span class="path">java/PQueue.java</span><span class="lines">the declarations, gathered</span></div>
+<pre><span class="hl">public final class</span> PQueue&lt;T&gt; {
 
-val empty    : 'a t
-val is_empty : 'a t -&gt; bool
-val enqueue  : 'a -&gt; 'a t -&gt; 'a t
-val dequeue  : 'a t -&gt; ('a * 'a t) option
-val peek     : 'a t -&gt; 'a option
-val to_list  : 'a t -&gt; 'a list
-val of_list  : 'a list -&gt; 'a t</pre>
+    private <span class="hl">record</span> Node&lt;T&gt;(T head, Node&lt;T&gt; tail) {}
+
+    <span class="hl">private final</span> Node&lt;T&gt; front;
+    <span class="hl">private final</span> Node&lt;T&gt; back;
+
+    <span class="hl">private</span> PQueue(Node&lt;T&gt; front, Node&lt;T&gt; back) { ... }
+}</pre>
     </div>
 
-    <p>The type is declared and never defined. Outside this module a queue has no fields, no representation and no shape: it can be produced only by <code>empty</code> and <code>enqueue</code>, and examined only through the seven functions listed. That the implementation happens to be a record of two lists is not hidden by convention &mdash; it is <em>absent</em> from what a client is given.</p>
+    <ul class="marks">
+      <li><b><code>final</code> class.</b> No subclass, so no override can reintroduce a mutable field or break the invariant behind the class's back.</li>
+      <li><b><code>private final</code> fields.</b> <code>private</code> keeps clients out; <code>final</code> keeps the class itself out, after construction. The two are genuinely different guarantees, and both are needed.</li>
+      <li><b><code>record</code> nodes.</b> A record's components are implicitly final and it has no setters, so a cons cell is immutable by construction rather than by discipline. This is the one place where modern Java says in a single word what the other three keywords say the long way.</li>
+      <li><b>A <code>private</code> constructor.</b> No client can assemble a queue directly, so every queue in the program has passed through <code>make</code> &mdash; which is what makes the invariant hold everywhere rather than merely usually.</li>
+    </ul>
 
     <div class="callout">
-      <p><strong>What this buys, concretely.</strong> Replace the two lists with a different representation tomorrow &mdash; a banker's queue with lazy tails, say, which is exactly session&nbsp;5's repair &mdash; and every client compiles unchanged, because no client could have depended on the old shape. The compiler also checks the implementation <em>against</em> this file: a queue operation whose type drifts from the contract is a compile error in <code>pqueue.ml</code>, not a surprise in <code>solver.ml</code>.</p>
+      <p><strong>Compare the same guarantee, three times.</strong> OCaml needs none of this: a record is immutable unless a field is marked <code>mutable</code>, so the default is already right and the <code>.mli</code> hides the representation outright. Python has no mechanism at all &mdash; <code>_rev</code> and <code>_make</code> are a naming convention, and immutability comes from tuples happening to be immutable. Java sits between: nothing is enforced by default, everything can be enforced on request, and each request is a separate word.</p>
     </div>
-
-    <p>The same discipline in Python is a naming convention that nothing enforces, and in Java a set of keywords &mdash; <code>private</code>, <code>final</code> &mdash; that enforce rather less than this one line does. The three are compared on the <a href="index.html#languages">session page</a>.</p>
   </div>
 </section>
 
 <!-- ===================== 03 ===================== -->
-<section id="algorithm">
+<section id="empty">
   <div class="col">
-    <p class="kicker">03 &mdash; the algorithm</p>
-    <h2>The search never names a queue</h2>
-    <p class="lede">One loop, written once. It puts positions somewhere and takes positions back out, and it does not know what the somewhere is.</p>
+    <p class="kicker">03 &mdash; the shared empty</p>
+    <h2>One empty queue, and a cast we sign for</h2>
+    <p class="lede">This is the most interesting file in the lab, and it is six lines long.</p>
 
     <div class="code">
-      <div class="code-head"><span class="path">ocaml/bin/solver.ml</span><span class="lines">abridged</span></div>
-<pre>let rec loop frontier =
-  <span class="hl">match ops.take frontier with</span>
-  | None -&gt; None                     <span class="c">(* nothing left to explore *)</span>
-  | Some (pos, frontier) -&gt;
-      <span class="c">(* settle pos, and collect its unvisited neighbours as `fresh` *)</span>
-      let frontier =
-        List.fold_left (fun f p -&gt; <span class="hl">ops.put</span> p f) frontier fresh in
-      loop frontier</pre>
+      <div class="code-head"><span class="path">java/PQueue.java</span><span class="lines">the shared empty value</span></div>
+<pre>private static final PQueue&lt;?&gt; EMPTY = new PQueue&lt;&gt;(null, null);
+
+<span class="hl">@SuppressWarnings("unchecked")</span>
+public static &lt;T&gt; PQueue&lt;T&gt; empty() {
+    return <span class="hl">(PQueue&lt;T&gt;)</span> EMPTY;
+}</pre>
     </div>
 
-    <p>Three names appear from the container: <code>ops.empty</code>, <code>ops.put</code>, <code>ops.take</code>. The words <em>queue</em> and <em>stack</em> appear nowhere in the loop. Supply a queue and the loop is breadth-first; supply a stack and the very same loop is depth-first.</p>
+    <p>There is exactly one empty queue in a running program, and every caller receives the same object. That is safe for precisely one reason: no operation can modify it. An <em>ephemeral</em> queue could not do this &mdash; each caller would need a fresh <code>new</code>, because each caller would be about to change it. The lecture made this point with two lines of an interface file, <code>create : unit -&gt; 'a t</code> against <code>empty : 'a t</code>; here it is the same point, in the implementation.</p>
 
-    <p>Note also what <code>take</code> returns: <code>('a * 'f) option</code> &mdash; the element <em>and the new frontier</em>, or nothing at all. The loop cannot forget the empty case, and it cannot mutate the frontier it was handed. Every step names a new version, and the old ones remain valid &mdash; which is how <code>--inspect</code> can ask what the frontier held at step&nbsp;40 without anything having been recorded.</p>
+    <div class="callout">
+      <p><strong>Read the annotation as a signature on a form.</strong> Generics are erased at run time, so a <code>PQueue&lt;?&gt;</code> holding nothing cannot be <em>proved</em> to be a <code>PQueue&lt;String&gt;</code>; the cast is unchecked and the compiler says so. It is nevertheless sound, because the object contains no <code>T</code> at all &mdash; two nulls &mdash; and never will, being immutable. The reason it is safe is therefore the persistence of the structure, and the type system has no way to express that reason. So the programmer states it by hand, and takes responsibility.</p>
+      <p>OCaml writes the same thing as <code>val empty : 'a t</code>, with no cast, no annotation and nothing to take responsibility for. That difference &mdash; not syntax, not verbosity &mdash; is what a more expressive type system buys.</p>
+    </div>
   </div>
 </section>
 
 <!-- ===================== 04 ===================== -->
-<section id="frontier">
+<section id="pairs">
   <div class="col">
-    <p class="kicker">04 &mdash; the frontier</p>
-    <h2>A frontier is five functions &mdash; and a type</h2>
-    <p class="lede">This is the one place where the OCaml version says something the Python version cannot.</p>
+    <p class="kicker">04 &mdash; returning two things</p>
+    <h2>No tuples, and no option</h2>
+    <p class="lede">A persistent <code>dequeue</code> must return the element <em>and</em> the new version. Each language solves that with what it has.</p>
 
     <div class="code">
-      <div class="code-head"><span class="path">ocaml/bin/solver.ml</span><span class="lines">the interface, as a type</span></div>
-<pre>type <span class="hl">('a, 'f)</span> frontier_ops = {
-  name    : string;
-  empty   : 'f;
-  put     : 'a -&gt; 'f -&gt; 'f;
-  take    : 'f -&gt; ('a * 'f) option;
-  to_list : 'f -&gt; 'a list;
-}</pre>
+      <div class="code-head"><span class="path">java/PQueue.java</span><span class="lines">a type declared for one purpose</span></div>
+<pre>public record Dequeued&lt;T&gt;(T value, PQueue&lt;T&gt; rest) {}
+
+public Dequeued&lt;T&gt; dequeue() { ... }</pre>
     </div>
 
-    <p><strong>Two type variables, and the second is the interesting one.</strong> <code>'a</code> is what the frontier stores &mdash; here, positions. <code>'f</code> is the frontier <em>itself</em>, and it differs between the two implementations:</p>
+    <p>Java has no tuple type, so returning two things means declaring a type for the occasion. Records make that cheap &mdash; one line &mdash; and arguably clearer than a tuple, because the components are named. <code>MazeSolver</code> does the same thing again for its frontier, with <code>record Taken(Pos value, Frontier rest)</code>.</p>
 
-    <div class="code">
-      <div class="code-head"><span class="path">the two frontiers</span><span class="lines">same interface, different 'f</span></div>
-<pre><span class="c">(* a position is an (int * int) pair -- row and column *)</span>
-
-queue_frontier : (int * int, <span class="hl">(int * int) Pqueue.t</span>) frontier_ops
-stack_frontier : (int * int, <span class="hl">(int * int) list</span>)     frontier_ops</pre>
-    </div>
-
-    <p>Because <code>search</code> is written for <em>any</em> <code>'f</code>, it is incapable of depending on which one arrives. Not unlikely to; incapable. There is no cast to reach through the abstraction and no field to inspect, because within the loop the type <code>'f</code> has no structure at all. The agnosticism the Python note describes as a discipline is here a property the compiler establishes before the program runs.</p>
+    <p>The second difference is sharper. OCaml returns <code>('a * 'a t) option</code>, so the empty case is in the type and a caller cannot reach the value without handling it. Java throws <code>NoSuchElementException</code>, which is in the documentation and in nothing that the compiler checks. Both decisions are defensible; only one of them is enforced.</p>
 
     <div class="callout">
-      <p><strong>The stack needs no module behind it.</strong> <code>queue_frontier</code> is built from <code>Pqueue</code>; <code>stack_frontier</code> is built from nothing &mdash; its <code>empty</code> is <code>[]</code>, its <code>put</code> is <code>::</code>, and its <code>take</code> is a two-case <code>match</code>. OCaml's built-in list <em>is</em> the lecture's persistent stack, so the depth-first half of this lab is supplied by the language itself. That is also why <code>--dfs</code> runs before a single TODO is filled in.</p>
+      <p><strong>An ignored result is always a bug.</strong> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/Tests.java">Tests.java</a> contains the line <code>q1.enqueue(4);</code> with the result deliberately discarded, in order to check that <code>q1</code> is unchanged afterwards. Some editors flag that line, and the flag is worth pausing on: for a <em>pure</em> method, ignoring the return value means the call did nothing whatsoever. In the ephemeral version of this class the same line would be the normal way to use it. The warning is only correct because the queue is persistent.</p>
     </div>
-
-    <p>A record whose fields are functions has a proper name, and gets it in session&nbsp;5. For now it reads as a bundle of operations passed as one value.</p>
   </div>
 </section>
 
 <!-- ===================== 05 ===================== -->
-<section id="wiring">
+<section id="frontier">
   <div class="col">
-    <p class="kicker">05 &mdash; the wiring</p>
-    <h2>What dune does, and one thing it is told not to do</h2>
+    <p class="kicker">05 &mdash; the frontier</p>
+    <h2>An interface, and two records that implement it</h2>
+    <p class="lede">The search never names a queue or a stack. Java expresses that with the mechanism every student here already knows.</p>
 
-    <ul class="marks">
-      <li><b>No build order is written down.</b> Dune reads the sources, derives the module graph and compiles what is needed. Adding a file to a stanza is the whole of adding a file.</li>
-      <li><b><code>_build/</code> is disposable.</b> Everything dune produces lives there and nothing else is touched; deleting it costs a recompilation and nothing more.</li>
-      <li><b>Warnings are relaxed in the library, deliberately.</b> <code>lib/dune</code> carries <code>(flags (:standard -w -26-27-32))</code>, which turns unused-variable and unused-value warnings off for that stanza only. Half-finished code compiles, so the tests can run and report which TODO is next instead of the compiler refusing the file. It is a teaching setting, not a style to copy: in the executable and the tests those warnings are on.</li>
-    </ul>
+    <div class="code">
+      <div class="code-head"><span class="path">java/MazeSolver.java</span><span class="lines">the interface and its two implementations</span></div>
+<pre>interface Frontier {
+    boolean  isEmpty();
+    Frontier put(Pos p);
+    Taken    take();
+    record Taken(Pos value, Frontier rest) {}
+}
 
-    <div class="callout">
-      <p><strong>Build errors read bottom-up.</strong> When <code>dune runtest</code> fails, the first error is the one to read; the rest are usually its consequences. And an error reported in <code>test_pqueue.ml</code> about a type that does not match is nearly always a signature disagreement &mdash; the implementation drifting from <code>pqueue.mli</code>, which is the file to look at next.</p>
+record QueueFrontier(PQueue&lt;Pos&gt; q) implements Frontier { ... }
+
+record <span class="hl">StackFrontier(Pos head, StackFrontier tail)</span> implements Frontier { ... }</pre>
     </div>
+
+    <p>Three languages, three ways to say <em>same interface, two implementations</em>: Python gathers five functions into a <code>SimpleNamespace</code> and nothing checks that they exist; OCaml uses a record of functions whose second type parameter is the frontier itself, so the search is polymorphic in it; Java declares an interface and dispatches dynamically. Java's is the version that needs no explanation in this room &mdash; which is exactly why it is worth noticing that the other two achieved the same separation without it.</p>
+
+    <p>The highlighted line repays a second look. <code>StackFrontier</code> is a record whose <code>tail</code> is another <code>StackFrontier</code>: the frontier <em>is</em> its own cons cell, so the persistent stack needs no separate class and no queue behind it. Its <code>put</code> is one <code>new</code>, and its <code>take</code> returns the two components it already has. That is why <code>--dfs</code> produces a complete search before any of the four TODOs is written.</p>
   </div>
 </section>
 
@@ -484,25 +464,24 @@ stack_frontier : (int * int, <span class="hl">(int * int) list</span>)     front
 <section id="run">
   <div class="col">
     <p class="kicker">06 &mdash; run it</p>
-    <h2>Three commands</h2>
+    <h2>Two commands</h2>
 
     <div class="code">
-      <div class="code-head"><span class="path">from ocaml/</span><span class="lines">build, test, run</span></div>
-<pre>dune build
-dune runtest
-
-M=../mazes/medium.txt
-dune exec bin/solver.exe <span class="hl">--</span> $M --bfs
-dune exec bin/solver.exe <span class="hl">--</span> $M --dfs
-dune exec bin/solver.exe -- $M --bfs --inspect=40</pre>
+      <div class="code-head"><span class="path">from java/</span><span class="lines">compile, then run</span></div>
+<pre>javac *.java
+java Tests
+java MazeSolver ../mazes/medium.txt
+java MazeSolver ../mazes/medium.txt --dfs</pre>
     </div>
 
-    <p><code>dune build</code> compiles everything; <code>dune runtest</code> compiles and then runs the tests. The bare <code>--</code> separates dune's own arguments from the program's: without it, <code>--bfs</code> would be read as an option to <code>dune exec</code>. All three solvers agree on <code>mazes/medium.txt</code> &mdash; 306 cells explored and a path of 75 for breadth-first &mdash; which is the cross-language check that the specification, not the language, decided the answer.</p>
+    <p><code>javac *.java</code> compiles all three files; <code>java Tests</code> runs the tests and <code>java MazeSolver</code> the search. There is no build directory and nothing to clean beyond the <code>.class</code> files left beside the sources.</p>
+
+    <p>Part E is homework, and it is the third time through the same specification. The value is no longer in working out the algorithm &mdash; that was settled on paper before Part A &mdash; but in noticing what this language checks, what it merely permits, and what is left to us to guarantee. The half-page reflection asks precisely that.</p>
   </div>
 
   <footer class="col">
-    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.mli">lib/pqueue.mli</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">lib/pqueue.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/bin/solver.ml">bin/solver.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/bin/render.ml">bin/render.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/test/test_pqueue.ml">test/test_pqueue.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">tour.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">homework.ml</a></p>
-    <p>Links resolve when this page is opened from the lab folder. The same queue appears in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">java/PQueue.java</a>; the three are compared on the <a href="index.html#languages">session page</a>.</p>
+    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">PQueue.java</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/MazeSolver.java">MazeSolver.java</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/Tests.java">Tests.java</a></p>
+    <p>Links resolve when this page is opened from the lab folder. The same queue appears in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a>; the three are compared on the <a href="index.html#languages">session page</a>.</p>
     <p style="margin-top:16px">Programming Paradigms, session 2 &mdash; persistent vs. ephemeral data structures.</p>
   </footer>
 </section>
