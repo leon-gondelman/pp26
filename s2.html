@@ -20,7 +20,7 @@
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="group"><span class="glabel">Lecture material</span><ul><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — the queue in Java</a></li></ul></li></ul>
+  <ul class="materials"><li class="group"><span class="glabel">Lecture material</span><ul><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">OCaml tour — tour.ml, a program that runs</a></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — the queue in Java</a></li></ul></li></ul>
 </section>
 <section class="story">
   <h2>The question</h2>
@@ -95,16 +95,28 @@
     <li><strong>Why <code>private</code> and <code>final</code>.</strong>
         Java enforcing by compiler what Python asks for politely; the
         tuples-as-cons construction and the frozen-object trick.</li>
-    <li><strong>OCaml enters, read-only.</strong> Two interface files side by
-        side. <code>create : unit -> 'a t</code> against
-        <code>empty : 'a t</code> &mdash; one makes every caller allocate, the
-        other is a single value the whole program can share. That contrast
-        <em>is</em> the immutability argument, in two lines.</li>
-    <li><strong>Where this came from.</strong> Knuth, then the modern era;
-        Okasaki&rsquo;s thesis; and planar point location &mdash; the geometry
-        problem whose solution is &ldquo;share structure between adjacent
-        slabs&rdquo;.</li>
+    <li><strong>Where this came from.</strong> Knuth on structure, then
+        Okasaki&rsquo;s thesis &mdash; the point at which persistence stopped
+        being a trick and became a subject.</li>
+    <li><strong>Languages that start persistent.</strong> Lisp&rsquo;s cons
+        cell, Haskell with no assignment to take away, and OCaml&rsquo;s
+        persistent stack in five lines. No keyword was required in any of
+        them: the default did the work.</li>
+    <li><strong>A first look at OCaml.</strong> Enough of the language to
+        write the lab and deliberately no more: lists and what <code>::</code>
+        shares, <code>match</code>, records, <code>option</code> in place of
+        <code>null</code>, and how to compile and run. It closes on the same
+        stack written with a <em>mutable</em> record &mdash; same language,
+        same data, and the whole difference visible in one type.</li>
   </ol>
+
+  <p class="p">The OCaml half is also a program.
+     <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">tour.ml</a>
+     walks the same ten steps in the same order, so the claims made on the
+     slides can be checked instead of believed &mdash; structural sharing,
+     for instance, is demonstrated with physical equality rather than drawn.
+     It stops short of the queue itself, which is the lab&rsquo;s work.
+     Run it with <code>ocaml tour.ml</code>.</p>
 </section>
 
 <section>

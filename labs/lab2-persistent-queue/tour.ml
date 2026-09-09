@@ -65,20 +65,23 @@ let () =
   Printf.printf "counter now  = %d   (a ref is a mutable cell)\n" !counter
 
 (* ------------------------------------------------------------------ 4 *)
-(* Recursion. A function that calls itself must say so: let rec.
-   On numbers we recurse towards 0; on lists, towards []. *)
+(* A list is a chain of cells, each holding a value and a pointer to the
+   rest -- a linked list. The difference from Java or C is that OCaml never
+   hands us the pointer: there is no .next to assign to. *)
 
-let rec fact n = if n <= 1 then 1 else n * fact (n - 1)
-
-let rec length l =
-  match l with
-  | [] -> 0
-  | _ :: tl -> 1 + length tl
+let nothing = []                    (* the empty list *)
+let l  = [ 1; 2; 3 ]                (* a literal -- note the SEMICOLONS *)
+let l' = 1 :: 2 :: 3 :: []          (* exactly the same list *)
 
 let () =
-  section "4. let rec";
-  Printf.printf "fact 10      = %d\n" (fact 10);
-  Printf.printf "length [1;2;3;4] = %d\n" (length [ 1; 2; 3; 4 ])
+  section "4. Three ways to write one list";
+  Printf.printf "[]           = %s\n" (show nothing);
+  Printf.printf "[1; 2; 3]    = %s\n" (show l);
+  Printf.printf "1::2::3::[]  = %s\n" (show l');
+  Printf.printf "the last two are equal : %b\n" (l = l');
+  print_endline "  careful: [1, 2, 3] is NOT this list -- it is a list of";
+  print_endline "  ONE element, the triple (1, 2, 3). The complaint arrives";
+  print_endline "  later, somewhere else."
 
 (* ------------------------------------------------------------------ 5 *)
 (* Lists are immutable, and :: shares. This is the claim the lecture made
@@ -114,6 +117,22 @@ let () =
    Session 3 makes that guarantee the whole point. *)
 
 (* ------------------------------------------------------------------ 7 *)
+(* Recursion. A function that calls itself must say so: let rec.
+   On numbers we recurse towards 0; on lists, towards []. *)
+
+let rec fact n = if n <= 1 then 1 else n * fact (n - 1)
+
+let rec length l =
+  match l with
+  | [] -> 0
+  | _ :: tl -> 1 + length tl
+
+let () =
+  section "7. let rec";
+  Printf.printf "fact 10      = %d\n" (fact 10);
+  Printf.printf "length [1;2;3;4] = %d\n" (length [ 1; 2; 3; 4 ])
+
+(* ------------------------------------------------------------------ 8 *)
 (* Records group several values under names. They are immutable unless a
    field is declared `mutable`, so an "update" builds a new record and
    leaves the old one alone. *)
@@ -127,7 +146,7 @@ let shift p dx = { x = p.x + dx; y = p.y }   (* a NEW point *)
 let make_point x y = { x; y }
 
 let () =
-  section "7. Records";
+  section "8. Records";
   let p = make_point 3 4 in
   let q = shift p 10 in
   Printf.printf "p            = (%d, %d)\n" p.x p.y;
@@ -148,9 +167,13 @@ let () =
          lib/pqueue.ml      the implementation, with three TODOs for us
          test/              the tests, run by `dune runtest` *)
 
-(* ------------------------------------------------------------------ 8 *)
+(* ------------------------------------------------------------------ 9 *)
 (* option: OCaml has no null. A value is None, or Some v. The empty case
    lives in the TYPE, so a caller cannot quietly forget it.
+
+   option is a type defined by listing its cases -- our first algebraic
+   data type, and the only one we borrow today. Declaring our own is
+   session 3.
 
    We show it on the persistent STACK from the lecture -- five lines, and
    not the lab's exercise. *)
@@ -163,7 +186,7 @@ let pop s = match s with [] -> None | v :: rest -> Some (v, rest)
 let peek s = match s with [] -> None | v :: _ -> Some v
 
 let () =
-  section "8-9. option, and a persistent stack";
+  section "9. option, and a persistent stack";
   let s0 = push 3 (push 2 (push 1 empty_stack)) in
   let s1 = push 4 s0 in
   Printf.printf "s0           = %s\n" (show s0);
@@ -179,6 +202,31 @@ let () =
   (match peek s1 with
    | None -> ()
    | Some v -> Printf.printf "peek s1      = Some %d\n" v)
+
+(* ------------------------------------------------------------------ 10 *)
+(* A record field marked `mutable` can be assigned with <-. The same stack,
+   written imperatively -- and this is where persistence is lost. *)
+
+type 'a mstack = { mutable elems : 'a list }
+
+let create () = { elems = [] }
+let mpush v s = s.elems <- v :: s.elems       (* returns unit *)
+
+let () =
+  section "10. A record may be mutable";
+  let ms = create () in
+  mpush 1 ms;
+  mpush 2 ms;
+  let alias = ms in                (* another NAME for the same stack *)
+  Printf.printf "ms          = %s\n" (show ms.elems);
+  mpush 3 ms;
+  Printf.printf "after mpush 3 ms:\n";
+  Printf.printf "  ms        = %s\n" (show ms.elems);
+  Printf.printf "  alias     = %s   <- it changed too\n" (show alias.elems);
+  print_endline "  there is only ONE stack. Compare section 9, where s0";
+  print_endline "  survived untouched. The difference is in the types:";
+  print_endline "    mpush : 'a -> 'a mstack -> unit    (I changed something)";
+  print_endline "    push  : 'a -> 'a stack -> 'a stack (here is a new one)"
 
 (* ------------------------------------------------------------------ *)
 (* That is the whole language we need.
