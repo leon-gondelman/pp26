@@ -52,7 +52,7 @@ the lab's last part returns to it.
 | B | Watch it drive the **maze solver**; swap queue for stack | `python/solver.py` | ~15 min |
 | C | The same queue in **OCaml**, against a given `.mli` | `ocaml/lib/pqueue.ml`, 3 TODOs | ~30 min |
 | D | Break the amortized bound with persistence | `python/bench.py` | ~15 min |
-| E | The same queue in **Java** + written reflection | `java/PQueue.java`, 4 TODOs | homework |
+| E | The same queue in **Java** | `java/PQueue.java`, 4 TODOs | homework |
 
 Each part is guarded by tests — make them pass in order.
 
@@ -137,7 +137,7 @@ the proof does persistence break?** (The full repair uses lazy evaluation
 and memoization — Okasaki, *Purely Functional Data Structures*, 1996. We
 will have the tools in session 5.)
 
-### Part E — Java + reflection (homework)
+### Part E — Java (homework)
 
 ```bash
 cd java
@@ -148,17 +148,6 @@ java MazeSolver ../mazes/medium.txt [--dfs]
 Fill the four TODOs in `PQueue.java`. Note what Java adds that Python could
 only ask for politely: `final` fields, `record` nodes, a `final` class —
 the lecture's "why `private` and `final`?" slide, enforced by a compiler.
-
-Then write **half a page**, for the oral exam portfolio:
-
-1. The same four operations in three languages: what did each language
-   *check*, what did it merely *trust*? Where did you notice the
-   typed/untyped difference in practice?
-2. In which language was persistence the path of least resistance, and in
-   which did you have to maintain it by discipline?
-3. Your one-sentence answer to Part D, plus: would the problem disappear if
-   the queue were ephemeral? What would you lose instead? (Hint: what did
-   `--inspect` cost?)
 
 ### Stretch (optional, any week)
 
