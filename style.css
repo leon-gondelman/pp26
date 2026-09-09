@@ -132,3 +132,19 @@ ul.refs li{padding:.55rem 0;border-bottom:1px solid var(--rule);
 @media (max-width:640px){
   table.langs td:first-child{width:auto}
 }
+
+/* B and D: run and watch, nothing to implement */
+table.parts tr.watch{background:var(--accent-soft)}
+table.parts tr.watch td.p{color:var(--accent)}
+table.parts tr.watch td:last-child::after{content:"run and watch";display:block;
+  margin-top:.4rem;font:600 .68rem/1 -apple-system,BlinkMacSystemFont,sans-serif;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+/* materials grouped by lecture / lab / homework */
+ul.materials li.group{border:0;background:none;padding:0;margin-bottom:.9rem}
+ul.materials li.group>.glabel{display:block;font:600 .72rem/1.4 -apple-system,
+  BlinkMacSystemFont,sans-serif;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:.35rem}
+ul.materials li.group>ul{list-style:none;padding:0;display:grid;gap:.4rem}
+ul.materials li.group>ul>li{border:1px solid var(--rule);border-radius:6px;
+  padding:.55rem .9rem;background:var(--card)}
+ul.materials li.group>ul>li::before{content:none}

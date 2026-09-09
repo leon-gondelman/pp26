@@ -20,7 +20,7 @@
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — Java queue + written reflection</a></li></ul>
+  <ul class="materials"><li class="group"><span class="glabel">Lecture material</span><ul><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — the queue in Java</a></li></ul></li></ul>
 </section>
 <section class="story">
   <h2>The question</h2>
@@ -102,51 +102,45 @@
 </section>
 
 <section>
-  <h2>What we build</h2>
+  <h2>The lab, A to E</h2>
   <p>One data structure, specified once, built three times: the
      <strong>two-list persistent queue</strong>. The stack was easy because
      <code>push</code> shares everything. A queue adds at one end and removes
      at the other, so persistence has to be earned.</p>
+  <p><strong>B and D have nothing to implement</strong> &mdash; they are the
+     two we run and watch, and they are where the point of the session lands.
+     They are shaded below. Everything happens in order, A through D on the
+     day, E at home. Nothing is handed in.</p>
   <table class="parts">
     <tbody>
       <tr><td class="p">A0</td><td><strong>On paper, before any code.</strong>
           The representation, the abstraction function, the invariant, and a
-          hand-executed trace. Nine exercises; the last four are homework.</td></tr>
+          hand-executed trace. Nine exercises; the proofs in the last four are
+          for afterwards.</td></tr>
       <tr><td class="p">A</td><td><strong>Python.</strong> Four holes in
           <code>pqueue.py</code>, guarded by fourteen tests in three groups:
           basics, the FIFO contract, then persistence and structural
           sharing.</td></tr>
+      <tr class="watch"><td class="p">B</td><td><strong>The payoff.</strong>
+          Our queue drives a maze solver. Swapping it for the lecture&rsquo;s
+          stack turns breadth-first search into depth-first, without touching
+          the search: the algorithm never mentions queue or stack, only a
+          frontier. A slider then scrubs through every frontier the search ever
+          had &mdash; nothing was logged, the old versions were simply never
+          destroyed.</td></tr>
       <tr><td class="p">C</td><td><strong>OCaml.</strong> The same queue
           against a given <code>.mli</code>. Worth noticing what the compiler
           now checks for us, and what got shorter.</td></tr>
-      <tr><td class="p">E</td><td><strong>Java.</strong> Homework. The same
-          four operations a third time, in a language that can enforce what
-          Python only asks for politely: <code>final</code> fields,
+      <tr class="watch"><td class="p">D</td><td><strong>Breaking the
+          bank.</strong> The amortised bound has an assumption hidden inside
+          it, and persistence violates it: a benchmark makes an
+          &ldquo;O(1)&rdquo; operation cost O(n) every single time. Which
+          assumption? We answer it out loud before we leave. The repair needs
+          tools we meet in session&nbsp;5.</td></tr>
+      <tr><td class="p">E</td><td><strong>Java.</strong> At home. The same four
+          operations a third time, in a language that can enforce what Python
+          only asks for politely: <code>final</code> fields,
           <code>record</code> nodes, a <code>final</code> class.</td></tr>
-    </tbody>
-  </table>
-</section>
-
-<section>
-  <h2>What we run and watch</h2>
-  <p>Two parts have nothing to implement. They sit between the
-     implementations &mdash; on the day the order is A, B, C, D &mdash; and
-     they are where the point of the session actually lands.</p>
-  <table class="parts">
-    <tbody>
-      <tr><td class="p">B</td><td><strong>The payoff.</strong> Our queue drives
-          a maze solver. Swapping it for the lecture&rsquo;s stack turns
-          breadth-first search into depth-first, without touching the search:
-          the algorithm never mentions queue or stack, only a frontier. A
-          slider then scrubs through every frontier the search ever had &mdash;
-          nothing was logged, the old versions were simply never
-          destroyed.</td></tr>
-      <tr><td class="p">D</td><td><strong>Breaking the bank.</strong> The
-          amortised bound has an assumption hidden inside it, and persistence
-          violates it: a benchmark makes an &ldquo;O(1)&rdquo; operation cost
-          O(n) every single time. Which assumption? We answer it out loud
-          before we leave. The repair needs tools we meet in
-          session&nbsp;5.</td></tr>
     </tbody>
   </table>
 </section>
