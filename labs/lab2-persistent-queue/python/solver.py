@@ -108,14 +108,15 @@ def main(argv):
     try:
         path, trace, versions = search(mz, ops)
     except NotImplementedError as todo:
-        print(f"--bfs runs on the persistent queue of pqueue.py, not yet finished "
-              f"yet ({todo}).\n"
+        print(f"--bfs runs on the persistent queue of pqueue.py, which is not yet "
+              f"finished ({todo}).\n"
               f"  * fill the TODOs in pqueue.py  (Part A), or\n"
               f"  * run --dfs right now: the stack frontier is provided.",
               file=sys.stderr)
         return 1
 
     print(render.ascii_maze(mz, path=path, visited=[p for p, _ in trace],
+                           frontier=("stack" if "dfs" in flags else "queue"),
                            colour=False if "no-color" in flags else None))
     print(f"{ops.name}: explored {len(trace)} cells, "
           + (f"path length {len(path)}" if path else "no path found"))

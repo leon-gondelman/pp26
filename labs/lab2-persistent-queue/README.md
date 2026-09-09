@@ -56,6 +56,23 @@ the lab's last part returns to it.
 
 Each part is guarded by tests — make them pass in order.
 
+### Before starting, on Windows
+
+The commands throughout assume a POSIX shell. Three adjustments:
+
+- **`python3` is `python` or `py`.** Windows has no `python3` on the path.
+- **Part C is easiest under WSL.** opam has supported Windows natively since
+  2.2, but the Windows Subsystem for Linux gives the same toolchain everyone
+  else is using, and settles the point above at the same time.
+- **If the output reads `←[38;5;39m` instead of colour**, the terminal is not
+  interpreting ANSI escapes. Windows Terminal and PowerShell 7 do; the legacy
+  console does not. Add `--no-color` to any solver command.
+
+One habit worth acquiring on every platform: copy a command **without** the
+prose around it. A `#` comment typed after a command is stripped by a shell
+script, but not by an interactive `zsh` prompt — the default on macOS — where
+it arrives as extra arguments and confuses tools such as `dune`.
+
 ### Part A — Python
 
 ```bash
@@ -72,11 +89,15 @@ correct **ephemeral** one.
 
 ### Part B — the payoff
 
+The four runs below are, in order: breadth-first with the persistent queue;
+the one-line swap to depth-first; the time-travel view, written to a file; and
+a question put to an old version of the frontier.
+
 ```bash
-python3 solver.py ../mazes/medium.txt --bfs                  # BFS with the persistent queue
-python3 solver.py ../mazes/medium.txt --dfs                  # one-line swap
-python3 solver.py ../mazes/medium.txt --bfs --html=bfs.html  # time-travel view
-python3 solver.py ../mazes/medium.txt --bfs --inspect=40     # ask an old version
+python3 solver.py ../mazes/medium.txt --bfs
+python3 solver.py ../mazes/medium.txt --dfs
+python3 solver.py ../mazes/medium.txt --bfs --html=bfs.html
+python3 solver.py ../mazes/medium.txt --bfs --inspect=40
 ```
 
 `--dfs` works before a single line is written — the stack frontier is provided
@@ -99,9 +120,11 @@ versions is free when nothing can modify them.
 
 ### Part C — OCaml
 
+`dune runtest` reports the three TODOs in `lib/pqueue.ml`, one at a time.
+
 ```bash
 cd ocaml
-dune runtest                                    # 3 TODOs in lib/pqueue.ml
+dune runtest
 dune exec bin/solver.exe -- ../mazes/medium.txt --bfs
 dune exec bin/solver.exe -- ../mazes/medium.txt --dfs
 dune exec bin/solver.exe -- ../mazes/medium.txt --bfs --html=bfs.html

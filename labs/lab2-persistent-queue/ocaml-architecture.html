@@ -488,8 +488,8 @@ stack_frontier : (int * int, <span class="hl">(int * int) list</span>)     front
 
     <div class="code">
       <div class="code-head"><span class="path">from ocaml/</span><span class="lines">build, test, run</span></div>
-<pre>dune build                  <span class="c"># compile everything</span>
-dune runtest                <span class="c"># compile, then run the tests</span>
+<pre>dune build
+dune runtest
 
 M=../mazes/medium.txt
 dune exec bin/solver.exe <span class="hl">--</span> $M --bfs
@@ -497,7 +497,7 @@ dune exec bin/solver.exe <span class="hl">--</span> $M --dfs
 dune exec bin/solver.exe -- $M --bfs --inspect=40</pre>
     </div>
 
-    <p>The bare <code>--</code> separates dune's own arguments from the program's: without it, <code>--bfs</code> would be read as an option to <code>dune exec</code>. All three solvers agree on <code>mazes/medium.txt</code> &mdash; 306 cells explored and a path of 75 for breadth-first &mdash; which is the cross-language check that the specification, not the language, decided the answer.</p>
+    <p><code>dune build</code> compiles everything; <code>dune runtest</code> compiles and then runs the tests. The bare <code>--</code> separates dune's own arguments from the program's: without it, <code>--bfs</code> would be read as an option to <code>dune exec</code>. All three solvers agree on <code>mazes/medium.txt</code> &mdash; 306 cells explored and a path of 75 for breadth-first &mdash; which is the cross-language check that the specification, not the language, decided the answer.</p>
   </div>
 
   <footer class="col">

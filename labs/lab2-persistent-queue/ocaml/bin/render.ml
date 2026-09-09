@@ -23,9 +23,14 @@ let glyph wide = function
   | Start -> if wide then "S " else "S"
   | Goal -> if wide then "E " else "E"
 
-let colour_of = function
+(* The explored cells are tinted per search, matching the lab pages: the queue
+   frontier is blue, the stack frontier gold. The path stays bold gold in both. *)
+let seen_queue = "\027[38;5;39m"
+let seen_stack = "\027[38;5;179m"
+
+let colour_of seen = function
   | Wall -> Some "\027[38;5;240m"
-  | Seen -> Some "\027[38;5;39m"
+  | Seen -> Some seen
   | Path -> Some "\027[1;38;5;220m"
   | Start -> Some "\027[1;38;5;46m"
   | Goal -> Some "\027[1;38;5;207m"
@@ -45,7 +50,8 @@ let terminal_columns () =
   | Some n when n > 0 -> n
   | _ -> 80
 
-let ascii_maze grid ?path ?(visited = []) ?colour ?wide () =
+let ascii_maze grid ?path ?(visited = []) ?colour ?wide
+    ?(seen = seen_queue) () =
   let height = Array.length grid and width = String.length grid.(0) in
   let kind =
     Array.map
@@ -73,7 +79,7 @@ let ascii_maze grid ?path ?(visited = []) ?colour ?wide () =
   in
   let colour = colour_on colour in
   let draw k =
-    match (if colour then colour_of k else None) with
+    match (if colour then colour_of seen k else None) with
     | Some c -> c ^ glyph wide k ^ "\027[0m"
     | None -> glyph wide k
   in

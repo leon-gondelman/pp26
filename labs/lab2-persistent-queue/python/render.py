@@ -23,6 +23,10 @@ _COLOUR = {"wall": "\033[38;5;240m", "seen": "\033[38;5;39m",
            "end": "\033[1;38;5;207m"}
 _OFF = "\033[0m"
 
+# The explored cells are tinted per search, matching the lab pages: the queue
+# frontier is blue, the stack frontier gold. The path stays bold gold in both.
+_SEEN = {"queue": "\033[38;5;39m", "stack": "\033[38;5;179m"}
+
 
 def _colour_on(explicit):
     if explicit is not None:
@@ -32,7 +36,8 @@ def _colour_on(explicit):
     return sys.stdout.isatty()
 
 
-def ascii_maze(mz, path=None, visited=None, colour=None, wide=None):
+def ascii_maze(mz, path=None, visited=None, colour=None, wide=None,
+               frontier="queue"):
     """The maze, the cells the search touched, and the path it found."""
     kind = [["wall" if ch == "#" else "open" for ch in row] for row in mz.grid]
     for r, c in visited or []:
@@ -51,7 +56,8 @@ def ascii_maze(mz, path=None, visited=None, colour=None, wide=None):
 
     def draw(k):
         if colour and k in _COLOUR:
-            return _COLOUR[k] + glyph[k] + _OFF
+            code = _SEEN.get(frontier, _COLOUR["seen"]) if k == "seen" else _COLOUR[k]
+            return code + glyph[k] + _OFF
         return glyph[k]
 
     body = "\n".join("".join(draw(k) for k in row) for row in kind)

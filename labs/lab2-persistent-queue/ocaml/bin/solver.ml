@@ -171,6 +171,7 @@ let report grid ops flags outcome =
        ?path:outcome.path
        ~visited:(List.map fst outcome.trace)
        ?colour:(if flag "no-color" <> None then Some false else None)
+       ~seen:(if flag "dfs" <> None then Render.seen_stack else Render.seen_queue)
        ());
   (match outcome.path with
    | Some cells ->
@@ -219,8 +220,8 @@ let () =
         | outcome -> report grid ops flags outcome; 0
         | exception Failure msg ->
             Printf.eprintf
-              "--bfs runs on the persistent queue of pqueue.ml, not yet finished \
-               yet (%s).\n\
+              "--bfs runs on the persistent queue of pqueue.ml, which is not yet \
+               finished (%s).\n\
               \  * fill the TODOs in lib/pqueue.ml  (Part C), or\n\
               \  * run --dfs right now: the stack frontier is provided.\n"
               msg;
