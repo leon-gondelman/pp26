@@ -167,14 +167,60 @@
 
 <section>
   <h2>Further reading</h2>
+  <p>None of this is required. It is the list from the
+     <a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html#reading">lab page</a>, where each entry is annotated at
+     more length.</p>
   <ul class="refs">
-    <li>Chris Okasaki, <em>Purely Functional Data Structures</em>, Cambridge
-        University Press, 1998. Chapter&nbsp;5 for amortisation and this exact
-        queue; chapter&nbsp;6 for the lazy repair.</li>
-    <li>Driscoll, Sarnak, Sleator and Tarjan, <em>Making data structures
-        persistent</em>, 1989 &mdash; fat nodes, and the general recipe.</li>
-    <li>Dobkin and Lipton, 1976, for the slab decomposition behind the
-        point-location example.</li>
+    <li><strong>Chris Okasaki, <em>Purely Functional Data Structures</em></strong>
+        &mdash;
+        <a href="https://www.cambridge.org/core/books/purely-functional-data-structures/0409255DA1B48FA731859AC72E34D494">CUP, 1998</a>,
+        from the <a href="https://www.cs.cmu.edu/~rwh/students/okasaki.pdf">1996 thesis</a>
+        (free PDF). The standard reference. Chapter&nbsp;5 is the queue we are
+        building and &sect;5.6 is the amortisation-versus-persistence tension;
+        chapter&nbsp;6 is the repair for Part&nbsp;D, using laziness and
+        memoisation. His
+        <a href="http://okasaki.blogspot.com/2008/02/ten-years-of-purely-functional-data.html">retrospective ten years on</a>
+        is worth five minutes.</li>
+
+    <li><strong>Eric Lippert, &ldquo;Immutability in C#&rdquo;</strong>
+        (2007&ndash;08). Eleven posts building immutable stacks, queues and
+        trees.
+        <a href="https://ericlippert.com/2007/11/13/immutability-in-c-part-one-kinds-of-immutability/">Part One</a>
+        separates the several things the word <em>immutable</em> is used to
+        mean;
+        <a href="https://ericlippert.com/2007/12/10/immutability-in-c-part-four-an-immutable-queue/">Part Four</a>
+        is this very queue in a fourth language, twenty years earlier &mdash;
+        including the observation that a stack is a backwards queue, and the
+        warning that one dequeue can cost O(n).</li>
+
+    <li><strong>Driscoll, Sarnak, Sleator and Tarjan,
+        &ldquo;Making data structures persistent&rdquo;</strong> &mdash;
+        <a href="https://doi.org/10.1016/0022-0000(89)90034-2">JCSS, 1989</a>.
+        Where the vocabulary comes from: <em>partial</em> persistence, where
+        old versions can be read, against <em>full</em> persistence, where they
+        can be written too. The <code>--inspect</code> flag in the lab is the
+        partial kind.</li>
+
+    <li><strong>Hood and Melville (1981); Kaplan and Tarjan (1995).</strong>
+        Queues with worst-case O(1) bounds instead of amortised ones, reached
+        by incremental rebuilding rather than laziness &mdash; the other way
+        out of the problem Part&nbsp;D walks into.</li>
+
+    <li><strong><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Git&rsquo;s object model</a></strong>
+        &mdash; a persistent data structure in production. A commit is a new
+        version of a whole tree that shares every unchanged subtree with its
+        parent. Checking out an old commit is cheap for exactly the reason
+        <code>--inspect</code> is cheap here.</li>
+
+    <li><strong>hyPiRion,
+        <a href="https://hypirion.com/musings/understanding-persistent-vector-pt-1">&ldquo;Understanding Clojure&rsquo;s Persistent Vectors&rdquo;</a></strong>
+        (2013). Three illustrated posts on the bit-partitioned trie behind
+        Clojure&rsquo;s vectors: how a persistent structure keeps effectively
+        constant-time indexing once cons cells are no longer enough. The
+        companion post on
+        <a href="https://hypirion.com/musings/understanding-clojure-transients">transients</a>
+        covers mutation that nobody is able to observe &mdash; the other half
+        of the amortisation story, and the natural sequel to this lab.</li>
   </ul>
 </section>
 
