@@ -20,7 +20,7 @@
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="group"><span class="glabel">Lecture material</span><ul><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">OCaml tour — tour.ml, a program that runs</a></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — the queue in Java</a></li></ul></li></ul>
+  <ul class="materials"><li class="group"><span class="glabel">Lecture material</span><ul><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">OCaml tour — tour.ml, a program that runs</a></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — the queue in Java</a></li><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">OCaml exercises — homework.ml</a></li></ul></li></ul>
 </section>
 <section class="story">
   <h2>The question</h2>
@@ -117,6 +117,15 @@
      for instance, is demonstrated with physical equality rather than drawn.
      It stops short of the queue itself, which is the lab&rsquo;s work.
      Run it with <code>ocaml tour.ml</code>.</p>
+
+  <p class="p">Its companion is
+     <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">homework.ml</a>,
+     which follows the same order and asks us to write the code instead:
+     nine short exercises on lists, recursion, <code>match</code> and
+     <code>option</code>, each starting as a hole. Running the file reports
+     which are still to do, which pass and which are wrong, so we can work one
+     at a time. There is nothing to collect &mdash; the point is that the
+     lab&rsquo;s OCaml part should be typing rather than puzzling.</p>
 </section>
 
 <section>
@@ -189,6 +198,17 @@
      <a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html#reading">lab page</a>, where each entry is annotated at
      more length.</p>
   <ul class="refs">
+    <li><strong>Sylvain Conchon &amp; Jean-Christophe Filli&acirc;tre,
+        <em>Learn Programming with OCaml: Algorithms and Data Structures</em></strong>
+        &mdash; <a href="https://usr.lmf.cnrs.fr/lpo/lpo.pdf">free PDF</a>,
+        English translation by Urmila Nair, 2026, CC&nbsp;BY-SA. The closest
+        book to this course there is. Chapter&nbsp;2 covers everything in
+        today&rsquo;s OCaml part and ends in the kind of exercises set for
+        homework; &sect;6.1 and &sect;6.2 are the imperative and the persistent
+        queue, side by side; &sect;4.4 is persistent arrays. Later on,
+        chapter&nbsp;5 is session&nbsp;3&rsquo;s trees and chapter&nbsp;8 is
+        session&nbsp;7&rsquo;s union-find.</li>
+
     <li><strong>Chris Okasaki, <em>Purely Functional Data Structures</em></strong>
         &mdash;
         <a href="https://www.cambridge.org/core/books/purely-functional-data-structures/0409255DA1B48FA731859AC72E34D494">CUP, 1998</a>,
