@@ -20,7 +20,7 @@
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="group"><span class="glabel">Lecture material</span><ul><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">OCaml tour — tour.ml</a></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">Lab code (Python, OCaml, Java)</a></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — the queue in Java</a></li><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">OCaml exercises — homework.ml</a></li></ul></li></ul>
+  <ul class="materials"><li class="group"><span class="glabel">Lecture material</span><ul><li class="m-slides"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></li><li class="m-code"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">OCaml tour — tour.ml</a></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-paper"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">The two-list queue, on paper</a></li><li class="m-lab"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Lab 2 — one queue, three languages</a> <span class="dim">&middot;</span> <a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab2-persistent-queue">the code on GitHub</a></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">Part E — the queue in Java</a></li><li class="m-homework"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">OCaml exercises — homework.ml</a></li></ul></li></ul>
 </section>
 <section class="story">
   <h2>The question</h2>
@@ -153,7 +153,8 @@
           stack turns breadth-first search into depth-first, without touching
           the search: the algorithm never mentions queue or stack, only a
           frontier. A slider then scrubs through every frontier the search ever
-          had &mdash; nothing was logged, the old versions were never destroyed.</td></tr>
+          had, and <code>--inspect=40</code> asks what the frontier held at
+          step&nbsp;40 &mdash; without the solver having recorded it.</td></tr>
       <tr><td class="p">C</td><td><strong>OCaml.</strong> The same queue
           against a given <code>.mli</code>. Worth noticing what the compiler
           now checks for us, and what got shorter.</td></tr>
@@ -161,14 +162,41 @@
           bank.</strong> The amortised bound has an assumption hidden inside
           it, and persistence violates it: a benchmark makes an
           &ldquo;O(1)&rdquo; operation cost O(n) every single time. Which
-          assumption? We answer it out loud before we leave. The repair needs
-          tools we meet in session&nbsp;5.</td></tr>
+          assumption? We answer it out loud before we leave. This is the case
+          Okasaki constructs in &sect;5.6; the repair is his chapter&nbsp;6,
+          and needs tools we meet in session&nbsp;5.</td></tr>
       <tr><td class="p">E</td><td><strong>Java.</strong> At home. The same four
           operations a third time, in a language that can enforce what Python
           only asks for politely: <code>final</code> fields,
           <code>record</code> nodes, a <code>final</code> class.</td></tr>
     </tbody>
   </table>
+
+  <p class="p"><strong>What &ldquo;free history&rdquo; means, exactly.</strong>
+     Two things in Part&nbsp;B look alike and are not.</p>
+
+  <table class="langs">
+    <thead><tr><th>Feature</th><th>Reads</th><th>Recorded?</th></tr></thead>
+    <tbody>
+      <tr><td><code>--inspect=40</code></td>
+          <td><code>versions[40]</code> &mdash; the frontier value itself</td>
+          <td>nothing recorded</td></tr>
+      <tr><td>the HTML slider</td>
+          <td>a trace exported to JSON</td>
+          <td>one snapshot per step</td></tr>
+    </tbody>
+  </table>
+
+  <p class="p"><code>versions</code> is an ordinary list the solver appends to
+     at every step. That is bookkeeping &mdash; but it copies nothing. Each
+     entry is a reference to a value that already exists, and consecutive
+     values share all but one or two cells, so keeping every version costs one
+     pointer per step and not a single extra cons cell: the search allocated
+     those cells anyway, and the list merely declines to forget them. The
+     slider is the other case, and has no choice: a browser cannot hold
+     references into the solver&rsquo;s heap, so the frontier is walked and
+     serialised at each step. On <code>mazes/medium.txt</code> that is 1306
+     cells against the search&rsquo;s own 612.</p>
 </section>
 
 <section>
