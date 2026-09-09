@@ -1,0 +1,4 @@
+(test
+ (name test_pqueue)
+ (modules test_pqueue)
+ (libraries pqueue_lib))

@@ -1,0 +1,4 @@
+(executable
+ (name solver)
+ (modules solver render)
+ (libraries pqueue_lib unix))

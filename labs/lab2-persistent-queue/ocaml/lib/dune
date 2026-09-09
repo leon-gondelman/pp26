@@ -1,0 +1,6 @@
+(library
+ (name pqueue_lib)
+ (modules pqueue)
+ ; students' work-in-progress code often has unused values — keep those
+ ; as warnings, not errors
+ (flags (:standard -w -26-27-32)))

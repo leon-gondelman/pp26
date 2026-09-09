@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Four Holes in a Queue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#f3f5f8; --surface:#ffffff; --surface-2:#e9edf2; --sunken:#eef1f5;
+  --ink:#161a21; --ink-2:#434b58; --ink-3:#6d7583; --rule:#d5dae2; --rule-2:#c2c9d3;
+  --queue:#0b6ea9; --queue-soft:#e2eff8; --queue-line:#9dc7e3;
+  --stack:#8a5606; --stack-soft:#f8efdc; --stack-line:#dcbc84;
+  --start:#1c7a45; --exit:#a3319a; --wall:#a7b0bb;
+  --queue-tint:#8dbedd; --stack-tint:#d3ab63;
+  --shadow:0 1px 2px rgba(20,28,40,.06), 0 8px 24px -12px rgba(20,28,40,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0f1217; --surface:#161a21; --surface-2:#1d222b; --sunken:#12161c;
+    --ink:#e6eaf0; --ink-2:#b2bac6; --ink-3:#828b99; --rule:#282e38; --rule-2:#333b47;
+    --queue:#5db6ec; --queue-soft:#132738; --queue-line:#2b5876;
+    --stack:#e2a951; --stack-soft:#2c2312; --stack-line:#6b552a;
+    --start:#4fc07f; --exit:#e07ad4; --wall:#464e5a;
+    --queue-tint:#356a8e; --stack-tint:#7d6231;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0f1217; --surface:#161a21; --surface-2:#1d222b; --sunken:#12161c;
+  --ink:#e6eaf0; --ink-2:#b2bac6; --ink-3:#828b99; --rule:#282e38; --rule-2:#333b47;
+  --queue:#5db6ec; --queue-soft:#132738; --queue-line:#2b5876;
+  --stack:#e2a951; --stack-soft:#2c2312; --stack-line:#6b552a;
+  --start:#4fc07f; --exit:#e07ad4; --wall:#464e5a;
+  --queue-tint:#356a8e; --stack-tint:#7d6231;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px; line-height:1.62; font-weight:400;
+  text-rendering:optimizeLegibility;
+}
+.wrap{max-width:930px; margin:0 auto; padding:0 28px 96px}
+.col{max-width:660px; margin-left:auto; margin-right:auto}
+.figure-wide + .col{margin-top:34px}
+.compare + .col{margin-top:20px}
+
+/* ---- masthead ---- */
+header.masthead{border-bottom:1px solid var(--rule); background:var(--surface)}
+.masthead .wrap{padding-top:44px; padding-bottom:36px}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 18px;
+}
+h1{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:600;
+  font-size:clamp(34px,5.2vw,52px); line-height:1.06; letter-spacing:-.02em;
+  margin:0 0 20px; text-wrap:balance;
+}
+.standfirst{font-size:19px; line-height:1.55; color:var(--ink-2); margin:0; max-width:640px}
+.standfirst strong{font-weight:600; color:var(--ink)}
+nav.toc{
+  display:flex; flex-wrap:wrap; gap:0 26px; margin-top:30px;
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; letter-spacing:.03em;
+}
+nav.toc a{color:var(--ink-3); text-decoration:none; padding:4px 0; border-bottom:1px solid transparent}
+nav.toc a:hover{color:var(--queue); border-bottom-color:var(--queue-line)}
+
+/* ---- sections ---- */
+section{padding-top:68px}
+h2{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:600;
+  font-size:29px; line-height:1.2; letter-spacing:-.012em; margin:0 0 6px;
+  text-wrap:balance;
+}
+h3{
+  font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:16px;
+  letter-spacing:-.005em; margin:34px 0 8px;
+}
+.kicker{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 12px;
+  display:flex; align-items:center; gap:12px;
+}
+.kicker::after{content:""; flex:1; height:1px; background:var(--rule); max-width:180px}
+.kicker.todo{color:var(--queue)}
+.kicker.todo::after{background:var(--queue-line)}
+p{margin:0 0 17px}
+.lede{font-size:18.5px; color:var(--ink-2); margin-bottom:22px}
+
+a{color:var(--queue)}
+a.file{
+  font-family:"IBM Plex Mono",monospace; font-size:.9em; font-weight:500;
+  color:var(--ink); text-decoration:none;
+  border-bottom:1.5px solid var(--queue-line);
+  padding-bottom:1px; white-space:nowrap;
+}
+a.file:hover{color:var(--queue); border-bottom-color:var(--queue); background:var(--queue-soft)}
+a.file::before{content:"↗ "; font-size:.85em; color:var(--ink-3)}
+a:focus-visible, a.file:focus-visible{outline:2px solid var(--queue); outline-offset:3px; border-radius:2px}
+
+code{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.875em;
+  background:var(--surface-2); padding:.12em .34em; border-radius:3px; color:var(--ink);
+}
+
+/* ---- code blocks ---- */
+figure{margin:26px 0}
+.code{
+  background:var(--sunken); border:1px solid var(--rule); border-radius:6px;
+  overflow-x:auto; box-shadow:var(--shadow);
+}
+.code-head{
+  display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+  padding:9px 16px; border-bottom:1px solid var(--rule);
+  background:var(--surface); border-radius:6px 6px 0 0;
+  font-family:"IBM Plex Mono",monospace; font-size:12px;
+  position:sticky; left:0;
+}
+.code-head .path{font-weight:500}
+.code-head .lines{color:var(--ink-3); letter-spacing:.03em; white-space:nowrap}
+.code pre{
+  margin:0; padding:16px; font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  font-size:13.5px; line-height:1.65; color:var(--ink);
+}
+.code .c{color:var(--ink-3)}
+.code .hl{
+  display:inline-block; width:100%;
+  background:var(--queue-soft); box-shadow:-6px 0 0 var(--queue-soft), inset 3px 0 0 var(--queue);
+  padding-left:3px; margin-left:-3px;
+}
+.code .hl-s{
+  display:inline-block; width:100%;
+  background:var(--stack-soft); box-shadow:-6px 0 0 var(--stack-soft), inset 3px 0 0 var(--stack);
+  padding-left:3px; margin-left:-3px;
+}
+figcaption{
+  font-size:14px; color:var(--ink-3); margin-top:10px; line-height:1.5; max-width:640px;
+}
+figcaption b{color:var(--ink-2); font-weight:600}
+
+/* ---- diagram ---- */
+.figure-wide{margin:30px 0 0}
+.diagram{
+  background:var(--surface); border:1px solid var(--rule); border-radius:8px;
+  padding:22px 18px 14px; box-shadow:var(--shadow); overflow-x:auto;
+}
+.diagram svg{display:block; width:100%; min-width:620px; height:auto}
+.d-box{fill:var(--surface-2); stroke:var(--rule-2); stroke-width:1}
+.d-box-q{fill:var(--queue-soft); stroke:var(--queue-line); stroke-width:1.5}
+.d-box-s{fill:var(--stack-soft); stroke:var(--stack-line); stroke-width:1.5}
+.d-cell{fill:none; stroke:var(--rule-2); stroke-width:1; stroke-dasharray:3 3}
+.d-val{font-family:"IBM Plex Mono",monospace; font-size:14px; font-weight:500; fill:var(--ink); text-anchor:middle}
+.d-name{font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600; fill:var(--ink-2)}
+.d-sub{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; fill:var(--ink-3)}
+.d-sub-q{fill:var(--queue)} .d-sub-s{fill:var(--stack)}
+.d-band{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.13em; fill:var(--ink-3)}
+.d-edge{stroke:var(--rule-2); stroke-width:1.5; fill:none}
+.d-edge-q{stroke:var(--queue-line); stroke-width:1.5; fill:none}
+.d-edge-s{stroke:var(--stack-line); stroke-width:1.5; fill:none}
+.d-thin{stroke:var(--rule-2); stroke-width:1; fill:none; stroke-dasharray:4 4}
+.d-thin-s{stroke:var(--stack-line); stroke-width:1; fill:none; stroke-dasharray:4 4}
+.d-arrow{fill:var(--rule-2)} .d-arrow-q{fill:var(--queue-line)} .d-arrow-s{fill:var(--stack-line)}
+.d-note{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; font-style:italic; fill:var(--ink-3)}
+.d-mono{font-family:"IBM Plex Mono",monospace; font-size:12px; fill:var(--ink-3)}
+
+/* ---- two-up compare ---- */
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0}
+.panel{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:18px 20px 20px; box-shadow:var(--shadow); min-width:0;
+}
+.panel.q{border-top:3px solid var(--queue)}
+.panel.s{border-top:3px solid var(--stack)}
+.panel h4{margin:0 0 2px; font-family:"IBM Plex Mono",monospace; font-size:13.5px; font-weight:600}
+.panel.q h4{color:var(--queue)} .panel.s h4{color:var(--stack)}
+.panel .role{font-size:12.5px; color:var(--ink-3); margin:0 0 14px; line-height:1.45}
+.panel p{font-size:15px; margin:0 0 12px}
+.panel p:last-child{margin-bottom:0}
+.panel pre{
+  margin:0 0 12px; font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+  line-height:1.6; background:var(--sunken); border:1px solid var(--rule);
+  border-radius:5px; padding:12px; overflow-x:auto; color:var(--ink);
+}
+.panel pre .c{color:var(--ink-3)}
+
+/* ---- interface / map table ---- */
+.iface{width:100%; border-collapse:collapse; margin:24px 0 8px;
+  font-family:"IBM Plex Mono",monospace; font-size:13px}
+.iface th{
+  text-align:left; font-weight:600; font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); padding:0 14px 8px 0;
+  border-bottom:1px solid var(--rule-2); white-space:nowrap;
+}
+.iface th.q{color:var(--queue)}
+.iface td{padding:9px 14px 9px 0; border-bottom:1px solid var(--rule); vertical-align:baseline}
+.iface td:first-child{color:var(--ink-2); white-space:nowrap}
+.iface td.q{color:var(--queue); font-weight:500}
+.iface td.dim{color:var(--ink-3)}
+.iface td.prose{font-family:"IBM Plex Sans",sans-serif; font-size:14px; color:var(--ink-2)}
+.iface tr:last-child td{border-bottom:none}
+
+/* ---- trace table ---- */
+.results{width:100%; border-collapse:collapse; margin:22px 0 8px; font-size:14px;
+  font-variant-numeric:tabular-nums}
+.results caption{text-align:left; font-size:12.5px; color:var(--ink-3);
+  padding-bottom:10px; font-family:"IBM Plex Mono",monospace}
+.results th{
+  text-align:left; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600; padding:0 18px 8px 0;
+  border-bottom:1px solid var(--rule-2);
+}
+.results th.q{color:var(--queue)}
+.results td{padding:9px 18px 9px 0; border-bottom:1px solid var(--rule);
+  font-family:"IBM Plex Mono",monospace; font-size:13px}
+.results td.step{color:var(--ink-3); width:1%}
+.results td.q{color:var(--queue); font-weight:500}
+.results tr:last-child td{border-bottom:none}
+
+/* ---- callout ---- */
+.callout{
+  border-left:3px solid var(--stack); background:var(--stack-soft);
+  padding:16px 20px; border-radius:0 6px 6px 0; margin:26px 0;
+}
+.callout p{margin:0; font-size:15.5px; color:var(--ink-2)}
+.callout p + p{margin-top:10px}
+.callout strong{color:var(--ink); font-weight:600}
+.callout.q{border-left-color:var(--queue); background:var(--queue-soft)}
+
+/* ---- run block ---- */
+.shell{
+  background:var(--sunken); border:1px solid var(--rule); border-radius:6px;
+  padding:16px 18px; overflow-x:auto; box-shadow:var(--shadow);
+  font-family:"IBM Plex Mono",monospace; font-size:13px; line-height:1.9;
+}
+.shell .prompt{color:var(--ink-3); user-select:none}
+.shell .c{color:var(--ink-3)}
+.shell .ok{color:var(--start)}
+.shell div{white-space:pre}
+
+/* ---- checkpoints / pitfalls ---- */
+ul.marks{list-style:none; padding:0; margin:18px 0}
+ul.marks li{padding:12px 0 12px 30px; border-bottom:1px solid var(--rule);
+  position:relative; font-size:16px}
+ul.marks li:last-child{border-bottom:none}
+ul.marks li::before{content:"—"; position:absolute; left:0; top:12px; color:var(--queue);
+  font-family:"IBM Plex Mono",monospace}
+ul.marks.warn li::before{content:"×"; color:var(--stack); font-weight:600}
+ul.marks b{font-weight:600}
+
+footer{margin-top:80px; padding-top:26px; border-top:1px solid var(--rule);
+  font-size:13.5px; color:var(--ink-3); line-height:1.6}
+footer p{margin:0 0 8px; max-width:640px}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .compare{grid-template-columns:1fr}
+  .wrap{padding:0 20px 72px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">PP_E26 &nbsp;·&nbsp; Lab 2 &nbsp;·&nbsp; part A · reading guide</p>
+    <h1>Four Holes in a Queue</h1>
+    <p class="standfirst"><code>python/pqueue.py</code> is 94 lines, and four of its functions are missing. This note walks through <strong>what each hole is for</strong>, what the surrounding code already guarantees, and how to know you got it right — without handing you the four bodies. The whole lab hangs off this one file: the maze solver, the OCaml port, and the benchmark all call it.</p>
+    <nav class="toc">
+      <a href="#map">01 · the file</a>
+      <a href="#rep">02 · the representation</a>
+      <a href="#rev">03 · todo 1 · _rev</a>
+      <a href="#make">04 · todo 2 · _make</a>
+      <a href="#enqueue">05 · todo 3 · enqueue</a>
+      <a href="#dequeue">06 · todo 4 · dequeue</a>
+      <a href="#tests">07 · the tests</a>
+      <a href="#cost">08 · the cost</a>
+      <a href="#run">09 · run it</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ===================== 01 ===================== -->
+<section id="map">
+  <div class="col">
+    <p class="kicker">01 — the file</p>
+    <h2>What is given, what is yours</h2>
+    <p class="lede">Only four bodies are missing, and they are ordered so that each one can use the previous. Do them in order — out of order, you will be debugging two things at once.</p>
+
+    <table class="iface">
+      <tr><th>line</th><th>name</th><th class="q">status</th><th>what it is</th></tr>
+      <tr><td>19</td><td><code>EMPTY</code></td><td class="dim">given</td><td class="prose">The empty queue, <code>(None, None)</code>.</td></tr>
+      <tr><td>22</td><td><code>is_empty</code></td><td class="dim">given</td><td class="prose">Checks <em>front</em> only — and that is legal precisely because of the invariant.</td></tr>
+      <tr><td>27</td><td><code>peek</code></td><td class="dim">given</td><td class="prose">Reads <code>front[0]</code>. One pointer. Never searches.</td></tr>
+      <tr><td>35</td><td><code>_rev</code></td><td class="q">TODO 1</td><td class="prose">Reverse a cons-list.</td></tr>
+      <tr><td>46</td><td><code>_make</code></td><td class="q">TODO 2</td><td class="prose">The smart constructor that restores the invariant.</td></tr>
+      <tr><td>57</td><td><code>enqueue</code></td><td class="q">TODO 3</td><td class="prose">Add at the back. O(1).</td></tr>
+      <tr><td>65</td><td><code>dequeue</code></td><td class="q">TODO 4</td><td class="prose">Take from the front, return <em>both</em> the value and the new queue.</td></tr>
+      <tr><td>77</td><td><code>to_list</code></td><td class="dim">given</td><td class="prose">The abstraction function. The tests measure you against it.</td></tr>
+      <tr><td>90</td><td><code>from_iter</code></td><td class="dim">given</td><td class="prose">Convenience: enqueue everything in an iterable.</td></tr>
+    </table>
+
+    <div class="callout q">
+      <p><strong>One rule above all others.</strong> Every operation returns a <em>new</em> queue and leaves its argument exactly as it found it. In Python this is nearly forced on you — tuples are immutable, so you literally cannot write into an existing node. What you <em>can</em> get wrong is rebuilding structure that should have been shared. That is what <code>C_Persistence</code> looks for.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section id="rep">
+  <div class="col">
+    <p class="kicker">02 — the representation</p>
+    <h2>Two lists pretending to be one</h2>
+    <p class="lede">A cons-list is the lecture's: <code>None</code> is the empty list, and <code>(head, tail)</code> is a node whose tail is another cons-list. Nothing else. A queue is a pair of them.</p>
+    <p>Cons-lists are only cheap at one end — you can add or remove a head in constant time, and reaching the last element costs a full walk. A FIFO queue needs both ends. The trick is to keep <em>two</em> lists pointing in opposite directions, so that both ends of the queue are somebody's head.</p>
+    <p><code>front</code> holds the oldest elements in the order they will leave. <code>back</code> holds the newest elements <em>reversed</em> — the most recently enqueued one is its head. So the sequence the queue actually represents is:</p>
+
+    <figure>
+      <div class="code">
+        <div class="code-head"><span class="path">the abstraction function</span><span class="lines">to_list, line 77</span></div>
+<pre>contents(front, back)  =  front  ++  reverse(back)
+
+invariant:   front is None  ⟹  back is None</pre>
+      </div>
+      <figcaption><b>The invariant is what makes <code>peek</code> a one-liner.</b> If the front is allowed to run empty while elements sit in the back, then <code>peek</code> would have to know about that case and go digging. Forbid the state instead, and every reader gets simpler.</figcaption>
+    </figure>
+  </div>
+
+  <div class="figure-wide">
+    <div class="diagram">
+      <svg viewBox="0 0 900 290" role="img" aria-label="A queue holding 1 2 3 4 5, split into a front list holding 1 2 3 in order and a back list holding 5 4 in reverse order; dashed lines show that reversing the back list produces the tail of the sequence.">
+        <!-- front list -->
+        <text class="d-name" x="110" y="26">front</text>
+        <text class="d-sub" x="160" y="26">oldest first — read this end</text>
+        <rect class="d-box-q" x="110" y="40" width="64" height="34" rx="4"/>
+        <text class="d-val" x="142" y="63">1</text>
+        <rect class="d-box-q" x="200" y="40" width="64" height="34" rx="4"/>
+        <text class="d-val" x="232" y="63">2</text>
+        <rect class="d-box-q" x="290" y="40" width="64" height="34" rx="4"/>
+        <text class="d-val" x="322" y="63">3</text>
+        <path class="d-edge-q" d="M174 57 H194"/><path class="d-arrow-q" d="M200 57 l-7 -4 v8 z"/>
+        <path class="d-edge-q" d="M264 57 H284"/><path class="d-arrow-q" d="M290 57 l-7 -4 v8 z"/>
+        <path class="d-edge-q" d="M354 57 H374"/>
+        <text class="d-mono" x="380" y="62">None</text>
+
+        <!-- back list -->
+        <text class="d-name" x="560" y="26">back</text>
+        <text class="d-sub" x="605" y="26">newest first — write this end</text>
+        <rect class="d-box-s" x="560" y="40" width="64" height="34" rx="4"/>
+        <text class="d-val" x="592" y="63">5</text>
+        <rect class="d-box-s" x="650" y="40" width="64" height="34" rx="4"/>
+        <text class="d-val" x="682" y="63">4</text>
+        <path class="d-edge-s" d="M624 57 H644"/><path class="d-arrow-s" d="M650 57 l-7 -4 v8 z"/>
+        <path class="d-edge-s" d="M714 57 H734"/>
+        <text class="d-mono" x="740" y="62">None</text>
+
+        <!-- connectors -->
+        <path class="d-thin" d="M142 78 V150 H282 V178"/>
+        <path class="d-thin" d="M232 78 V160 H354 V178"/>
+        <path class="d-thin" d="M322 78 V170 H426 V178"/>
+        <path class="d-thin-s" d="M592 78 V130 H570 V178"/>
+        <path class="d-thin-s" d="M682 78 V140 H498 V178"/>
+
+        <!-- sequence band -->
+        <text class="d-band" x="250" y="200">CONTENTS</text>
+        <rect class="d-cell" x="250" y="210" width="64" height="36" rx="4"/>
+        <text class="d-val" x="282" y="234">1</text>
+        <rect class="d-cell" x="322" y="210" width="64" height="36" rx="4"/>
+        <text class="d-val" x="354" y="234">2</text>
+        <rect class="d-cell" x="394" y="210" width="64" height="36" rx="4"/>
+        <text class="d-val" x="426" y="234">3</text>
+        <rect class="d-cell" x="466" y="210" width="64" height="36" rx="4"/>
+        <text class="d-val" x="498" y="234">4</text>
+        <rect class="d-cell" x="538" y="210" width="64" height="36" rx="4"/>
+        <text class="d-val" x="570" y="234">5</text>
+
+        <text class="d-sub d-sub-q" x="250" y="268">↑ dequeue / peek here</text>
+        <text class="d-sub d-sub-s" x="482" y="268">enqueue lands here ↑</text>
+        <text class="d-note" x="640" y="200">the two crossings are the reversal</text>
+      </svg>
+    </div>
+    <figcaption><b>Nobody stores the bottom row.</b> It exists only in <code>to_list</code> and in your head. The queue <em>is</em> the two lists; the sequence is what they mean. Notice the crossing on the right: the back list is stored newest-first, so the last two contents cells come out of it backwards.</figcaption>
+  </div>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section id="rev">
+  <div class="col">
+    <p class="kicker todo">03 — todo 1</p>
+    <h2><code>_rev(lst)</code> — reverse a cons-list</h2>
+    <p class="lede">The only piece of real list work in the file. Everything else is a rearrangement of pointers.</p>
+
+    <figure>
+      <div class="code">
+        <div class="code-head"><span class="path">python/pqueue.py</span><span class="lines">lines 35–44</span></div>
+<pre><span class="hl">def _rev(lst):</span>
+    <span class="c">"""TODO 1: reverse a cons-list, returning a new cons-list.
+
+    _rev((1, (2, (3, None))))  ==  (3, (2, (1, None)))
+
+    An imperative while-loop over local variables is fine — the lists
+    themselves must not be touched (they can't be: tuples are immutable).
+    """</span></pre>
+      </div>
+    </figure>
+
+    <p>Take the docstring's permission seriously. You do not need recursion here, and on a large maze recursion would hand you a <code>RecursionError</code> instead of a path. The shape you want is the standard accumulator walk: carry a second cons-list that starts empty, and keep moving the head of the input onto the head of the accumulator until the input is exhausted. Each step is one <code>(head, tail)</code> allocation.</p>
+
+    <table class="results">
+      <caption>_rev((1, (2, (3, None)))) — trace</caption>
+      <tr><th>step</th><th>remaining input</th><th class="q">accumulator</th></tr>
+      <tr><td class="step">0</td><td>1 → 2 → 3 → None</td><td class="q">None</td></tr>
+      <tr><td class="step">1</td><td>2 → 3 → None</td><td class="q">1 → None</td></tr>
+      <tr><td class="step">2</td><td>3 → None</td><td class="q">2 → 1 → None</td></tr>
+      <tr><td class="step">3</td><td>None</td><td class="q">3 → 2 → 1 → None</td></tr>
+    </table>
+
+    <p>The accumulator is the return value once the input runs out. Note what <em>doesn't</em> happen in that table: no node of the input is ever altered. The old list is still intact at step 3 — you built a new spine alongside it.</p>
+
+    <h3>Check yourself before moving on</h3>
+    <p><code>_rev(None)</code> must give <code>None</code>, not crash and not <code>(None, None)</code>. Reversing twice must give back an equal list. If you are unsure, open a REPL and try those two before touching <code>_make</code>.</p>
+  </div>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section id="make">
+  <div class="col">
+    <p class="kicker todo">04 — todo 2</p>
+    <h2><code>_make(front, back)</code> — the smart constructor</h2>
+    <p class="lede">This is the heart of the data structure. It is also four lines. Every other function builds queues by calling it, and never by writing a tuple literal — that is the whole reason the invariant holds everywhere.</p>
+
+    <figure>
+      <div class="code">
+        <div class="code-head"><span class="path">python/pqueue.py</span><span class="lines">lines 46–55</span></div>
+<pre><span class="hl">def _make(front, back):</span>
+    <span class="c">"""TODO 2: smart constructor.
+
+    Return a queue (front, back) — but restore the invariant first:
+    if `front` is empty, the reversed `back` must BECOME the front.
+    Every other function builds queues only through _make, so the
+    invariant will hold everywhere. This is where the O(n) work hides.
+    """</span></pre>
+      </div>
+    </figure>
+
+    <p>Two cases, and the branch is on <code>front</code> alone:</p>
+    <ul class="marks">
+      <li><b>Front is non-empty.</b> Nothing to fix. Return the pair as it stands — and return the <em>same</em> <code>front</code> object you were handed, not a copy of it. A test checks this with <code>assertIs</code>.</li>
+      <li><b>Front is empty.</b> The invariant demands the back be empty too, so move it: the reversal of <code>back</code> becomes the new front, and the new back is empty. If <code>back</code> was also empty this quietly produces <code>EMPTY</code>, which is exactly right — no special case needed.</li>
+    </ul>
+  </div>
+
+  <div class="figure-wide">
+    <div class="diagram">
+      <svg viewBox="0 0 900 175" role="img" aria-label="Before and after the flip: a queue with an empty front and a back holding c, b, a becomes a queue whose front holds a, b, c and whose back is empty.">
+        <!-- before -->
+        <text class="d-band" x="0" y="18">BEFORE — INVARIANT BROKEN</text>
+        <text class="d-name" x="0" y="58">front</text>
+        <text class="d-mono" x="66" y="58">None</text>
+        <text class="d-name" x="0" y="106">back</text>
+        <rect class="d-box-s" x="60" y="86" width="46" height="30" rx="4"/>
+        <text class="d-val" x="83" y="106">c</text>
+        <rect class="d-box-s" x="124" y="86" width="46" height="30" rx="4"/>
+        <text class="d-val" x="147" y="106">b</text>
+        <rect class="d-box-s" x="188" y="86" width="46" height="30" rx="4"/>
+        <text class="d-val" x="211" y="106">a</text>
+        <path class="d-edge-s" d="M106 101 H118"/><path class="d-arrow-s" d="M124 101 l-7 -4 v8 z"/>
+        <path class="d-edge-s" d="M170 101 H182"/><path class="d-arrow-s" d="M188 101 l-7 -4 v8 z"/>
+        <path class="d-edge-s" d="M234 101 H246"/>
+        <text class="d-mono" x="252" y="106">None</text>
+        <text class="d-note" x="0" y="148">peek has nothing to look at</text>
+
+        <!-- arrow -->
+        <path class="d-edge" d="M350 82 H448"/><path class="d-arrow" d="M456 82 l-9 -5 v10 z"/>
+        <text class="d-mono" x="352" y="70">_rev(back)</text>
+        <text class="d-note" x="366" y="102">O(n), paid once</text>
+
+        <!-- after -->
+        <g transform="translate(500,0)">
+          <text class="d-band" x="0" y="18">AFTER — INVARIANT RESTORED</text>
+          <text class="d-name" x="0" y="58">front</text>
+          <rect class="d-box-q" x="60" y="38" width="46" height="30" rx="4"/>
+          <text class="d-val" x="83" y="58">a</text>
+          <rect class="d-box-q" x="124" y="38" width="46" height="30" rx="4"/>
+          <text class="d-val" x="147" y="58">b</text>
+          <rect class="d-box-q" x="188" y="38" width="46" height="30" rx="4"/>
+          <text class="d-val" x="211" y="58">c</text>
+          <path class="d-edge-q" d="M106 53 H118"/><path class="d-arrow-q" d="M124 53 l-7 -4 v8 z"/>
+          <path class="d-edge-q" d="M170 53 H182"/><path class="d-arrow-q" d="M188 53 l-7 -4 v8 z"/>
+          <path class="d-edge-q" d="M234 53 H246"/>
+          <text class="d-mono" x="252" y="58">None</text>
+          <text class="d-name" x="0" y="106">back</text>
+          <text class="d-mono" x="66" y="106">None</text>
+          <text class="d-note" x="0" y="148">a is the oldest — one pointer away</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>The flip happens at most once per element.</b> An element enters the back, waits, gets moved to the front by one reversal, and leaves. It is never reversed a second time — which is the entire content of the amortised bound in <a href="#cost">section 08</a>.</figcaption>
+  </div>
+
+  <div class="col">
+    <div class="callout">
+      <p><strong>The tempting wrong version.</strong> Reversing unconditionally — always returning <code>(_rev(back) ++ front, None)</code> or similar — passes the correctness tests and destroys the performance story. Every enqueue would then be O(n), the front would be rebuilt on every operation, and <code>test_structural_sharing</code> fails. Branch on the front.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section id="enqueue">
+  <div class="col">
+    <p class="kicker todo">05 — todo 3</p>
+    <h2><code>enqueue(q, x)</code> — add at the back</h2>
+    <p class="lede">One cons and one call. If your version is longer than two lines, you are probably doing work that belongs to <code>_make</code>.</p>
+
+    <figure>
+      <div class="code">
+        <div class="code-head"><span class="path">python/pqueue.py</span><span class="lines">lines 57–63</span></div>
+<pre><span class="hl">def enqueue(q, x):</span>
+    <span class="c">"""TODO 3: return a new queue with x added at the back. O(1).
+
+    Do not rebuild anything: cons x onto back, keep front AS IS (shared!).
+    """</span></pre>
+      </div>
+    </figure>
+
+    <p>Unpack the queue, put <code>x</code> at the head of the back list, and hand both halves to <code>_make</code>. Do not build the pair yourself: enqueueing onto <code>EMPTY</code> would leave an empty front with a one-element back, which is precisely the state the invariant forbids. <code>_make</code> is what catches that.</p>
+
+    <div class="compare">
+      <div class="panel q">
+        <h4>shares</h4>
+        <p class="role">The new queue points <em>into</em> the old one. Both versions stay usable.</p>
+<pre>q1 = from_iter([1, 2, 3])
+q2 = enqueue(q1, 4)
+
+<span class="c"># q2's front IS q1's front —
+# the same object, not a copy</span>
+front2 is front1   → True</pre>
+        <p>Only one new node exists after the call: the one holding <code>4</code>. Three elements were reused untouched.</p>
+      </div>
+      <div class="panel s">
+        <h4>copies</h4>
+        <p class="role">Correct answers, wrong structure. The tests catch it.</p>
+<pre>def enqueue(q, x):
+    <span class="c"># walks the front, or reverses,
+    # or rebuilds the pair by hand</span>
+    ...
+
+front2 is front1   → False</pre>
+        <p><code>to_list</code> would still agree. <code>test_structural_sharing</code> would not: persistence that copies is just an expensive imitation of persistence.</p>
+      </div>
+    </div>
+
+    <p>And the O(1) claim survives the <code>_make</code> call, which is worth a second of thought. <code>_make</code> only reverses when the front is empty — and when the front is empty, the invariant says the back was empty too, so the list being reversed has exactly the one element you just consed. Constant work, always.</p>
+  </div>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section id="dequeue">
+  <div class="col">
+    <p class="kicker todo">06 — todo 4</p>
+    <h2><code>dequeue(q)</code> — take from the front</h2>
+    <p class="lede">The one operation that returns two things, because a persistent structure cannot hand you the value by mutating itself.</p>
+
+    <figure>
+      <div class="code">
+        <div class="code-head"><span class="path">python/pqueue.py</span><span class="lines">lines 65–71</span></div>
+<pre><span class="hl">def dequeue(q):</span>
+    <span class="c">"""TODO 4: return (value, new_queue); raise IndexError if empty.
+
+    Take the head of front; rebuild the rest through _make.
+    """</span></pre>
+      </div>
+    </figure>
+
+    <p>Three moves. Refuse the empty queue with an <code>IndexError</code> — <code>peek</code> above shows the exact idiom, message and all. Otherwise the head of the front is your value, and the queue you return is built from the front's <em>tail</em> and the untouched back, passed through <code>_make</code>. That call is where the front can run dry and trigger the flip.</p>
+
+    <p>The return order matters and is not symmetric: callers all over the lab write <code>x, q = dequeue(q)</code>, value first. Get it backwards and every test in <code>B_FifoContract</code> fails in a confusing way.</p>
+
+    <h3>Why the old queue still works afterwards</h3>
+    <p>Nothing in those three moves writes anywhere. The node holding the old head is still there, still pointing at the same tail; you simply stopped referring to it. That is why <code>test_fan_out</code> can dequeue the same version twice and get the same answer both times, then push the two results in different directions. One present, several futures.</p>
+  </div>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section id="tests">
+  <div class="col">
+    <p class="kicker">07 — the tests</p>
+    <h2>What each test class is actually asking</h2>
+    <p class="lede">The classes are named <code>A_</code>, <code>B_</code>, <code>C_</code> so that unittest runs them in that order. Read a failure as a question about your design, not as a broken assertion.</p>
+
+    <table class="iface">
+      <tr><th>class</th><th class="q">asks</th><th>if it fails</th></tr>
+      <tr><td><code>A_Basics</code></td><td class="q">does it work at all?</td><td class="prose">Empty cases and the single-element round trip. Usually a missing <code>IndexError</code> or a swapped return order.</td></tr>
+      <tr><td><code>B_FifoContract</code></td><td class="q">is it a queue?</td><td class="prose">FIFO order under interleaving, plus 2000 random operations checked against <code>collections.deque</code>. A mismatch here means the abstraction function and your code disagree — trace the step number it prints.</td></tr>
+      <tr><td><code>B_&hellip;invariant</code></td><td class="q">is the invariant real?</td><td class="prose">500 random operations, asserting after each that an empty front implies an empty back. Fails when something built a queue without going through <code>_make</code>.</td></tr>
+      <tr><td><code>C_Persistence</code></td><td class="q">is it persistent?</td><td class="prose">Old versions survive; the same version can be dequeued twice; the front is shared, not copied. <strong>A correct ephemeral queue fails these</strong> — that is the point of the class.</td></tr>
+    </table>
+
+    <div class="callout q">
+      <p><strong>Read <code>test_structural_sharing</code> once, deliberately.</strong> It is the only test in the file that inspects the representation rather than the contents, and it is the only one that distinguishes real structural sharing from copying. Everything else in the lab — the time-travel view of the solver, the benchmark in part D — depends on the property it checks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 08 ===================== -->
+<section id="cost">
+  <div class="col">
+    <p class="kicker">08 — the cost</p>
+    <h2>Amortised O(1), and the assumption inside it</h2>
+    <p class="lede">Every operation is constant time except one, which is linear. The claim is that the linear one is rare enough to pay for itself.</p>
+
+    <p><b>The banker's argument.</b> Charge every <code>enqueue</code> two coins: one for the cons it actually performs, one deposited on the element itself. An element sits in the back holding its coin. When the front finally runs dry and <code>_make</code> reverses, each element in the back spends its own coin to pay for its own move. No element is ever reversed twice, so <em>n</em> operations cost O(<em>n</em>) in total — constant amortised.</p>
+
+    <p>The argument is airtight, and it quietly assumes something the rest of this lab exists to break: <strong>that each version of the queue is used once</strong>. Coins are spent when an element moves; if you hold on to a version whose reversal is still pending and dequeue it repeatedly, every one of those calls performs the same O(<em>n</em>) reversal and there is only one deposit to pay for all of them.</p>
+
+    <div class="callout">
+      <p><strong>Part D asks you to do exactly that</strong> in <code>python/bench.py</code>: keep one bad version and re-dequeue it, and watch a supposedly constant-time operation trace out a quadratic curve. Persistence and amortisation do not automatically get along — the fix is a different queue (real-time or banker's), not a different proof.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 09 ===================== -->
+<section id="run">
+  <div class="col">
+    <p class="kicker">09 — run it</p>
+    <h2>The loop you should be in</h2>
+
+    <div class="shell">
+      <div><span class="prompt">$ </span>cd python</div>
+      <div><span class="prompt">$ </span>python3 -m unittest test_pqueue -v      <span class="c"># after every TODO</span></div>
+      <div> </div>
+      <div><span class="c"># once everything is green — your queue drives a real search:</span></div>
+      <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs</div>
+      <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --html=bfs.html   <span class="c"># time travel</span></div>
+      <div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --inspect=40      <span class="c"># ask an old version</span></div>
+    </div>
+
+    <h3>If you are stuck</h3>
+    <ul class="marks warn">
+      <li><b>Everything fails with <code>NotImplementedError</code>.</b> Expected — that is the starting state. Work top to bottom; <code>A_Basics</code> cannot go green until all four are in, because <code>from_iter</code> calls <code>enqueue</code>.</li>
+      <li><b><code>test_structural_sharing</code> alone fails.</b> Something rebuilt the front. Look for a <code>_rev</code> call on a path where the front was not empty.</li>
+      <li><b>The invariant test fails.</b> Some queue was constructed as a bare tuple instead of through <code>_make</code>. Grep your file for <code>return (</code>.</li>
+      <li><b><code>RecursionError</code> on the large maze.</b> A recursive <code>_rev</code>. The docstring's suggestion of a loop was not decorative.</li>
+      <li><b>Values are right but shifted by one.</b> <code>dequeue</code> rebuilt from <code>front</code> instead of from <code>front[1]</code>.</li>
+    </ul>
+
+    <p style="margin-top:26px">Next: <a class="file" href="architecture.html">architecture.html</a> — where this queue sits in the maze solver, and what changes when you swap it for a stack.</p>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>PP_E26 · Lab 2 · Part A reading guide for <code>python/pqueue.py</code>. The four bodies are deliberately not printed here; if you want to compare afterwards, the reference implementation lives with your instructor.</p>
+  <p>Source: <code>python/pqueue.py</code> (94 lines) · tests: <code>python/test_pqueue.py</code> · overview: <code>README.md</code></p>
+</footer>
+
+</main>
+</body>
+</html>
