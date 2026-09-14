@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What the Types Are For</title>
+<title>Three Layers, One Search</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
@@ -435,11 +435,11 @@ footer p{margin:0 0 8px; max-width:640px}
       </div>
       <div class="lr-sections">
         <h2>On this page</h2>
-        <ul class="lr-toc"><li><a class="" href="#shape">01 &middot; the shape</a></li><li><a class="" href="#boundary">02 &middot; the boundary</a></li><li><a class="" href="#algorithm">03 &middot; the algorithm</a></li><li><a class="" href="#frontier">04 &middot; the frontier</a></li><li><a class="" href="#wiring">05 &middot; the wiring</a></li><li><a class="" href="#run">06 &middot; run it</a></li></ul>
+        <ul class="lr-toc"><li><a class="" href="#shape">01 · the shape</a></li><li><a class="" href="#graph">02 · the graph</a></li><li><a class="" href="#algorithm">03 · the algorithm</a></li><li><a class="" href="#structures">04 · the structures</a></li><li><a class="" href="#wiring">05 · the wiring</a></li><li><a class="" href="#run">06 · run it</a></li></ul>
       </div>
       <div>
         <h2>Lab pages</h2>
-        <ul><li><a class="lr" href="index.html"><span class="t">One queue, three languages</span><span class="d">the lab — overview, general architecture, assignments</span></a></li><li><a class="lr" href="python-pqueue.html"><span class="t">Four holes in a queue</span><span class="d">Python · reading guide, part A</span></a></li><li class="sub"><a class="lr" href="python-architecture.html"><span class="t">Three layers, one search</span><span class="d">how the Python solver is built</span></a></li><li><a class="lr" href="ocaml-pqueue.html"><span class="t">Three holes in a queue</span><span class="d">OCaml · reading guide, part C</span></a></li><li class="sub"><a class="lr" href="ocaml-architecture.html" aria-current='page'><span class="t">What the types are for</span><span class="d">how the OCaml solver is built</span></a></li><li><a class="lr" href="java-pqueue.html"><span class="t">Four holes, all final</span><span class="d">Java · reading guide, part E · homework</span></a></li><li class="sub"><a class="lr" href="java-architecture.html"><span class="t">Immutability, spelled out</span><span class="d">how the Java solver is built</span></a></li></ul>
+        <ul><li><a class="lr" href="index.html"><span class="t">One queue, three languages</span><span class="d">the lab — overview, general architecture, assignments</span></a></li><li><a class="lr" href="python-pqueue.html"><span class="t">Four holes in a queue</span><span class="d">Python · reading guide, part A</span></a></li><li class="sub"><a class="lr" href="python-architecture.html" aria-current='page'><span class="t">Three layers, one search</span><span class="d">how the Python solver is built</span></a></li><li><a class="lr" href="ocaml-pqueue.html"><span class="t">Three holes in a queue</span><span class="d">OCaml · reading guide, part C</span></a></li><li class="sub"><a class="lr" href="ocaml-architecture.html"><span class="t">What the types are for</span><span class="d">how the OCaml solver is built</span></a></li><li><a class="lr" href="java-pqueue.html"><span class="t">Four holes, all final</span><span class="d">Java · reading guide, part E · homework</span></a></li><li class="sub"><a class="lr" href="java-architecture.html"><span class="t">Immutability, spelled out</span><span class="d">how the Java solver is built</span></a></li></ul>
       </div>
       <div>
         <h2>Code</h2>
@@ -458,16 +458,16 @@ footer p{margin:0 0 8px; max-width:640px}
 
 <header class="masthead">
   <div class="wrap">
-    <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;&middot;&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s2.html">Session 2</a> &nbsp;&middot;&nbsp; <a href="index.html">lab</a> &nbsp;&middot;&nbsp; OCaml &nbsp;&middot;&nbsp; architecture note</p>
-    <h1>What the Types Are For</h1>
-    <p class="standfirst">The OCaml solver walks the same maze as the Python one, from the same language-independent specification, and the two agree cell for cell. This note is about what the OCaml version can <em>state</em> that the Python version can only intend: a boundary written in <code>pqueue.mli</code>, and a frontier whose type the compiler follows. The companion notes are <a href="python-architecture.html">Three Layers, One Search</a> (Python) and <a href="java-architecture.html">Immutability, Spelled Out</a> (Java).</p>
+    <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;·&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s2.html">Session 2</a> &nbsp;·&nbsp; <a href="index.html">lab</a> &nbsp;·&nbsp; Python &nbsp;·&nbsp; architecture note</p>
+    <h1>Three Layers, One Search</h1>
+    <p class="standfirst">The maze solver is split across files that know almost nothing about each other. This note sets out <strong>where the boundaries were drawn</strong> in the Python version, and how the pieces are composed. What the separation yields — the two searches side by side, and why the containers had to be persistent — is on the <a href="index.html">session page</a>.</p>
     <nav class="toc">
-      <a href="#shape">01 &middot; the shape</a>
-      <a href="#boundary">02 &middot; the boundary</a>
-      <a href="#algorithm">03 &middot; the algorithm</a>
-      <a href="#frontier">04 &middot; the frontier</a>
-      <a href="#wiring">05 &middot; the wiring</a>
-      <a href="#run">06 &middot; run it</a>
+      <a href="#shape">01 · the shape</a>
+      <a href="#graph">02 · the graph</a>
+      <a href="#algorithm">03 · the algorithm</a>
+      <a href="#structures">04 · the structures</a>
+      <a href="#wiring">05 · the wiring</a>
+      <a href="#run">06 · run it</a>
     </nav>
   </div>
 </header>
@@ -477,175 +477,269 @@ footer p{margin:0 0 8px; max-width:640px}
 <!-- ===================== 01 ===================== -->
 <section id="shape">
   <div class="col">
-    <p class="kicker">01 &mdash; the shape</p>
-    <h2>Three stanzas, not three imports</h2>
-    <p class="lede">The Python architecture is legible from its <code>import</code> lines. Here it is <em>declared</em>: three small files say what the pieces are and which of them may see which.</p>
+    <p class="kicker">01 — the shape</p>
+    <h2>Who imports whom</h2>
+    <p class="lede">The architecture is legible from the import statements alone. Only one module imports anything else from the lab.</p>
+  </div>
 
-    <div class="code">
-      <div class="code-head"><span class="path">ocaml/</span><span class="lines">the dependency direction</span></div>
-<pre>  test/  test_pqueue.ml <span class="c">──┐</span>
-                          <span class="c">├──&gt;</span>  lib/  pqueue.mli   <span class="c">the contract</span>
-  bin/   solver.ml      <span class="c">──┘</span>            pqueue.ml    <span class="c">the implementation</span>
-         render.ml</pre>
+  <div class="figure-wide">
+    <div class="diagram">
+      <svg viewBox="0 0 900 408" role="img" aria-label="Dependency graph: solver.py imports maze.py, pqueue.py, pstack.py and render.py. test_pqueue.py and bench.py import pqueue.py. maze.py, pqueue.py and pstack.py import nothing.">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" class="d-arrow"/>
+          </marker>
+          <marker id="ahq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" class="d-arrow-q"/>
+          </marker>
+          <marker id="ahs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" class="d-arrow-s"/>
+          </marker>
+        </defs>
+
+        <text class="d-band" x="75" y="22">ENTRY POINT</text>
+        <rect class="d-box-solver" x="365" y="34" width="170" height="58" rx="5"/>
+        <text class="d-name" x="450" y="58" text-anchor="middle">solver.py</text>
+        <text class="d-sub" x="450" y="76" text-anchor="middle">the search, written once</text>
+
+        <path class="d-edge"   d="M450 92 V 140 H 157 V 188" marker-end="url(#ah)"/>
+        <path class="d-edge-q" d="M450 92 V 140 H 352 V 188" marker-end="url(#ahq)"/>
+        <path class="d-edge-s" d="M450 92 V 140 H 547 V 188" marker-end="url(#ahs)"/>
+        <path class="d-edge"   d="M450 92 V 140 H 742 V 188" marker-end="url(#ah)"/>
+
+        <text class="d-band" x="75" y="176">WHAT IT IMPORTS</text>
+
+        <rect class="d-box"   x="75"  y="194" width="165" height="60" rx="5"/>
+        <text class="d-name" x="157" y="218" text-anchor="middle">maze.py</text>
+        <text class="d-sub"  x="157" y="236" text-anchor="middle">the graph</text>
+
+        <rect class="d-box-q" x="270" y="194" width="165" height="60" rx="5"/>
+        <text class="d-name" x="352" y="218" text-anchor="middle">pqueue.py</text>
+        <text class="d-sub d-sub-q" x="352" y="236" text-anchor="middle">FIFO — the one to write</text>
+
+        <rect class="d-box-s" x="465" y="194" width="165" height="60" rx="5"/>
+        <text class="d-name" x="547" y="218" text-anchor="middle">pstack.py</text>
+        <text class="d-sub d-sub-s" x="547" y="236" text-anchor="middle">LIFO — provided</text>
+
+        <rect class="d-box"   x="660" y="194" width="165" height="60" rx="5"/>
+        <text class="d-name" x="742" y="218" text-anchor="middle">render.py</text>
+        <text class="d-sub"  x="742" y="236" text-anchor="middle">ASCII &amp; HTML output</text>
+
+        <text class="d-note" x="157" y="276" text-anchor="middle">imports nothing</text>
+        <text class="d-note" x="352" y="276" text-anchor="middle">imports nothing</text>
+        <text class="d-note" x="547" y="276" text-anchor="middle">imports nothing</text>
+        <text class="d-note" x="742" y="276" text-anchor="middle">stdlib only</text>
+
+        <path class="d-edge-q" d="M282 316 V 296 H 352 V 268" marker-end="url(#ahq)"/>
+        <path class="d-edge-q" d="M465 316 V 296 H 352 V 268" marker-end="url(#ahq)"/>
+
+        <text class="d-band" x="75" y="306">HARNESS</text>
+        <rect class="d-box" x="200" y="318" width="165" height="54" rx="5"/>
+        <text class="d-name" x="282" y="341" text-anchor="middle">test_pqueue.py</text>
+        <text class="d-sub"  x="282" y="358" text-anchor="middle">correctness + persistence</text>
+
+        <rect class="d-box" x="400" y="318" width="130" height="54" rx="5"/>
+        <text class="d-name" x="465" y="341" text-anchor="middle">bench.py</text>
+        <text class="d-sub"  x="465" y="358" text-anchor="middle">breaks the bound</text>
+      </svg>
     </div>
+    <figcaption>Arrows point from importer to imported. <b>Three of the five modules import nothing at all</b> — they are leaves, and a leaf cannot depend on how it is used. The substance of the lab lies in the four arrows leaving <code>solver.py</code>.</figcaption>
+  </div>
 
-    <p>The library depends on nothing in the lab. The executable and the tests both depend on the library, and never on each other. Two files describe that in full:</p>
-
-    <div class="code">
-      <div class="code-head"><span class="path">ocaml/lib/dune</span><span class="lines">and ocaml/bin/dune</span></div>
-<pre>(library
- (name pqueue_lib)
- <span class="hl">(modules pqueue)</span>)
-
-(executable
- (name solver)
- (modules solver render)
- <span class="hl">(libraries pqueue_lib unix)</span>)</pre>
-    </div>
-
-    <ul class="marks">
-      <li><b><code>(modules ...)</code> decides membership.</b> A file belongs to the stanza that names it &mdash; which is why <code>tour.ml</code> and <code>homework.ml</code> sit outside this directory entirely and are run with plain <code>ocaml</code>: they belong to no stanza and dune ignores them.</li>
-      <li><b><code>(libraries ...)</code> is the only dependency we write.</b> Not a list of files, and not an order. Dune reads the sources, works out which module needs which, and compiles them in an order we never state.</li>
-      <li><b>The test stanza is a third client, not a special case.</b> <code>test/dune</code> declares <code>(libraries pqueue_lib)</code> exactly as the executable does. The tests see precisely what any other client sees &mdash; which is the point of the next section.</li>
-    </ul>
+  <div class="col">
+    <p>Read in reverse, the graph gives the layering. <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/maze.py">python/maze.py</a> describes a world. <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">python/pstack.py</a> describe two disciplines for holding a collection of items. Neither is aware of the other, and neither is aware of what a search is. <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">python/solver.py</a> is the only file that refers to all of them, and the only one that had to change when the stack was moved into a module of its own.</p>
   </div>
 </section>
 
 <!-- ===================== 02 ===================== -->
-<section id="boundary">
+<section id="graph">
   <div class="col">
-    <p class="kicker">02 &mdash; the boundary</p>
-    <h2>The interface is a file, and the compiler reads it</h2>
-    <p class="lede">Python has <code>_rev</code> and <code>_make</code>: a leading underscore, which asks politely. OCaml has a second file, which does not ask.</p>
+    <p class="kicker">02 — layer one</p>
+    <h2>The graph knows nothing about search</h2>
+    <p class="lede"><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/maze.py">maze.py</a> answers exactly one question: given a cell, which cells are one step away?</p>
+  </div>
 
+  <figure class="col">
     <div class="code">
-      <div class="code-head"><span class="path">ocaml/lib/pqueue.mli</span><span class="lines">what a client may know</span></div>
-<pre><span class="hl">type 'a t</span>                                 <span class="c">(* no definition given *)</span>
-
-val empty    : 'a t
-val is_empty : 'a t -&gt; bool
-val enqueue  : 'a -&gt; 'a t -&gt; 'a t
-val dequeue  : 'a t -&gt; ('a * 'a t) option
-val peek     : 'a t -&gt; 'a option
-val to_list  : 'a t -&gt; 'a list
-val of_list  : 'a list -&gt; 'a t</pre>
+      <div class="code-head"><span class="path">python/maze.py</span><span class="lines">lines 55–68</span></div>
+<pre>def neighbors(self, pos):
+    <span class="c">"""Yield the walkable cells orthogonally adjacent to `pos`."""</span>
+    r, c = pos
+<span class="hl">    for dr, dc in ((-1, 0), (0, 1), (1, 0), (0, -1)):</span>
+        npos = (r + dr, c + dc)
+        if self.is_free(npos):
+            yield npos</pre>
     </div>
+    <figcaption>The highlighted tuple is <b>up, right, down, left</b> — a tie-break, not a strategy. It fixes the order in which neighbours are yielded, so that runs are reproducible; it does not determine which of them is explored next.</figcaption>
+  </figure>
 
-    <p>The type is declared and never defined. Outside this module a queue has no fields, no representation and no shape: it can be produced only by <code>empty</code> and <code>enqueue</code>, and examined only through the seven functions listed. That the implementation happens to be a record of two lists is not hidden by convention &mdash; it is <em>absent</em> from what a client is given.</p>
-
-    <div class="callout">
-      <p><strong>What this buys, concretely.</strong> Replace the two lists with a different representation tomorrow &mdash; a banker's queue with lazy tails, say, which is exactly session&nbsp;5's repair &mdash; and every client compiles unchanged, because no client could have depended on the old shape. The compiler also checks the implementation <em>against</em> this file: a queue operation whose type drifts from the contract is a compile error in <code>pqueue.ml</code>, not a surprise in <code>solver.ml</code>.</p>
-    </div>
-
-    <p>The same discipline in Python is a naming convention that nothing enforces, and in Java a set of keywords &mdash; <code>private</code>, <code>final</code> &mdash; that enforce rather less than this one line does. The three are compared on the <a href="index.html#languages">session page</a>.</p>
+  <div class="col">
+    <h3>Three places the agnosticism is visible</h3>
+    <ul class="marks">
+      <li><b>No frontier state in the constructor.</b> <code>__init__</code> stores <code>grid</code>, <code>height</code>, <code>width</code>, <code>start</code>, <code>end</code> — and nothing else. No queue, no stack, no visited set, no parent map. All of that is the search's bookkeeping and none of it lives here.</li>
+      <li><b><code>neighbors</code> reports adjacency, not order.</b> It returns every walkable neighbour and leaves the caller to sequence them. It is a generator, so a caller that stops early incurs no further cost.</li>
+      <li><b><code>is_free</code> is a pure predicate.</b> It returns the same answer for a cell regardless of how that cell was reached, or whether a search is under way at all. The bounds check precedes the index, so a negative coordinate is rejected rather than wrapping silently to the far side of the grid.</li>
+    </ul>
+    <p>That is the entire boundary. The maze is a graph, and a graph prescribes no traversal order.</p>
   </div>
 </section>
 
 <!-- ===================== 03 ===================== -->
 <section id="algorithm">
   <div class="col">
-    <p class="kicker">03 &mdash; the algorithm</p>
-    <h2>The search never names a queue</h2>
-    <p class="lede">One loop, written once. It puts positions somewhere and takes positions back out, and it does not know what the somewhere is.</p>
+    <p class="kicker">03 — layer two</p>
+    <h2>The algorithm, written once</h2>
+    <p class="lede"><code>search</code> in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">solver.py</a> never mentions a queue or a stack. It refers only to <code>ops</code>.</p>
+  </div>
 
+  <figure class="col">
     <div class="code">
-      <div class="code-head"><span class="path">ocaml/bin/solver.ml</span><span class="lines">abridged</span></div>
-<pre>let rec loop frontier =
-  <span class="hl">match ops.take frontier with</span>
-  | None -&gt; None                     <span class="c">(* nothing left to explore *)</span>
-  | Some (pos, frontier) -&gt;
-      <span class="c">(* settle pos, and collect its unvisited neighbours as `fresh` *)</span>
-      let frontier =
-        List.fold_left (fun f p -&gt; <span class="hl">ops.put</span> p f) frontier fresh in
-      loop frontier</pre>
+      <div class="code-head"><span class="path">python/solver.py</span><span class="lines">lines 73–91, abridged</span></div>
+<pre><span class="hl">frontier = ops.put(ops.empty, mz.start)</span>
+parent   = {mz.start: None}
+versions = [frontier]
+
+<span class="hl">while not ops.is_empty(frontier):</span>
+<span class="hl">    pos, frontier = ops.take(frontier)</span>
+    if pos == mz.end:
+        <span class="c"># walk `parent` backwards to build the path</span>
+        ...
+    for npos in <span class="c">mz.</span>neighbors(pos):
+        if npos not in parent:
+            parent[npos] = pos
+<span class="hl">            frontier = ops.put(frontier, npos)</span>
+    versions.append(frontier)</pre>
     </div>
+    <figcaption>Four highlighted lines are the entire contract: <code>empty</code>, <code>put</code>, <code>take</code>, <code>is_empty</code>. Nothing further about the container is assumed: neither its representation, nor its cost, nor its ordering.</figcaption>
+  </figure>
 
-    <p>Three names appear from the container: <code>ops.empty</code>, <code>ops.put</code>, <code>ops.take</code>. The words <em>queue</em> and <em>stack</em> appear nowhere in the loop. Supply a queue and the loop is breadth-first; supply a stack and the very same loop is depth-first.</p>
-
-    <p>Note also what <code>take</code> returns: <code>('a * 'f) option</code> &mdash; the element <em>and the new frontier</em>, or nothing at all. The loop cannot forget the empty case, and it cannot mutate the frontier it was handed. Every step names a new version, and the old ones remain valid &mdash; which is how <code>--inspect</code> can ask what the frontier held at step&nbsp;40 without anything having been recorded.</p>
+  <div class="col">
+    <p>Note what <code>take</code> returns: <em>a value and a new frontier</em>. Nothing is mutated in place. That signature is not a stylistic preference; it is what allows the solver to retain <code>versions</code>, a list of every frontier the search has held, without copying. Why that matters is the subject of <a href="index.html#persistence">§04 of the session page</a>.</p>
+    <p>The <code>parent</code> dictionary serves two purposes at once — visited set and path reconstruction: a cell is enqueued only if it has no parent recorded, and the path is recovered by following parents backwards from the exit.</p>
   </div>
 </section>
 
 <!-- ===================== 04 ===================== -->
-<section id="frontier">
+<section id="structures">
   <div class="col">
-    <p class="kicker">04 &mdash; the frontier</p>
-    <h2>A frontier is five functions &mdash; and a type</h2>
-    <p class="lede">This is the one place where the OCaml version says something the Python version cannot.</p>
+    <p class="kicker">04 — layer three</p>
+    <h2>Two containers, same interface</h2>
+    <p class="lede">Both are cons-lists — <code>None</code> is empty, <code>(head, tail)</code> is a node. Both are persistent: every operation returns a new structure, and no earlier version is ever destroyed. Only one of the two is difficult to implement.</p>
+  </div>
 
-    <div class="code">
-      <div class="code-head"><span class="path">ocaml/bin/solver.ml</span><span class="lines">the interface, as a type</span></div>
-<pre>type <span class="hl">('a, 'f)</span> frontier_ops = {
-  name    : string;
-  empty   : 'f;
-  put     : 'a -&gt; 'f -&gt; 'f;
-  take    : 'f -&gt; ('a * 'f) option;
-  to_list : 'f -&gt; 'a list;
-}</pre>
+  <div class="compare">
+    <div class="panel q">
+      <h4>pqueue.py &nbsp;— FIFO</h4>
+      <p class="role">Two cons-lists, <code>(front, back)</code>. Take from the head of <code>front</code>, push onto the head of <code>back</code>. Four TODOs remain to be completed.</p>
+<pre>q = (front, back)
+
+<span class="c"># contents = front ++ reverse(back)</span>
+<span class="c"># invariant: front empty ⟹ back empty</span>
+
+enqueue(q, x)   <span class="c"># O(1)</span>
+dequeue(q)      <span class="c"># amortized O(1)</span></pre>
+      <p>Here persistence must be <em>earned</em>. When <code>front</code> is exhausted, <code>_make</code> reverses the whole of <code>back</code> — an O(n) step. The banker's argument establishes that each element pays for its own reversal exactly once, so n operations still cost O(n) in total.</p>
     </div>
+    <div class="panel s">
+      <h4>pstack.py &nbsp;— LIFO</h4>
+      <p class="role">A single cons-list. Take from the head, push onto the head. No TODOs; supplied in full.</p>
+<pre>s = (head, tail)
 
-    <p><strong>Two type variables, and the second is the interesting one.</strong> <code>'a</code> is what the frontier stores &mdash; here, positions. <code>'f</code> is the frontier <em>itself</em>, and it differs between the two implementations:</p>
+<span class="c"># contents = the list itself</span>
+<span class="c"># invariant: none needed</span>
 
-    <div class="code">
-      <div class="code-head"><span class="path">the two frontiers</span><span class="lines">same interface, different 'f</span></div>
-<pre><span class="c">(* a position is an (int * int) pair -- row and column *)</span>
-
-queue_frontier : (int * int, <span class="hl">(int * int) Pqueue.t</span>) frontier_ops
-stack_frontier : (int * int, <span class="hl">(int * int) list</span>)     frontier_ops</pre>
+push(s, x)      <span class="c"># O(1), shares all of s</span>
+pop(s)          <span class="c"># O(1), allocates nothing</span></pre>
+      <p>Here persistence is <em>free</em>. <code>push</code> conses a single node in front of the old stack and shares all of it; <code>pop</code> returns a tail that already exists. There is no rebalancing step anywhere, so there is nothing to amortise.</p>
     </div>
+  </div>
 
-    <p>Because <code>search</code> is written for <em>any</em> <code>'f</code>, it is incapable of depending on which one arrives. Not unlikely to; incapable. There is no cast to reach through the abstraction and no field to inspect, because within the loop the type <code>'f</code> has no structure at all. The agnosticism the Python note describes as a discipline is here a property the compiler establishes before the program runs.</p>
-
-    <div class="callout">
-      <p><strong>The stack needs no module behind it.</strong> <code>queue_frontier</code> is built from <code>Pqueue</code>; <code>stack_frontier</code> is built from nothing &mdash; its <code>empty</code> is <code>[]</code>, its <code>put</code> is <code>::</code>, and its <code>take</code> is a two-case <code>match</code>. OCaml's built-in list <em>is</em> the lecture's persistent stack, so the depth-first half of this lab is supplied by the language itself. That is also why <code>--dfs</code> runs before a single TODO is filled in.</p>
-    </div>
-
-    <p>A record whose fields are functions has a proper name, and gets it in session&nbsp;5. For now it reads as a bundle of operations passed as one value.</p>
+  <div class="col">
+    <figcaption style="max-width:none">The two files were deliberately written to the same shape; read them side by side. The entire difficulty of Part A is concentrated in one function, <code>pqueue._make</code>, and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">pstack.py</a> is there to show what its absence looks like.</figcaption>
   </div>
 </section>
 
 <!-- ===================== 05 ===================== -->
 <section id="wiring">
   <div class="col">
-    <p class="kicker">05 &mdash; the wiring</p>
-    <h2>What dune does, and one thing it is told not to do</h2>
+    <p class="kicker">05 — the wiring</p>
+    <h2>A frontier is five functions</h2>
+    <p class="lede">There is no base class, no ABC, no <code>Protocol</code>. A frontier is a namespace holding five names, and the two modules supply them.</p>
 
-    <ul class="marks">
-      <li><b>No build order is written down.</b> Dune reads the sources, derives the module graph and compiles what is needed. Adding a file to a stanza is the whole of adding a file.</li>
-      <li><b><code>_build/</code> is disposable.</b> Everything dune produces lives there and nothing else is touched; deleting it costs a recompilation and nothing more.</li>
-      <li><b>Warnings are relaxed in the library, deliberately.</b> <code>lib/dune</code> carries <code>(flags (:standard -w -26-27-32))</code>, which turns unused-variable and unused-value warnings off for that stanza only. Half-finished code compiles, so the tests can run and report which TODO is next instead of the compiler refusing the file. It is a teaching setting, not a style to copy: in the executable and the tests those warnings are on.</li>
-    </ul>
+    <table class="iface">
+      <thead>
+        <tr><th>ops.<em>name</em></th><th class="q">queue_frontier &nbsp;→ BFS</th><th class="s">stack_frontier &nbsp;→ DFS</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>empty</td>    <td class="q">P.EMPTY</td>    <td class="s">S.EMPTY</td></tr>
+        <tr><td>put</td>      <td class="q">P.enqueue</td>  <td class="s">S.push</td></tr>
+        <tr><td>take</td>     <td class="q">P.dequeue</td>  <td class="s">S.pop</td></tr>
+        <tr><td>is_empty</td> <td class="q">P.is_empty</td> <td class="s">S.is_empty</td></tr>
+        <tr><td>to_list</td>  <td class="q">P.to_list</td>  <td class="s">S.to_list</td></tr>
+      </tbody>
+    </table>
+  </div>
 
+  <figure class="col">
+    <div class="code">
+      <div class="code-head"><span class="path">python/solver.py</span><span class="lines">lines 36–53</span></div>
+<pre><span class="c"># FIFO frontier: the persistent queue of pqueue.py (Part A).</span>
+queue_frontier = SimpleNamespace(
+    name="BFS (queue frontier)",
+<span class="hl">    empty=P.EMPTY, put=P.enqueue, take=P.dequeue,</span>
+    is_empty=P.is_empty, to_list=P.to_list,
+)
+
+<span class="c"># LIFO frontier: the persistent stack from the lecture (pstack.py, provided).</span>
+stack_frontier = SimpleNamespace(
+    name="DFS (stack frontier)",
+<span class="hl-s">    empty=S.EMPTY, put=S.push, take=S.pop,</span>
+    is_empty=S.is_empty, to_list=S.to_list,
+)</pre>
+    </div>
+    <figcaption>Two declarations, structurally identical, differing only in which module the five names come from. That symmetry is the point, and it is the reason the stack was moved out of this file into <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">pstack.py</a>.</figcaption>
+  </figure>
+
+  <figure class="col">
+    <div class="code">
+      <div class="code-head"><span class="path">python/solver.py</span><span class="lines">line 113</span></div>
+<pre><span class="c"># No flag means --bfs: the default frontier is the one under construction.</span>
+<span class="hl">ops = stack_frontier if "dfs" in flags else queue_frontier</span></pre>
+    </div>
+    <figcaption><b>This is the whole of &quot;choosing an algorithm.&quot;</b> A single assignment, made during argument parsing, remote from both the search and the maze.</figcaption>
+  </figure>
+
+  <div class="col">
     <div class="callout">
-      <p><strong>Build errors read bottom-up.</strong> When <code>dune runtest</code> fails, the first error is the one to read; the rest are usually its consequences. And an error reported in <code>test_pqueue.ml</code> about a type that does not match is nearly always a signature disagreement &mdash; the implementation drifting from <code>pqueue.mli</code>, which is the file to look at next.</p>
+      <p><strong>The single point of difference.</strong> <code>put</code> followed by <code>take</code> returns the <em>oldest</em> element on the queue and the <em>newest</em> on the stack. That one difference is what makes the same loop either expand in rings from the start — breadth-first, with a guaranteed shortest path — or descend a single corridor until it dead-ends — depth-first, returning the first path found.</p>
+      <p>The maze never learns which occurred. <code>search</code> never asks.</p>
+      <p>Both searches run side by side, one step at a time, in <a href="index.html#demo">§03 of the session page</a>.</p>
     </div>
   </div>
 </section>
 
-<!-- ===================== 06 ===================== -->
+<!-- ===================== 08 ===================== -->
 <section id="run">
   <div class="col">
-    <p class="kicker">06 &mdash; run it</p>
-    <h2>Three commands</h2>
-
-    <div class="code">
-      <div class="code-head"><span class="path">from ocaml/</span><span class="lines">build, test, run</span></div>
-<pre>dune build
-dune runtest
-
-M=../mazes/medium.txt
-dune exec bin/solver.exe <span class="hl">--</span> $M --bfs
-dune exec bin/solver.exe <span class="hl">--</span> $M --dfs
-dune exec bin/solver.exe -- $M --bfs --inspect=40</pre>
+    <p class="kicker">06 — run it</p>
+    <h2>From the <code>python/</code> directory</h2>
+  </div>
+  <div class="col">
+    <div class="shell">
+<div><span class="prompt">$ </span>python3 -m unittest test_pqueue -v      <span class="c"># Part A: make these pass, in order</span></div>
+<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --dfs   <span class="c"># works before a line is written</span></div>
+<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs   <span class="c"># runs on the persistent queue</span></div>
+<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --html=bfs.html</div>
+<div><span class="prompt">$ </span>python3 solver.py ../mazes/medium.txt --bfs --inspect=40</div>
+<div><span class="prompt">$ </span>python3 bench.py                         <span class="c"># Part D: break the bound</span></div>
     </div>
-
-    <p><code>dune build</code> compiles everything; <code>dune runtest</code> compiles and then runs the tests. The bare <code>--</code> separates dune's own arguments from the program's: without it, <code>--bfs</code> would be read as an option to <code>dune exec</code>. All three solvers agree on <code>mazes/medium.txt</code> &mdash; 306 cells explored and a path of 75 for breadth-first &mdash; which is the cross-language check that the specification, not the language, decided the answer.</p>
+    <p style="margin-top:22px"><code>--bfs</code> is the default, and until the four TODOs in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">pqueue.py</a> are completed it reports this plainly rather than failing: <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">solver.py</a> catches the <code>NotImplementedError</code> and directs the reader back to the file in question. Full lab instructions are in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">README.md</a>.</p>
   </div>
 
   <footer class="col">
-    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.mli">lib/pqueue.mli</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">lib/pqueue.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/bin/solver.ml">bin/solver.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/bin/render.ml">bin/render.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/test/test_pqueue.ml">test/test_pqueue.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">tour.ml</a> &middot; <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">homework.ml</a></p>
-    <p>Links resolve when this page is opened from the lab folder. The same queue appears in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">java/PQueue.java</a>; the three are compared on the <a href="index.html#languages">session page</a>.</p>
-    <p style="margin-top:16px">Programming Paradigms, session 2 &mdash; persistent vs. ephemeral data structures.</p>
+    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/maze.py">maze.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">solver.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">pqueue.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">pstack.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/render.py">render.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/test_pqueue.py">test_pqueue.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/bench.py">bench.py</a></p>
+    <p>Links resolve when this page is opened from the lab folder. The same queue appears again in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> and <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">java/PQueue.java</a>; the three are compared on the <a href="index.html#languages">session page</a>.</p>
+    <p style="margin-top:16px">Programming Paradigms, session 2 — persistent vs. ephemeral data structures. Page colours are taken from the solver's own terminal palette in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/render.py">render.py</a> — xterm blue, gold, green, magenta — reassigned so that each search tints its own trail: one hue per frontier, pale for explored cells, solid for the path retained.</p>
   </footer>
 </section>
 

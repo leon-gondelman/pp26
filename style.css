@@ -321,3 +321,8 @@ footer.site .meta a:hover{text-decoration:underline}
   .field{grid-template-columns:1fr;gap:.1rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* exam format: long section with subheadings and lists */
+#exam h3{margin-top:1.5rem}
+#exam li{margin:0 0 .4rem}
+#exam ol,#exam ul{margin:0 0 1rem}

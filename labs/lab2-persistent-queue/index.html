@@ -571,6 +571,13 @@ ul.refs .where{
 .labrail .lr-readme a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--rule-2)}
 .labrail .lr-readme a:hover{color:var(--task); border-color:var(--task-line)}
 
+/* A helper note sits under the guide it serves: indented, on a hairline,
+   lighter weight — subordinate, not equal. */
+.labrail li.sub a.lr{margin-left:12px; padding-left:12px; border-left:2px solid var(--rule);
+  border-radius:0 7px 7px 0}
+.labrail li.sub a.lr .t{font-weight:400; font-size:13.5px}
+.labrail li.sub a.lr[aria-current]{border-left-color:var(--queue)}
+
 /* This page's own sections, in the page's own voice: mono, numbered, with the
    assignment marker the boxed list used. The current one lights up on scroll. */
 .labrail .lr-toc a{display:block; padding:5.5px 10px; border-radius:7px;
@@ -614,7 +621,7 @@ ul.refs .where{
       <span class="up">PP26 &middot; Session 2</span><b>Lab 2 &mdash; Persistent Queue</b></a>
       <div class="lr-what">
         <h2>What to do</h2>
-        <ul class="lr-todo"><li><a class="do" href="queue-on-paper.pdf"><span class="k">paper</span><span class="t">On paper</span><span class="d">the two-list queue, by hand</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-a--python"><span class="k">A</span><span class="t">Python</span><span class="d"><code>python/pqueue.py</code> — four TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-b--the-payoff"><span class="k">B</span><span class="t">The payoff</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-c--ocaml"><span class="k">C</span><span class="t">OCaml</span><span class="d"><code>ocaml/lib/pqueue.ml</code></span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-d--breaking-the-bank"><span class="k">D</span><span class="t">Breaking the bank</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-e--java-homework"><span class="k">E</span><span class="t">Java · homework</span><span class="d"><code>java/PQueue.java</code></span></a></li></ul>
+        <ul class="lr-todo"><li><a class="do" href="queue-on-paper.pdf"><span class="k">paper</span><span class="t">On paper</span><span class="d">the two-list queue, by hand</span></a></li><li><a class="do" href="python-pqueue.html"><span class="k">A</span><span class="t">Python</span><span class="d"><code>python/pqueue.py</code> — four TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-b--the-payoff"><span class="k">B</span><span class="t">The payoff</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="ocaml-pqueue.html"><span class="k">C</span><span class="t">OCaml</span><span class="d"><code>ocaml/lib/pqueue.ml</code> — three TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-d--breaking-the-bank"><span class="k">D</span><span class="t">Breaking the bank</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="java-pqueue.html"><span class="k">E</span><span class="t">Java · homework</span><span class="d"><code>java/PQueue.java</code> — four TODOs</span></a></li></ul>
         <p class="lr-readme"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">full instructions &mdash; README</a></p>
       </div>
       <div class="lr-sections">
@@ -623,7 +630,7 @@ ul.refs .where{
       </div>
       <div>
         <h2>Lab pages</h2>
-        <ul><li><a class="lr" href="index.html" aria-current='page'><span class="t">One queue, three languages</span><span class="d">the lab — overview, assignments, homework</span></a></li><li><a class="lr" href="pqueue.html"><span class="t">Four holes in a queue</span><span class="d">Python · reading guide to the four TODOs</span></a></li><li><a class="lr" href="architecture.html"><span class="t">Three layers, one search</span><span class="d">Python · how the maze solver is built</span></a></li><li><a class="lr" href="ocaml-architecture.html"><span class="t">What the types are for</span><span class="d">OCaml · architecture note</span></a></li><li><a class="lr" href="java-architecture.html"><span class="t">Immutability, spelled out</span><span class="d">Java · architecture note</span></a></li></ul>
+        <ul><li><a class="lr" href="index.html" aria-current='page'><span class="t">One queue, three languages</span><span class="d">the lab — overview, general architecture, assignments</span></a></li><li><a class="lr" href="python-pqueue.html"><span class="t">Four holes in a queue</span><span class="d">Python · reading guide, part A</span></a></li><li class="sub"><a class="lr" href="python-architecture.html"><span class="t">Three layers, one search</span><span class="d">how the Python solver is built</span></a></li><li><a class="lr" href="ocaml-pqueue.html"><span class="t">Three holes in a queue</span><span class="d">OCaml · reading guide, part C</span></a></li><li class="sub"><a class="lr" href="ocaml-architecture.html"><span class="t">What the types are for</span><span class="d">how the OCaml solver is built</span></a></li><li><a class="lr" href="java-pqueue.html"><span class="t">Four holes, all final</span><span class="d">Java · reading guide, part E · homework</span></a></li><li class="sub"><a class="lr" href="java-architecture.html"><span class="t">Immutability, spelled out</span><span class="d">how the Java solver is built</span></a></li></ul>
       </div>
       <div>
         <h2>Code</h2>
@@ -945,8 +952,8 @@ python3 solver.py $M --bfs
 python3 solver.py $M --dfs
 python3 bench.py</pre>
       <p class="links">
-        <span><a class="file" href="pqueue.html">pqueue.html</a> — the four holes</span>
-        <span><a class="file" href="architecture.html">architecture.html</a> — the wiring</span>
+        <span><a class="file" href="python-pqueue.html">python-pqueue.html</a> — the four holes</span>
+        <span><a class="file" href="python-architecture.html">python-architecture.html</a> — the wiring</span>
         <span><a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> — the file to edit</span>
       </p>
       <p class="todo">4 TODOs · <code>--dfs</code> works before a line is written</p>
@@ -1157,7 +1164,7 @@ java MazeSolver $M --dfs</pre>
   </div>
 
   <footer class="col">
-    <p><b>Pages in this lab:</b> <a class="file" href="pqueue.html">pqueue.html</a> · <a class="file" href="architecture.html">architecture.html</a> · <a class="file" href="queue-on-paper.pdf">queue-on-paper.pdf</a></p>
+    <p><b>Pages in this lab:</b> <a class="file" href="python-pqueue.html">python-pqueue.html</a> · <a class="file" href="python-architecture.html">python-architecture.html</a> · <a class="file" href="queue-on-paper.pdf">queue-on-paper.pdf</a></p>
     <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py">python/pqueue.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/solver.py">python/solver.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pstack.py">python/pstack.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/bench.py">python/bench.py</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml">ocaml/lib/pqueue.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java">java/PQueue.java</a></p>
     <p style="margin-top:16px">Programming Paradigms, session 2 — persistent versus ephemeral data structures. The demo in <a href="#demo">§01</a> replays a real run of the Python solver on <code>mazes/medium.txt</code>: the frontier drawn at each step is the frontier the search actually held at that step, exported by the solver's own <code>--html</code> path. Page colours are taken from the solver's terminal palette — xterm blue, gold, green, magenta — reassigned so that each search tints its own trail.</p>
   </footer>

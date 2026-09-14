@@ -380,6 +380,13 @@ footer p{margin:0 0 8px; max-width:640px}
 .labrail .lr-readme a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--rule-2)}
 .labrail .lr-readme a:hover{color:var(--task); border-color:var(--task-line)}
 
+/* A helper note sits under the guide it serves: indented, on a hairline,
+   lighter weight — subordinate, not equal. */
+.labrail li.sub a.lr{margin-left:12px; padding-left:12px; border-left:2px solid var(--rule);
+  border-radius:0 7px 7px 0}
+.labrail li.sub a.lr .t{font-weight:400; font-size:13.5px}
+.labrail li.sub a.lr[aria-current]{border-left-color:var(--queue)}
+
 /* This page's own sections, in the page's own voice: mono, numbered, with the
    assignment marker the boxed list used. The current one lights up on scroll. */
 .labrail .lr-toc a{display:block; padding:5.5px 10px; border-radius:7px;
@@ -423,7 +430,7 @@ footer p{margin:0 0 8px; max-width:640px}
       <span class="up">PP26 &middot; Session 2</span><b>Lab 2 &mdash; Persistent Queue</b></a>
       <div class="lr-what">
         <h2>What to do</h2>
-        <ul class="lr-todo"><li><a class="do" href="queue-on-paper.pdf"><span class="k">paper</span><span class="t">On paper</span><span class="d">the two-list queue, by hand</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-a--python"><span class="k">A</span><span class="t">Python</span><span class="d"><code>python/pqueue.py</code> — four TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-b--the-payoff"><span class="k">B</span><span class="t">The payoff</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-c--ocaml"><span class="k">C</span><span class="t">OCaml</span><span class="d"><code>ocaml/lib/pqueue.ml</code></span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-d--breaking-the-bank"><span class="k">D</span><span class="t">Breaking the bank</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-e--java-homework"><span class="k">E</span><span class="t">Java · homework</span><span class="d"><code>java/PQueue.java</code></span></a></li></ul>
+        <ul class="lr-todo"><li><a class="do" href="queue-on-paper.pdf"><span class="k">paper</span><span class="t">On paper</span><span class="d">the two-list queue, by hand</span></a></li><li><a class="do" href="python-pqueue.html"><span class="k">A</span><span class="t">Python</span><span class="d"><code>python/pqueue.py</code> — four TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-b--the-payoff"><span class="k">B</span><span class="t">The payoff</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="ocaml-pqueue.html"><span class="k">C</span><span class="t">OCaml</span><span class="d"><code>ocaml/lib/pqueue.ml</code> — three TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-d--breaking-the-bank"><span class="k">D</span><span class="t">Breaking the bank</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="java-pqueue.html"><span class="k">E</span><span class="t">Java · homework</span><span class="d"><code>java/PQueue.java</code> — four TODOs</span></a></li></ul>
         <p class="lr-readme"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">full instructions &mdash; README</a></p>
       </div>
       <div class="lr-sections">
@@ -432,7 +439,7 @@ footer p{margin:0 0 8px; max-width:640px}
       </div>
       <div>
         <h2>Lab pages</h2>
-        <ul><li><a class="lr" href="index.html"><span class="t">One queue, three languages</span><span class="d">the lab — overview, assignments, homework</span></a></li><li><a class="lr" href="pqueue.html"><span class="t">Four holes in a queue</span><span class="d">Python · reading guide to the four TODOs</span></a></li><li><a class="lr" href="architecture.html"><span class="t">Three layers, one search</span><span class="d">Python · how the maze solver is built</span></a></li><li><a class="lr" href="ocaml-architecture.html"><span class="t">What the types are for</span><span class="d">OCaml · architecture note</span></a></li><li><a class="lr" href="java-architecture.html" aria-current='page'><span class="t">Immutability, spelled out</span><span class="d">Java · architecture note</span></a></li></ul>
+        <ul><li><a class="lr" href="index.html"><span class="t">One queue, three languages</span><span class="d">the lab — overview, general architecture, assignments</span></a></li><li><a class="lr" href="python-pqueue.html"><span class="t">Four holes in a queue</span><span class="d">Python · reading guide, part A</span></a></li><li class="sub"><a class="lr" href="python-architecture.html"><span class="t">Three layers, one search</span><span class="d">how the Python solver is built</span></a></li><li><a class="lr" href="ocaml-pqueue.html"><span class="t">Three holes in a queue</span><span class="d">OCaml · reading guide, part C</span></a></li><li class="sub"><a class="lr" href="ocaml-architecture.html"><span class="t">What the types are for</span><span class="d">how the OCaml solver is built</span></a></li><li><a class="lr" href="java-pqueue.html"><span class="t">Four holes, all final</span><span class="d">Java · reading guide, part E · homework</span></a></li><li class="sub"><a class="lr" href="java-architecture.html" aria-current='page'><span class="t">Immutability, spelled out</span><span class="d">how the Java solver is built</span></a></li></ul>
       </div>
       <div>
         <h2>Code</h2>
@@ -453,7 +460,7 @@ footer p{margin:0 0 8px; max-width:640px}
   <div class="wrap">
     <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;&middot;&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s2.html">Session 2</a> &nbsp;&middot;&nbsp; <a href="index.html">lab</a> &nbsp;&middot;&nbsp; Java &nbsp;&middot;&nbsp; architecture note</p>
     <h1>Immutability, Spelled Out</h1>
-    <p class="standfirst">The third implementation of the same queue, in the language that states its intentions most explicitly. OCaml is persistent by default and says nothing; Python asks politely with a leading underscore. Java writes the discipline down in four separate keywords, has the compiler check each one &mdash; and then, in exactly one place, runs out of things it can prove and asks us to sign for the rest. The companion notes are <a href="architecture.html">Three Layers, One Search</a> (Python) and <a href="ocaml-architecture.html">What the Types Are For</a> (OCaml).</p>
+    <p class="standfirst">The third implementation of the same queue, in the language that states its intentions most explicitly. OCaml is persistent by default and says nothing; Python asks politely with a leading underscore. Java writes the discipline down in four separate keywords, has the compiler check each one &mdash; and then, in exactly one place, runs out of things it can prove and asks us to sign for the rest. The companion notes are <a href="python-architecture.html">Three Layers, One Search</a> (Python) and <a href="ocaml-architecture.html">What the Types Are For</a> (OCaml).</p>
     <nav class="toc">
       <a href="#shape">01 &middot; the shape</a>
       <a href="#keywords">02 &middot; four keywords</a>
