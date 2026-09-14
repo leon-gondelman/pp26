@@ -302,7 +302,7 @@ footer p{margin:0 0 8px; max-width:640px}
   font:600 11.5px/1 "IBM Plex Sans",sans-serif; letter-spacing:.13em;
   text-transform:uppercase; color:var(--ink); margin:26px 0 10px; padding:0; border:0}
 .labrail h2::after{content:""; flex:1; height:1px; background:var(--rule-2)}
-.labrail .lr-sections h2,.labrail .lr-nav>div:first-of-type h2{margin-top:22px}
+.labrail .lr-nav>div:first-of-type h2{margin-top:18px}
 .labrail ul{list-style:none; margin:0; padding:0}
 .labrail a.lr{display:block; padding:6px 10px; border-radius:7px;
   text-decoration:none; color:var(--ink-2); font-size:14.5px}
@@ -315,6 +315,25 @@ footer p{margin:0 0 8px; max-width:640px}
 .labrail a.lr .d{display:block; font:400 12px/1.35 "IBM Plex Sans",sans-serif;
   color:var(--ink-3); margin-top:1px}
 .labrail a.lr[aria-current] .d{color:var(--queue); opacity:.85; font-weight:400}
+
+/* The assignment itself, first: one line per part, letter in mono, the parts
+   where code gets written in the lab's task colour; run-and-watch parts muted. */
+.labrail .lr-todo a{display:grid; grid-template-columns:2.4rem 1fr; gap:0 6px;
+  align-items:baseline; padding:5px 10px; border-radius:7px; text-decoration:none;
+  color:var(--ink-2)}
+.labrail .lr-todo a:hover{background:var(--sunken); color:var(--ink)}
+.labrail .lr-todo .k{font:500 12.5px/1.5 "IBM Plex Mono",monospace; color:var(--ink-3);
+  letter-spacing:.02em}
+.labrail .lr-todo .t{font-size:14.5px; font-weight:600}
+.labrail .lr-todo .d{grid-column:2; font:400 12px/1.35 "IBM Plex Sans",sans-serif;
+  color:var(--ink-3); margin-top:1px}
+.labrail .lr-todo .d code{font:500 11.5px/1.4 "IBM Plex Mono",monospace; background:none;
+  padding:0; color:inherit}
+.labrail .lr-todo a.do .k,.labrail .lr-todo a.do .t{color:var(--task)}
+.labrail .lr-todo a.do:hover{background:var(--task-soft)}
+.labrail .lr-readme{margin:6px 0 0; padding:0 10px; font-size:12.5px}
+.labrail .lr-readme a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.labrail .lr-readme a:hover{color:var(--task); border-color:var(--task-line)}
 
 /* This page's own sections, in the page's own voice: mono, numbered, with the
    assignment marker the boxed list used. The current one lights up on scroll. */
@@ -357,6 +376,11 @@ footer p{margin:0 0 8px; max-width:640px}
   <div class="lr-nav">
     <a class="lr-brand" href="https://homes.cs.aau.dk/~lego/pp26/s2.html">
       <span class="up">PP26 &middot; Session 2</span><b>Lab 2 &mdash; Persistent Queue</b></a>
+      <div class="lr-what">
+        <h2>What to do</h2>
+        <ul class="lr-todo"><li><a class="do" href="queue-on-paper.pdf"><span class="k">paper</span><span class="t">On paper</span><span class="d">the two-list queue, by hand</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-a--python"><span class="k">A</span><span class="t">Python</span><span class="d"><code>python/pqueue.py</code> — four TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-b--the-payoff"><span class="k">B</span><span class="t">The payoff</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-c--ocaml"><span class="k">C</span><span class="t">OCaml</span><span class="d"><code>ocaml/lib/pqueue.ml</code></span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-d--breaking-the-bank"><span class="k">D</span><span class="t">Breaking the bank</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-e--java-homework"><span class="k">E</span><span class="t">Java · homework</span><span class="d"><code>java/PQueue.java</code></span></a></li></ul>
+        <p class="lr-readme"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">full instructions &mdash; README</a></p>
+      </div>
       <div class="lr-sections">
         <h2>On this page</h2>
         <ul class="lr-toc"><li><a class="" href="#map">01 · the file</a></li><li><a class="" href="#rep">02 · the representation</a></li><li><a class="" href="#rev">03 · todo 1 · _rev</a></li><li><a class="" href="#make">04 · todo 2 · _make</a></li><li><a class="" href="#enqueue">05 · todo 3 · enqueue</a></li><li><a class="" href="#dequeue">06 · todo 4 · dequeue</a></li><li><a class="" href="#tests">07 · the tests</a></li><li><a class="" href="#cost">08 · the cost</a></li><li><a class="" href="#run">09 · run it</a></li></ul>
@@ -364,13 +388,6 @@ footer p{margin:0 0 8px; max-width:640px}
       <div>
         <h2>Lab pages</h2>
         <ul><li><a class="lr" href="index.html"><span class="t">One queue, three languages</span><span class="d">the lab — overview, assignments, homework</span></a></li><li><a class="lr" href="pqueue.html" aria-current='page'><span class="t">Four holes in a queue</span><span class="d">Python · reading guide to the four TODOs</span></a></li><li><a class="lr" href="architecture.html"><span class="t">Three layers, one search</span><span class="d">Python · how the maze solver is built</span></a></li><li><a class="lr" href="ocaml-architecture.html"><span class="t">What the types are for</span><span class="d">OCaml · architecture note</span></a></li><li><a class="lr" href="java-architecture.html"><span class="t">Immutability, spelled out</span><span class="d">Java · architecture note</span></a></li></ul>
-      </div>
-      <div>
-        <h2>On paper</h2>
-        <ul>
-          <li><a class="lr" href="queue-on-paper.pdf">Handout (PDF)</a></li>
-          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">README &mdash; what to do</a></li>
-        </ul>
       </div>
       <div>
         <h2>Code</h2>
