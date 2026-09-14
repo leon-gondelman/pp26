@@ -5,9 +5,10 @@
 
 :root{
   --bg:#ffffff; --side:#f7f8fa; --sunk:#fbfbfd;
-  --ink:#0f1115; --ink2:#4a5160; --ink3:#7b8394; --faint:#c9cfd9;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f; --faint:#c9cfd9;
   --line:#e6e9ef; --line-soft:#eef0f4;
   --acc:#211a52; --acc-l:#eeecf7; --acc-t:#3d3383;
+  --wine:#7a1f2e; --wine-l:#f4e7ea;
   --lec:#1d4ed8; --lec-b:#e6edfd;
   --lab:#0d6b63; --lab-b:#d9f2ef;
   --hw:#a2540a;  --hw-b:#fbeeda;
@@ -24,6 +25,7 @@
     --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d; --faint:#3a4049;
     --line:#23272e; --line-soft:#1b1f25;
     --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
+    --wine:#e39aa7; --wine-l:#2f191e;
     --lec:#8fb0ff; --lec-b:#15203a;
     --lab:#6fd3c4; --lab-b:#0f2b29;
     --hw:#e0a962;  --hw-b:#2c2113;
@@ -36,6 +38,7 @@
   --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d; --faint:#3a4049;
   --line:#23272e; --line-soft:#1b1f25;
   --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
+  --wine:#e39aa7; --wine-l:#2f191e;
   --lec:#8fb0ff; --lec-b:#15203a;
   --lab:#6fd3c4; --lab-b:#0f2b29;
   --hw:#e0a962;  --hw-b:#2c2113;
@@ -121,10 +124,10 @@ section>p,.hero p{margin:0 0 1rem}
 
 /* next-session strip */
 .nextbar{max-width:none;display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap;
-  background:var(--acc-l);border-radius:10px;padding:.8rem 1.05rem;margin:0 0 1.9rem;
+  background:var(--wine-l);border-radius:10px;padding:.8rem 1.05rem;margin:0 0 1.9rem;
   font-size:.93rem;color:var(--ink)}
 .nextbar .k{font:600 .66rem/1 var(--sans);letter-spacing:.11em;text-transform:uppercase;
-  color:var(--bg);background:var(--acc);padding:.5em .7em;border-radius:20px}
+  color:var(--bg);background:var(--wine);padding:.5em .7em;border-radius:20px}
 .nextbar b{font-weight:600}
 .nextbar .r{margin-left:auto;color:var(--ink3);font-size:.84rem;
   font-variant-numeric:tabular-nums}
@@ -158,7 +161,7 @@ tr.partrow td{background:var(--side);padding:.55rem .8rem;
 tr.partrow .pill{color:var(--acc-t);margin-right:.5rem}
 tr.partrow .dim{font-weight:400;letter-spacing:.02em;text-transform:none;font-size:.78rem}
 tr.now td{background:var(--sunk)}
-tr.now td.date{box-shadow:inset 3px 0 0 var(--acc);color:var(--acc-t);font-weight:600}
+tr.now td.date{box-shadow:inset 3px 0 0 var(--wine);color:var(--wine);font-weight:600}
 tr.done td.date{color:var(--ink3)}
 
 /* material chips, coloured by what the thing is */
@@ -295,7 +298,7 @@ footer.site .meta a:hover{text-decoration:underline}
     border-radius:7px;margin-top:.5rem}
   table.sessions tr.partrow td{display:block;grid-column:auto;padding:0}
   table.sessions tr.now{background:var(--sunk);border-radius:8px;
-    padding-left:.6rem;box-shadow:inset 3px 0 0 var(--acc)}
+    padding-left:.6rem;box-shadow:inset 3px 0 0 var(--wine)}
   table.sessions tr.now td.date{box-shadow:none}
 }
 @media (max-width:980px){

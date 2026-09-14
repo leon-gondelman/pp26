@@ -9,22 +9,24 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <style>
 :root{
-  --ground:#f3f5f8; --surface:#ffffff; --surface-2:#e9edf2; --sunken:#eef1f5;
-  --ink:#161a21; --ink-2:#434b58; --ink-3:#6d7583; --rule:#d5dae2; --rule-2:#c2c9d3;
-  --queue:#0b6ea9; --queue-soft:#e2eff8; --queue-line:#9dc7e3;
-  --stack:#8a5606; --stack-soft:#f8efdc; --stack-line:#dcbc84;
-  --start:#1c7a45; --exit:#a3319a; --wall:#a7b0bb;
-  --queue-tint:#8dbedd; --stack-tint:#d3ab63;
-  --shadow:0 1px 2px rgba(20,28,40,.06), 0 8px 24px -12px rgba(20,28,40,.18);
+  --ground:#f5f4f0; --surface:#ffffff; --surface-2:#eae8e2; --sunken:#f0eeea;
+  --ink:#15171c; --ink-2:#3b4250; --ink-3:#5f6774; --rule:#d8d5cd; --rule-2:#c5c1b8;
+  --queue:#0a5f96; --queue-soft:#e2edf6; --queue-line:#94bcd9;
+  --stack:#7f4e06; --stack-soft:#f6ecd8; --stack-line:#d7b67c;
+  --start:#1b7a45; --exit:#9b2e92; --wall:#adaeaa;
+  --queue-tint:#88b5d4; --stack-tint:#cfa65d;
+  --task:#7a1f2e; --task-soft:#f4e7ea; --task-line:#d2a2ad;
+  --shadow:0 1px 2px rgba(30,26,20,.06), 0 8px 24px -12px rgba(30,26,20,.16);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#0f1217; --surface:#161a21; --surface-2:#1d222b; --sunken:#12161c;
-    --ink:#e6eaf0; --ink-2:#b2bac6; --ink-3:#828b99; --rule:#282e38; --rule-2:#333b47;
-    --queue:#5db6ec; --queue-soft:#132738; --queue-line:#2b5876;
-    --stack:#e2a951; --stack-soft:#2c2312; --stack-line:#6b552a;
-    --start:#4fc07f; --exit:#e07ad4; --wall:#464e5a;
-    --queue-tint:#356a8e; --stack-tint:#7d6231;
+    --ground:#111318; --surface:#181b22; --surface-2:#232833; --sunken:#14171d;
+    --ink:#e8eaef; --ink-2:#b6bdc9; --ink-3:#8a929f; --rule:#2a2f39; --rule-2:#363c48;
+    --queue:#62b8ee; --queue-soft:#14283a; --queue-line:#2d5a79;
+    --stack:#e3ab55; --stack-soft:#2d2413; --stack-line:#6c572b;
+    --start:#52c283; --exit:#e07cd6; --wall:#4a505a;
+    --queue-tint:#376c90; --stack-tint:#7f6433;
+    --task:#e39aa7; --task-soft:#2f191e; --task-line:#6f3a46;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
   }
 }
@@ -114,13 +116,13 @@ code{
 /* ---- code blocks ---- */
 figure{margin:26px 0}
 .code{
-  background:var(--sunken); border:1px solid var(--rule); border-radius:6px;
+  background:var(--surface); border:1px solid var(--rule); border-radius:6px;
   overflow-x:auto; box-shadow:var(--shadow);
 }
 .code-head{
   display:flex; justify-content:space-between; align-items:baseline; gap:16px;
   padding:9px 16px; border-bottom:1px solid var(--rule);
-  background:var(--surface); border-radius:6px 6px 0 0;
+  background:var(--sunken); border-radius:6px 6px 0 0;
   font-family:"IBM Plex Mono",monospace; font-size:12px;
   position:sticky; left:0;
 }
@@ -186,7 +188,7 @@ figcaption b{color:var(--ink-2); font-weight:600}
 .panel p:last-child{margin-bottom:0}
 .panel pre{
   margin:0 0 12px; font-family:"IBM Plex Mono",monospace; font-size:12.5px;
-  line-height:1.6; background:var(--sunken); border:1px solid var(--rule);
+  line-height:1.6; background:var(--surface); border:1px solid var(--rule);
   border-radius:5px; padding:12px; overflow-x:auto; color:var(--ink);
 }
 .panel pre .c{color:var(--ink-3)}
@@ -309,6 +311,11 @@ footer p{margin:0 0 8px; max-width:640px}
 .labrail a.lr code{font:500 13.5px/1.5 "IBM Plex Mono",monospace; background:none;
   padding:0; color:inherit}
 
+.labrail a.lr .t{display:block}
+.labrail a.lr .d{display:block; font:400 12px/1.35 "IBM Plex Sans",sans-serif;
+  color:var(--ink-3); margin-top:1px}
+.labrail a.lr[aria-current] .d{color:var(--queue); opacity:.85; font-weight:400}
+
 /* This page's own sections, in the page's own voice: mono, numbered, with the
    assignment marker the boxed list used. The current one lights up on scroll. */
 .labrail .lr-toc a{display:block; padding:5.5px 10px; border-radius:7px;
@@ -356,7 +363,7 @@ footer p{margin:0 0 8px; max-width:640px}
       </div>
       <div>
         <h2>Lab pages</h2>
-        <ul><li><a class="lr" href="index.html">One queue, three languages</a></li><li><a class="lr" href="pqueue.html" aria-current='page'>Four holes in a queue</a></li><li><a class="lr" href="architecture.html">Three layers, one search</a></li><li><a class="lr" href="ocaml-architecture.html">What the types are for</a></li><li><a class="lr" href="java-architecture.html">Immutability, spelled out</a></li></ul>
+        <ul><li><a class="lr" href="index.html"><span class="t">One queue, three languages</span><span class="d">the lab — overview, assignments, homework</span></a></li><li><a class="lr" href="pqueue.html" aria-current='page'><span class="t">Four holes in a queue</span><span class="d">Python · reading guide to the four TODOs</span></a></li><li><a class="lr" href="architecture.html"><span class="t">Three layers, one search</span><span class="d">Python · how the maze solver is built</span></a></li><li><a class="lr" href="ocaml-architecture.html"><span class="t">What the types are for</span><span class="d">OCaml · architecture note</span></a></li><li><a class="lr" href="java-architecture.html"><span class="t">Immutability, spelled out</span><span class="d">Java · architecture note</span></a></li></ul>
       </div>
       <div>
         <h2>On paper</h2>
