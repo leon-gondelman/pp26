@@ -1,150 +1,320 @@
+/* Programming Paradigms — PP26
+   Layout: persistent session rail + content column ("Studio" direction).
+   Colour, type and spacing are tokens; everything below styles through them,
+   so dark mode is a token swap and nothing needs a second definition. */
+
 :root{
-  --bg:#fdfdfc; --fg:#1a1a18; --dim:#6b6b66; --rule:#e2e0da;
-  --accent:#14507a; --accent-soft:#eef3f8; --card:#f7f6f3;
+  --bg:#ffffff; --side:#f7f8fa; --sunk:#fbfbfd;
+  --ink:#0f1115; --ink2:#4a5160; --ink3:#7b8394; --faint:#c9cfd9;
+  --line:#e6e9ef; --line-soft:#eef0f4;
+  --acc:#211a52; --acc-l:#eeecf7; --acc-t:#3d3383;
+  --lec:#1d4ed8; --lec-b:#e6edfd;
+  --lab:#0d6b63; --lab-b:#d9f2ef;
+  --hw:#a2540a;  --hw-b:#fbeeda;
+  --sol:#6d28d9; --sol-b:#f0e9fd;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --rail:16.5rem;
+  color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
-  :root{ --bg:#16171a; --fg:#e8e6e1; --dim:#9a978f; --rule:#2e3035;
-         --accent:#7fb2dd; --accent-soft:#1d252e;
-         --card:#1e2024; }
+  :root:not([data-theme="light"]){
+    --bg:#0e1014; --side:#14171c; --sunk:#111419;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d; --faint:#3a4049;
+    --line:#23272e; --line-soft:#1b1f25;
+    --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
+    --lec:#8fb0ff; --lec-b:#15203a;
+    --lab:#6fd3c4; --lab-b:#0f2b29;
+    --hw:#e0a962;  --hw-b:#2c2113;
+    --sol:#bfa3fb; --sol-b:#231a3a;
+    color-scheme:dark;
+  }
 }
+:root[data-theme="dark"]{
+  --bg:#0e1014; --side:#14171c; --sunk:#111419;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d; --faint:#3a4049;
+  --line:#23272e; --line-soft:#1b1f25;
+  --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
+  --lec:#8fb0ff; --lec-b:#15203a;
+  --lab:#6fd3c4; --lab-b:#0f2b29;
+  --hw:#e0a962;  --hw-b:#2c2113;
+  --sol:#bfa3fb; --sol-b:#231a3a;
+  color-scheme:dark;
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);
-  font:16px/1.6 "Iowan Old Style",Palatino,Georgia,serif;}
-main{max-width:62rem;margin:0 auto;padding:0 1.5rem 4rem}
-a{color:var(--accent)}
-h1,h2,h3{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  line-height:1.25;letter-spacing:-.01em}
-h1{font-size:2.1rem;margin:.2em 0 .3em}
-h2{font-size:1.3rem;margin:2.4em 0 .8em;padding-bottom:.35em;
-  border-bottom:1px solid var(--rule)}
-h3{font-size:1.02rem;margin:0 0 .4em}
-p{margin:.7em 0}
-.dim{color:var(--dim)}
+html{-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 15.5px/1.62 var(--sans);
+  display:grid;grid-template-columns:var(--rail) minmax(0,1fr);min-height:100vh}
+a{color:var(--acc)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+h1,h2,h3{text-wrap:balance}
 
-header.site{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:baseline;
-  max-width:62rem;margin:0 auto;padding:1.4rem 1.5rem;border-bottom:1px solid var(--rule)}
-header.site .home{font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  font-weight:600;text-decoration:none;color:var(--fg)}
-header.site .meta{font-size:.85rem;color:var(--dim);
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+/* ---------------------------------------------------------------- rail */
+aside.rail{background:var(--side);border-right:1px solid var(--line);
+  padding:1.6rem 1.25rem;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;gap:.7rem;align-items:center;text-decoration:none;color:var(--ink)}
+.brand .monogram{flex:none;width:34px;height:34px;border-radius:9px;background:var(--acc);
+  color:var(--bg);font:600 12px/34px var(--mono);text-align:center;letter-spacing:.04em}
+.brand b{font:600 .97rem/1.24 var(--sans);letter-spacing:-.01em}
+.brand-sub{margin:.45rem 0 1.5rem calc(34px + .7rem);font-size:.76rem;color:var(--ink3)}
+.rail nav ul{list-style:none;margin:0 0 1.7rem;padding:0}
+.rail nav a{display:block;padding:.42rem .6rem;border-radius:6px;text-decoration:none;
+  font-size:.89rem;color:var(--ink2)}
+.rail nav a:hover{background:var(--line-soft);color:var(--ink)}
+.rail nav a[aria-current]{background:var(--acc-l);color:var(--acc-t);font-weight:600}
+.railhead{font:600 .68rem/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink3);margin:0 0 .6rem .6rem}
+ol.railsessions{list-style:none;margin:0 0 1.6rem;padding:0;font-size:.845rem}
+ol.railsessions a{display:grid;grid-template-columns:1.5rem 1fr;gap:.5rem;
+  padding:.31rem .6rem;border-radius:6px;text-decoration:none;color:var(--ink2)}
+ol.railsessions a:hover{background:var(--line-soft);color:var(--ink)}
+ol.railsessions .n{color:var(--ink3);font:400 .78rem/1.55 var(--mono);
+  font-variant-numeric:tabular-nums}
+ol.railsessions a[aria-current]{color:var(--acc-t);font-weight:600}
+ol.railsessions a[aria-current] .n{color:var(--acc-t)}
+.railfoot{border-top:1px solid var(--line);padding-top:1rem;
+  font-size:.76rem;line-height:1.55;color:var(--ink3)}
+.railfoot .aaumark{display:flex;align-items:center;gap:.6rem;margin-bottom:.55rem;
+  color:var(--acc);text-decoration:none}
+.railfoot .aaumark svg{width:26px;height:26px;flex:none;fill:currentColor}
+.railfoot .aaumark span{font:600 .72rem/1.25 var(--sans);letter-spacing:.01em;color:var(--ink2)}
 
-.hero{padding:2rem 0 .5rem}
-.lead{font-size:1.12rem;color:var(--dim)}
-.crumb{margin:1.4rem 0 0;font-size:.9rem}
+/* ---------------------------------------------------------------- main */
+main{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:1.5rem;
+  padding:.8rem 3rem;border-bottom:1px solid var(--line);
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px)}
+.topbar .where{font:400 .8rem/1.5 var(--mono);color:var(--ink3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .where b{color:var(--ink2);font-weight:500}
+.topbar nav{margin-left:auto;display:flex;gap:1.35rem;font-size:.86rem}
+.topbar nav a{color:var(--ink2);text-decoration:none}
+.topbar nav a:hover{color:var(--acc)}
+.topbar .theme{font:500 .86rem/1 var(--sans);color:var(--ink2);background:none;
+  border:1px solid var(--line);border-radius:7px;padding:.36rem .6rem;cursor:pointer}
+.topbar .theme:hover{color:var(--acc);border-color:var(--acc)}
+.topbar .theme span{display:none}
+.topbar .theme[data-mode="auto"] [data-t="auto"],
+.topbar .theme[data-mode="light"] [data-t="light"],
+.topbar .theme[data-mode="dark"] [data-t="dark"]{display:inline}
+.inner{padding:2.6rem 3rem 4.5rem;max-width:64rem;flex:1}
+/* The schedule carries four columns of chips and is the one block that wants
+   more room than the reading measure; let it use the width the rail leaves. */
+.inner>section#sessions{max-width:none;width:min(78rem,100%)}
 
-table.sessions{width:100%;border-collapse:collapse;font-size:.94rem}
-table.sessions th{text-align:left;font-family:-apple-system,sans-serif;
-  font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;
-  color:var(--dim);font-weight:600;padding:.5rem .6rem;border-bottom:1px solid var(--rule)}
-table.sessions td{padding:.6rem;border-bottom:1px solid var(--rule);vertical-align:top}
-table.sessions td.ttl{font-weight:600}
-table.sessions td.ttl a{text-decoration:none;color:var(--fg)}
-table.sessions td.ttl a:hover{text-decoration:underline;color:var(--accent)}
-table.sessions td.ttl .n{display:inline-block;min-width:1.6rem;color:var(--dim);
-  font-weight:400;font-variant-numeric:tabular-nums}
-table.sessions td.mat{width:7rem}
-a.dl{display:inline-block;font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  font-size:.8rem;text-decoration:none;border:1px solid var(--rule);
-  background:var(--card);border-radius:5px;padding:.2em .7em;margin:.1em .15em .1em 0}
-a.dl:hover{border-color:var(--accent);color:var(--accent)}
-tr.partrow td{background:var(--accent-soft);font-family:-apple-system,sans-serif;
-  font-size:.86rem;font-weight:600;padding-top:.8rem;padding-bottom:.8rem}
-.pill{background:var(--accent);color:#fff;border-radius:1em;
-  padding:.1em .6em;font-size:.75rem;margin-right:.4em}
-tr.partrow .dim{font-weight:400}
+/* ---------------------------------------------------------------- hero */
+.hero{margin-bottom:2.2rem}
+h1{font:500 clamp(2.1rem,4.4vw,2.95rem)/1.08 var(--serif);letter-spacing:-.015em;
+  margin:0 0 .55rem}
+.hero .sub{margin:0 0 1.7rem;font-size:.92rem;color:var(--ink3)}
+.hero .sub b{color:var(--ink2);font-weight:500}
+.lead{font:400 1.17rem/1.6 var(--serif);color:var(--ink2);max-width:38rem;margin:0 0 1.1rem}
+.hero p,.story p,section>p{max-width:38rem;color:var(--ink2)}
+section>p,.hero p{margin:0 0 1rem}
+.dim{color:var(--ink3)}
+.crumb{margin:0 0 1.6rem;font-size:.85rem}
+.crumb a{text-decoration:none}
+.crumb a:hover{text-decoration:underline}
 
-.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
-.card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1rem}
-.card p{margin:0;font-size:.92rem;color:var(--dim)}
-.tag{font-size:.7rem;background:var(--accent-soft);color:var(--accent);
-  border-radius:1em;padding:.15em .55em;vertical-align:middle}
+/* next-session strip */
+.nextbar{max-width:none;display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap;
+  background:var(--acc-l);border-radius:10px;padding:.8rem 1.05rem;margin:0 0 1.9rem;
+  font-size:.93rem;color:var(--ink)}
+.nextbar .k{font:600 .66rem/1 var(--sans);letter-spacing:.11em;text-transform:uppercase;
+  color:var(--bg);background:var(--acc);padding:.5em .7em;border-radius:20px}
+.nextbar b{font-weight:600}
+.nextbar .r{margin-left:auto;color:var(--ink3);font-size:.84rem;
+  font-variant-numeric:tabular-nums}
 
-ul.plain{list-style:none;padding:0}
-ul.plain li{padding:.5rem 0;border-bottom:1px solid var(--rule)}
-ol.timeline{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
-ol.timeline li{background:var(--card);border:1px solid var(--rule);
-  border-radius:6px;padding:.45rem .8rem;font-size:.9rem}
-ol.timeline span{font-weight:700;color:var(--accent);margin-right:.35em}
+/* ---------------------------------------------------------------- sections */
+h2{font:600 .71rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink3);margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid var(--line)}
+h3{font:600 1rem/1.35 var(--sans);margin:0 0 .4rem}
+code{font:400 .88em/1.4 var(--mono);background:var(--sunk);border:1px solid var(--line-soft);
+  padding:.1em .35em;border-radius:4px}
 
-ul.materials{list-style:none;padding:0;display:grid;gap:.5rem}
-ul.materials li{border:1px solid var(--rule);border-radius:6px;padding:.6rem .9rem;
-  background:var(--card)}
-ul.materials li::before{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
-  color:var(--dim);font-family:-apple-system,sans-serif;display:block;margin-bottom:.15em}
-li.m-slides::before{content:"slides"} li.m-lab::before{content:"lab"}
-li.m-paper::before{content:"handout"} li.m-notes::before{content:"notes"}
+/* ---------------------------------------------------------------- sessions table */
+.tablewrap{overflow-x:auto}
+table.sessions{width:100%;border-collapse:collapse;font-size:.9rem;min-width:52rem}
+table.sessions th{text-align:left;font:600 .67rem/1 var(--sans);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink3);padding:0 .8rem .7rem;
+  border-bottom:1px solid var(--line)}
+table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
+  vertical-align:middle}
+td.date{width:5.2rem;white-space:nowrap;color:var(--ink3);
+  font:500 .79rem/1 var(--mono);font-variant-numeric:tabular-nums}
+td.ttl a{font-weight:600;text-decoration:none;color:var(--ink);font-size:.945rem}
+td.ttl a:hover{color:var(--acc)}
+td.ttl .n{color:var(--ink3);font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums;
+  margin-right:.15rem}
+td.ttl{width:26%;min-width:13rem}
+td.mat{width:auto}
+td.mat .none{color:var(--faint)}
+tr.partrow td{background:var(--side);padding:.55rem .8rem;
+  font:600 .68rem/1.5 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+tr.partrow .pill{color:var(--acc-t);margin-right:.5rem}
+tr.partrow .dim{font-weight:400;letter-spacing:.02em;text-transform:none;font-size:.78rem}
+tr.now td{background:var(--sunk)}
+tr.now td.date{box-shadow:inset 3px 0 0 var(--acc);color:var(--acc-t);font-weight:600}
+tr.done td.date{color:var(--ink3)}
 
-dl{margin:0} .field{display:grid;grid-template-columns:11rem 1fr;gap:.4rem 1rem;
-  padding:.65rem 0;border-bottom:1px solid var(--rule)}
-.field dt{font-family:-apple-system,sans-serif;font-size:.8rem;text-transform:uppercase;
-  letter-spacing:.05em;color:var(--dim);font-weight:600}
-.field dd{margin:0}
+/* material chips, coloured by what the thing is */
+a.dl{display:inline-block;white-space:nowrap;text-decoration:none;margin:.1rem .2rem .1rem 0;
+  font:600 .705rem/1 var(--sans);letter-spacing:.005em;padding:.44em .58em;border-radius:5px;
+  background:var(--sunk);color:var(--ink2);border:1px solid var(--line);
+  transition:filter .12s ease,border-color .12s ease}
+a.dl:hover{filter:brightness(.96);border-color:var(--ink3)}
+a.dl.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
+a.dl.c-lab{color:var(--lab);background:var(--lab-b);border-color:transparent}
+a.dl.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
+a.dl.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 
-footer{border-top:1px solid var(--rule);margin-top:3rem}
-footer p{max-width:62rem;margin:0 auto;padding:1.2rem 1.5rem;
-  font-size:.85rem;color:var(--dim);
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+/* ---------------------------------------------------------------- session pages */
+/* Materials. Same visual language as the index: a tinted pill per item,
+   coloured by what it is (lecture / lab / homework / solutions). The session
+   page differs only in that the pill can carry the full title, because here
+   there is room for it. */
+ul.materials{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;
+  gap:.45rem;max-width:56rem}
+ul.materials li{display:inline-flex;align-items:center;border-radius:7px;
+  padding:.5rem .75rem;font:600 .875rem/1.35 var(--sans);
+  background:var(--sunk);color:var(--ink2);border:1px solid var(--line);
+  transition:filter .12s ease}
+ul.materials li:hover{filter:brightness(.965)}
+ul.materials li a{text-decoration:none;color:inherit}
+ul.materials li a:hover{text-decoration:underline}
+ul.materials li .mi{min-width:0}
+ul.materials li .mi .dim{font-weight:400;opacity:.7;margin:0 .25em}
+ul.materials li.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
+ul.materials li.c-lab{color:var(--lab);background:var(--lab-b);border-color:transparent}
+ul.materials li.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
+ul.materials li.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
+ul.materials li.dim{width:100%;display:block;font-weight:400;color:var(--ink3)}
 
-@media (max-width:640px){
-  .field{grid-template-columns:1fr;gap:.1rem}
-  table.sessions td.mat{width:auto}
-  table.sessions th{font-size:.68rem}
-}
+/* A group is a labelled row of those pills, not a box of its own. */
+ul.materials li.group{display:block;width:100%;border:0;background:none;padding:0;
+  margin:0 0 1.05rem;filter:none}
+ul.materials li.group>.glabel{display:flex;align-items:center;gap:.7rem;
+  font:600 .68rem/1.4 var(--sans);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:.45rem}
+ul.materials li.group>.glabel::after{content:"";flex:1;height:1px;background:var(--line)}
+ul.materials li.group>ul{list-style:none;padding:0;margin:0;
+  display:flex;flex-wrap:wrap;gap:.45rem}
+ul.materials li.group>ul>li::before{content:none}
 
-.ok{font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  background:var(--accent-soft);color:var(--accent);
-  border-radius:1em;padding:.15em .6em}
-code{font-size:.9em;background:var(--card);padding:.1em .35em;border-radius:3px}
+dl{margin:0}
+.field{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:.35rem 1.2rem;
+  padding:.7rem 0;border-bottom:1px solid var(--line-soft)}
+.field dt{font:600 .68rem/1.6 var(--sans);letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink3)}
+.field dd{margin:0;color:var(--ink2)}
 
-/* ---- rich session pages ---------------------------------------------- */
-.story p{max-width:38em}
-.story em{font-style:italic}
+.cards{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+.card{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.card p{margin:0;font-size:.9rem;color:var(--ink2)}
 .card.num{position:relative;padding-top:2.4rem}
-.card.num::before{content:attr(data-n);position:absolute;top:.7rem;left:1rem;
-  width:1.5rem;height:1.5rem;border-radius:50%;background:var(--accent);
-  color:#fff;font:600 .8rem/1.5rem -apple-system,BlinkMacSystemFont,sans-serif;
-  text-align:center}
+.card.num::before{content:attr(data-n);position:absolute;top:.75rem;left:1rem;
+  width:1.5rem;height:1.5rem;border-radius:50%;background:var(--acc);color:var(--bg);
+  font:600 .78rem/1.5rem var(--mono);text-align:center}
+
+.tag{font:600 .68rem/1 var(--sans);background:var(--acc-l);color:var(--acc-t);
+  border-radius:5px;padding:.4em .55em;vertical-align:middle;letter-spacing:.02em}
+.tag.read{background:var(--sunk);color:var(--ink3);border:1px solid var(--line);
+  text-transform:uppercase;letter-spacing:.06em;margin-right:.3rem}
+.tag.write{background:var(--acc);color:var(--bg);text-transform:uppercase;
+  letter-spacing:.06em;margin-right:.3rem}
+.ok,.pill{font:600 .68rem/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;
+  background:var(--acc-l);color:var(--acc-t);border-radius:20px;padding:.4em .65em}
+
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{padding:.55rem 0;border-bottom:1px solid var(--line-soft);color:var(--ink2)}
+ol.timeline{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.45rem}
+ol.timeline li{background:var(--sunk);border:1px solid var(--line);border-radius:7px;
+  padding:.45rem .75rem;font-size:.88rem;color:var(--ink2)}
+ol.timeline span{font-weight:700;color:var(--acc-t);margin-right:.35em;font-family:var(--mono)}
 ol.arc{list-style:none;counter-reset:arc;padding:0;margin:0}
 ol.arc li{counter-increment:arc;position:relative;padding:.7rem 0 .7rem 2.6rem;
-  border-bottom:1px solid var(--rule)}
-ol.arc li::before{content:counter(arc);position:absolute;left:0;top:.75rem;
-  width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--rule);
-  background:var(--card);color:var(--dim);
-  font:600 .78rem/1.55rem -apple-system,BlinkMacSystemFont,sans-serif;
-  text-align:center}
-table.parts,table.langs{width:100%;border-collapse:collapse;margin-top:.6rem}
-table.parts td,table.langs td,table.langs th{padding:.6rem;
-  border-bottom:1px solid var(--rule);vertical-align:top}
-table.langs th{text-align:left;font:600 .78rem/1.4 -apple-system,sans-serif;
-  text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
-table.parts td.p{width:2.6rem;font:700 .85rem/1.6 -apple-system,sans-serif;
-  color:var(--accent)}
-table.langs td:first-child{width:8rem;font-weight:600}
-.tag.read,.tag.write{font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;border-radius:1em;
-  padding:.12em .55em;margin-right:.3em}
-.tag.read{background:var(--card);color:var(--dim);border:1px solid var(--rule)}
-.tag.write{background:var(--accent);color:#fff}
-ul.refs{list-style:none;padding:0}
-ul.refs li{padding:.55rem 0;border-bottom:1px solid var(--rule);
-  font-size:.94rem;max-width:44em}
-@media (max-width:640px){
-  table.langs td:first-child{width:auto}
-}
+  border-bottom:1px solid var(--line-soft);color:var(--ink2)}
+ol.arc li::before{content:counter(arc);position:absolute;left:0;top:.72rem;
+  width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--line);
+  background:var(--sunk);color:var(--ink3);
+  font:600 .76rem/1.55rem var(--mono);text-align:center}
+ul.refs{list-style:none;padding:0;margin:0}
+ul.refs li{padding:.55rem 0;border-bottom:1px solid var(--line-soft);
+  font-size:.92rem;max-width:44em;color:var(--ink2)}
 
-/* B and D: run and watch, nothing to implement */
-table.parts tr.watch{background:var(--accent-soft)}
-table.parts tr.watch td.p{color:var(--accent)}
+table.parts,table.langs{width:100%;border-collapse:collapse;margin-top:.5rem;font-size:.92rem}
+table.parts td,table.langs td,table.langs th{padding:.6rem;border-bottom:1px solid var(--line-soft);
+  vertical-align:top;color:var(--ink2)}
+table.langs th{text-align:left;font:600 .68rem/1.5 var(--sans);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink3)}
+table.parts td.p{width:2.6rem;font:700 .82rem/1.6 var(--mono);color:var(--acc-t)}
+table.langs td:first-child{width:8rem;font-weight:600;color:var(--ink)}
+table.parts tr.watch{background:var(--acc-l)}
 table.parts tr.watch td:last-child::after{content:"run and watch";display:block;
-  margin-top:.4rem;font:600 .68rem/1 -apple-system,BlinkMacSystemFont,sans-serif;
-  letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
-/* materials grouped by lecture / lab / homework */
-ul.materials li.group{border:0;background:none;padding:0;margin-bottom:.9rem}
-ul.materials li.group>.glabel{display:block;font:600 .72rem/1.4 -apple-system,
-  BlinkMacSystemFont,sans-serif;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:.35rem}
-ul.materials li.group>ul{list-style:none;padding:0;display:grid;gap:.4rem}
-ul.materials li.group>ul>li{border:1px solid var(--rule);border-radius:6px;
-  padding:.55rem .9rem;background:var(--card)}
-ul.materials li.group>ul>li::before{content:none}
+  margin-top:.4rem;font:600 .66rem/1 var(--sans);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--acc-t)}
+
+/* ---------------------------------------------------------------- footer */
+footer.site{border-top:1px solid var(--line);background:var(--side);
+  padding:1.9rem 3rem 2.6rem;display:flex;gap:2.5rem;align-items:flex-start;flex-wrap:wrap}
+footer.site .colophon{display:flex;gap:1rem;align-items:center}
+footer.site .aaulogo{flex:none;width:46px;height:46px;color:var(--acc);fill:currentColor}
+footer.site .colophon .who{font-size:.84rem;line-height:1.5;color:var(--ink2)}
+footer.site .colophon .who b{display:block;font-weight:600;color:var(--ink);
+  font-size:.9rem;letter-spacing:-.005em}
+footer.site .meta{margin-left:auto;text-align:right;font-size:.8rem;line-height:1.65;
+  color:var(--ink3);max-width:26rem}
+footer.site .meta a{text-decoration:none}
+footer.site .meta a:hover{text-decoration:underline}
+
+/* ---------------------------------------------------------------- small screens */
+/* Phones: a six-column table cannot fit, and sideways scrolling hides the
+   material. Each session becomes a block - date and title on one line, then
+   whatever material exists, one kind per line. Empty kinds vanish.
+   Every selector below is prefixed with table.sessions so it outranks the
+   desktop cell rules rather than tying with them. */
+@media (max-width:760px){
+  .tablewrap{overflow-x:visible}
+  table.sessions{min-width:0;display:block;font-size:.92rem}
+  table.sessions thead{display:none}
+  table.sessions tbody{display:block}
+  table.sessions tr{display:grid;grid-template-columns:4.5rem minmax(0,1fr);
+    gap:.15rem .6rem;padding:.75rem 0;border-bottom:1px solid var(--line-soft)}
+  table.sessions td{display:block;border:0;padding:0;grid-column:2}
+  table.sessions td.date{grid-column:1;grid-row:1;width:auto;padding-top:.2rem}
+  table.sessions td.ttl{grid-column:2;grid-row:1;width:auto;min-width:0}
+  table.sessions td.mat{width:auto;padding:.1rem 0}
+  table.sessions td.mat .none{display:none}
+  /* a kind with nothing released takes no room at all on a phone */
+  table.sessions td.mat:not(:has(a)){display:none}
+  table.sessions tr.partrow{display:block;padding:.55rem .7rem;border-bottom:0;
+    border-radius:7px;margin-top:.5rem}
+  table.sessions tr.partrow td{display:block;grid-column:auto;padding:0}
+  table.sessions tr.now{background:var(--sunk);border-radius:8px;
+    padding-left:.6rem;box-shadow:inset 3px 0 0 var(--acc)}
+  table.sessions tr.now td.date{box-shadow:none}
+}
+@media (max-width:980px){
+  body{display:block}
+  /* On a phone the rail is a masthead, not a menu: brand and term only, so
+     the first screen is the course rather than a screenful of navigation.
+     Its links are anchors into this same page, which a thumb reaches by
+     scrolling, and the colophon is repeated in the footer already. */
+  aside.rail{position:static;height:auto;border-right:0;
+    border-bottom:1px solid var(--line);padding:1.1rem 1.4rem .9rem;
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .8rem}
+  aside.rail .brand{margin:0}
+  aside.rail .brand-sub{margin:0}
+  aside.rail nav,aside.rail .railhead,aside.rail .railfoot{display:none}
+  .topbar{padding:.75rem 1.4rem}
+  .topbar .where{display:none}
+  .inner{padding:1.8rem 1.4rem 3rem}
+  footer.site{padding:1.6rem 1.4rem 2.4rem}
+  footer.site .meta{margin-left:0;text-align:left}
+  .field{grid-template-columns:1fr;gap:.1rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}

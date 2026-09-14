@@ -310,9 +310,90 @@ footer p{margin:0 0 8px; max-width:640px}
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important; transition:none !important}
 }
+/* ---- lab rail (generated; edit the injector, not this) ----------------- */
+:root{--labrail:17rem}
+.labrail{background:var(--surface); border-right:1px solid var(--rule);
+  padding:22px 16px 28px; font-size:13.5px; line-height:1.5; z-index:20}
+@media (min-width:1100px){
+  body{padding-left:var(--labrail)}
+  .labrail{position:fixed; top:0; bottom:0; left:0; width:var(--labrail); overflow-y:auto}
+  header.masthead nav.toc{display:none}   /* it lives in the rail up here */
+}
+.labrail .lr-brand{display:block; text-decoration:none; color:var(--ink); margin-bottom:18px}
+.labrail .lr-brand .up{display:block; font:500 10.5px/1 "IBM Plex Mono",monospace;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px}
+.labrail .lr-brand b{font:600 15px/1.28 "IBM Plex Sans",sans-serif; letter-spacing:-.01em}
+.labrail h2{font:600 10.5px/1 "IBM Plex Sans",sans-serif; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); margin:20px 0 7px; padding:0; border:0}
+.labrail ul{list-style:none; margin:0; padding:0}
+.labrail a.lr{display:block; padding:5px 8px; border-radius:6px; text-decoration:none;
+  color:var(--ink-2)}
+.labrail a.lr:hover{background:var(--sunken); color:var(--ink)}
+.labrail a.lr[aria-current]{background:var(--queue-soft); color:var(--queue); font-weight:600}
+.labrail a.lr code{font:500 12px/1.5 "IBM Plex Mono",monospace; background:none;
+  padding:0; color:inherit}
+
+/* This page's own sections, in the page's own voice: mono, numbered, with the
+   assignment marker the boxed list used. The current one lights up on scroll. */
+.labrail .lr-toc a{display:block; padding:4.5px 8px; border-radius:6px;
+  text-decoration:none; font:400 12.5px/1.45 "IBM Plex Mono",monospace;
+  letter-spacing:.03em; color:var(--ink-3)}
+.labrail .lr-toc a:hover{background:var(--sunken); color:var(--queue)}
+.labrail .lr-toc a.on{background:var(--queue-soft); color:var(--queue); font-weight:500}
+.labrail .lr-toc a.assign{color:var(--task); font-weight:500}
+.labrail .lr-toc a.assign::before{content:"\25CF"; font-size:8px; vertical-align:2px;
+  margin-right:5px}
+.labrail .lr-toc a.assign.on{background:var(--task-soft); color:var(--task)}
+
+.labrail .lr-foot{margin:22px 0 0; padding-top:14px; border-top:1px solid var(--rule);
+  font-size:12px}
+.labrail .lr-foot a{color:var(--ink-3); text-decoration:none}
+.labrail .lr-foot a:hover{color:var(--queue)}
+@media (max-width:1099px){
+  /* Narrow: the rail is a compact block of links, and the page keeps its own
+     boxed contents list where it always was, under the standfirst. */
+  .labrail{position:static; width:auto; border-right:0;
+    border-bottom:1px solid var(--rule); display:grid; align-items:start;
+    grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:0 22px}
+  .labrail .lr-brand{grid-column:1/-1}
+  .labrail .lr-sections{display:none}
+  .labrail h2{margin-top:14px}
+}
 </style>
 </head>
 <body>
+<!-- pp26:labrail -->
+<aside class="labrail">
+  <a class="lr-brand" href="https://homes.cs.aau.dk/~lego/pp26/s2.html">
+    <span class="up">PP26 &middot; Session 2</span><b>Lab 2 &mdash; Persistent Queue</b></a>
+  <div class="lr-sections">
+    <h2>On this page</h2>
+    <ul class="lr-toc"><li><a class="" href="#shape">01 · the shape</a></li><li><a class="" href="#graph">02 · the graph</a></li><li><a class="" href="#algorithm">03 · the algorithm</a></li><li><a class="" href="#structures">04 · the structures</a></li><li><a class="" href="#wiring">05 · the wiring</a></li><li><a class="" href="#run">06 · run it</a></li></ul>
+  </div>
+  <div>
+    <h2>Lab pages</h2>
+    <ul><li><a class="lr" href="index.html">One queue, three languages</a></li><li><a class="lr" href="pqueue.html">Four holes in a queue</a></li><li><a class="lr" href="architecture.html" aria-current='page'>Three layers, one search</a></li><li><a class="lr" href="ocaml-architecture.html">What the types are for</a></li><li><a class="lr" href="java-architecture.html">Immutability, spelled out</a></li></ul>
+  </div>
+  <div>
+    <h2>On paper</h2>
+    <ul>
+      <li><a class="lr" href="queue-on-paper.pdf">Handout (PDF)</a></li>
+      <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">README &mdash; what to do</a></li>
+    </ul>
+  </div>
+  <div>
+    <h2>Code</h2>
+    <ul>
+      <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml"><code>tour.ml</code></a></li>
+      <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/python/pqueue.py"><code>python/pqueue.py</code></a></li>
+      <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/ocaml/lib/pqueue.ml"><code>ocaml/lib/pqueue.ml</code></a></li>
+      <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/java/PQueue.java"><code>java/PQueue.java</code></a></li>
+      <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml"><code>homework.ml</code></a></li>
+    </ul>
+  </div>
+  <p class="lr-foot"><a href="https://homes.cs.aau.dk/~lego/pp26/">&larr; Programming Paradigms</a></p>
+</aside>
+<!-- /pp26:labrail -->
 
 <header class="masthead">
   <div class="wrap">
@@ -602,5 +683,12 @@ stack_frontier = SimpleNamespace(
 </section>
 
 </main>
+<script>/* pp26:labrail-spy — mark the section the reader is in */
+(function(){var L=[].slice.call(document.querySelectorAll(".lr-toc a"));if(!L.length)return;
+var S=L.map(function(a){return document.getElementById(a.hash.slice(1))});
+function up(){var c=-1;for(var i=0;i<S.length;i++){if(S[i]&&S[i].getBoundingClientRect().top<=140)c=i}
+if(c<0)c=0;for(var j=0;j<L.length;j++)L[j].classList.toggle("on",j===c)}
+addEventListener("scroll",up,{passive:true});addEventListener("resize",up);up()})();
+</script>
 </body>
 </html>
