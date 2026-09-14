@@ -18,4 +18,7 @@ git clone https://github.com/leon-gondelman/pp26.git
 cd pp26 && git pull
 ```
 
-Solutions are not published here.
+| `solutions/` | worked solutions, released session by session |
+
+Solutions appear once a session has run; a session with nothing under
+`solutions/` has not reached that point yet.

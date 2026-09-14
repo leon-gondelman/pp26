@@ -82,7 +82,10 @@ def html_scrubber(mz, trace, path, title, out_file):
         "path": [[r, c] for r, c in (path or [])],
         "title": title,
     }
-    html = _TEMPLATE.replace("__DATA__", json.dumps(data))
+    # Compact separators, so this page is byte-for-byte the one the OCaml
+    # solver writes: bin/render.ml emits JSON with no spaces. The README
+    # makes that claim, and a student may well check it with diff.
+    html = _TEMPLATE.replace("__DATA__", json.dumps(data, separators=(",", ":")))
     with open(out_file, "w") as f:
         f.write(html)
 

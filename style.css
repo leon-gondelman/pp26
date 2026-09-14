@@ -42,7 +42,7 @@ table.sessions td.ttl a{text-decoration:none;color:var(--fg)}
 table.sessions td.ttl a:hover{text-decoration:underline;color:var(--accent)}
 table.sessions td.ttl .n{display:inline-block;min-width:1.6rem;color:var(--dim);
   font-weight:400;font-variant-numeric:tabular-nums}
-table.sessions td.mat{width:8.5rem}
+table.sessions td.mat{width:7rem}
 a.dl{display:inline-block;font-family:-apple-system,BlinkMacSystemFont,sans-serif;
   font-size:.8rem;text-decoration:none;border:1px solid var(--rule);
   background:var(--card);border-radius:5px;padding:.2em .7em;margin:.1em .15em .1em 0}
