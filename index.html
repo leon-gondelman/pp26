@@ -10,9 +10,8 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homes.cs.aau.dk/~lego/pp26/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23211a52'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' font-weight='700' fill='white' text-anchor='middle'%3EPP%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="preload" href="fonts/inter-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
 <link rel="stylesheet" href="style.css">
 <script>/* before paint: a stored choice wins, otherwise the system decides */
 (function(){try{var t=localStorage.getItem("pp-theme");
@@ -47,7 +46,7 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 <section class="hero">
   <h1>Programming Paradigms</h1>
   <p class="sub">SW7 &middot; Autumn 2026 &middot; Aalborg University Copenhagen</p>
-<p class="nextbar"><span class="k">Next</span><span><b>Session 3 &mdash; Algebraic Data Types</b> &middot; Wed 16 September, 12:30–16:15 &middot; room 2.2.120</span><span class="r">2 of 12 complete</span></p>
+
   <p class="lead">This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data types and modularity.</p>
   <p>These decisions shape everyday engineering: git branches instantly because it never overwrites data, allowing access to all previous states; WhatsApp serves hundreds of millions of users on message-passing concurrency; Android adopts Rust because most security vulnerabilities are memory errors that the language design rules out through its type system. These concepts, however, have a wider scope than any single technology or programming language that only make some design choices default. As AI assistants generate more of the code, recognizing the paradigm beneath an unfamiliar program becomes a core engineering skill. In this course, we will learn to identify and apply these design decisions through study, practice, and implementation.</p>
   <p>Twelve sessions, every Wednesday 12:30&ndash;16:15: a 2&times;45&nbsp;min lecture, then a 2&nbsp;h lab with homework. We already know Java, C#, Python and some C; we will read and write OCaml and other languages as the ideas require them.</p>
@@ -84,9 +83,9 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 
 <h3>Groups</h3>
 <ul>
-<li>Groups are <strong>voluntary</strong>. Students work in a group of two to five, or individually. Groups need not coincide with the semester project groups.</li>
+<li>Groups are <strong>voluntary</strong>. Students work in a group of two to six, or individually. Groups need not coincide with the semester project groups.</li>
 <li>Groups, or the choice to work individually, and the topic are <strong>registered by 4 November (Session 10)</strong> through the form on Moodle. Students who have not registered by then are examined individually on a topic from the list.</li>
-<li><strong>Leaving a group.</strong> The same opportunities for group separation apply as in other exams. A student may leave a group at any time before the submission deadline by informing the lecturer and the study secretariat. Each part then submits its own report. Material produced jointly before the split may be used by both parts, and each report states the split and the shared material.</li>
+<li><strong>Leaving a group.</strong> The same opportunities for group separation apply as in other exams. A student who wishes to leave a group informs the lecturer and the study secretariat no later than two weeks before the submission deadline. The Study Board may grant exemption from this deadline. Each part then submits its own report. Material produced jointly before the split may be used by both parts, and each report states the split and the shared material.</li>
 <li>Special conditions and hardship cases are handled by the Study Board.</li>
 </ul>
 
@@ -131,6 +130,7 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 <li><strong>7 October (S6)</strong> &mdash; list of suggested mini-project topics published</li>
 <li><strong>28 October (S9)</strong> &mdash; own-topic proposals sent to the lecturer for approval</li>
 <li><strong>4 November (S10)</strong> &mdash; registration of groups (or individual work) and topics</li>
+<li><strong>Two weeks before submission</strong> &mdash; last day to notify a group split (Study Board may grant exemption)</li>
 <li><strong>Early January 2027</strong> &mdash; report and code submitted in Digital Exam (date set by the study secretariat)</li>
 <li><strong>January 2027</strong> &mdash; oral exams</li>
 </ul>
