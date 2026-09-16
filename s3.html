@@ -2,10 +2,10 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S3 Algebraic Data Types - PP26</title>
+<title>S3 Algebraic Data Types and Objects - PP26</title>
 <meta name="description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
 <meta name="theme-color" content="#211a52">
-<meta property="og:title" content="S3 Algebraic Data Types - PP26">
+<meta property="og:title" content="S3 Algebraic Data Types and Objects - PP26">
 <meta property="og:description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homes.cs.aau.dk/~lego/pp26/">
@@ -25,7 +25,7 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
   <p class="brand-sub">SW7 &middot; Autumn 2026 &middot; AAU Copenhagen</p>
   <nav aria-label="Course"><ul><li><a href="index.html">Overview</a></li><li><a href="index.html#sessions">Schedule</a></li><li><a href="index.html#exam">Exam format</a></li><li><a href="index.html#materials">Materials</a></li><li><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle ↗</a></li><li><a href="https://github.com/leon-gondelman/pp26">Repository ↗</a></li></ul></nav>
   <p class="railhead">Sessions</p>
-  <nav aria-label="Sessions"><ol class="railsessions"><li><a href="s1.html"><span class="n">01</span><span>Intro</span></a></li><li><a href="s2.html"><span class="n">02</span><span>Persistent Data Structures</span></a></li><li><a href="s3.html" aria-current='page'><span class="n">03</span><span>Algebraic Data Types</span></a></li><li><a href="s4.html"><span class="n">04</span><span>Functional Programming</span></a></li><li><a href="s5.html"><span class="n">05</span><span>Higher-Order Functions</span></a></li><li><a href="s6.html"><span class="n">06</span><span>Asynchronous Programming</span></a></li><li><a href="s7.html"><span class="n">07</span><span>Multi-Threading</span></a></li><li><a href="s8.html"><span class="n">08</span><span>Message Passing</span></a></li><li><a href="s9.html"><span class="n">09</span><span>Static Type Systems</span></a></li><li><a href="s10.html"><span class="n">10</span><span>Polymorphism</span></a></li><li><a href="s11.html"><span class="n">11</span><span>Data Abstraction</span></a></li><li><a href="s12.html"><span class="n">12</span><span>Declarative Programming and Conclusion</span></a></li></ol></nav>
+  <nav aria-label="Sessions"><ol class="railsessions"><li><a href="s1.html"><span class="n">01</span><span>Intro</span></a></li><li><a href="s2.html"><span class="n">02</span><span>Persistent Data Structures</span></a></li><li><a href="s3.html" aria-current='page'><span class="n">03</span><span>Algebraic Data Types and Objects</span></a></li><li><a href="s4.html"><span class="n">04</span><span>Functional Programming</span></a></li><li><a href="s5.html"><span class="n">05</span><span>Higher-Order Functions</span></a></li><li><a href="s6.html"><span class="n">06</span><span>Asynchronous Programming</span></a></li><li><a href="s7.html"><span class="n">07</span><span>Multi-Threading</span></a></li><li><a href="s8.html"><span class="n">08</span><span>Message Passing</span></a></li><li><a href="s9.html"><span class="n">09</span><span>Static Type Systems</span></a></li><li><a href="s10.html"><span class="n">10</span><span>Polymorphism</span></a></li><li><a href="s11.html"><span class="n">11</span><span>Data Abstraction</span></a></li><li><a href="s12.html"><span class="n">12</span><span>Declarative Programming and Conclusion</span></a></li></ol></nav>
   <div class="railfoot">
     <a class="aaumark" href="https://www.en.aau.dk/">
       <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aalborg University" focusable="false"><path d="M56.913 45.79c-1.532-.698-3.072-.989-5.688-2.844-6.654-4.72-9.649-10.186-5.388-21.751 2.459-6.671 3.464-11.579 3.319-18.053-.082-.064-.406-.277-.483-.341-1.326 8.045-3.543 12.011-8.535 20.115-11.296 18.345-.675 29.574 4.344 33.605 4.99-2.878 9.253-7.061 12.431-12.222a29.9 29.9 0 0 1-.0-.0Z"/><path d="M44.807 3.108a44 44 0 0 0-.586-.312c-2.86 7.061-6.717 10.696-13.34 16.028-14.096 11.348-12.242 24.428-6.037 34.673a29.9 29.9 0 0 0 9.219.219c-5.916-9.028-8.436-19.409 1.243-31.63 5.75-7.262 8.16-11.708 9.501-18.978Z"/><path d="M42.83 2.093A30 30 0 0 0 30.001 0C13.432 0 0 13.432 0 30c0 7.61 2.834 14.558 7.503 19.845.363-14.55 4.184-21.62 17.203-28.462 8.876-4.665 14.2-8.256 18.124-19.29Z"/></svg><span>Aalborg University Copenhagen</span>
@@ -47,13 +47,196 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 <p class="crumb"><a href="index.html">&larr; all sessions</a></p>
 <section class="hero">
   <p class="dim">Session 3</p>
-  <h1>Algebraic Data Types</h1>
-  <p class="lead">Not yet. This session&rsquo;s outline may still change.</p>
+  <h1>Algebraic Data Types and Objects</h1>
+  <p class="lead">Two ways to be a value: a closed list of shapes the compiler reads, or a bundle of operations the value carries. Algebraic data types and objects, and what each can grow.</p>
 </section>
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="dim">Published when the session runs.</li></ul>
+  <ul class="materials"><li class="group"><span class="glabel">Lecture</span><ul><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s3-two-ways-to-be-a-value.html">Lecture slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li></ul></li><li class="group"><span class="glabel">Lab</span><ul><li class="m-lab c-lab"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab3-melody/index.html">Lab 3 — a little music language</a></span></li><li class="m-lab c-lab"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/README.md">Lab README — what to do, part by part</a></span></li><li class="m-code c-lab"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab3-melody">The lab folder — melody.ml, tunes.ml, main.ml, wav.ml</a></span></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-reading c-homework"><span class="mi"><a href="https://cs3110.github.io/textbook/chapters/data/intro.html">CS3110, chapter 3 — sections 3.1, 3.5, 3.6, 3.8, 3.11, 3.12</a></span></li><li class="m-homework c-homework"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab3-melody/index.html#homework">What to finish at home — on the lab page</a></span></li></ul></li></ul>
+</section>
+<section class="story">
+  <h2>The question</h2>
+  <p>What is a datatype? The answers we give first &mdash; a set of numbers,
+     several values glued together, values with code attached &mdash; each
+     describe one aspect. This session takes one aspect, how a datatype
+     <em>organises</em> its values, and finds that there are two answers to it,
+     and that they are opposites.</p>
+  <p>We discover both in JavaScript, on a set of integers with four operations.
+     In the first version a set is <strong>data</strong>: an array, and every
+     operation inspects it. In the second a set is <strong>a function</strong>
+     that answers <em>is x inside?</em>, and every operation can only call it.
+     Client code cannot tell them apart &mdash; until we extend the interface.
+     A new operation is one line for the first version and rebuilds every set in
+     the second; a new kind of set is one line for the second and touches every
+     operation of the first.</p>
+  <p>Then the names. The first way, made precise, is the <strong>algebraic
+     data type</strong>: a closed list of shapes, written where the compiler
+     can read it. The second is the <strong>object</strong>: a value used only
+     through the operations it carries. Reynolds saw in 1975 that they are
+     complementary; Cook gave the comparison its rows in 2009; Wadler named the
+     tension between them in 1998.</p>
+</section>
+
+<section>
+  <h2>Three things to take away</h2>
+  <div class="cards">
+    <article class="card num" data-n="1">
+      <h3>A type can invent values</h3>
+      <p><code>type note = C | D | E | F | G | A | B</code> creates seven
+         values that did not exist before, distinct by construction.
+         <code>C</code> is not <code>0</code>; nothing is inside it. Sums add
+         alternatives, products glue fields, and recursion lets a type mention
+         itself. Every value is then built in exactly one way &mdash; which is
+         why <code>match</code> can take it apart again, and why the compiler
+         can tell us when a case is missing.</p>
+    </article>
+    <article class="card num" data-n="2">
+      <h3>Kinds × operations</h3>
+      <p>Lay the kinds of a type along one side and its operations along the
+         other. An algebraic data type fills the table a column at a time:
+         one function per operation, every kind inside it. An object fills it
+         a row at a time: one class per kind, every operation inside it. Each
+         way makes one direction of growth free and the other expensive. That
+         is the expression problem, and both sides of it are checked by a
+         compiler &mdash; each blind exactly where the other sees.</p>
+    </article>
+    <article class="card num" data-n="3">
+      <h3>Languages choose a default</h3>
+      <p>OCaml, Haskell, Rust and Swift start from the closed list of shapes;
+         Java, Smalltalk, Python and Go start from the object. Each can say
+         the other thing &mdash; OCaml has <code>object … end</code>, Java has
+         <code>sealed</code>, <code>record</code> and pattern
+         <code>switch</code> &mdash; but the friction of saying it measures the
+         default. Paradigm is not language.</p>
+    </article>
+  </div>
+</section>
+
+<section>
+  <h2>The lecture, in order</h2>
+  <ol class="arc">
+    <li><strong>The question.</strong> What is a datatype, what is an
+        object, what is an algebraic data type &mdash; asked, not answered.</li>
+    <li><strong>Two ways to be a set.</strong> One interface, two
+        implementations in JavaScript, three extensions that tell them
+        apart. Code runs inside the slides.</li>
+    <li><strong>Algebraic data types.</strong> Enumerations, carried values,
+        products and sums, why the word is &ldquo;algebraic&rdquo;, recursion,
+        constructors as functions that lose no information, matching as their
+        inverse, and a timeline from Hope in 1980 to Java 21.</li>
+    <li><strong>Objects.</strong> The same set as OCaml objects and as a Java
+        abstract class; what a class bundles, and how five languages bundle
+        it differently.</li>
+    <li><strong>Abstract data types versus objects.</strong> One abstraction
+        barrier placed two ways, Reynolds and Cook&rsquo;s comparison, the
+        kinds&nbsp;&times;&nbsp;operations matrix, exhaustiveness in three
+        languages, the two dual checks, the visitor pattern as matching by
+        hand, and where each way is used.</li>
+    <li><strong>Conclusion.</strong> The default each language chooses, the
+        same question in sessions 8, 9, 11 and 12, and the lab&rsquo;s
+        type.</li>
+  </ol>
+  <p class="p">The slides are a web page rather than a PDF this time, because
+     the JavaScript on them runs. Arrow keys move one step; <kbd>T</kbd> lists
+     the parts; <kbd>Esc</kbd> shows an overview.</p>
+</section>
+
+<section>
+  <h2>The lab, A to C</h2>
+  <p>A tiny language for melodies as an OCaml type, then the programs that
+     process it. Every function is one <code>match</code> on one type, and the
+     lecture&rsquo;s thesis is tested in code: when we add a constructor, the
+     compiler lists every function we have to fix; when we add a function, we
+     touch nothing else. Nothing needs an ear: the tests are on counts, beats
+     and event lists. The piece is Bach&rsquo;s Invention no.&nbsp;1 in C major,
+     BWV&nbsp;772 &mdash; two voices, 467 notes, written out in
+     <code>tunes.ml</code>.</p>
+  <table class="parts">
+    <tbody>
+      <tr><td class="p">A</td><td><strong>Two numbers.</strong> Count the
+          notes; measure the length in beats. <code>Seq</code> adds,
+          <code>Par</code> takes the maximum &mdash; the constructor decides
+          the operation.</td></tr>
+      <tr class="watch"><td class="p">B</td><td><strong>From a melody to
+          sound.</strong> Compile the tree to timed events and write a
+          <code>.wav</code>; we hear the two voices together. Then add a constructor,
+          <code>Repeat</code>, and read the compiler&rsquo;s list of what to
+          fix &mdash; that list is the point of the session.</td></tr>
+      <tr><td class="p">C</td><td><strong>Operations on melodies.</strong>
+          Transpose, print, reverse, simplify: four new functions, and
+          nothing else changes. Reversing swaps a <code>Seq</code> but not a
+          <code>Par</code> &mdash; time reverses, simultaneity does not.</td></tr>
+    </tbody>
+  </table>
+  <p class="p">Nothing is handed in. What is left open is finished at home,
+     with the checks in <code>main.ml</code> saying which parts remain.</p>
+</section>
+
+<section>
+  <h2>Homework</h2>
+  <ul class="refs">
+    <li class="must"><strong>Reading.</strong>
+        <a href="https://cs3110.github.io/textbook/chapters/data/intro.html">CS3110, chapter 3</a>:
+        sections 3.1, 3.5, 3.6, 3.8, 3.11 and 3.12. The lecture gives the
+        idea; the reading gives the language. Session 4 writes OCaml from the
+        first minute, and the lab&rsquo;s Part C goes much quicker after these
+        sections.</li>
+    <li><strong>Finish the lab.</strong> Any part left open, in order.</li>
+    <li><strong>Three questions to think about.</strong> How would we model a
+        tie between two notes? What would an empty melody be, and which
+        constructors would need it? Where does <code>pretty</code> live if
+        <code>melody</code> is written in Java as an abstract class with
+        subclasses &mdash; and where when it is a <code>sealed</code>
+        interface with records?</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Languages this session</h2>
+  <table class="langs">
+    <thead><tr><th>Language</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>JavaScript</td><td><span class="tag read">read</span> the two
+          sets and their extensions, run live on the slides</td></tr>
+      <tr><td>OCaml</td><td><span class="tag read">read</span> in the
+          lecture, <span class="tag write">write</span> in the lab &mdash;
+          our first type declarations and our first recursion</td></tr>
+      <tr><td>Java</td><td><span class="tag read">read</span> the abstract
+          class, the <code>sealed</code> interface, the visitor</td></tr>
+      <tr><td>Smalltalk, Python, Go</td><td><span class="tag read">read</span>
+          one specimen each</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Further reading</h2>
+  <p>None of this is required.</p>
+  <ul class="refs">
+    <li><strong>William Cook, &ldquo;On understanding data abstraction,
+        revisited&rdquo;</strong> &mdash;
+        <a href="https://www.cs.utexas.edu/~wcook/Drafts/2009/essay.pdf">OOPSLA 2009 (PDF)</a>.
+        The essay this session&rsquo;s part 5 follows: the set example, the
+        comparison table, and the claim that objects and abstract data types
+        are different things rather than one with a feature missing.</li>
+    <li><strong>John Reynolds, &ldquo;User-defined types and procedural data
+        structures as complementary approaches to data abstraction&rdquo;</strong>
+        (1975). Where the duality was first stated, in the vocabulary of its
+        time.</li>
+    <li><strong>Philip Wadler, &ldquo;The expression problem&rdquo;</strong>
+        &mdash; <a href="https://homepages.inf.ed.ac.uk/wadler/papers/expression/expression.txt">a 1998 mailing-list post</a>
+        that named the kinds&nbsp;&times;&nbsp;operations matrix. Its
+        resolutions are session 10.</li>
+    <li><strong>Burstall, MacQueen and Sannella, &ldquo;Hope: an experimental
+        applicative language&rdquo;</strong> (1980). The first language with
+        algebraic data types and pattern matching as we now write them.</li>
+    <li><strong>Sylvain Conchon &amp; Jean-Christophe Filli&acirc;tre,
+        <em>Learn Programming with OCaml</em></strong> &mdash;
+        <a href="https://usr.lmf.cnrs.fr/lpo/lpo.pdf">free PDF</a>.
+        Chapter&nbsp;5 is trees as algebraic data types, in the same style as
+        the lab.</li>
+  </ul>
 </section>
 
   </div>

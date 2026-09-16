@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Little Music Language</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#f5f4f0; --surface:#ffffff; --surface-2:#eae8e2; --sunken:#f0eeea;
+  --ink:#15171c; --ink-2:#3b4250; --ink-3:#5f6774; --rule:#d8d5cd; --rule-2:#c5c1b8;
+  --queue:#0a5f96; --queue-soft:#e2edf6; --queue-line:#94bcd9;
+  --stack:#7f4e06; --stack-soft:#f6ecd8; --stack-line:#d7b67c;
+  --start:#1b7a45; --exit:#9b2e92; --wall:#adaeaa;
+  --queue-tint:#88b5d4; --stack-tint:#cfa65d;
+  --task:#7a1f2e; --task-soft:#f4e7ea; --task-line:#d2a2ad;
+  --shadow:0 1px 2px rgba(30,26,20,.06), 0 8px 24px -12px rgba(30,26,20,.16);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111318; --surface:#181b22; --surface-2:#232833; --sunken:#14171d;
+    --ink:#e8eaef; --ink-2:#b6bdc9; --ink-3:#8a929f; --rule:#2a2f39; --rule-2:#363c48;
+    --queue:#62b8ee; --queue-soft:#14283a; --queue-line:#2d5a79;
+    --stack:#e3ab55; --stack-soft:#2d2413; --stack-line:#6c572b;
+    --start:#52c283; --exit:#e07cd6; --wall:#4a505a;
+    --queue-tint:#376c90; --stack-tint:#7f6433;
+    --task:#e39aa7; --task-soft:#2f191e; --task-line:#6f3a46;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0f1217; --surface:#161a21; --surface-2:#1d222b; --sunken:#12161c;
+  --ink:#e6eaf0; --ink-2:#b2bac6; --ink-3:#828b99; --rule:#282e38; --rule-2:#333b47;
+  --queue:#5db6ec; --queue-soft:#132738; --queue-line:#2b5876;
+  --stack:#e2a951; --stack-soft:#2c2312; --stack-line:#6b552a;
+  --start:#4fc07f; --exit:#e07ad4; --wall:#464e5a;
+  --queue-tint:#356a8e; --stack-tint:#7d6231;
+  --task:#ff9d8b; --task-soft:#2f1613; --task-line:#7c3c31;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px; line-height:1.62; font-weight:400;
+  text-rendering:optimizeLegibility;
+}
+.wrap{max-width:930px; margin:0 auto; padding:0 28px 96px}
+.col{max-width:660px; margin-left:auto; margin-right:auto}
+.figure-wide + .col{margin-top:34px}
+.compare + .col, .mazes + .legend{margin-top:20px}
+
+/* ---- masthead ---- */
+header.masthead{
+  border-bottom:1px solid var(--rule); background:var(--surface);
+}
+.masthead .wrap{padding-top:44px; padding-bottom:36px}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 18px;
+}
+h1{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:600;
+  font-size:clamp(34px,5.2vw,52px); line-height:1.06; letter-spacing:-.02em;
+  margin:0 0 20px; text-wrap:balance;
+}
+.standfirst{font-size:19px; line-height:1.55; color:var(--ink-2); margin:0; max-width:640px}
+.standfirst strong{font-weight:600; color:var(--ink)}
+
+nav.toc{
+  display:grid; grid-auto-flow:column; grid-template-rows:repeat(4,auto);
+  gap:0 48px; margin-top:32px; max-width:600px;
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; letter-spacing:.03em;
+}
+nav.toc a{
+  color:var(--ink-3); text-decoration:none; padding:5px 0;
+  border-bottom:1px solid transparent; justify-self:start;
+}
+nav.toc a:hover{color:var(--queue); border-bottom-color:var(--queue-line)}
+nav.toc a.assign{color:var(--task); font-weight:500}
+nav.toc a.assign:hover{color:var(--task); border-bottom-color:var(--task-line)}
+
+/* ---- sections ---- */
+section{padding-top:68px}
+h2{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:600;
+  font-size:29px; line-height:1.2; letter-spacing:-.012em; margin:0 0 6px;
+  text-wrap:balance;
+}
+.col h4{
+  font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:15px;
+  letter-spacing:-.004em; color:var(--ink-2); margin:26px 0 6px;
+}
+h3{
+  font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:16px;
+  letter-spacing:-.005em; margin:34px 0 8px;
+}
+h3.sub{
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:20px; font-weight:600;
+  letter-spacing:-.01em; margin:46px 0 10px; padding-top:22px;
+  border-top:1px solid var(--rule);
+}
+.kicker{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 12px;
+  display:flex; align-items:center; gap:12px;
+}
+.kicker::after{content:""; flex:1; height:1px; background:var(--rule); max-width:180px}
+.kicker.task{color:var(--task)}
+.kicker.task::after{background:var(--task-line)}
+.badge{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.12em; text-transform:uppercase; font-weight:600;
+  color:var(--task); background:var(--task-soft); border:1px solid var(--task-line);
+  border-radius:3px; padding:2px 7px; vertical-align:3px; margin-left:10px;
+}
+p{margin:0 0 17px}
+.lede{font-size:18.5px; color:var(--ink-2); margin-bottom:22px}
+
+a{color:var(--queue)}
+a.file{
+  font-family:"IBM Plex Mono",monospace; font-size:.9em; font-weight:500;
+  color:var(--ink); text-decoration:none;
+  border-bottom:1.5px solid var(--queue-line);
+  padding-bottom:1px; white-space:nowrap;
+}
+a.file:hover{color:var(--queue); border-bottom-color:var(--queue); background:var(--queue-soft)}
+a.file::before{content:"↗ "; font-size:.85em; color:var(--ink-3)}
+a:focus-visible, a.file:focus-visible{outline:2px solid var(--queue); outline-offset:3px; border-radius:2px}
+
+code{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.875em;
+  background:var(--surface-2); padding:.12em .34em; border-radius:3px;
+  color:var(--ink);
+}
+
+/* ---- code blocks ---- */
+figure{margin:26px 0}
+.code{
+  background:var(--surface); border:1px solid var(--rule); border-radius:6px;
+  overflow-x:auto; box-shadow:var(--shadow);
+}
+.code-head{
+  display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+  padding:9px 16px; border-bottom:1px solid var(--rule);
+  background:var(--sunken); border-radius:6px 6px 0 0;
+  font-family:"IBM Plex Mono",monospace; font-size:12px;
+  position:sticky; left:0;
+}
+.code-head .path{font-weight:500}
+.code-head .lines{color:var(--ink-3); letter-spacing:.03em; white-space:nowrap}
+.code pre{
+  margin:0; padding:16px; font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  font-size:13.5px; line-height:1.65; color:var(--ink);
+}
+.code .c{color:var(--ink-3)}
+.code .hl{
+  display:inline-block; width:100%;
+  background:var(--queue-soft); box-shadow:-6px 0 0 var(--queue-soft), inset 3px 0 0 var(--queue);
+  padding-left:3px; margin-left:-3px;
+}
+.code .hl-s{
+  display:inline-block; width:100%;
+  background:var(--stack-soft); box-shadow:-6px 0 0 var(--stack-soft), inset 3px 0 0 var(--stack);
+  padding-left:3px; margin-left:-3px;
+}
+figcaption{
+  font-size:14px; color:var(--ink-3); margin-top:10px; line-height:1.5;
+  max-width:640px;
+}
+figcaption b{color:var(--ink-2); font-weight:600}
+
+/* ---- diagram ---- */
+.figure-wide{margin:30px 0 0}
+.diagram{
+  background:var(--surface); border:1px solid var(--rule); border-radius:8px;
+  padding:22px 18px 14px; box-shadow:var(--shadow); overflow-x:auto;
+}
+.diagram svg{display:block; width:100%; min-width:620px; height:auto}
+.d-box{fill:var(--surface-2); stroke:var(--rule-2); stroke-width:1}
+.d-box-solver{fill:var(--surface-2); stroke:var(--ink-3); stroke-width:1.5}
+.d-box-q{fill:var(--queue-soft); stroke:var(--queue-line); stroke-width:1.5}
+.d-box-s{fill:var(--stack-soft); stroke:var(--stack-line); stroke-width:1.5}
+.d-name{font-family:"IBM Plex Mono",monospace; font-size:14px; font-weight:500; fill:var(--ink)}
+.d-sub{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; fill:var(--ink-3)}
+.d-sub-q{fill:var(--queue)} .d-sub-s{fill:var(--stack)}
+.d-band{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.13em; fill:var(--ink-3)}
+.d-edge{stroke:var(--rule-2); stroke-width:1.5; fill:none}
+.d-edge-q{stroke:var(--queue-line); stroke-width:1.5; fill:none}
+.d-edge-s{stroke:var(--stack-line); stroke-width:1.5; fill:none}
+.d-arrow{fill:var(--rule-2)} .d-arrow-q{fill:var(--queue-line)} .d-arrow-s{fill:var(--stack-line)}
+.d-note{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; font-style:italic; fill:var(--ink-3)}
+
+/* ---- two-up compare ---- */
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0}
+.panel{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:18px 20px 20px; box-shadow:var(--shadow); min-width:0;
+}
+.panel.q{border-top:3px solid var(--queue)}
+.panel.s{border-top:3px solid var(--stack)}
+.panel h4{
+  margin:0 0 2px; font-family:"IBM Plex Mono",monospace; font-size:13.5px; font-weight:600;
+}
+.panel.q h4{color:var(--queue)} .panel.s h4{color:var(--stack)}
+.panel .role{font-size:12.5px; color:var(--ink-3); margin:0 0 14px; line-height:1.45}
+.panel p{font-size:15px; margin:0 0 12px}
+.panel p:last-child{margin-bottom:0}
+.panel pre{
+  margin:0 0 12px; font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+  line-height:1.6; background:var(--surface); border:1px solid var(--rule);
+  border-radius:5px; padding:12px; overflow-x:auto; color:var(--ink);
+}
+.panel pre .c{color:var(--ink-3)}
+
+/* ---- interface table ---- */
+.iface{
+  width:100%; border-collapse:collapse; margin:24px 0 8px;
+  font-family:"IBM Plex Mono",monospace; font-size:13px;
+}
+.iface th{
+  text-align:left; font-weight:600; font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); padding:0 14px 8px 0;
+  border-bottom:1px solid var(--rule-2); white-space:nowrap;
+}
+.iface th.q{color:var(--queue)} .iface th.s{color:var(--stack)}
+.iface td{padding:9px 14px 9px 0; border-bottom:1px solid var(--rule); vertical-align:baseline}
+.iface td:first-child{color:var(--ink-2)}
+.iface td.q{color:var(--queue); font-weight:500}
+.iface td.s{color:var(--stack); font-weight:500}
+.iface tr:last-child td{border-bottom:none}
+
+/* ---- results table ---- */
+.results{
+  width:100%; border-collapse:collapse; margin:22px 0 8px; font-size:14px;
+  font-variant-numeric:tabular-nums;
+}
+.results caption{
+  text-align:left; font-size:12.5px; color:var(--ink-3); padding-bottom:10px;
+  font-family:"IBM Plex Mono",monospace;
+}
+.results th{
+  text-align:right; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600; padding:0 0 8px 18px;
+  border-bottom:1px solid var(--rule-2);
+}
+.results th:first-child{text-align:left; padding-left:0}
+.results th.q{color:var(--queue)} .results th.s{color:var(--stack)}
+.results td{text-align:right; padding:10px 0 10px 18px; border-bottom:1px solid var(--rule)}
+.results td:first-child{
+  text-align:left; padding-left:0; font-family:"IBM Plex Mono",monospace; font-size:13px;
+}
+.results td .dim{color:var(--ink-3); font-size:12px}
+.results td.q{color:var(--queue); font-weight:500}
+.results td.s{color:var(--stack); font-weight:500}
+.results tr:last-child td{border-bottom:none}
+
+/* ---- maze renders ---- */
+.mazes{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0 0}
+.maze-card{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:16px 16px 14px; box-shadow:var(--shadow); overflow-x:auto; min-width:0;
+}
+.maze-card h4{
+  margin:0 0 3px; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600;
+}
+.maze-card.q h4{color:var(--queue)} .maze-card.s h4{color:var(--stack)}
+.maze-card .stat{font-size:12.5px; color:var(--ink-3); margin:0 0 12px}
+.maze{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:12px;
+  line-height:1.02; white-space:pre; margin:0; letter-spacing:0;
+}
+.maze .w{color:var(--wall)}
+.maze .o{color:transparent}
+.maze-card.q .maze .v{color:var(--queue-tint)}
+.maze-card.s .maze .v{color:var(--stack-tint)}
+.maze .p-q{color:var(--queue); font-weight:600}
+.maze .p-s{color:var(--stack); font-weight:600}
+.maze .s{color:var(--start); font-weight:600}
+.maze .e{color:var(--exit); font-weight:600}
+.legend{
+  display:flex; flex-wrap:wrap; gap:6px 18px; margin:16px 0 0;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-3);
+}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{font-style:normal; font-size:13px}
+
+/* ---- callout ---- */
+.callout{
+  border-left:3px solid var(--stack); background:var(--stack-soft);
+  padding:16px 20px; border-radius:0 6px 6px 0; margin:26px 0;
+}
+.callout p{margin:0; font-size:15.5px; color:var(--ink-2)}
+.callout p + p{margin-top:10px}
+.callout strong{color:var(--ink); font-weight:600}
+
+/* ---- run block ---- */
+.shell{
+  background:var(--sunken); border:1px solid var(--rule); border-radius:6px;
+  padding:16px 18px; overflow-x:auto; box-shadow:var(--shadow);
+  font-family:"IBM Plex Mono",monospace; font-size:13px; line-height:1.9;
+}
+.shell .prompt{color:var(--ink-3); user-select:none}
+.shell .c{color:var(--ink-3)}
+.shell div{white-space:pre}
+
+/* ---- checkpoints ---- */
+ul.marks{list-style:none; padding:0; margin:18px 0}
+ul.marks li{
+  padding:12px 0 12px 30px; border-bottom:1px solid var(--rule); position:relative;
+  font-size:16px;
+}
+ul.marks li:last-child{border-bottom:none}
+ul.marks li::before{
+  content:"—"; position:absolute; left:0; top:12px; color:var(--queue);
+  font-family:"IBM Plex Mono",monospace;
+}
+ul.marks b{font-weight:600}
+
+footer{
+  margin-top:80px; padding-top:26px; border-top:1px solid var(--rule);
+  font-size:13.5px; color:var(--ink-3); line-height:1.6;
+}
+footer p{margin:0 0 8px; max-width:640px}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .compare, .mazes{grid-template-columns:1fr}
+  .wrap{padding:0 20px 72px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}
+
+/* ================= session-page additions ================= */
+
+/* ---- masthead course link ---- */
+.eyebrow a{color:inherit; text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.eyebrow a:hover{color:var(--queue); border-bottom-color:var(--queue)}
+
+/* ---- objectives ---- */
+.objectives{
+  display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0 8px;
+}
+.obj{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:16px 18px 18px; box-shadow:var(--shadow); min-width:0;
+}
+.obj h4{
+  margin:0 0 10px; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.obj ul{margin:0; padding-left:18px}
+.obj li{font-size:14.5px; line-height:1.5; margin-bottom:8px; color:var(--ink-2)}
+.obj li:last-child{margin-bottom:0}
+.obj li b{color:var(--ink); font-weight:600}
+
+/* ---- in-class / homework split ---- */
+.split{
+  display:grid; grid-template-columns:1fr 1fr; gap:0; margin:26px 0 0;
+  border:1px solid var(--rule); border-radius:8px; overflow:hidden;
+  background:var(--surface); box-shadow:var(--shadow);
+}
+.split > div{padding:16px 20px 18px}
+.split > div + div{border-left:1px solid var(--rule); background:var(--sunken)}
+.split h4{
+  margin:0 0 8px; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.13em; text-transform:uppercase; font-weight:600;
+}
+.split .now h4{color:var(--queue)}
+.split .later h4{color:var(--stack)}
+.split p{font-size:14.5px; margin:0; color:var(--ink-2); line-height:1.55}
+.split code{font-size:.85em}
+
+/* ---- session forward-link chip ---- */
+.sn{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.06em; text-transform:uppercase; white-space:nowrap;
+  color:var(--stack); background:var(--stack-soft);
+  border:1px solid var(--stack-line); border-radius:3px;
+  padding:1px 5px; margin-left:6px; vertical-align:1px; font-weight:500;
+}
+
+/* ---- cross-language table ---- */
+.xwrap{overflow-x:auto; margin:26px 0 8px; -webkit-overflow-scrolling:touch}
+.xlang{
+  border-collapse:collapse; font-size:13.5px; min-width:760px; width:100%;
+}
+.xlang th{
+  text-align:left; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.11em; text-transform:uppercase; font-weight:600;
+  color:var(--ink-3); padding:0 16px 9px 0; border-bottom:1px solid var(--rule-2);
+  vertical-align:bottom;
+}
+.xlang th.py{color:var(--queue)} .xlang th.ml{color:var(--start)} .xlang th.jv{color:var(--stack)}
+.xlang td{
+  padding:11px 16px 11px 0; border-bottom:1px solid var(--rule);
+  vertical-align:top; line-height:1.45;
+}
+.xlang td:first-child{
+  color:var(--ink-3); font-size:12.5px; width:20%;
+  font-family:"IBM Plex Mono",monospace;
+}
+.xlang tbody tr:hover td{background:var(--surface-2)}
+.xlang tr:last-child td{border-bottom:none}
+.xlang tr.count td{font-weight:600; color:var(--ink)}
+.xlang tr.count td:first-child{color:var(--ink-2)}
+.xlang code{font-size:.86em; white-space:nowrap}
+.xlang .no{color:var(--ink-3); font-style:italic}
+
+/* ---- route cards ---- */
+.routes{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:26px 0 0}
+.routes.two{grid-template-columns:repeat(2,1fr); max-width:660px; margin-left:auto; margin-right:auto}
+.routes.one{grid-template-columns:1fr; max-width:660px; margin-left:auto; margin-right:auto}
+.route{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:16px 18px 18px; box-shadow:var(--shadow); min-width:0;
+  display:flex; flex-direction:column;
+}
+.route.py{border-top:3px solid var(--queue)}
+.route.ml{border-top:3px solid var(--start)}
+.route.jv{border-top:3px solid var(--stack)}
+.route h4{
+  margin:0 0 2px; font-family:"IBM Plex Mono",monospace;
+  font-size:14px; font-weight:600;
+}
+.route.py h4{color:var(--queue)} .route.ml h4{color:var(--start)} .route.jv h4{color:var(--stack)}
+.route .part{font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-3); font-family:"IBM Plex Mono",monospace; margin:0 0 12px}
+.route p{font-size:14px; margin:0 0 12px; color:var(--ink-2); line-height:1.5}
+.route pre{
+  margin:0 0 12px; font-family:"IBM Plex Mono",monospace; font-size:11.5px;
+  line-height:1.75; background:var(--sunken); border:1px solid var(--rule);
+  border-radius:5px; padding:10px 12px; color:var(--ink);
+  white-space:pre-wrap; overflow-wrap:anywhere;
+}
+.route .links{margin-top:auto; padding-top:4px; font-size:13px; line-height:1.5}
+.route .links span{display:block; margin-bottom:6px}
+.route .links span:last-child{margin-bottom:0}
+.route .todo{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3);
+  border-top:1px solid var(--rule); padding-top:10px; margin-top:4px;
+}
+.route .soon{color:var(--ink-3); font-style:italic; font-size:13px}
+
+/* ---- demo ---- */
+.demo{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  box-shadow:var(--shadow); padding:18px 18px 14px; margin:26px 0 0;
+}
+.demo-boards{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.board{min-width:0}
+.board h4{
+  margin:0 0 2px; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600;
+}
+.board.q h4{color:var(--queue)} .board.s h4{color:var(--stack)}
+.board .stat{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3);
+  margin:0 0 10px; font-variant-numeric:tabular-nums;
+}
+.board canvas{
+  display:block; width:100%; height:auto;
+  border:1px solid var(--rule); border-radius:4px; background:var(--sunken);
+}
+.demo-bar{
+  display:flex; align-items:center; gap:14px; margin-top:16px;
+  padding-top:14px; border-top:1px solid var(--rule);
+}
+.demo-bar button{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:500;
+  color:var(--ink); background:var(--surface-2);
+  border:1px solid var(--rule-2); border-radius:5px;
+  padding:5px 14px; cursor:pointer; min-width:76px;
+}
+.demo-bar button:hover{border-color:var(--queue); color:var(--queue)}
+.demo-bar button:focus-visible{outline:2px solid var(--queue); outline-offset:2px}
+.demo-bar input[type=range]{flex:1; min-width:0; accent-color:var(--queue)}
+.demo-bar .step{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-3);
+  white-space:nowrap; font-variant-numeric:tabular-nums; min-width:96px; text-align:right;
+}
+
+/* ---- related work ---- */
+ul.refs{list-style:none; padding:0; margin:18px 0 0}
+ul.refs li{
+  padding:11px 0; border-bottom:1px solid var(--rule);
+  font-size:14.5px; line-height:1.5; color:var(--ink-2);
+}
+ul.refs li:last-child{border-bottom:none}
+ul.refs b{color:var(--ink); font-weight:600}
+ul.refs .where{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3);
+  display:block; margin-top:2px;
+}
+
+@media (max-width:760px){
+  .objectives, .split, .routes, .routes.two, .demo-boards{grid-template-columns:1fr}
+  nav.toc{grid-auto-flow:row; grid-template-rows:none}
+  .split > div + div{border-left:none; border-top:1px solid var(--rule)}
+}
+/* ---- lab rail (generated; edit the injector, not this) -----------------
+   Wide screens: the rail is an absolute left column spanning the page. Its
+   top block is decoration, sized to the masthead by script, so the menu
+   begins level with section 00; the menu itself is sticky, so the snippet
+   scrolls away and the navigation stays. Narrow screens: a compact block of
+   links, and the page keeps its own boxed contents list under the standfirst. */
+:root{--labrail:21rem; --masthead-h:340px}
+.labrail{background:var(--surface); border-right:1px solid var(--rule);
+  padding:22px 20px 28px; font-size:14.5px; line-height:1.5; z-index:20}
+@media (min-width:1180px){
+  body{position:relative; padding-left:var(--labrail)}
+  .labrail{position:absolute; left:0; top:0; bottom:0; width:var(--labrail);
+    padding:0}
+  .lr-art{height:var(--masthead-h); padding:26px 22px; display:flex;
+    flex-direction:column; justify-content:flex-end; overflow:hidden}
+  .lr-nav{position:sticky; top:0; max-height:100vh; overflow-y:auto;
+    padding:22px 20px 28px}
+  header.masthead nav.toc{display:none}   /* it lives in the rail up here */
+}
+.lr-art svg{width:100%; height:auto; display:block}
+.lr-art .cap{font:500 10.5px/1.4 "IBM Plex Sans",sans-serif; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); border-top:1px solid var(--rule);
+  padding-top:10px; margin:14px 0 0}
+.lr-art{display:none}
+@media (min-width:1180px){.lr-art{display:flex}}
+
+.labrail .lr-brand{display:block; text-decoration:none; color:var(--ink);
+  margin-bottom:20px}
+.labrail .lr-brand .up{display:block; font:500 11px/1 "IBM Plex Mono",monospace;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px}
+.labrail .lr-brand b{font:600 16px/1.28 "IBM Plex Sans",sans-serif; letter-spacing:-.01em}
+.labrail h2{display:flex; align-items:center; gap:10px;
+  font:600 11.5px/1 "IBM Plex Sans",sans-serif; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink); margin:26px 0 10px; padding:0; border:0}
+.labrail h2::after{content:""; flex:1; height:1px; background:var(--rule-2)}
+.labrail .lr-nav>div:first-of-type h2{margin-top:18px}
+.labrail ul{list-style:none; margin:0; padding:0}
+.labrail a.lr{display:block; padding:6px 10px; border-radius:7px;
+  text-decoration:none; color:var(--ink-2); font-size:14.5px}
+.labrail a.lr:hover{background:var(--sunken); color:var(--ink)}
+.labrail a.lr[aria-current]{background:var(--queue-soft); color:var(--queue); font-weight:600}
+.labrail a.lr code{font:500 13.5px/1.5 "IBM Plex Mono",monospace; background:none;
+  padding:0; color:inherit}
+
+.labrail a.lr .t{display:block}
+.labrail a.lr .d{display:block; font:400 12px/1.35 "IBM Plex Sans",sans-serif;
+  color:var(--ink-3); margin-top:1px}
+.labrail a.lr[aria-current] .d{color:var(--queue); opacity:.85; font-weight:400}
+
+/* The assignment itself, first: one line per part, letter in mono, the parts
+   where code gets written in the lab's task colour; run-and-watch parts muted. */
+.labrail .lr-todo a{display:grid; grid-template-columns:2.4rem 1fr; gap:0 6px;
+  align-items:baseline; padding:5px 10px; border-radius:7px; text-decoration:none;
+  color:var(--ink-2)}
+.labrail .lr-todo a:hover{background:var(--sunken); color:var(--ink)}
+.labrail .lr-todo .k{font:500 12.5px/1.5 "IBM Plex Mono",monospace; color:var(--ink-3);
+  letter-spacing:.02em}
+.labrail .lr-todo .t{font-size:14.5px; font-weight:600}
+.labrail .lr-todo .d{grid-column:2; font:400 12px/1.35 "IBM Plex Sans",sans-serif;
+  color:var(--ink-3); margin-top:1px}
+.labrail .lr-todo .d code{font:500 11.5px/1.4 "IBM Plex Mono",monospace; background:none;
+  padding:0; color:inherit}
+.labrail .lr-todo a.do .k,.labrail .lr-todo a.do .t{color:var(--task)}
+.labrail .lr-todo a.do:hover{background:var(--task-soft)}
+.labrail .lr-readme{margin:6px 0 0; padding:0 10px; font-size:12.5px}
+.labrail .lr-readme a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.labrail .lr-readme a:hover{color:var(--task); border-color:var(--task-line)}
+
+/* A helper note sits under the guide it serves: indented, on a hairline,
+   lighter weight — subordinate, not equal. */
+.labrail li.sub a.lr{margin-left:12px; padding-left:12px; border-left:2px solid var(--rule);
+  border-radius:0 7px 7px 0}
+.labrail li.sub a.lr .t{font-weight:400; font-size:13.5px}
+.labrail li.sub a.lr[aria-current]{border-left-color:var(--queue)}
+
+/* This page's own sections, in the page's own voice: mono, numbered, with the
+   assignment marker the boxed list used. The current one lights up on scroll. */
+.labrail .lr-toc a{display:block; padding:5.5px 10px; border-radius:7px;
+  text-decoration:none; font:400 14px/1.45 "IBM Plex Mono",monospace;
+  letter-spacing:.02em; color:var(--ink-3)}
+.labrail .lr-toc a:hover{background:var(--sunken); color:var(--queue)}
+.labrail .lr-toc a.on{background:var(--queue-soft); color:var(--queue); font-weight:500}
+.labrail .lr-toc a.assign{color:var(--task); font-weight:500}
+.labrail .lr-toc a.assign.on{background:var(--task-soft); color:var(--task)}
+
+.labrail .lr-foot{margin:24px 0 0; padding-top:15px; border-top:1px solid var(--rule);
+  font-size:13px}
+.labrail .lr-foot a{color:var(--ink-3); text-decoration:none}
+.labrail .lr-foot a:hover{color:var(--queue)}
+@media (max-width:1179px){
+  /* Narrow: the lab is long-form reading, so the navigation goes AFTER it
+     rather than ahead of it. The page already names itself in its masthead
+     and keeps its own boxed contents list, so nothing is lost from the top. */
+  body{display:flex; flex-direction:column}
+  .labrail{order:99; position:static; width:auto; border-right:0;
+    border-top:1px solid var(--rule); border-bottom:0; display:grid;
+    align-items:start; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:0 24px}
+  .labrail .lr-nav{display:contents}
+  .labrail .lr-brand{grid-column:1/-1}
+  .labrail .lr-sections{display:none}
+  .labrail h2{margin-top:16px}
+  .labrail .lr-foot{grid-column:1/-1}
+}
+</style>
+<style>
+.music{border:1px solid var(--rule); border-left:4px solid var(--queue); background:var(--queue-soft); padding:14px 20px; border-radius:6px; margin:18px 0}
+.music h3{margin:0 0 8px; font-size:15px; letter-spacing:.04em; text-transform:uppercase; color:var(--queue)}
+.music ul{margin:0; padding-left:1.2em}
+table.parts{width:100%; border-collapse:collapse; margin:14px 0 22px; font-size:15.5px}
+table.parts th{text-align:left; border-bottom:2px solid var(--rule-2); padding:6px 10px 8px 0; font-weight:600}
+table.parts td{border-bottom:1px solid var(--rule); padding:8px 10px 8px 0; vertical-align:top}
+table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; color:var(--ink-3)}
+</style>
+</head>
+<body>
+<!-- pp26:labrail -->
+<aside class="labrail">
+  <div class="lr-art" aria-hidden="false">
+    <svg viewBox="0 0 285 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two voices sounding together">
+      <g stroke="var(--rule-2)" stroke-width="1"><line x1="8" y1="30" x2="277" y2="30"/><line x1="8" y1="90" x2="277" y2="90"/></g>
+      <g fill="var(--queue)"><rect x="8" y="22" width="60" height="16" rx="3"/><rect x="72" y="22" width="60" height="16" rx="3" opacity=".8"/><rect x="136" y="22" width="60" height="16" rx="3" opacity=".6"/><rect x="200" y="22" width="60" height="16" rx="3" opacity=".4"/></g>
+      <g fill="var(--stack)"><rect x="8" y="82" width="60" height="16" rx="3"/><rect x="72" y="82" width="60" height="16" rx="3"/><rect x="136" y="82" width="60" height="16" rx="3" opacity=".8"/><rect x="200" y="82" width="60" height="16" rx="3" opacity=".6"/></g>
+      <text x="8" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-3)">voice1</text>
+      <text x="8" y="74" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-3)">voice2</text>
+    </svg>
+    <p class="cap">two voices &middot; <code>voice1 // voice2</code></p>
+  </div>
+  <div class="lr-nav">
+    <a class="lr-brand" href="https://homes.cs.aau.dk/~lego/pp26/s3.html">
+      <span class="up">PP26 &middot; Session 3</span><b>Lab 3 &mdash; A Little Music Language</b></a>
+      <div class="lr-what">
+        <h2>What to do</h2>
+        <ul class="lr-todo">
+          <li><a class="do" href="#part-a"><span class="k">A</span><span class="t">Two numbers</span><span class="d">count it, time it</span></a></li>
+          <li><a class="do" href="#part-b"><span class="k">B</span><span class="t">To sound</span><span class="d">timed notes, a .wav, then <code>Repeat</code></span></a></li>
+          <li><a class="do" href="#part-c"><span class="k">C</span><span class="t">Transformations</span><span class="d">transpose, print, reverse, simplify</span></a></li>
+        </ul>
+        <p class="lr-readme"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/README.md">the same, as a README</a></p>
+      </div>
+      <div class="lr-sections">
+        <h2>On this page</h2>
+        <ul class="lr-toc"><li><a href="#description">00 · description</a></li><li><a href="#music">01 · all the music we need</a></li><li><a href="#type">02 · the type</a></li><li><a href="#parts">03 · the assignments</a></li><li><a href="#homework">04 · homework</a></li></ul>
+      </div>
+      <div>
+        <h2>Code</h2>
+        <ul>
+          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/melody.ml"><code>melody.ml</code></a></li>
+          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/tunes.ml"><code>tunes.ml</code> — Bach, the crab canon theme, the examples</a></li>
+          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/main.ml"><code>main.ml</code></a></li>
+          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/wav.ml"><code>wav.ml</code></a></li>
+        </ul>
+      </div>
+      <p class="lr-foot"><a href="https://homes.cs.aau.dk/~lego/pp26/">&larr; Programming Paradigms</a></p>
+  </div>
+</aside>
+<!-- /pp26:labrail -->
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;·&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s3.html">Session 3</a> &nbsp;·&nbsp; lab</p>
+    <h1>A Little Music Language</h1>
+    <p class="standfirst">We write a tiny language for melodies as an OCaml type, then the programs that process it: count it, time it, play it, transform it. Every function is one <code>match</code> on one type. When we add a constructor, the compiler lists every function we have to fix; when we add a function, we touch nothing else. That is the lecture's thesis, in code.</p>
+    <nav class="toc">
+      <a href="#description">00 · description</a>
+      <a href="#music">01 · all the music we need</a>
+      <a href="#type">02 · the type</a>
+      <a class="assign" href="#parts">03 · the assignments</a>
+      <a class="assign" href="#homework">04 · homework</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="description">
+  <div class="col">
+    <p class="kicker">00 — description</p>
+    <h2>What this lab is for</h2>
+    <p>Part 3 of the lecture built an algebraic data type from an enumeration up to a recursive type. Part 5 showed what such a type buys: every value has a closed list of shapes, every operation is one <code>match</code>, and the compiler checks that every operation handles every shape. The lab makes that concrete on a type with four shapes and a dozen operations, and lets us hear the result.</p>
+    <p>The piece we test on is Bach's Invention no. 1 in C major, BWV 772: two voices, 22 bars, 467 notes, in <code>tunes.ml</code>, one <code>let</code> per bar and voice. <code>voice1</code> is the upper voice alone; <code>bach</code> is both together. Nothing assessed needs an ear: the checks are on counts, beats and event lists.</p>
+    <pre><code>dune build
+dune exec ./main.exe        # pass / FAIL / todo, one line per check</code></pre>
+    <p>Then open <code>bach.wav</code> in any player, and <code>examples.wav</code>: one voice alone, a C major scale; then a cadence of four chords, the scale in parallel thirds, and a canon. They are written at the end of <code>tunes.ml</code> in a few lines each; a chord is three voices that start together:</p>
+    <pre><code>let chord a b c = q a 4 // q b 4 // q c 4
+let canon = scale // (r Whole ++ scale)</code></pre>
+    <p>Change them, add our own, listen. Windows: use WSL or the OCaml installer as in lab 2.</p>
+  </div>
+</section>
+
+<section id="music">
+  <div class="col">
+    <p class="kicker">01 — all the music we need</p>
+    <h2>Five facts</h2>
+    <div class="music">
+      <h3>All the music we need</h3>
+      <ul>
+        <li>There are seven letter names, C D E F G A B, and five sharps between them: C# D# F# G# A#.</li>
+        <li>A <b>pitch</b> is a name plus an octave number. C4 is middle C. One octave up doubles the frequency.</li>
+        <li>A <b>duration</b> is a fraction of a whole note: 1, 1/2, 1/4, 1/8, 1/16, 1/32. A quarter note is one <em>beat</em>. A dot after a note makes it half as long again.</li>
+        <li>A <b>tempo</b> says how many beats per minute. At 120, a beat lasts half a second.</li>
+        <li>Two melodies can sound <b>at the same time</b>, or <b>one after the other</b>.</li>
+      </ul>
+    </div>
+    <p>Every one of these is a line of the type declaration below.</p>
+  </div>
+</section>
+
+<section id="type">
+  <div class="col">
+    <p class="kicker">02 — the type</p>
+    <h2>The language, as a type</h2>
+    <pre><code>type note = C | Cs | D | Ds | E | F | Fs | G | Gs | A | As | B   (* Cs is C sharp *)
+type pitch = { note : note; octave : int }          (* C4 is middle C *)
+type duration =
+  | Whole | Half | Quarter | Eighth | Sixteenth | ThirtySecond
+  | Dotted of duration            (* a dotted note lasts one and a half times as long *)
+
+type melody =
+  | Note of duration * pitch
+  | Rest of duration
+  | Seq  of melody * melody      (* one after the other *)
+  | Par  of melody * melody      (* at the same time    *)
+
+let ( ++ ) a b = Seq (a, b)
+let ( // ) a b = Par (a, b)</code></pre>
+    <p>Provided: <code>beats : duration -> float</code> and <code>frequency : pitch -> float</code>. With the two operators a tune reads left to right: <code>q C 4 ++ q D 4 ++ q E 4 ++ q C 4</code>, and a chord is <code>q C 4 // q E 4 // q G 4</code>.</p>
+    <p>A <code>Seq</code> or a <code>Par</code> holds two melodies: the type is a <b>tree</b>. Every Part C operation returns a new tree and shares the parts it did not change — the persistent structures of session 2, without any extra work.</p>
+  </div>
+</section>
+
+<section id="parts">
+  <div class="col">
+    <p class="kicker">03 — the assignments</p>
+    <h2>What we build, and in what order<span class="badge">assignment</span></h2>
+    <p><code>melody.ml</code> is the file we edit. Each hole is a <code>failwith "TODO …"</code>; <code>main.ml</code> reports each one as <em>todo</em> until it is filled, then as <em>pass</em> or <em>FAIL</em>.</p>
+
+    <h3 id="part-a">Part A — two numbers</h3>
+    <table class="parts">
+      <tr><td class="k">A1</td><td>Count the notes. A <code>Par</code> counts both voices: the upper voice has 245, the piece 467.<pre><code>count_notes : melody -> int</code></pre></td></tr>
+      <tr><td class="k">A2</td><td>The length in beats. <code>Seq</code> adds; <code>Par</code> takes the maximum — the constructor decides the operation. Each voice is 88 beats, and so is the piece: 88, not 176.<pre><code>length_in_beats : melody -> float</code></pre></td></tr>
+      <tr><td class="k">A3</td><td>Three voices via two. <code>Par</code> takes two melodies; a chord of three is a <code>Par</code> inside a <code>Par</code>, and the grouping does not change the sound. Write the function that takes the first voice and a list of the others. Why does it not take just a list? — think about the chord with no notes.<pre><code>voices : melody -> melody list -> melody</code></pre></td></tr>
+    </table>
+
+    <h3 id="part-b">Part B — from a melody to sound</h3>
+    <table class="parts">
+      <tr><td class="k">B1</td><td>Compile the melody to events. An event is a note with a start time, a frequency and a length, in seconds. The skeleton threads a clock: the inner function returns the events of a melody started at a given beat, together with the beat at which it ends. <code>Note</code> and <code>Rest</code> are done; <code>Seq</code> and <code>Par</code> are the holes. A rest produces no event — it is the absence of one. A wrong <code>Seq</code> plays everything at once; we will hear it.<pre><code>to_events : int -> melody -> event list      (* the int is the tempo *)</code></pre></td></tr>
+      <tr><td class="k">B2</td><td>Add a constructor: <code>Repeat of int * melody</code>. Rebuild. The compiler now warns, once per function, <em>this pattern-matching is not exhaustive</em>, with the missing case — that list of warnings is the checklist. Then uncomment <code>twice</code> in <code>tunes.ml</code> and the B2 checks in <code>main.ml</code>: repeating a voice twice must sound exactly like writing it twice.</td></tr>
+    </table>
+
+    <h3 id="part-c">Part C — operations on melodies</h3>
+    <table class="parts">
+      <tr><td class="k">C1</td><td>Move a melody up or down by whole octaves. The <code>Note</code> case is done: it builds a new pitch record from the old one, changing only the octave field. Beats unchanged; frequencies doubled for one octave up.<pre><code>transpose_octave : int -> melody -> melody</code></pre></td></tr>
+      <tr><td class="k">C2</td><td>Print a melody. Exactly this format: <code>C4/4</code>, <code>C#5/8.</code>, <code>r/8</code>, <code>a b</code> for a sequence, <code>(a // b)</code> for two voices, <code>[m]x2</code> for a repeat.<pre><code>pretty : melody -> string</code></pre></td></tr>
+      <tr><td class="k">C3</td><td>Play a melody backwards. <code>Seq</code> swaps its two halves; <code>Par</code> does not — time reverses, simultaneity does not.<pre><code>retrograde : melody -> melody</code></pre>Bach's <em>Crab Canon</em> (Musical Offering, BWV 1079) plays a theme against its own retrograde, at the same time. The theme is in <code>tunes.ml</code> as <code>crab_theme</code>; the second voice is not written anywhere, it is computed. Once <code>retrograde</code> works, <code>main.ml</code> writes the canon to <code>crab.wav</code>:<pre><code>let crab = crab_theme // retrograde crab_theme</code></pre></td></tr>
+      <tr><td class="k">C4</td><td><code>simplify</code> (needs <code>Repeat</code>; uncomment it): <code>Repeat (1, m)</code> is <code>m</code>; <code>Repeat (n, Repeat (k, m))</code> is <code>Repeat (n * k, m)</code>. The order of the two arms matters — swap them and see what the compiler says.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="homework">
+  <div class="col">
+    <p class="kicker">04 — homework</p>
+    <h2>What to finish at home<span class="badge">assignment</span></h2>
+    <ul>
+      <li>CS3110, chapter 3: sections 3.1, 3.5, 3.6, 3.8, 3.11, 3.12. The lecture gives the idea; the reading gives the language.</li>
+      <li>Finish any part left open. The checks in <code>main.ml</code> say which.</li>
+      <li>Questions to think about: how would we model a tie between two notes? What would an empty melody be, and which constructors would need it? Where does <code>pretty</code> live if <code>melody</code> is written in Java as an abstract class with subclasses — and where when it is a <code>sealed</code> interface with records?</li>
+    </ul>
+  </div>
+
+  <footer class="col">
+    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/melody.ml">melody.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/tunes.ml">tunes.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/main.ml">main.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/wav.ml">wav.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/README.md">README.md</a></p>
+    <p style="margin-top:16px">Programming Paradigms, session 3 — algebraic data types and objects.</p>
+  </footer>
+</section>
+
+</main>
+<script>/* pp26:labrail-spy — size the rail's top block to the masthead,
+   and mark the section the reader is in */
+(function(){var m=document.querySelector("header.masthead");
+if(m)document.documentElement.style.setProperty("--masthead-h",m.offsetHeight+"px");
+var L=[].slice.call(document.querySelectorAll(".lr-toc a"));if(!L.length)return;
+var S=L.map(function(a){return document.getElementById(a.hash.slice(1))});
+function up(){var c=-1;for(var i=0;i<S.length;i++){if(S[i]&&S[i].getBoundingClientRect().top<=140)c=i}
+if(c<0)c=0;for(var j=0;j<L.length;j++)L[j].classList.toggle("on",j===c)}
+addEventListener("scroll",up,{passive:true});
+addEventListener("resize",function(){if(m)document.documentElement.style.setProperty("--masthead-h",m.offsetHeight+"px");up()});
+up()})();
+</script>
+</body>
+</html>

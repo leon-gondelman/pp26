@@ -1,0 +1,1142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PP26 Session 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Fira+Mono:wght@400;500&display=swap">
+<style>
+/*!
+* reveal.js 5.1.0
+* https://revealjs.com
+* MIT licensed
+*
+* Copyright (C) 2011-2024 Hakim El Hattab, https://hakim.se
+*/.reveal .r-stretch,.reveal .stretch{max-width:none;max-height:none}.reveal pre.r-stretch code,.reveal pre.stretch code{height:100%;max-height:100%;box-sizing:border-box}.reveal .r-fit-text{display:inline-block;white-space:nowrap}.reveal .r-stack{display:grid;grid-template-rows:100%}.reveal .r-stack>*{grid-area:1/1;margin:auto}.reveal .r-hstack,.reveal .r-vstack{display:flex}.reveal .r-hstack img,.reveal .r-hstack video,.reveal .r-vstack img,.reveal .r-vstack video{min-width:0;min-height:0;object-fit:contain}.reveal .r-vstack{flex-direction:column;align-items:center;justify-content:center}.reveal .r-hstack{flex-direction:row;align-items:center;justify-content:center}.reveal .items-stretch{align-items:stretch}.reveal .items-start{align-items:flex-start}.reveal .items-center{align-items:center}.reveal .items-end{align-items:flex-end}.reveal .justify-between{justify-content:space-between}.reveal .justify-around{justify-content:space-around}.reveal .justify-start{justify-content:flex-start}.reveal .justify-center{justify-content:center}.reveal .justify-end{justify-content:flex-end}html.reveal-full-page{width:100%;height:100%;height:100vh;height:calc(var(--vh,1vh) * 100);height:100svh;overflow:hidden}.reveal-viewport{height:100%;overflow:hidden;position:relative;line-height:1;margin:0;background-color:#fff;color:#000;--r-controls-spacing:12px}.reveal-viewport:fullscreen{top:0!important;left:0!important;width:100%!important;height:100%!important;transform:none!important}.reveal .fragment{transition:all .2s ease}.reveal .fragment:not(.custom){opacity:0;visibility:hidden;will-change:opacity}.reveal .fragment.visible{opacity:1;visibility:inherit}.reveal .fragment.disabled{transition:none}.reveal .fragment.grow{opacity:1;visibility:inherit}.reveal .fragment.grow.visible{transform:scale(1.3)}.reveal .fragment.shrink{opacity:1;visibility:inherit}.reveal .fragment.shrink.visible{transform:scale(.7)}.reveal .fragment.zoom-in{transform:scale(.1)}.reveal .fragment.zoom-in.visible{transform:none}.reveal .fragment.fade-out{opacity:1;visibility:inherit}.reveal .fragment.fade-out.visible{opacity:0;visibility:hidden}.reveal .fragment.semi-fade-out{opacity:1;visibility:inherit}.reveal .fragment.semi-fade-out.visible{opacity:.5;visibility:inherit}.reveal .fragment.strike{opacity:1;visibility:inherit}.reveal .fragment.strike.visible{text-decoration:line-through}.reveal .fragment.fade-up{transform:translate(0,40px)}.reveal .fragment.fade-up.visible{transform:translate(0,0)}.reveal .fragment.fade-down{transform:translate(0,-40px)}.reveal .fragment.fade-down.visible{transform:translate(0,0)}.reveal .fragment.fade-right{transform:translate(-40px,0)}.reveal .fragment.fade-right.visible{transform:translate(0,0)}.reveal .fragment.fade-left{transform:translate(40px,0)}.reveal .fragment.fade-left.visible{transform:translate(0,0)}.reveal .fragment.current-visible,.reveal .fragment.fade-in-then-out{opacity:0;visibility:hidden}.reveal .fragment.current-visible.current-fragment,.reveal .fragment.fade-in-then-out.current-fragment{opacity:1;visibility:inherit}.reveal .fragment.fade-in-then-semi-out{opacity:0;visibility:hidden}.reveal .fragment.fade-in-then-semi-out.visible{opacity:.5;visibility:inherit}.reveal .fragment.fade-in-then-semi-out.current-fragment{opacity:1;visibility:inherit}.reveal .fragment.highlight-blue,.reveal .fragment.highlight-current-blue,.reveal .fragment.highlight-current-green,.reveal .fragment.highlight-current-red,.reveal .fragment.highlight-green,.reveal .fragment.highlight-red{opacity:1;visibility:inherit}.reveal .fragment.highlight-red.visible{color:#ff2c2d}.reveal .fragment.highlight-green.visible{color:#17ff2e}.reveal .fragment.highlight-blue.visible{color:#1b91ff}.reveal .fragment.highlight-current-red.current-fragment{color:#ff2c2d}.reveal .fragment.highlight-current-green.current-fragment{color:#17ff2e}.reveal .fragment.highlight-current-blue.current-fragment{color:#1b91ff}.reveal:after{content:"";font-style:italic}.reveal iframe{z-index:1}.reveal a{position:relative}@keyframes bounce-right{0%,10%,25%,40%,50%{transform:translateX(0)}20%{transform:translateX(10px)}30%{transform:translateX(-5px)}}@keyframes bounce-left{0%,10%,25%,40%,50%{transform:translateX(0)}20%{transform:translateX(-10px)}30%{transform:translateX(5px)}}@keyframes bounce-down{0%,10%,25%,40%,50%{transform:translateY(0)}20%{transform:translateY(10px)}30%{transform:translateY(-5px)}}.reveal .controls{display:none;position:absolute;top:auto;bottom:var(--r-controls-spacing);right:var(--r-controls-spacing);left:auto;z-index:11;color:#000;pointer-events:none;font-size:10px}.reveal .controls button{position:absolute;padding:0;background-color:transparent;border:0;outline:0;cursor:pointer;color:currentColor;transform:scale(.9999);transition:color .2s ease,opacity .2s ease,transform .2s ease;z-index:2;pointer-events:auto;font-size:inherit;visibility:hidden;opacity:0;-webkit-appearance:none;-webkit-tap-highlight-color:transparent}.reveal .controls .controls-arrow:after,.reveal .controls .controls-arrow:before{content:"";position:absolute;top:0;left:0;width:2.6em;height:.5em;border-radius:.25em;background-color:currentColor;transition:all .15s ease,background-color .8s ease;transform-origin:.2em 50%;will-change:transform}.reveal .controls .controls-arrow{position:relative;width:3.6em;height:3.6em}.reveal .controls .controls-arrow:before{transform:translateX(.5em) translateY(1.55em) rotate(45deg)}.reveal .controls .controls-arrow:after{transform:translateX(.5em) translateY(1.55em) rotate(-45deg)}.reveal .controls .controls-arrow:hover:before{transform:translateX(.5em) translateY(1.55em) rotate(40deg)}.reveal .controls .controls-arrow:hover:after{transform:translateX(.5em) translateY(1.55em) rotate(-40deg)}.reveal .controls .controls-arrow:active:before{transform:translateX(.5em) translateY(1.55em) rotate(36deg)}.reveal .controls .controls-arrow:active:after{transform:translateX(.5em) translateY(1.55em) rotate(-36deg)}.reveal .controls .navigate-left{right:6.4em;bottom:3.2em;transform:translateX(-10px)}.reveal .controls .navigate-left.highlight{animation:bounce-left 2s 50 both ease-out}.reveal .controls .navigate-right{right:0;bottom:3.2em;transform:translateX(10px)}.reveal .controls .navigate-right .controls-arrow{transform:rotate(180deg)}.reveal .controls .navigate-right.highlight{animation:bounce-right 2s 50 both ease-out}.reveal .controls .navigate-up{right:3.2em;bottom:6.4em;transform:translateY(-10px)}.reveal .controls .navigate-up .controls-arrow{transform:rotate(90deg)}.reveal .controls .navigate-down{right:3.2em;bottom:-1.4em;padding-bottom:1.4em;transform:translateY(10px)}.reveal .controls .navigate-down .controls-arrow{transform:rotate(-90deg)}.reveal .controls .navigate-down.highlight{animation:bounce-down 2s 50 both ease-out}.reveal .controls[data-controls-back-arrows=faded] .navigate-up.enabled{opacity:.3}.reveal .controls[data-controls-back-arrows=faded] .navigate-up.enabled:hover{opacity:1}.reveal .controls[data-controls-back-arrows=hidden] .navigate-up.enabled{opacity:0;visibility:hidden}.reveal .controls .enabled{visibility:visible;opacity:.9;cursor:pointer;transform:none}.reveal .controls .enabled.fragmented{opacity:.5}.reveal .controls .enabled.fragmented:hover,.reveal .controls .enabled:hover{opacity:1}.reveal:not(.rtl) .controls[data-controls-back-arrows=faded] .navigate-left.enabled{opacity:.3}.reveal:not(.rtl) .controls[data-controls-back-arrows=faded] .navigate-left.enabled:hover{opacity:1}.reveal:not(.rtl) .controls[data-controls-back-arrows=hidden] .navigate-left.enabled{opacity:0;visibility:hidden}.reveal.rtl .controls[data-controls-back-arrows=faded] .navigate-right.enabled{opacity:.3}.reveal.rtl .controls[data-controls-back-arrows=faded] .navigate-right.enabled:hover{opacity:1}.reveal.rtl .controls[data-controls-back-arrows=hidden] .navigate-right.enabled{opacity:0;visibility:hidden}.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-down,.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-up{display:none}.reveal:not(.has-vertical-slides) .controls .navigate-left,.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-left{bottom:1.4em;right:5.5em}.reveal:not(.has-vertical-slides) .controls .navigate-right,.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-right{bottom:1.4em;right:.5em}.reveal:not(.has-horizontal-slides) .controls .navigate-up{right:1.4em;bottom:5em}.reveal:not(.has-horizontal-slides) .controls .navigate-down{right:1.4em;bottom:.5em}.reveal.has-dark-background .controls{color:#fff}.reveal.has-light-background .controls{color:#000}.reveal.no-hover .controls .controls-arrow:active:before,.reveal.no-hover .controls .controls-arrow:hover:before{transform:translateX(.5em) translateY(1.55em) rotate(45deg)}.reveal.no-hover .controls .controls-arrow:active:after,.reveal.no-hover .controls .controls-arrow:hover:after{transform:translateX(.5em) translateY(1.55em) rotate(-45deg)}@media screen and (min-width:500px){.reveal-viewport{--r-controls-spacing:0.8em}.reveal .controls[data-controls-layout=edges]{top:0;right:0;bottom:0;left:0}.reveal .controls[data-controls-layout=edges] .navigate-down,.reveal .controls[data-controls-layout=edges] .navigate-left,.reveal .controls[data-controls-layout=edges] .navigate-right,.reveal .controls[data-controls-layout=edges] .navigate-up{bottom:auto;right:auto}.reveal .controls[data-controls-layout=edges] .navigate-left{top:50%;left:var(--r-controls-spacing);margin-top:-1.8em}.reveal .controls[data-controls-layout=edges] .navigate-right{top:50%;right:var(--r-controls-spacing);margin-top:-1.8em}.reveal .controls[data-controls-layout=edges] .navigate-up{top:var(--r-controls-spacing);left:50%;margin-left:-1.8em}.reveal .controls[data-controls-layout=edges] .navigate-down{bottom:calc(var(--r-controls-spacing) - 1.4em + .3em);left:50%;margin-left:-1.8em}}.reveal .progress{position:absolute;display:none;height:3px;width:100%;bottom:0;left:0;z-index:10;background-color:rgba(0,0,0,.2);color:#fff}.reveal .progress:after{content:"";display:block;position:absolute;height:10px;width:100%;top:-10px}.reveal .progress span{display:block;height:100%;width:100%;background-color:currentColor;transition:transform .8s cubic-bezier(.26,.86,.44,.985);transform-origin:0 0;transform:scaleX(0)}.reveal .slide-number{position:absolute;display:block;right:8px;bottom:8px;z-index:31;font-family:Helvetica,sans-serif;font-size:12px;line-height:1;color:#fff;background-color:rgba(0,0,0,.4);padding:5px}.reveal .slide-number a{color:currentColor}.reveal .slide-number-delimiter{margin:0 3px}.reveal{position:relative;width:100%;height:100%;overflow:hidden;touch-action:pinch-zoom}.reveal.embedded{touch-action:pan-y}.reveal.embedded.is-vertical-slide{touch-action:none}.reveal .slides{position:absolute;width:100%;height:100%;top:0;right:0;bottom:0;left:0;margin:auto;pointer-events:none;overflow:visible;z-index:1;text-align:center;perspective:600px;perspective-origin:50% 40%}.reveal .slides>section{perspective:600px}.reveal .slides>section,.reveal .slides>section>section{display:none;position:absolute;width:100%;pointer-events:auto;z-index:10;transform-style:flat;transition:transform-origin .8s cubic-bezier(.26,.86,.44,.985),transform .8s cubic-bezier(.26,.86,.44,.985),visibility .8s cubic-bezier(.26,.86,.44,.985),opacity .8s cubic-bezier(.26,.86,.44,.985)}.reveal[data-transition-speed=fast] .slides section{transition-duration:.4s}.reveal[data-transition-speed=slow] .slides section{transition-duration:1.2s}.reveal .slides section[data-transition-speed=fast]{transition-duration:.4s}.reveal .slides section[data-transition-speed=slow]{transition-duration:1.2s}.reveal .slides>section.stack{padding-top:0;padding-bottom:0;pointer-events:none;height:100%}.reveal .slides>section.present,.reveal .slides>section>section.present{display:block;z-index:11;opacity:1}.reveal .slides>section:empty,.reveal .slides>section>section:empty,.reveal .slides>section>section[data-background-interactive],.reveal .slides>section[data-background-interactive]{pointer-events:none}.reveal.center,.reveal.center .slides,.reveal.center .slides section{min-height:0!important}.reveal .slides>section:not(.present),.reveal .slides>section>section:not(.present){pointer-events:none}.reveal.overview .slides>section,.reveal.overview .slides>section>section{pointer-events:auto}.reveal .slides>section.future,.reveal .slides>section.future>section,.reveal .slides>section.past,.reveal .slides>section.past>section,.reveal .slides>section>section.future,.reveal .slides>section>section.past{opacity:0}.reveal .slides>section[data-transition=slide].past,.reveal .slides>section[data-transition~=slide-out].past,.reveal.slide .slides>section:not([data-transition]).past{transform:translate(-150%,0)}.reveal .slides>section[data-transition=slide].future,.reveal .slides>section[data-transition~=slide-in].future,.reveal.slide .slides>section:not([data-transition]).future{transform:translate(150%,0)}.reveal .slides>section>section[data-transition=slide].past,.reveal .slides>section>section[data-transition~=slide-out].past,.reveal.slide .slides>section>section:not([data-transition]).past{transform:translate(0,-150%)}.reveal .slides>section>section[data-transition=slide].future,.reveal .slides>section>section[data-transition~=slide-in].future,.reveal.slide .slides>section>section:not([data-transition]).future{transform:translate(0,150%)}.reveal .slides>section[data-transition=linear].past,.reveal .slides>section[data-transition~=linear-out].past,.reveal.linear .slides>section:not([data-transition]).past{transform:translate(-150%,0)}.reveal .slides>section[data-transition=linear].future,.reveal .slides>section[data-transition~=linear-in].future,.reveal.linear .slides>section:not([data-transition]).future{transform:translate(150%,0)}.reveal .slides>section>section[data-transition=linear].past,.reveal .slides>section>section[data-transition~=linear-out].past,.reveal.linear .slides>section>section:not([data-transition]).past{transform:translate(0,-150%)}.reveal .slides>section>section[data-transition=linear].future,.reveal .slides>section>section[data-transition~=linear-in].future,.reveal.linear .slides>section>section:not([data-transition]).future{transform:translate(0,150%)}.reveal .slides section[data-transition=default].stack,.reveal.default .slides section.stack{transform-style:preserve-3d}.reveal .slides>section[data-transition=default].past,.reveal .slides>section[data-transition~=default-out].past,.reveal.default .slides>section:not([data-transition]).past{transform:translate3d(-100%,0,0) rotateY(-90deg) translate3d(-100%,0,0)}.reveal .slides>section[data-transition=default].future,.reveal .slides>section[data-transition~=default-in].future,.reveal.default .slides>section:not([data-transition]).future{transform:translate3d(100%,0,0) rotateY(90deg) translate3d(100%,0,0)}.reveal .slides>section>section[data-transition=default].past,.reveal .slides>section>section[data-transition~=default-out].past,.reveal.default .slides>section>section:not([data-transition]).past{transform:translate3d(0,-300px,0) rotateX(70deg) translate3d(0,-300px,0)}.reveal .slides>section>section[data-transition=default].future,.reveal .slides>section>section[data-transition~=default-in].future,.reveal.default .slides>section>section:not([data-transition]).future{transform:translate3d(0,300px,0) rotateX(-70deg) translate3d(0,300px,0)}.reveal .slides section[data-transition=convex].stack,.reveal.convex .slides section.stack{transform-style:preserve-3d}.reveal .slides>section[data-transition=convex].past,.reveal .slides>section[data-transition~=convex-out].past,.reveal.convex .slides>section:not([data-transition]).past{transform:translate3d(-100%,0,0) rotateY(-90deg) translate3d(-100%,0,0)}.reveal .slides>section[data-transition=convex].future,.reveal .slides>section[data-transition~=convex-in].future,.reveal.convex .slides>section:not([data-transition]).future{transform:translate3d(100%,0,0) rotateY(90deg) translate3d(100%,0,0)}.reveal .slides>section>section[data-transition=convex].past,.reveal .slides>section>section[data-transition~=convex-out].past,.reveal.convex .slides>section>section:not([data-transition]).past{transform:translate3d(0,-300px,0) rotateX(70deg) translate3d(0,-300px,0)}.reveal .slides>section>section[data-transition=convex].future,.reveal .slides>section>section[data-transition~=convex-in].future,.reveal.convex .slides>section>section:not([data-transition]).future{transform:translate3d(0,300px,0) rotateX(-70deg) translate3d(0,300px,0)}.reveal .slides section[data-transition=concave].stack,.reveal.concave .slides section.stack{transform-style:preserve-3d}.reveal .slides>section[data-transition=concave].past,.reveal .slides>section[data-transition~=concave-out].past,.reveal.concave .slides>section:not([data-transition]).past{transform:translate3d(-100%,0,0) rotateY(90deg) translate3d(-100%,0,0)}.reveal .slides>section[data-transition=concave].future,.reveal .slides>section[data-transition~=concave-in].future,.reveal.concave .slides>section:not([data-transition]).future{transform:translate3d(100%,0,0) rotateY(-90deg) translate3d(100%,0,0)}.reveal .slides>section>section[data-transition=concave].past,.reveal .slides>section>section[data-transition~=concave-out].past,.reveal.concave .slides>section>section:not([data-transition]).past{transform:translate3d(0,-80%,0) rotateX(-70deg) translate3d(0,-80%,0)}.reveal .slides>section>section[data-transition=concave].future,.reveal .slides>section>section[data-transition~=concave-in].future,.reveal.concave .slides>section>section:not([data-transition]).future{transform:translate3d(0,80%,0) rotateX(70deg) translate3d(0,80%,0)}.reveal .slides section[data-transition=zoom],.reveal.zoom .slides section:not([data-transition]){transition-timing-function:ease}.reveal .slides>section[data-transition=zoom].past,.reveal .slides>section[data-transition~=zoom-out].past,.reveal.zoom .slides>section:not([data-transition]).past{visibility:hidden;transform:scale(16)}.reveal .slides>section[data-transition=zoom].future,.reveal .slides>section[data-transition~=zoom-in].future,.reveal.zoom .slides>section:not([data-transition]).future{visibility:hidden;transform:scale(.2)}.reveal .slides>section>section[data-transition=zoom].past,.reveal .slides>section>section[data-transition~=zoom-out].past,.reveal.zoom .slides>section>section:not([data-transition]).past{transform:scale(16)}.reveal .slides>section>section[data-transition=zoom].future,.reveal .slides>section>section[data-transition~=zoom-in].future,.reveal.zoom .slides>section>section:not([data-transition]).future{transform:scale(.2)}.reveal.cube .slides{perspective:1300px}.reveal.cube .slides section{padding:30px;min-height:700px;backface-visibility:hidden;box-sizing:border-box;transform-style:preserve-3d}.reveal.center.cube .slides section{min-height:0}.reveal.cube .slides section:not(.stack):before{content:"";position:absolute;display:block;width:100%;height:100%;left:0;top:0;background:rgba(0,0,0,.1);border-radius:4px;transform:translateZ(-20px)}.reveal.cube .slides section:not(.stack):after{content:"";position:absolute;display:block;width:90%;height:30px;left:5%;bottom:0;background:0 0;z-index:1;border-radius:4px;box-shadow:0 95px 25px rgba(0,0,0,.2);transform:translateZ(-90px) rotateX(65deg)}.reveal.cube .slides>section.stack{padding:0;background:0 0}.reveal.cube .slides>section.past{transform-origin:100% 0;transform:translate3d(-100%,0,0) rotateY(-90deg)}.reveal.cube .slides>section.future{transform-origin:0 0;transform:translate3d(100%,0,0) rotateY(90deg)}.reveal.cube .slides>section>section.past{transform-origin:0 100%;transform:translate3d(0,-100%,0) rotateX(90deg)}.reveal.cube .slides>section>section.future{transform-origin:0 0;transform:translate3d(0,100%,0) rotateX(-90deg)}.reveal.page .slides{perspective-origin:0 50%;perspective:3000px}.reveal.page .slides section{padding:30px;min-height:700px;box-sizing:border-box;transform-style:preserve-3d}.reveal.page .slides section.past{z-index:12}.reveal.page .slides section:not(.stack):before{content:"";position:absolute;display:block;width:100%;height:100%;left:0;top:0;background:rgba(0,0,0,.1);transform:translateZ(-20px)}.reveal.page .slides section:not(.stack):after{content:"";position:absolute;display:block;width:90%;height:30px;left:5%;bottom:0;background:0 0;z-index:1;border-radius:4px;box-shadow:0 95px 25px rgba(0,0,0,.2);-webkit-transform:translateZ(-90px) rotateX(65deg)}.reveal.page .slides>section.stack{padding:0;background:0 0}.reveal.page .slides>section.past{transform-origin:0 0;transform:translate3d(-40%,0,0) rotateY(-80deg)}.reveal.page .slides>section.future{transform-origin:100% 0;transform:translate3d(0,0,0)}.reveal.page .slides>section>section.past{transform-origin:0 0;transform:translate3d(0,-40%,0) rotateX(80deg)}.reveal.page .slides>section>section.future{transform-origin:0 100%;transform:translate3d(0,0,0)}.reveal .slides section[data-transition=fade],.reveal.fade .slides section:not([data-transition]),.reveal.fade .slides>section>section:not([data-transition]){transform:none;transition:opacity .5s}.reveal.fade.overview .slides section,.reveal.fade.overview .slides>section>section{transition:none}.reveal .slides section[data-transition=none],.reveal.none .slides section:not([data-transition]){transform:none;transition:none}.reveal .pause-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#000;visibility:hidden;opacity:0;z-index:100;transition:all 1s ease}.reveal .pause-overlay .resume-button{position:absolute;bottom:20px;right:20px;color:#ccc;border-radius:2px;padding:6px 14px;border:2px solid #ccc;font-size:16px;background:0 0;cursor:pointer}.reveal .pause-overlay .resume-button:hover{color:#fff;border-color:#fff}.reveal.paused .pause-overlay{visibility:visible;opacity:1}.reveal .no-transition,.reveal .no-transition *,.reveal .slides.disable-slide-transitions section{transition:none!important}.reveal .slides.disable-slide-transitions section{transform:none!important}.reveal .backgrounds{position:absolute;width:100%;height:100%;top:0;left:0;perspective:600px}.reveal .slide-background{display:none;position:absolute;width:100%;height:100%;opacity:0;visibility:hidden;overflow:hidden;background-color:rgba(0,0,0,0);transition:all .8s cubic-bezier(.26,.86,.44,.985)}.reveal .slide-background-content{position:absolute;width:100%;height:100%;background-position:50% 50%;background-repeat:no-repeat;background-size:cover}.reveal .slide-background.stack{display:block}.reveal .slide-background.present{opacity:1;visibility:visible;z-index:2}.print-pdf .reveal .slide-background{opacity:1!important;visibility:visible!important}.reveal .slide-background video{position:absolute;width:100%;height:100%;max-width:none;max-height:none;top:0;left:0;object-fit:cover}.reveal .slide-background[data-background-size=contain] video{object-fit:contain}.reveal>.backgrounds .slide-background[data-background-transition=none],.reveal[data-background-transition=none]>.backgrounds .slide-background:not([data-background-transition]){transition:none}.reveal>.backgrounds .slide-background[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background:not([data-background-transition]){opacity:1}.reveal>.backgrounds .slide-background.past[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background.past:not([data-background-transition]){transform:translate(-100%,0)}.reveal>.backgrounds .slide-background.future[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background.future:not([data-background-transition]){transform:translate(100%,0)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){transform:translate(0,-100%)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){transform:translate(0,100%)}.reveal>.backgrounds .slide-background.past[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(-100%,0,0) rotateY(-90deg) translate3d(-100%,0,0)}.reveal>.backgrounds .slide-background.future[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(100%,0,0) rotateY(90deg) translate3d(100%,0,0)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(0,-100%,0) rotateX(90deg) translate3d(0,-100%,0)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(0,100%,0) rotateX(-90deg) translate3d(0,100%,0)}.reveal>.backgrounds .slide-background.past[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(-100%,0,0) rotateY(90deg) translate3d(-100%,0,0)}.reveal>.backgrounds .slide-background.future[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(100%,0,0) rotateY(-90deg) translate3d(100%,0,0)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(0,-100%,0) rotateX(-90deg) translate3d(0,-100%,0)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(0,100%,0) rotateX(90deg) translate3d(0,100%,0)}.reveal>.backgrounds .slide-background[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background:not([data-background-transition]){transition-timing-function:ease}.reveal>.backgrounds .slide-background.past[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background.past:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(16)}.reveal>.backgrounds .slide-background.future[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background.future:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(.2)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(16)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(.2)}.reveal[data-transition-speed=fast]>.backgrounds .slide-background{transition-duration:.4s}.reveal[data-transition-speed=slow]>.backgrounds .slide-background{transition-duration:1.2s}.reveal [data-auto-animate-target^=unmatched]{will-change:opacity}.reveal section[data-auto-animate]:not(.stack):not([data-auto-animate=running]) [data-auto-animate-target^=unmatched]{opacity:0}.reveal.overview{perspective-origin:50% 50%;perspective:700px}.reveal.overview .slides{-moz-transform-style:preserve-3d}.reveal.overview .slides section{height:100%;top:0!important;opacity:1!important;overflow:hidden;visibility:visible!important;cursor:pointer;box-sizing:border-box}.reveal.overview .slides section.present,.reveal.overview .slides section:hover{outline:10px solid rgba(150,150,150,.4);outline-offset:10px}.reveal.overview .slides section .fragment{opacity:1;transition:none}.reveal.overview .slides section:after,.reveal.overview .slides section:before{display:none!important}.reveal.overview .slides>section.stack{padding:0;top:0!important;background:0 0;outline:0;overflow:visible}.reveal.overview .backgrounds{perspective:inherit;-moz-transform-style:preserve-3d}.reveal.overview .backgrounds .slide-background{opacity:1;visibility:visible;outline:10px solid rgba(150,150,150,.1);outline-offset:10px}.reveal.overview .backgrounds .slide-background.stack{overflow:visible}.reveal.overview .slides section,.reveal.overview-deactivating .slides section{transition:none}.reveal.overview .backgrounds .slide-background,.reveal.overview-deactivating .backgrounds .slide-background{transition:none}.reveal.rtl .slides,.reveal.rtl .slides h1,.reveal.rtl .slides h2,.reveal.rtl .slides h3,.reveal.rtl .slides h4,.reveal.rtl .slides h5,.reveal.rtl .slides h6{direction:rtl;font-family:sans-serif}.reveal.rtl code,.reveal.rtl pre{direction:ltr}.reveal.rtl ol,.reveal.rtl ul{text-align:right}.reveal.rtl .progress span{transform-origin:100% 0}.reveal.has-parallax-background .backgrounds{transition:all .8s ease}.reveal.has-parallax-background[data-transition-speed=fast] .backgrounds{transition-duration:.4s}.reveal.has-parallax-background[data-transition-speed=slow] .backgrounds{transition-duration:1.2s}.reveal>.overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1000;background:rgba(0,0,0,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:all .3s ease}.reveal>.overlay .spinner{position:absolute;display:block;top:50%;left:50%;width:32px;height:32px;margin:-16px 0 0 -16px;z-index:10;background-image:url(data:image/gif;base64,R0lGODlhIAAgAPMAAJmZmf%2F%2F%2F6%2Bvr8nJybW1tcDAwOjo6Nvb26ioqKOjo7Ozs%2FLy8vz8%2FAAAAAAAAAAAACH%2FC05FVFNDQVBFMi4wAwEAAAAh%2FhpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh%2BQQJCgAAACwAAAAAIAAgAAAE5xDISWlhperN52JLhSSdRgwVo1ICQZRUsiwHpTJT4iowNS8vyW2icCF6k8HMMBkCEDskxTBDAZwuAkkqIfxIQyhBQBFvAQSDITM5VDW6XNE4KagNh6Bgwe60smQUB3d4Rz1ZBApnFASDd0hihh12BkE9kjAJVlycXIg7CQIFA6SlnJ87paqbSKiKoqusnbMdmDC2tXQlkUhziYtyWTxIfy6BE8WJt5YJvpJivxNaGmLHT0VnOgSYf0dZXS7APdpB309RnHOG5gDqXGLDaC457D1zZ%2FV%2FnmOM82XiHRLYKhKP1oZmADdEAAAh%2BQQJCgAAACwAAAAAIAAgAAAE6hDISWlZpOrNp1lGNRSdRpDUolIGw5RUYhhHukqFu8DsrEyqnWThGvAmhVlteBvojpTDDBUEIFwMFBRAmBkSgOrBFZogCASwBDEY%2FCZSg7GSE0gSCjQBMVG023xWBhklAnoEdhQEfyNqMIcKjhRsjEdnezB%2BA4k8gTwJhFuiW4dokXiloUepBAp5qaKpp6%2BHo7aWW54wl7obvEe0kRuoplCGepwSx2jJvqHEmGt6whJpGpfJCHmOoNHKaHx61WiSR92E4lbFoq%2BB6QDtuetcaBPnW6%2BO7wDHpIiK9SaVK5GgV543tzjgGcghAgAh%2BQQJCgAAACwAAAAAIAAgAAAE7hDISSkxpOrN5zFHNWRdhSiVoVLHspRUMoyUakyEe8PTPCATW9A14E0UvuAKMNAZKYUZCiBMuBakSQKG8G2FzUWox2AUtAQFcBKlVQoLgQReZhQlCIJesQXI5B0CBnUMOxMCenoCfTCEWBsJColTMANldx15BGs8B5wlCZ9Po6OJkwmRpnqkqnuSrayqfKmqpLajoiW5HJq7FL1Gr2mMMcKUMIiJgIemy7xZtJsTmsM4xHiKv5KMCXqfyUCJEonXPN2rAOIAmsfB3uPoAK%2B%2BG%2Bw48edZPK%2BM6hLJpQg484enXIdQFSS1u6UhksENEQAAIfkECQoAAAAsAAAAACAAIAAABOcQyEmpGKLqzWcZRVUQnZYg1aBSh2GUVEIQ2aQOE%2BG%2BcD4ntpWkZQj1JIiZIogDFFyHI0UxQwFugMSOFIPJftfVAEoZLBbcLEFhlQiqGp1Vd140AUklUN3eCA51C1EWMzMCezCBBmkxVIVHBWd3HHl9JQOIJSdSnJ0TDKChCwUJjoWMPaGqDKannasMo6WnM562R5YluZRwur0wpgqZE7NKUm%2BFNRPIhjBJxKZteWuIBMN4zRMIVIhffcgojwCF117i4nlLnY5ztRLsnOk%2BaV%2BoJY7V7m76PdkS4trKcdg0Zc0tTcKkRAAAIfkECQoAAAAsAAAAACAAIAAABO4QyEkpKqjqzScpRaVkXZWQEximw1BSCUEIlDohrft6cpKCk5xid5MNJTaAIkekKGQkWyKHkvhKsR7ARmitkAYDYRIbUQRQjWBwJRzChi9CRlBcY1UN4g0%2FVNB0AlcvcAYHRyZPdEQFYV8ccwR5HWxEJ02YmRMLnJ1xCYp0Y5idpQuhopmmC2KgojKasUQDk5BNAwwMOh2RtRq5uQuPZKGIJQIGwAwGf6I0JXMpC8C7kXWDBINFMxS4DKMAWVWAGYsAdNqW5uaRxkSKJOZKaU3tPOBZ4DuK2LATgJhkPJMgTwKCdFjyPHEnKxFCDhEAACH5BAkKAAAALAAAAAAgACAAAATzEMhJaVKp6s2nIkolIJ2WkBShpkVRWqqQrhLSEu9MZJKK9y1ZrqYK9WiClmvoUaF8gIQSNeF1Er4MNFn4SRSDARWroAIETg1iVwuHjYB1kYc1mwruwXKC9gmsJXliGxc%2BXiUCby9ydh1sOSdMkpMTBpaXBzsfhoc5l58Gm5yToAaZhaOUqjkDgCWNHAULCwOLaTmzswadEqggQwgHuQsHIoZCHQMMQgQGubVEcxOPFAcMDAYUA85eWARmfSRQCdcMe0zeP1AAygwLlJtPNAAL19DARdPzBOWSm1brJBi45soRAWQAAkrQIykShQ9wVhHCwCQCACH5BAkKAAAALAAAAAAgACAAAATrEMhJaVKp6s2nIkqFZF2VIBWhUsJaTokqUCoBq%2BE71SRQeyqUToLA7VxF0JDyIQh%2FMVVPMt1ECZlfcjZJ9mIKoaTl1MRIl5o4CUKXOwmyrCInCKqcWtvadL2SYhyASyNDJ0uIiRMDjI0Fd30%2FiI2UA5GSS5UDj2l6NoqgOgN4gksEBgYFf0FDqKgHnyZ9OX8HrgYHdHpcHQULXAS2qKpENRg7eAMLC7kTBaixUYFkKAzWAAnLC7FLVxLWDBLKCwaKTULgEwbLA4hJtOkSBNqITT3xEgfLpBtzE%2FjiuL04RGEBgwWhShRgQExHBAAh%2BQQJCgAAACwAAAAAIAAgAAAE7xDISWlSqerNpyJKhWRdlSAVoVLCWk6JKlAqAavhO9UkUHsqlE6CwO1cRdCQ8iEIfzFVTzLdRAmZX3I2SfZiCqGk5dTESJeaOAlClzsJsqwiJwiqnFrb2nS9kmIcgEsjQydLiIlHehhpejaIjzh9eomSjZR%2BipslWIRLAgMDOR2DOqKogTB9pCUJBagDBXR6XB0EBkIIsaRsGGMMAxoDBgYHTKJiUYEGDAzHC9EACcUGkIgFzgwZ0QsSBcXHiQvOwgDdEwfFs0sDzt4S6BK4xYjkDOzn0unFeBzOBijIm1Dgmg5YFQwsCMjp1oJ8LyIAACH5BAkKAAAALAAAAAAgACAAAATwEMhJaVKp6s2nIkqFZF2VIBWhUsJaTokqUCoBq%2BE71SRQeyqUToLA7VxF0JDyIQh%2FMVVPMt1ECZlfcjZJ9mIKoaTl1MRIl5o4CUKXOwmyrCInCKqcWtvadL2SYhyASyNDJ0uIiUd6GGl6NoiPOH16iZKNlH6KmyWFOggHhEEvAwwMA0N9GBsEC6amhnVcEwavDAazGwIDaH1ipaYLBUTCGgQDA8NdHz0FpqgTBwsLqAbWAAnIA4FWKdMLGdYGEgraigbT0OITBcg5QwPT4xLrROZL6AuQAPUS7bxLpoWidY0JtxLHKhwwMJBTHgPKdEQAACH5BAkKAAAALAAAAAAgACAAAATrEMhJaVKp6s2nIkqFZF2VIBWhUsJaTokqUCoBq%2BE71SRQeyqUToLA7VxF0JDyIQh%2FMVVPMt1ECZlfcjZJ9mIKoaTl1MRIl5o4CUKXOwmyrCInCKqcWtvadL2SYhyASyNDJ0uIiUd6GAULDJCRiXo1CpGXDJOUjY%2BYip9DhToJA4RBLwMLCwVDfRgbBAaqqoZ1XBMHswsHtxtFaH1iqaoGNgAIxRpbFAgfPQSqpbgGBqUD1wBXeCYp1AYZ19JJOYgH1KwA4UBvQwXUBxPqVD9L3sbp2BNk2xvvFPJd%2BMFCN6HAAIKgNggY0KtEBAAh%2BQQJCgAAACwAAAAAIAAgAAAE6BDISWlSqerNpyJKhWRdlSAVoVLCWk6JKlAqAavhO9UkUHsqlE6CwO1cRdCQ8iEIfzFVTzLdRAmZX3I2SfYIDMaAFdTESJeaEDAIMxYFqrOUaNW4E4ObYcCXaiBVEgULe0NJaxxtYksjh2NLkZISgDgJhHthkpU4mW6blRiYmZOlh4JWkDqILwUGBnE6TYEbCgevr0N1gH4At7gHiRpFaLNrrq8HNgAJA70AWxQIH1%2BvsYMDAzZQPC9VCNkDWUhGkuE5PxJNwiUK4UfLzOlD4WvzAHaoG9nxPi5d%2BjYUqfAhhykOFwJWiAAAIfkECQoAAAAsAAAAACAAIAAABPAQyElpUqnqzaciSoVkXVUMFaFSwlpOCcMYlErAavhOMnNLNo8KsZsMZItJEIDIFSkLGQoQTNhIsFehRww2CQLKF0tYGKYSg%2BygsZIuNqJksKgbfgIGepNo2cIUB3V1B3IvNiBYNQaDSTtfhhx0CwVPI0UJe0%2Bbm4g5VgcGoqOcnjmjqDSdnhgEoamcsZuXO1aWQy8KAwOAuTYYGwi7w5h%2BKr0SJ8MFihpNbx%2B4Erq7BYBuzsdiH1jCAzoSfl0rVirNbRXlBBlLX%2BBP0XJLAPGzTkAuAOqb0WT5AH7OcdCm5B8TgRwSRKIHQtaLCwg1RAAAOwAAAAAAAAAAAA%3D%3D);visibility:visible;opacity:.6;transition:all .3s ease}.reveal>.overlay header{position:absolute;left:0;top:0;width:100%;padding:5px;z-index:2;box-sizing:border-box}.reveal>.overlay header a{display:inline-block;width:40px;height:40px;line-height:36px;padding:0 10px;float:right;opacity:.6;box-sizing:border-box}.reveal>.overlay header a:hover{opacity:1}.reveal>.overlay header a .icon{display:inline-block;width:20px;height:20px;background-position:50% 50%;background-size:100%;background-repeat:no-repeat}.reveal>.overlay header a.close .icon{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABkklEQVRYR8WX4VHDMAxG6wnoJrABZQPYBCaBTWAD2g1gE5gg6OOsXuxIlr40d81dfrSJ9V4c2VLK7spHuTJ/5wpM07QXuXc5X0opX2tEJcadjHuV80li/FgxTIEK/5QBCICBD6xEhSMGHgQPgBgLiYVAB1dpSqKDawxTohFw4JSEA3clzgIBPCURwE2JucBR7rhPJJv5OpJwDX+SfDjgx1wACQeJG1aChP9K/IMmdZ8DtESV1WyP3Bt4MwM6sj4NMxMYiqUWHQu4KYA/SYkIjOsm3BXYWMKFDwU2khjCQ4ELJUJ4SmClRArOCmSXGuKma0fYD5CbzHxFpCSGAhfAVSSUGDUk2BWZaff2g6GE15BsBQ9nwmpIGDiyHQddwNTMKkbZaf9fajXQca1EX44puJZUsnY0ObGmITE3GVLCbEhQUjGVt146j6oasWN+49Vph2w1pZ5EansNZqKBm1txbU57iRRcZ86RWMDdWtBJUHBHwoQPi1GV+JCbntmvok7iTX4/Up9mgyTc/FJYDTcndgH/AA5A/CHsyEkVAAAAAElFTkSuQmCC)}.reveal>.overlay header a.external .icon{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAcElEQVRYR+2WSQoAIQwEzf8f7XiOMkUQxUPlGkM3hVmiQfQR9GYnH1SsAQlI4DiBqkCMoNb9y2e90IAEJPAcgdznU9+engMaeJ7Azh5Y1U67gAho4DqBqmB1buAf0MB1AlVBek83ZPkmJMGc1wAR+AAqod/B97TRpQAAAABJRU5ErkJggg==)}.reveal>.overlay .viewport{position:absolute;display:flex;top:50px;right:0;bottom:0;left:0}.reveal>.overlay.overlay-preview .viewport iframe{width:100%;height:100%;max-width:100%;max-height:100%;border:0;opacity:0;visibility:hidden;transition:all .3s ease}.reveal>.overlay.overlay-preview.loaded .viewport iframe{opacity:1;visibility:visible}.reveal>.overlay.overlay-preview.loaded .viewport-inner{position:absolute;z-index:-1;left:0;top:45%;width:100%;text-align:center;letter-spacing:normal}.reveal>.overlay.overlay-preview .x-frame-error{opacity:0;transition:opacity .3s ease .3s}.reveal>.overlay.overlay-preview.loaded .x-frame-error{opacity:1}.reveal>.overlay.overlay-preview.loaded .spinner{opacity:0;visibility:hidden;transform:scale(.2)}.reveal>.overlay.overlay-help .viewport{overflow:auto;color:#fff}.reveal>.overlay.overlay-help .viewport .viewport-inner{width:600px;margin:auto;padding:20px 20px 80px 20px;text-align:center;letter-spacing:normal}.reveal>.overlay.overlay-help .viewport .viewport-inner .title{font-size:20px}.reveal>.overlay.overlay-help .viewport .viewport-inner table{border:1px solid #fff;border-collapse:collapse;font-size:16px}.reveal>.overlay.overlay-help .viewport .viewport-inner table td,.reveal>.overlay.overlay-help .viewport .viewport-inner table th{width:200px;padding:14px;border:1px solid #fff;vertical-align:middle}.reveal>.overlay.overlay-help .viewport .viewport-inner table th{padding-top:20px;padding-bottom:20px}.reveal .playback{position:absolute;left:15px;bottom:20px;z-index:30;cursor:pointer;transition:all .4s ease;-webkit-tap-highlight-color:transparent}.reveal.overview .playback{opacity:0;visibility:hidden}.reveal .hljs{min-height:100%}.reveal .hljs table{margin:initial}.reveal .hljs-ln-code,.reveal .hljs-ln-numbers{padding:0;border:0}.reveal .hljs-ln-numbers{opacity:.6;padding-right:.75em;text-align:right;vertical-align:top}.reveal .hljs.has-highlights tr:not(.highlight-line){opacity:.4}.reveal .hljs.has-highlights.fragment{transition:all .2s ease}.reveal .hljs:not(:first-child).fragment{position:absolute;top:0;left:0;width:100%;box-sizing:border-box}.reveal pre[data-auto-animate-target]{overflow:hidden}.reveal pre[data-auto-animate-target] code{height:100%}.reveal .roll{display:inline-block;line-height:1.2;overflow:hidden;vertical-align:top;perspective:400px;perspective-origin:50% 50%}.reveal .roll:hover{background:0 0;text-shadow:none}.reveal .roll span{display:block;position:relative;padding:0 2px;pointer-events:none;transition:all .4s ease;transform-origin:50% 0;transform-style:preserve-3d;backface-visibility:hidden}.reveal .roll:hover span{background:rgba(0,0,0,.5);transform:translate3d(0,0,-45px) rotateX(90deg)}.reveal .roll span:after{content:attr(data-title);display:block;position:absolute;left:0;top:0;padding:0 2px;backface-visibility:hidden;transform-origin:50% 0;transform:translate3d(0,110%,0) rotateX(-90deg)}.reveal aside.notes{display:none}.reveal .speaker-notes{display:none;position:absolute;width:33.3333333333%;height:100%;top:0;left:100%;padding:14px 18px 14px 18px;z-index:1;font-size:18px;line-height:1.4;border:1px solid rgba(0,0,0,.05);color:#222;background-color:#f5f5f5;overflow:auto;box-sizing:border-box;text-align:left;font-family:Helvetica,sans-serif;-webkit-overflow-scrolling:touch}.reveal .speaker-notes .notes-placeholder{color:#ccc;font-style:italic}.reveal .speaker-notes:focus{outline:0}.reveal .speaker-notes:before{content:"Speaker notes";display:block;margin-bottom:10px;opacity:.5}.reveal.show-notes{max-width:75%;overflow:visible}.reveal.show-notes .speaker-notes{display:block}@media screen and (min-width:1600px){.reveal .speaker-notes{font-size:20px}}@media screen and (max-width:1024px){.reveal.show-notes{border-left:0;max-width:none;max-height:70%;max-height:70vh;overflow:visible}.reveal.show-notes .speaker-notes{top:100%;left:0;width:100%;height:30vh;border:0}}@media screen and (max-width:600px){.reveal.show-notes{max-height:60%;max-height:60vh}.reveal.show-notes .speaker-notes{top:100%;height:40vh}.reveal .speaker-notes{font-size:14px}}.reveal .jump-to-slide{position:absolute;top:15px;left:15px;z-index:30;font-size:32px;-webkit-tap-highlight-color:transparent}.reveal .jump-to-slide-input{background:0 0;padding:8px;font-size:inherit;color:currentColor;border:0}.reveal .jump-to-slide-input::placeholder{color:currentColor;opacity:.5}.reveal.has-dark-background .jump-to-slide-input{color:#fff}.reveal.has-light-background .jump-to-slide-input{color:#222}.reveal .jump-to-slide-input:focus{outline:0}.zoomed .reveal *,.zoomed .reveal :after,.zoomed .reveal :before{backface-visibility:visible!important}.zoomed .reveal .controls,.zoomed .reveal .progress{opacity:0}.zoomed .reveal .roll span{background:0 0}.zoomed .reveal .roll span:after{visibility:hidden}.reveal-viewport.loading-scroll-mode{visibility:hidden}.reveal-viewport.reveal-scroll{margin:0 auto;overflow:auto;overflow-x:hidden;overflow-y:auto;z-index:1;--r-scrollbar-width:7px;--r-scrollbar-trigger-size:5px;--r-controls-spacing:8px}@media screen and (max-width:500px){.reveal-viewport.reveal-scroll{--r-scrollbar-width:3px;--r-scrollbar-trigger-size:3px}}.reveal-viewport.reveal-scroll .backgrounds,.reveal-viewport.reveal-scroll .controls,.reveal-viewport.reveal-scroll .playback,.reveal-viewport.reveal-scroll .progress,.reveal-viewport.reveal-scroll .slide-number,.reveal-viewport.reveal-scroll .speaker-notes{display:none!important}.reveal-viewport.reveal-scroll .overlay,.reveal-viewport.reveal-scroll .pause-overlay{position:fixed}.reveal-viewport.reveal-scroll .reveal{overflow:visible;touch-action:manipulation}.reveal-viewport.reveal-scroll .slides{position:static;pointer-events:initial;left:auto;top:auto;width:100%!important;margin:0;padding:0;overflow:visible;display:block;perspective:none;perspective-origin:50% 50%}.reveal-viewport.reveal-scroll .scroll-page{position:relative;width:100%;height:calc(var(--page-height) + var(--page-scroll-padding));z-index:1;overflow:visible}.reveal-viewport.reveal-scroll .scroll-page-sticky{position:sticky;height:var(--page-height);top:0}.reveal-viewport.reveal-scroll .scroll-page-content{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}.reveal-viewport.reveal-scroll .scroll-page section{visibility:visible!important;display:block!important;position:absolute!important;width:var(--slide-width)!important;height:var(--slide-height)!important;top:50%!important;left:50%!important;opacity:1!important;transform:scale(var(--slide-scale)) translate(-50%,-50%)!important;transform-style:flat!important;transform-origin:0 0!important}.reveal-viewport.reveal-scroll .slide-background{display:block!important;position:absolute;top:0;left:0;width:100%;height:100%;z-index:auto!important;visibility:visible;opacity:1;touch-action:manipulation}.reveal-viewport.reveal-scroll[data-scrollbar=auto]::-webkit-scrollbar,.reveal-viewport.reveal-scroll[data-scrollbar=true]::-webkit-scrollbar{display:none}.reveal-viewport.reveal-scroll[data-scrollbar=auto],.reveal-viewport.reveal-scroll[data-scrollbar=true]{scrollbar-width:none}.reveal-viewport.has-dark-background,.reveal.has-dark-background{--r-overlay-element-bg-color:240,240,240;--r-overlay-element-fg-color:0,0,0}.reveal-viewport.has-light-background,.reveal.has-light-background{--r-overlay-element-bg-color:0,0,0;--r-overlay-element-fg-color:240,240,240}.reveal-viewport.reveal-scroll .scrollbar{position:sticky;top:50%;z-index:20;opacity:0;transition:all .3s ease}.reveal-viewport.reveal-scroll .scrollbar.visible,.reveal-viewport.reveal-scroll .scrollbar:hover{opacity:1}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-inner{position:absolute;width:var(--r-scrollbar-width);height:calc(var(--viewport-height) - var(--r-controls-spacing) * 2);right:var(--r-controls-spacing);top:0;transform:translateY(-50%);border-radius:var(--r-scrollbar-width);z-index:10}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-playhead{position:absolute;width:var(--r-scrollbar-width);height:var(--r-scrollbar-width);top:0;left:0;border-radius:var(--r-scrollbar-width);background-color:rgba(var(--r-overlay-element-bg-color),1);z-index:11;transition:background-color .2s ease}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide{position:absolute;width:100%;background-color:rgba(var(--r-overlay-element-bg-color),.2);box-shadow:0 0 0 1px rgba(var(--r-overlay-element-fg-color),.1);border-radius:var(--r-scrollbar-width);transition:background-color .2s ease}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide:after{content:"";position:absolute;width:200%;height:100%;top:0;left:-50%;background:rgba(0,0,0,0);z-index:-1}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active,.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide:hover{background-color:rgba(var(--r-overlay-element-bg-color),.4)}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-trigger{position:absolute;width:100%;transition:background-color .2s ease}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active.has-triggers{background-color:rgba(var(--r-overlay-element-bg-color),.4);z-index:10}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger:after{content:"";position:absolute;width:var(--r-scrollbar-trigger-size);height:var(--r-scrollbar-trigger-size);border-radius:20px;top:50%;left:50%;transform:translate(-50%,-50%);background-color:rgba(var(--r-overlay-element-bg-color),1);transition:transform .2s ease,opacity .2s ease;opacity:.4}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger.active:after,.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger.active~.scrollbar-trigger:after{opacity:1}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger~.scrollbar-trigger.active:after{transform:translate(calc(var(--r-scrollbar-width) * -2),0);background-color:rgba(var(--r-overlay-element-bg-color),1)}html.reveal-print *{-webkit-print-color-adjust:exact}html.reveal-print{width:100%;height:100%;overflow:visible}html.reveal-print body{margin:0 auto!important;border:0;padding:0;float:none!important;overflow:visible}html.reveal-print .nestedarrow,html.reveal-print .reveal .controls,html.reveal-print .reveal .playback,html.reveal-print .reveal .progress,html.reveal-print .reveal.overview,html.reveal-print .state-background{display:none!important}html.reveal-print .reveal pre code{overflow:hidden!important}html.reveal-print .reveal{width:auto!important;height:auto!important;overflow:hidden!important}html.reveal-print .reveal .slides{position:static;width:100%!important;height:auto!important;zoom:1!important;pointer-events:initial;left:auto;top:auto;margin:0!important;padding:0!important;overflow:visible;display:block;perspective:none;perspective-origin:50% 50%}html.reveal-print .reveal .slides .pdf-page{position:relative;overflow:hidden;z-index:1;page-break-after:always}html.reveal-print .reveal .slides .pdf-page:last-of-type{page-break-after:avoid}html.reveal-print .reveal .slides section{visibility:visible!important;display:block!important;position:absolute!important;margin:0!important;padding:0!important;box-sizing:border-box!important;min-height:1px;opacity:1!important;transform-style:flat!important;transform:none!important}html.reveal-print .reveal section.stack{position:relative!important;margin:0!important;padding:0!important;page-break-after:avoid!important;height:auto!important;min-height:auto!important}html.reveal-print .reveal img{box-shadow:none}html.reveal-print .reveal .backgrounds{display:none}html.reveal-print .reveal .slide-background{display:block!important;position:absolute;top:0;left:0;width:100%;height:100%;z-index:auto!important}html.reveal-print .reveal.show-notes{max-width:none;max-height:none}html.reveal-print .reveal .speaker-notes-pdf{display:block;width:100%;height:auto;max-height:none;top:auto;right:auto;bottom:auto;left:auto;z-index:100}html.reveal-print .reveal .speaker-notes-pdf[data-layout=separate-page]{position:relative;color:inherit;background-color:transparent;padding:20px;page-break-after:always;border:0}html.reveal-print .reveal .slide-number-pdf{display:block;position:absolute;font-size:14px;visibility:visible}html.reveal-print .aria-status{display:none}@media print{html:not(.print-pdf){overflow:visible;width:auto;height:auto}html:not(.print-pdf) body{margin:0;padding:0;overflow:visible}html:not(.print-pdf) .reveal{background:#fff;font-size:20pt}html:not(.print-pdf) .reveal .backgrounds,html:not(.print-pdf) .reveal .controls,html:not(.print-pdf) .reveal .progress,html:not(.print-pdf) .reveal .slide-number,html:not(.print-pdf) .reveal .state-background{display:none!important}html:not(.print-pdf) .reveal li,html:not(.print-pdf) .reveal p,html:not(.print-pdf) .reveal td{font-size:20pt!important;color:#000}html:not(.print-pdf) .reveal h1,html:not(.print-pdf) .reveal h2,html:not(.print-pdf) .reveal h3,html:not(.print-pdf) .reveal h4,html:not(.print-pdf) .reveal h5,html:not(.print-pdf) .reveal h6{color:#000!important;height:auto;line-height:normal;text-align:left;letter-spacing:normal}html:not(.print-pdf) .reveal h1{font-size:28pt!important}html:not(.print-pdf) .reveal h2{font-size:24pt!important}html:not(.print-pdf) .reveal h3{font-size:22pt!important}html:not(.print-pdf) .reveal h4{font-size:22pt!important;font-variant:small-caps}html:not(.print-pdf) .reveal h5{font-size:21pt!important}html:not(.print-pdf) .reveal h6{font-size:20pt!important;font-style:italic}html:not(.print-pdf) .reveal a:link,html:not(.print-pdf) .reveal a:visited{color:#000!important;font-weight:700;text-decoration:underline}html:not(.print-pdf) .reveal div,html:not(.print-pdf) .reveal ol,html:not(.print-pdf) .reveal p,html:not(.print-pdf) .reveal ul{visibility:visible;position:static;width:auto;height:auto;display:block;overflow:visible;margin:0;text-align:left!important}html:not(.print-pdf) .reveal pre,html:not(.print-pdf) .reveal table{margin-left:0;margin-right:0}html:not(.print-pdf) .reveal pre code{padding:20px}html:not(.print-pdf) .reveal blockquote{margin:20px 0}html:not(.print-pdf) .reveal .slides{position:static!important;width:auto!important;height:auto!important;left:0!important;top:0!important;margin-left:0!important;margin-top:0!important;padding:0!important;zoom:1!important;transform:none!important;overflow:visible!important;display:block!important;text-align:left!important;perspective:none;perspective-origin:50% 50%}html:not(.print-pdf) .reveal .slides section{visibility:visible!important;position:static!important;width:auto!important;height:auto!important;display:block!important;overflow:visible!important;left:0!important;top:0!important;margin-left:0!important;margin-top:0!important;padding:60px 20px!important;z-index:auto!important;opacity:1!important;page-break-after:always!important;transform-style:flat!important;transform:none!important;transition:none!important}html:not(.print-pdf) .reveal .slides section.stack{padding:0!important}html:not(.print-pdf) .reveal .slides section:last-of-type{page-break-after:avoid!important}html:not(.print-pdf) .reveal .slides section .fragment{opacity:1!important;visibility:visible!important;transform:none!important}html:not(.print-pdf) .reveal .r-fit-text{white-space:normal!important}html:not(.print-pdf) .reveal section img{display:block;margin:15px 0;background:#fff;border:1px solid #666;box-shadow:none}html:not(.print-pdf) .reveal section small{font-size:.8em}html:not(.print-pdf) .reveal .hljs{max-height:100%;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;font-size:15pt}html:not(.print-pdf) .reveal .hljs .hljs-ln-numbers{white-space:nowrap}html:not(.print-pdf) .reveal .hljs td{font-size:inherit!important;color:inherit!important}}
+/* ---------- metropolis-like theme, 16:9, large type ---------- */
+:root {
+  --bg: #FAFAFA; --fg: #23373B; --muted: #6F7F84; --accent: #EB811B; --green: #14B03D;
+  --band: #23373B; --band-fg: #FAFAFA; --code-bg: #EEF1F2; --rule: #C9D1D4; --box: #FFF4EA;
+}
+html, body { background: var(--bg); color: var(--fg); margin: 0; }
+.reveal { font-family: "Fira Sans", "Helvetica Neue", Arial, sans-serif; font-weight: 300; font-size: 38px; line-height: 1.35; color: var(--fg); }
+.reveal .slides { text-align: left; }
+.reveal .slides section { padding: 0 90px 0 90px; box-sizing: border-box; height: 100%; }
+.reveal strong, .reveal b { font-weight: 500; }
+.reveal em { font-style: italic; }
+.reveal h1, .reveal h2, .reveal h3 { font-family: "Fira Sans", sans-serif; font-weight: 400; letter-spacing: -0.01em; text-transform: none; text-shadow: none; }
+.reveal h2 { font-size: 54px; line-height: 1.15; margin: 0 -90px 38px -90px; padding: 26px 90px 22px 90px; background: var(--band); color: var(--band-fg); }
+.reveal h3 { font-size: 40px; color: var(--fg); margin: 0 0 16px 0; }
+.reveal p { margin: 0 0 18px 0; }
+.reveal ul, .reveal ol { margin: 0 0 22px 0; padding-left: 1.1em; }
+.reveal li { margin: 0 0 6px 0; }
+.reveal li li { font-size: 0.92em; }
+.reveal a { color: var(--accent); }
+.reveal .muted { color: var(--muted); }
+.reveal .accent { color: var(--accent); }
+.reveal .small { font-size: 0.78em; }
+.reveal .progress { color: var(--accent); height: 6px; }
+.reveal .slide-number { font-family: "Fira Mono", monospace; font-size: 20px; color: var(--muted); background: transparent; right: 24px; bottom: 16px; }
+.reveal .controls { color: var(--accent); }
+
+/* title slide */
+.reveal section.title { background: var(--band); color: var(--band-fg); padding: 90px 110px; }
+.reveal section.title .eyebrow { font-family: "Fira Mono", monospace; font-size: 26px; color: var(--accent); letter-spacing: .06em; margin-bottom: 40px; }
+.reveal section.title h1 { font-size: 78px; font-weight: 300; color: var(--band-fg); margin: 0 0 14px 0; line-height: 1.1; }
+.reveal section.title .sub { font-size: 40px; font-weight: 300; color: #CFD8DB; margin-bottom: 70px; }
+.reveal section.title .meta { font-size: 26px; color: #9FB0B5; }
+.reveal section.title .rule { width: 120px; height: 5px; background: var(--accent); margin: 34px 0 34px 0; }
+
+/* callout box, like a metropolis alert block */
+.reveal .box { border-left: 8px solid var(--accent); background: var(--box); padding: 18px 28px; margin: 30px 0 0 0; font-weight: 400; font-size: 0.8em; }
+.reveal .box.small { font-size: 0.8em; }
+.reveal table.counts td:last-child { text-align: right; padding-right: 0; }
+.reveal .cols p { text-align: left; }
+.reveal mjx-container[display="true"] { margin: 6px 0 !important; }
+
+/* tables: horizontal rules only */
+.reveal table { border-collapse: collapse; margin: 0 0 22px 0; font-size: 0.86em; width: 100%; }
+.reveal table th { font-weight: 500; text-align: left; border-bottom: 3px solid var(--fg); padding: 8px 18px 10px 0; }
+.reveal table td { border-bottom: 1px solid var(--rule); padding: 8px 18px 8px 0; vertical-align: top; }
+.reveal table tr:last-child td { border-bottom: 0; }
+.reveal table td.s { font-family: "Fira Mono", monospace; font-size: 0.85em; color: var(--muted); white-space: nowrap; }
+
+/* code */
+.reveal code { font-family: "Fira Mono", "Menlo", monospace; font-size: 0.88em; }
+.reveal pre { font-family: "Fira Mono", monospace; font-size: 32px; line-height: 1.55; width: 100%; box-sizing: border-box; margin: 8px 0 26px 0; box-shadow: none; overflow: visible; }
+.reveal pre code { display: block; font-size: 1em; line-height: 1.6; background: var(--code-bg); color: var(--fg); padding: 24px 34px; border-radius: 4px; max-height: none; overflow-x: auto; overflow-y: visible; white-space: pre; }
+.reveal pre code .cm { color: var(--muted); font-style: italic; }
+.reveal pre code .kw { color: #2A6F97; }
+.reveal pre code .cons { color: var(--accent); }
+/* highlight.js mapping */
+.hljs-keyword, .hljs-built_in { color: #2A6F97; }
+.hljs-type { color: var(--accent); }
+.hljs-string { color: var(--green); }
+.hljs-comment { color: var(--muted); font-style: italic; }
+.hljs-number, .hljs-literal { color: #7A3E9D; }
+
+/* two columns */
+.reveal .cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 50px; }
+.reveal .cols > * { min-width: 0; }
+
+/* speaker notes are hidden in the deck */
+.reveal aside.notes { display: none; }
+
+/* print */
+@media print { .reveal h2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+
+/* part dividers: the title theme, one size down */
+.reveal section.part { background: var(--band); color: var(--band-fg); padding: 120px 110px; }
+.reveal section.part .eyebrow { font-family: "Fira Mono", monospace; font-size: 26px; color: var(--accent); letter-spacing: .06em; margin-bottom: 36px; }
+.reveal section.part h1 { font-size: 72px; font-weight: 300; color: var(--band-fg); margin: 0 0 16px 0; line-height: 1.1; }
+.reveal section.part .sub { font-size: 38px; font-weight: 300; color: #CFD8DB; }
+/* live demo */
+.reveal button.run { font-family: "Fira Sans", sans-serif; font-size: 26px; font-weight: 500; color: #fff; background: var(--accent); border: 0; border-radius: 4px; padding: 6px 22px; cursor: pointer; }
+.reveal button.run:hover { filter: brightness(1.08); }
+.reveal pre.out { font-size: 30px; line-height: 1.5; background: #1E2A2E; color: #F2B04C; padding: 18px 28px; border-radius: 4px; margin: 0 0 22px 0; min-height: 1.6em; white-space: pre; box-sizing: border-box; max-width: 100%; overflow-x: auto; }
+.reveal .cols h3 { font-size: 32px; color: var(--muted); margin: 0 0 8px 0; }
+.reveal .cols pre { font-size: 23px; margin: 6px 0 18px 0; }
+.reveal .cols pre code { padding: 18px 24px; }
+.reveal .cols p { font-size: 0.88em; margin-bottom: 12px; }
+.reveal .cols li { font-size: 0.88em; }
+.reveal script.src { display: none; }
+
+.reveal .cols pre.out { font-size: 26px; }
+.reveal .slides section .fragment.visible { opacity: 1; visibility: inherit; }
+/* a current-visible fragment (the carousel panels) shows only while it is the current one */
+.reveal .slides section .fragment.current-visible.visible:not(.current-fragment) { opacity: 0; visibility: hidden; }
+/* footline (current part) and the T overlay */
+.reveal .toc { position: absolute; inset: 0; background: rgba(35, 55, 59, 0.94); color: var(--band-fg); z-index: 40; display: flex; align-items: center; justify-content: center; }
+.reveal .toc[hidden] { display: none; }
+.reveal .toc-inner { min-width: 700px; }
+.reveal .toc-title { font-size: 26px; color: var(--accent); font-family: "Fira Mono", monospace; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 26px; }
+.reveal .toc-title .muted { color: #9FB0B5; text-transform: none; letter-spacing: 0; }
+.reveal .toc ol { list-style: none; padding: 0; margin: 0; counter-reset: part; }
+.reveal .toc li { font-size: 34px; padding: 12px 18px; border-radius: 4px; cursor: pointer; counter-increment: part; }
+.reveal .toc li::before { content: counter(part) "  "; font-family: "Fira Mono", monospace; color: var(--accent); font-size: 26px; }
+.reveal .toc li:hover { background: rgba(255,255,255,0.08); }
+.reveal .toc li .muted { color: #9FB0B5; font-size: 26px; margin-left: 12px; }
+/* the one focus of a slide */
+.reveal .hl { color: var(--accent); font-weight: 500; font-style: normal; }
+.reveal .lang { color: #2A6F97; font-weight: 500; }
+.reveal h2 .hl { color: var(--accent); }
+/* footnote pinned above the footline */
+.reveal .fn { position: absolute; left: 90px; right: 90px; bottom: 72px; margin: 0; font-size: 27px; line-height: 1.35; color: var(--muted); }
+.reveal sup { font-size: 0.8em; font-weight: 500; color: var(--accent); }
+.reveal table.names td:first-child { width: 56%; }
+/* transcripts (compiler output shown verbatim) and the kinds × operations matrix */
+.reveal pre.out.tr { font-size: 24px; line-height: 1.45; margin: 0; padding: 12px 24px; }
+.reveal pre.mid { font-size: 26px; }
+.reveal table.defaults td:first-child, .reveal table.defaults th:first-child { width: 28%; }
+.reveal table.defaults td:nth-child(2), .reveal table.defaults th:nth-child(2) { width: 22%; }
+.reveal table.dual td:first-child, .reveal table.dual th:first-child { width: 30%; }
+.reveal table td pre.out.tr { margin: 4px 0; font-size: 22px; }
+.reveal table.matrix th, .reveal table.matrix td { text-align: center; }
+.reveal table.matrix th:first-child, .reveal table.matrix td:first-child { text-align: left; }
+.reveal table.matrix .ext { color: var(--muted); font-weight: 500; }
+.reveal table.matrix { margin-bottom: 14px; }
+/* carousel: one language at a time */
+.reveal .car-tabs { display: flex; gap: 8px; margin: 0 0 14px 0; }
+.reveal .car-tabs span { font-size: 26px; font-weight: 500; color: var(--muted); padding: 4px 18px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; }
+.reveal .car-tabs span.on { color: var(--accent); border-color: var(--accent); }
+.reveal .car-panels { position: relative; min-height: 300px; }
+.reveal .car-panel { position: absolute; inset: 0; }
+.reveal .car-panel pre { margin: 0 0 14px 0; }
+.reveal .car-panel p { font-size: 0.88em; margin: 0; }
+.reveal table.ways td { border-bottom: 0; padding-top: 6px; padding-bottom: 10px; }
+.reveal table.ways td.s { font-weight: 300; width: 14%; }
+.reveal table.ways td.s.hl { color: var(--accent); font-weight: 400; }
+/* matrix animation */
+.reveal table.matrix td.cell { color: transparent; position: relative; transition: background .3s, color .3s; border-radius: 4px; }
+.reveal table.matrix td.cell::after { content: '–'; color: var(--rule); position: absolute; left: 0; right: 18px; text-align: center; }
+.reveal table.matrix td.cell.on::after { content: none; }
+.reveal table.matrix td.cell.on.w1 { color: #2A6F97; background: #E3EEF5; }
+.reveal table.matrix td.cell.on.w2 { color: var(--accent); background: var(--box); }
+.reveal table.matrix th.hd, .reveal table.matrix td.rl { transition: background .3s, color .3s; border-radius: 4px; }
+.reveal table.matrix th.hd.on.w1 { color: #2A6F97; background: #E3EEF5; }
+.reveal table.matrix td.rl.on.w2 { color: var(--accent); background: var(--box); }
+.reveal table.matrix td.cell.on, .reveal .w1, .reveal .w2 { font-weight: 500; }
+.reveal .w1 { color: #2A6F97; }
+.reveal .w2 { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- 1 -->
+<section class="title" data-background-color="#23373B">
+  <div class="eyebrow">PROGRAMMING PARADIGMS · SESSION 3</div>
+  <h1>Two ways to be a value</h1>
+  <div class="sub">Algebraic data types and objects</div>
+  <div class="rule"></div>
+  <div class="meta">SW7 · Aalborg University Copenhagen · Autumn 2026</div>
+  <aside class="notes">One question today, answered twice. Both answers are older than the languages we use to write them.</aside>
+</section>
+
+
+<!-- part 1 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 1</div>
+  <h1>The question</h1>
+  <div class="sub">What is a datatype? What is an object? What is an algebraic data type?</div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2>What is a datatype?</h2>
+  <p>Some answers we would all give:</p>
+  <ul>
+    <li class="fragment"><code>int</code> — a set of numbers?</li>
+    <li class="fragment"><code>int32</code> — the same, but exactly \(2^{32}\) of them?</li>
+    <li class="fragment"><code>struct</code> — several values glued together?</li>
+    <li class="fragment"><code>class</code> — values with code attached?</li>
+    <li class="fragment">“a collection of values” — of what, arranged how?</li>
+  </ul>
+  <div class="fragment">
+  <p>Each describes one aspect. The question returns four times this semester:</p>
+  <table>
+    <tr><td class="s">S3 · today</td><td>how a datatype <span class="hl">organises</span> its values</td></tr>
+    <tr><td class="s">S9</td><td>what a type <b>claims</b> about a value</td></tr>
+    <tr><td class="s">S11</td><td>what a type <b>hides</b></td></tr>
+    <tr><td class="s">S12</td><td>a type as a <b>relation</b></td></tr>
+  </table>
+  </div>
+  <aside class="notes">Do not resolve the question. Leave it open; today is the first of four partial answers. The two-ways claim comes on slide 12, after the room has discovered it.</aside>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2>What is an object?</h2>
+  <p>In everyday use, “object” bundles several design decisions. Five of them, each treated on its own day:</p>
+  <table>
+    <tr><th>bundled into “object”</th><th>actually a separate axis</th><th class="s"></th></tr>
+    <tr><td>mutable fields, identity</td><td>state vs. persistence</td><td class="s">S2, S7</td></tr>
+    <tr><td>inheritance, <code>extends</code></td><td>subtyping</td><td class="s">S10</td></tr>
+    <tr><td>classes</td><td>classes vs. prototypes (Self, JS)</td><td class="s">today, one line</td></tr>
+    <tr><td>declared <code>implements</code></td><td>nominal vs. structural typing (Java vs. Go)</td><td class="s">S10</td></tr>
+    <tr><td>static types</td><td>Smalltalk has none — the purest object language</td><td class="s">S9</td></tr>
+  </table>
+  <div class="box fragment">In this session, an object is <b>a value used only through the operations it carries</b>.<br><span class="small">State and identity can be added — and usually are — but they are not essential.</span></div>
+  <aside class="notes">This is the stripping. Everything in the left column is real and important, and none of it is what makes an object an object. Cook 2009 defines objects this minimally.</aside>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2>What is an algebraic data type?</h2>
+  <p>Last week we read two of them without the name — and used the first in the type of <code>pop</code>:</p>
+  <pre><code class="language-ocaml">type 'a option = None | Some of 'a
+type 'a list   = []   | (::) of 'a * 'a list</code></pre>
+  <pre><code class="language-ocaml">val pop : 'a t -> ('a * 'a t) option
+(* the value and the new version — or nothing *)</code></pre>
+  <p class="fragment">Every value is built from a <span class="hl">closed list of shapes</span>, and taken apart the same way.</p>
+  <div class="box fragment">By the end of this first hour: why a closed list of shapes is the <b>natural design</b> for many datatypes — and what the opposite design looks like.</div>
+  <aside class="notes">Do not explain option or list here; the point is recognition. Both were on the S2 OCaml insert; the pop type is slide 3 of that deck.</aside>
+</section>
+
+
+<!-- part 2 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 2</div>
+  <h1>Two ways to be a set</h1>
+  <div class="sub">The discovery, in JavaScript</div>
+  <aside class="notes">No OCaml, no Java, no classes: arrays and arrow functions only. The room already reads this.</aside>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2>One interface</h2>
+  <p>A set of integers. Four operations, and nothing else:</p>
+  <pre><code class="language-js">empty              // the set with no elements
+insert(s, n)       // the set s, with n added
+contains(s, x)     // is x in s?
+union(s, t)        // every element of s, or of t</code></pre>
+  <p>Client code uses only these four names.</p>
+  <p class="fragment">Two implementations follow. The client cannot tell them apart. At least at first.</p>
+  <aside class="notes">Cook 2009's running example. Keep the interface small: four names, one of them binary.</aside>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2>Way 1 — a set <span class="hl">is data</span></h2>
+  <script class="src" id="src-way1">
+const empty1    = [];
+const insert1   = (s, n) => s.includes(n) ? s : [...s, n];
+const contains1 = (s, x) => s.includes(x);
+const union1    = (s, t) => [...s, ...t.filter(x => !s.includes(x))];
+  </script>
+  <pre><code class="language-js" data-src="src-way1"></code></pre>
+  <p>Every operation <span class="hl">inspects</span><sup>*</sup> the array.</p>
+  <p class="fragment"><code>union1</code> inspects <b>both</b> of its arguments.</p>
+  <p class="fn"><sup>*</sup> inspect: read the representation directly — here as an array; in OCaml, as a constructor and its arguments.</p>
+  <aside class="notes">Say "inspects" every time; Way 2's verb is "calls". The pair of verbs is the whole duality. The spread [...s, n] copies and extends: persistent like :: in S2, but O(n).</aside>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2>Way 2 — a set <span class="hl">is a function</span></h2>
+  <p>A set is a function that answers one question: <em>is x inside?</em></p>
+  <script class="src" id="src-way2">
+const empty2    = x => false;
+const insert2   = (s, n) => (x => x === n || s(x));
+const contains2 = (s, x) => s(x);
+const union2    = (s, t) => (x => s(x) || t(x));
+  </script>
+  <pre><code class="language-js" data-src="src-way2"></code></pre>
+  <p>Every operation <span class="hl">calls</span><sup>*</sup> the set. <code>contains2</code> is just the call.</p>
+  <p class="fn"><sup>*</sup> call: use a value only through the interface it exposes, learning nothing about how it is made.</p>
+  <p class="fragment"><code>union2</code> can do nothing with <code>s</code> and <code>t</code> except call them. <span class="hl">There is no inside.</span></p>
+  <aside class="notes">insert2 returns a NEW function — the parentheses show it: "x is in the new set if it is n, or if the old set says so". Read it aloud once. The next slide unfolds two inserts.</aside>
+</section>
+
+
+<!-- 8b -->
+<section>
+  <h2>Two inserts, unfolded</h2>
+  <div class="cols">
+    <div>
+      <h3>Way 1</h3>
+      <pre><code class="language-js">const s3  = insert1(empty1, 3)
+       // = [3]
+const s35 = insert1(s3, 5)
+       // = [3, 5]</code></pre>
+      <p>Each step produces <b>data</b>: an array anyone may inspect.</p>
+    </div>
+    <div>
+      <h3>Way 2</h3>
+      <pre><code class="language-js">const s3  = insert2(empty2, 3)
+       // = x => x === 3 || empty2(x)
+const s35 = insert2(s3, 5)
+       // = y => y === 5 || s3(y)</code></pre>
+      <p class="fragment" data-fragment-index="0">Each step produces a <b>closure</b><sup>*</sup>. <code>s35</code> holds <code>s3</code>; nothing runs until someone calls it.</p>
+    </div>
+  </div>
+  <p class="fn fragment" data-fragment-index="0"><sup>*</sup> closure: a function together with the bindings it captured where it was defined — here <code>n</code> and the previous set.</p>
+  <div class="box fragment" data-fragment-index="1">Both <code>s35</code> are chains of length two: <code>[3, 5]</code>, and a function holding 5 and <code>s3</code>, which holds 3 and <code>empty2</code>. Same shape — and, from the operations’ side, one can be inspected while the other can only be called.</div>
+  <aside class="notes">This is the closure made concrete: n and s live on inside the returned function. The "same shape" remark is the seed of slide 18 (set as a recursive type): Insert (5, Insert (3, Empty)) is the same chain, written as data.</aside>
+</section>
+
+<!-- 8 -->
+<section>
+  <h2>Same client, same answers</h2>
+  <script class="src" id="src-client">
+const a1 = insert1(insert1(empty1, 3), 5),  b1 = insert1(empty1, 4);
+const a2 = insert2(insert2(empty2, 3), 5),  b2 = insert2(empty2, 4);
+const test1 = [3, 4, 5, 6].map(x => contains1(union1(a1, b1), x));
+const test2 = [3, 4, 5, 6].map(x => contains2(union2(a2, b2), x));
+  </script>
+  <pre><code class="language-js" data-src="src-client"></code></pre>
+  <p><button class="run" onclick="show('out8', 'way 1: ' + J(test1) + '\nway 2: ' + J(test2))">Run</button></p>
+  <pre class="out" id="out8"> </pre>
+  <p class="fragment">Nothing so far tells the two apart. But what if we <span class="hl">extend</span> the interface with</p>
+  <ol class="fragment">
+    <li>a new operation</li>
+    <li>a new kind of set</li>
+    <li>an operation on two sets</li>
+  </ol>
+  <aside class="notes">Run it live. Same client code, same four answers. Then announce the three extensions.</aside>
+</section>
+
+<!-- 9 -->
+<section>
+  <h2>Extension 1 — a new operation: <code>size</code></h2>
+  <div class="cols">
+    <div>
+      <h3>Way 1</h3>
+      <script class="src" id="src-size1">
+const size1 = s => s.length;
+      </script>
+      <pre><code class="language-js" data-src="src-size1"></code></pre>
+      <p>One line. Nothing else is touched.</p>
+      <p><button class="run" onclick="show('out9', 'size1(union1(a1, b1)) = ' + size1(union1(a1, b1)))">Run</button></p>
+      <pre class="out" id="out9"> </pre>
+    </div>
+    <div>
+      <h3>Way 2</h3>
+      <p><code>const size2 = s => ???</code></p>
+      <p class="fragment">A function cannot be asked how many inputs it accepts.</p>
+      <div class="fragment">
+      <p>… unless a set carries <b>two</b> functions:</p>
+      <script class="src" id="src-rec">
+const insert2b = (s, n) => ({
+  contains: x => x === n || s.contains(x),
+  size:     () => s.size() + 1 });
+      </script>
+      <pre><code class="language-js" data-src="src-rec"></code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="box fragment">So a set becomes a <span class="hl">record of operations</span> sharing hidden data — and every existing set must be rebuilt this way.</div>
+  <aside class="notes">This is the object appearing on screen, before the word. Note the cost: every maker of sets changes, not one.</aside>
+</section>
+
+<!-- 10 -->
+<section>
+  <h2>Extension 2 — a new kind of set: the even numbers</h2>
+  <div class="cols">
+    <div>
+      <h3>Way 1</h3>
+      <p>No array holds the even numbers. There are now <span class="hl">two kinds</span> of set, told apart by a tag:</p>
+      <pre><code class="language-js">{ kind: 'finite', xs: [3, 5] }   // as before
+{ kind: 'evens' }                // no array
+
+const contains1 = (s, x) =>
+  s.kind === 'evens' ? x % 2 === 0
+                     : s.xs.includes(x);
+const union1 = (s, t) => /* four cases */</code></pre>
+      <p>— and <b>every</b> operation now begins by <span class="hl">reading the tag</span>.</p>
+    </div>
+    <div class="fragment">
+      <h3>Way 2</h3>
+      <script class="src" id="src-evens">
+const evens = x => x % 2 === 0;
+const test3 = [3, 4, 5, 6]
+  .map(x => contains2(union2(a2, evens), x));
+      </script>
+      <pre><code class="language-js" data-src="src-evens"></code></pre>
+      <p>One line — an <em>infinite</em> set — and it unions with the others as if nothing happened.</p>
+      <p><button class="run" onclick="show('out10', 'union2(a2, evens): ' + J(test3))">Run</button></p>
+      <pre class="out" id="out10"> </pre>
+    </div>
+  </div>
+  <aside class="notes">Ask the room what array holds the even numbers. Then: the tag field appears — the ancestor of the constructor.</aside>
+</section>
+
+<!-- 11 -->
+<section>
+  <h2>Extension 3 — an operation on two sets</h2>
+  <div class="cols">
+    <div>
+      <h3>Way 1</h3>
+      <pre><code class="language-js">const union1 = (s, t) =>
+  [...s, ...t.filter(x => !s.includes(x))];
+
+const equal1 = (s, t) =>
+  s.length === t.length &&
+  s.every(x => t.includes(x));</code></pre>
+      <p>Inspects both. Could sort, merge, deduplicate, compare.</p>
+    </div>
+    <div>
+      <h3>Way 2</h3>
+      <pre><code class="language-js">const union2 = (s, t) => x => s(x) || t(x);
+
+const equal2 = (s, t) => ???</code></pre>
+      <p>Can only call. Enough for <code>union</code> —</p>
+      <p class="fragment"><span class="hl">not enough</span> for <code>equal</code>: no finite test decides whether two functions agree on every input.</p>
+    </div>
+  </div>
+  <div class="box fragment"><b>Way 1:</b> an operation on two sets sees both representations — it can merge them, or compare them.<br><b>Way 2:</b> it can only ask each set about an <code>x</code> and combine the answers. The two sets themselves are <span class="hl">never compared</span>.</div>
+  <aside class="notes">This is the binary-method row of Cook's table, and function extensionality, without either name. Identity as a substitute for equality comes in S7.</aside>
+</section>
+
+<!-- 12 -->
+<section>
+  <h2>Two ways, stated</h2>
+  <table>
+    <tr><th></th><th>Way 1 — a set is data</th><th>Way 2 — a set is a function</th></tr>
+    <tr><td>a new operation</td><td>one new function</td><td>every set rebuilt</td></tr>
+    <tr><td>a new kind of set</td><td>every operation changed</td><td>one new function</td></tr>
+    <tr><td>an operation on two sets</td><td>inspect both</td><td>call both — no comparison</td></tr>
+  </table>
+  <div class="box fragment small"><b>Way 1:</b> a value <span class="hl">is</span> one of a closed collection of representations, open to every operation. A new operation is free; a new representation affects every operation.</div>
+  <div class="box fragment small"><b>Way 2:</b> a value <span class="hl">is</span> its own operations, bundled together when it is made. A new implementation is free; a new operation affects every implementation.</div>
+  <p class="fragment small" style="margin-top:18px">Two ways of <span class="hl">implementing one interface</span>. Neither is a language feature — we used arrays and arrow functions. The names come next.</p>
+  <aside class="notes">Layer 1, stated. Do not name ADTs or objects yet; that is the next divider. If asked about deletion: remove is one line on both sides — remove1 = (s, n) => s.filter(x => x !== n); remove2 = (s, n) => x => x !== n && s(x). Way 2 handles every POINTWISE operation (union, intersection, difference, remove, and complement x => !s(x), which Way 1's arrays cannot represent at all). What Way 2 cannot do is observe the set as a whole: size, isEmpty, enumerate, equal. The boundary is pointwise-through-the-interface vs requires-inspecting-the-whole.</aside>
+</section>
+
+
+<!-- part 3 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 3</div>
+  <h1>Algebraic data types</h1>
+  <div class="sub">Way 1, made precise</div>
+</section>
+
+<!-- 13 -->
+<section>
+  <h2>Naming the two ways</h2>
+  <table class="names">
+    <tr><th>what we built</th><th>what it is called</th></tr>
+    <tr><td><b>Way 1</b> — a value is data; operations inspect it</td><td><b>algebraic data types</b></td></tr>
+    <tr><td><b>Way 2</b> — a value is a function; operations call it</td><td><b>objects</b></td></tr>
+  </table>
+  <p class="fragment">Both are older than the languages we write them in. Reynolds (1975) called them <em>user-defined types</em> and <em>procedural data structures</em> — <span class="hl">“complementary approaches to data abstraction”</span>.</p>
+  <div class="box fragment small">Two ADTs, one acronym.<br>
+  <b>Abstract</b> data type (Liskov &amp; Zilles, 1974): a type its clients know only through its operations — session 11.<br>
+  <b>Algebraic</b> data type (Hope, 1980): a type whose values come in a closed list of shapes — today.</div>
+  <aside class="notes">The acronym clash costs students hours. Say it once, clearly. The abstract one is Way 1 with a wall in front; the wall is S11.</aside>
+</section>
+
+<!-- 14 -->
+<section>
+  <h2>An enumeration</h2>
+  <pre><code class="language-ocaml">type note = C | D | E | F | G | A | B
+
+let semitones n = match n with
+  | C -> 0 | D -> 2 | E -> 4 | F -> 5 | G -> 7 | A -> 9 | B -> 11</code></pre>
+  <p>Reading rule: <code>|</code> is <span class="hl">or</span>. A <code>note</code> is <code>C</code>, or <code>D</code>, or …</p>
+  <p class="fragment">The constructors are values we <span class="hl">invent</span>. <code>C</code> is not <code>0</code>; nothing is inside it. It is a <span class="hl">tag</span>, as <code>kind: 'evens'</code> was for the set — but one of exactly seven values of a new type, <code>note</code>, each distinct from the others by construction.</p>
+  <div class="box fragment small">The usual encoding in C, and in Java before <code>enum</code>, was <code>static final int C = 0, D = 2, …</code><br>Now <code>C + D</code> compiles, and <code>7</code> is accepted wherever a note is expected. A variant type allows neither.</div>
+  <aside class="notes">The leap students miss: a type declaration can create values, not only arrange existing ones. Say it.</aside>
+</section>
+
+<!-- 15 -->
+<section>
+  <h2>Carrying values: products and sums</h2>
+  <pre><code class="language-ocaml">type pitch    = { note : note; octave : int }
+type duration = Whole | Half | Quarter | Eighth
+type symbol   = Note of duration * pitch | Rest of duration</code></pre>
+  <ul>
+    <li><code>pitch</code> is a <b>product</b> type: each of its values holds every field.</li>
+    <li><code>symbol</code> is a <b>sum</b> type: each of its values is exactly one alternative — a <code>Note</code> carrying a duration and a pitch, or a <code>Rest</code> carrying a duration. That is what <code>of</code> reads as.</li>
+  </ul>
+  <p class="fragment">A <code>Rest</code> carries no pitch: no field is left empty or set to <code>null</code> — a rest with a pitch cannot be written at all.</p>
+  <pre class="fragment"><code class="language-ocaml">let beats s = match s with
+  | Note (d, _) | Rest d -> beats_of d</code></pre>
+  <aside class="notes">The or-pattern binding d in both arms: first sight of a pattern doing work. The lab uses exactly this line.</aside>
+</section>
+
+<!-- 16 -->
+<section>
+  <h2>Why “algebraic”</h2>
+  <div class="cols">
+    <div>
+      <h3>Count the values of a type</h3>
+      <table class="counts">
+        <tr><td><code>unit</code></td><td>\(1\)</td></tr>
+        <tr><td><code>bool</code></td><td>\(2\)</td></tr>
+        <tr><td><code>note</code></td><td>\(7\)</td></tr>
+        <tr><td><code>duration</code></td><td>\(4\)</td></tr>
+        <tr><td><code>pitch</code> = <code>note</code> × <code>int</code></td><td>\(7 \cdot |\mathrm{int}|\)</td></tr>
+        <tr><td><code>symbol</code> = <code>duration</code> × <code>pitch</code> + <code>duration</code></td><td>\(4 \cdot 7 \cdot |\mathrm{int}| + 4\)</td></tr>
+      </table>
+    </div>
+    <div class="fragment">
+      <div class="box" style="margin-top:0">The type constructors <span class="hl">form an algebra</span>. Counting is its simplest model — and it works for infinite types too, as laws rather than numbers.</div>
+      <h3 style="margin-top:26px">Products multiply, sums add</h3>
+      <p>\[|A \times B| = |A|\cdot|B| \quad\; |A + B| = |A| + |B|\]</p>
+      <p>The laws of arithmetic hold as <b>isomorphisms</b> of types, with a conversion function each way:</p>
+      <p>\[A \times (B + C) \;\cong\; A\times B + A\times C\]</p>
+    </div>
+  </div>
+  <aside class="notes">Cardelli and Wegner 1985 for "a type is a set of values"; the isomorphism is the honest content of the word "algebraic". Do not go to generating functions here.</aside>
+</section>
+
+<!-- 17 -->
+<section>
+  <h2>Two encodings of one type</h2>
+  <div class="cols">
+    <div>
+      <h3>A struct with a tag</h3>
+      <pre><code class="language-c">struct symbol {
+  int tag;        /* 0 = note, 1 = rest */
+  int duration, note, octave;
+};</code></pre>
+      <p>\(2^{128}\) states. Most mean nothing: a rest with a pitch; a tag of 7.</p>
+    </div>
+    <div>
+      <h3>A sum</h3>
+      <pre><code class="language-ocaml">type symbol =
+  | Note of duration * pitch
+  | Rest of duration
+  (* two shapes, nothing else *)</code></pre>
+      <p>\(4\cdot 7\cdot|\mathrm{int}| + 4\) states. Each means something.</p>
+    </div>
+  </div>
+  <div class="box fragment">Sums do not add possibilities. They <span class="hl">remove meaningless ones</span>.</div>
+  <table class="fragment" style="margin-top:26px">
+    <tr><td class="s"><code>option</code></td><td>absence as <b>one explicit case</b>: <code>None | Some of 'a</code> has one more value than <code>'a</code>, and every <code>match</code> must handle it.</td></tr>
+    <tr><td class="s"><code>null</code></td><td>absence added to <span class="hl">every type at once</span> and recorded in none: no <code>match</code> is required, but the missing case surfaces at runtime as a <code>NullPointerException</code>.</td></tr>
+  </table>
+  <aside class="notes">This is "make illegal states unrepresentable" (Minsky), stated as arithmetic. NullPointerException is an unchecked match.</aside>
+</section>
+
+<!-- 18 -->
+<section>
+  <h2>Recursion: a type mentioned in its own definition</h2>
+  <pre><code class="language-ocaml">type 'a list = [] | (::) of 'a * 'a list
+
+type set = Empty | Insert of int * set     (* slide 6, as a type *)
+
+let rec contains s x = match s with
+  | Empty            -> false
+  | Insert (n, rest) -> n = x || contains rest x</code></pre>
+  <div class="fragment">
+  <p>Its equation, solved: \(L = 1 + aL \;\Rightarrow\; L = \tfrac{1}{1 - a} = 1 + a + a^2 + a^3 + \cdots\)</p>
+  <p>A list is empty, or one element, or two, or three … — <span class="hl">a tuple of some length</span>, one shape for each length.</p>
+  </div>
+  <p class="fragment">The set we wrote as an array on slide 6 is now a type. The closed list of shapes — <code>Empty</code>, <code>Insert</code> — is written down <span class="hl">where the compiler can read it</span>.</p>
+  <aside class="notes">Recursion is the last rung needed for the lab. Trees are block 2's business (the melody type).</aside>
+</section>
+
+<!-- 19 -->
+<section>
+  <h2>Constructors<sup>*</sup> are functions — but not ordinary ones</h2>
+  <pre style="margin-bottom:14px"><code class="language-ocaml">length : 'a list -> int               (* an ordinary function *)
+Note   : duration * pitch -> symbol   (* a constructor *)</code></pre>
+  <p>An ordinary function may <b>lose information</b>: from <code>length xs</code> we cannot recover <code>xs</code>; many lists share one length.</p>
+  <p class="fragment">A constructor <span class="hl">loses no information</span>. Three properties no ordinary function has:</p>
+  <table class="fragment" style="margin-bottom:0">
+    <tr><td><b>injective</b></td><td>different arguments give different values</td></tr>
+    <tr><td><b>disjoint</b></td><td>different constructors never build the same value</td></tr>
+    <tr><td><b>exhaustive</b></td><td>every value of the type came from some constructor</td></tr>
+  </table>
+  <div class="box fragment" style="margin-top:12px">So every value was built in <span class="hl">exactly one way</span>: one constructor, applied to the values it carries.</div>
+  <p class="fn" style="bottom:56px"><sup>*</sup> Unlike Java’s constructors, these run no code and can be taken apart: a tag with a payload.</p>
+  <aside class="notes">This is the free-algebra property in plain words: no equations between terms. If asked: in OCaml a constructor is not a first-class function — pass (fun x -> Note x); the slide shows the type it behaves as, not a val declaration. Java's nearest relative of an ML constructor is a record; ML's nearest relative of a Java constructor is a smart constructor (a validating function that then applies the real one).</aside>
+</section>
+
+<!-- 20 -->
+<section>
+  <h2>Matching is the inverse</h2>
+  <pre><code class="language-ocaml">let s = Note (d, p)              (* forwards:  build            *)
+match s with Note (d, p) -> …    (* backwards: recover d and p  *)</code></pre>
+  <div class="box">A constructor goes from the carried values to the value: <code>(d, p)</code> ↦ <code>Note (d, p)</code>.<br>A <code>match</code> goes <span class="hl">from the value back to the carried values</span>: <code>Note (d, p)</code> ↦ <code>(d, p)</code>.<br>It can, because every value was built in exactly one way.</div>
+  <ul style="margin-top:14px">
+    <li class="fragment">We cannot match on <code>f x</code> for an arbitrary <code>f</code>: there is no inverse to run.</li>
+    <li class="fragment">We cannot match on a Way 2 value: any function may have produced it, and nothing in it says which, or from what — its environment is sealed, and there is no fixed list of makers. <span class="hl">There is nothing to invert.</span></li>
+    <li class="fragment">The list of shapes used to live in a comment. Now it lives in the type, and <span class="hl">the compiler reads it</span>: every <code>match</code> covers every shape, and no case is unreachable.</li>
+  </ul>
+  <aside class="notes">"Documentation became a declaration." This is the bridge to the lineage slide: C's union with a tag is the version where the list was a comment.</aside>
+</section>
+
+<!-- 21 -->
+<section>
+  <h2>Algebraic data types: a timeline</h2>
+  <table>
+    <tr><td class="s">1970s</td><td>Pascal variant records; C <code>union</code> with a tag field — the list of shapes is a convention, unchecked</td></tr>
+    <tr><td class="s">1980</td><td><b>Hope</b> (Burstall, MacQueen, Sannella): algebraic data types with pattern matching</td></tr>
+    <tr><td class="s">1984 →</td><td>Standard ML, then OCaml and Haskell: the ML family makes them the default</td></tr>
+    <tr><td class="s">2014 →</td><td>Swift enums, Rust enums, Kotlin sealed classes, TypeScript discriminated unions</td></tr>
+    <tr><td class="s">2021 →</td><td>Python 3.10 <code>match</code>; Java 17 <code>sealed</code>, Java 21 pattern <code>switch</code></td></tr>
+  </table>
+  <p class="fragment small">“Algebraic” also names the mathematics: the values of the type are <span class="hl">exactly the terms</span> built from its constructors, nothing more and nothing identified — the <em>initial algebra</em> of its constructors (Goguen, Thatcher, Wagner, Wright, 1977).</p>
+  <aside class="notes">The convergence is the lecture's arc: every mainstream language now has Way 1 built in. Keep the last line to one breath.</aside>
+</section>
+
+
+<!-- part 4 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 4</div>
+  <h1>Objects</h1>
+  <div class="sub">Way 2, made precise</div>
+  <aside class="notes">Same order as part 3: the thing we built, written as a type, then what the type does and does not say. No sealed anywhere in this part; Java doing Way 1 is part 5's evidence.</aside>
+</section>
+
+<!-- 22 -->
+<section>
+  <h2>The set as objects</h2>
+  <div class="cols">
+    <div>
+      <pre><code class="language-ocaml">type set =
+  &lt; contains : int -> bool; size : int &gt;
+
+let empty : set = object
+  method contains _ = false
+  method size = 0
+end
+
+let insert (s : set) n : set = object
+  method contains x = x = n || s#contains x
+  method size = s#size + 1
+end</code></pre>
+    </div>
+    <div>
+      <p><code>type set</code> is <span class="hl">the interface</span> of a set — extension 1’s record of operations, as a type — and under it two kinds of set, <code>empty</code> and <code>insert</code>.</p>
+      <p class="fragment">In the Way 1 type they were the constructors <code>Empty</code> and <code>Insert</code>; here the type lists only <b>operations</b>, and the kinds live in the code.</p>
+      <div class="box fragment" style="margin-top:0"><span class="hl">No <code>match</code> on a <code>set</code>:</span> nothing at compile time says how many kinds exist, or which one we hold.<br><span class="hl">That is the point:</span> which kind we hold is decided at run time, by the object, when it is called — <b>dynamic dispatch</b>.</div>
+    </div>
+  </div>
+  <p class="fn"><sup>*</sup> <code>object … end</code> builds one object and <code>#</code> calls a method. No class is involved; OCaml does not need one.</p>
+  <aside class="notes">Verified: demos/objset.ml prints "true false 2 true". Read insert aloud: the new object holds s and n in its closure, exactly as insert2b did on the JavaScript slide. Sum with payload, not an enum: an enum as classes looks silly and Java has enum anyway.</aside>
+</section>
+
+<!-- 23 -->
+<section>
+  <h2>The same, in Java</h2>
+  <div class="cols">
+    <div>
+      <pre style="font-size:21px"><code class="language-java">abstract class Set {
+  abstract boolean contains(int x);
+  abstract int size();
+}
+class Empty extends Set {
+  boolean contains(int x) { return false; }
+  int size() { return 0; }
+}
+class Insert extends Set {
+  private final Set s; private final int n;
+  Insert(Set s, int n)
+    { this.s = s; this.n = n; }
+  boolean contains(int x)
+    { return x == n || s.contains(x); }
+  int size() { return s.size() + 1; }
+}</code></pre>
+    </div>
+    <div>
+      <p>The abstract class is the interface<sup>*</sup>; each subclass is one kind, with its own operations.</p>
+      <p class="fragment">The fields are <code>private</code><sup>**</sup>: from a client’s side, a <code>Set</code> is only what its methods answer.</p>
+    </div>
+  </div>
+  <p class="fn fragment" data-fragment-index="0" style="bottom:40px"><sup>*</sup> A Java <code>interface</code> says the same, without fields or shared code.<br><sup>**</sup> <code>private</code>: no client reads the field. <code>final</code>: assigned once, in the constructor — a set never changes after it is made.</p>
+  <aside class="notes">Verified: demos/Sets.java prints "true false 2". Do not say sealed here. The interface question is answered on this slide only, in the footnote: an interface is the same declaration without fields or shared code; abstract class chosen so that part 5 can say "abstract class + subclasses = Way 2" and "sealed + records + switch = Way 1". final: the S2 point — a persistent value, no mutation after construction.</aside>
+</section>
+
+<!-- 23b -->
+<section>
+  <h2>A new kind, in Java</h2>
+  <p>A new kind is one more class:</p>
+  <pre><code class="language-java">class Evens extends Set {
+  boolean contains(int x) { return x % 2 == 0; }
+  int size()              { return Integer.MAX_VALUE; }
+}</code></pre>
+  <p class="fragment"><code>Set</code>, <code>Empty</code>, <code>Insert</code> and every client <span class="hl">stay as they are</span>:</p>
+  <pre class="fragment"><code class="language-java">Set s = new Insert(new Insert(new Empty(), 3), 5);
+s.contains(4);</code></pre>
+  <p class="fragment small">Which <code>contains</code> runs is decided by the object <code>s</code> holds, at run time — three calls down the chain, none visible to the caller.</p>
+  <aside class="notes">Dynamic dispatch on the receiver only: s is an Insert, so Insert.contains runs; it calls its inner Insert; that calls Empty.contains, which answers false. Had s been an Evens, the same client line would run Evens.contains. Contrast with Way 1, where the even numbers forced a change in every operation.</aside>
+</section>
+
+<!-- 25 -->
+<section>
+  <h2>Classes</h2>
+  <p>Nothing so far needed a class. In everyday languages, a class bundles several jobs:</p>
+  <div class="cols" style="gap:30px">
+    <ul>
+      <li><b>factory</b> — <code>new</code> makes objects</li>
+      <li><b>code sharing</b> — methods written once</li>
+      <li><b>type</b> — <code>Set</code> in signatures</li>
+    </ul>
+    <ul>
+      <li><b>privacy boundary</b></li>
+      <li><b>inheritance</b> — session 10</li>
+      <li><b>namespace</b> — <code>Set.empty</code></li>
+    </ul>
+  </div>
+  <p class="fragment" data-fragment-index="0">Languages disagree on which to bundle, and on whether to have a class at all:</p>
+  <div class="car fragment" data-fragment-index="0">
+    <div class="car-tabs"><span>Java</span><span>Smalltalk</span><span>JavaScript</span><span>OCaml</span><span>Go</span></div>
+    <div class="car-panels">
+      <div class="car-panel fragment current-visible" data-fragment-index="1">
+        <pre class="mid"><code class="language-java">public boolean equals(Object o) {
+  return o instanceof Insert i && i.n == n && i.s.equals(s);
+}</code></pre>
+        <p>All six jobs in one box. Privacy is <span class="hl">per class</span>, not per object: <code>equals</code> reads another object’s <code>n</code>. The <code>static</code> methods of a class are the operations of an abstract data type.</p>
+      </div>
+      <div class="car-panel fragment current-visible" data-fragment-index="2">
+        <pre class="mid"><code class="language-smalltalk">s := Insert new.
+x > 0 ifTrue: [ 'positive' ] ifFalse: [ 'not' ]</code></pre>
+        <p>A class is itself an object, and <code>new</code> is a message to it. Even <code>if</code> is a message: <code>ifTrue:ifFalse:</code> is sent to the boolean, and <span class="hl">the boolean object decides</span>. Compilers inline it; the meaning is the send.</p>
+      </div>
+      <div class="car-panel fragment current-visible" data-fragment-index="3">
+        <pre class="mid"><code class="language-js">const empty = { contains: x => false };
+const evens = Object.create(empty);
+evens.contains = x => x % 2 === 0;</code></pre>
+        <p>No class underneath: <span class="hl">objects are made from objects</span>. A prototype is another object, asked when a property is missing. The <code>class</code> syntax of 2015 writes this down and adds no mechanism.</p>
+      </div>
+      <div class="car-panel fragment current-visible" data-fragment-index="4">
+        <pre class="mid"><code class="language-ocaml">let empty = object method contains _ = false end
+(* empty : < contains : 'a -> bool > *)</code></pre>
+        <p>An object <span class="hl">without a class</span>. Its type is the list of its methods. A class, when we want one, is a recipe for making objects — a factory and code sharing, nothing more.</p>
+      </div>
+      <div class="car-panel fragment current-visible" data-fragment-index="5">
+        <pre class="mid"><code class="language-go">type Reader interface { Read(p []byte) (int, error) }</code></pre>
+        <p>No classes and no <code>implements</code>: any value with a <code>Read</code> method is a <code>Reader</code>. The interface is satisfied <span class="hl">by shape</span> — session 10. Same way, different amount of declaration.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Java panel verified: demos/Eq.java prints "true false". Fields: from outside, a field read is an operation with no arguments (Meyer's uniform access; Self's slots); public fields leak the representation — a product, Way 1. Dispatch ladder if a student asks how equals could see both: static (no dispatch) / a.equals(b) dispatches on the receiver only — the binary-method problem, Bruce et al. 1995 / visitor dispatches on both, next part / multimethods dispatch on all, S10. C++ (multiple inheritance, classes as structs with layout) is left out: it repeats Java's bundling, and inheritance is S10's axis. Smalltalk's booleans are two objects, True and False — demos/objbool.ml is the same in OCaml.</aside>
+</section>
+
+<!-- part 5 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 5</div>
+  <h1>Abstract data types versus objects</h1>
+  <div class="sub">What each hides, and how each grows — Reynolds 1975 · Cook 2009 · Wadler 1998</div>
+</section>
+
+<!-- 24 -->
+<section>
+  <h2>One abstraction barrier, placed two ways</h2>
+  <p>Both ways hide how an operation works: a client calls <code>contains</code> and gets an answer, never seeing the body — the array scan, or the chain of calls. Any function does this much. What each way adds differs:</p>
+  <table class="ways">
+    <tr class="fragment"><td class="s hl">[ADT]</td><td>Way 1, behind a wall we will build in session 11. The <b>representation type</b> is hidden: behind an <code>.mli</code>, as session 2’s stack, <code>type t</code> shows no constructors, so no client can match on a set or build one by hand. Cook calls this <span class="hl">type abstraction</span>. Only a compiler can enforce it.</td></tr>
+    <tr class="fragment"><td class="s hl">[Objects]</td><td>Way 2, as it stands. Nothing is hidden at the type level: the interface type is public. What is hidden is the environment of one closure — this <code>s</code>, this <code>n</code> — and it is hidden by being a function: nothing but a call can reach in. Cook calls this <span class="hl">procedural abstraction</span>: a procedure’s wall, with the data inside.</td></tr>
+  </table>
+  <div class="box fragment">One wall around the whole type, or <span class="hl">one wall around each value</span>.<br>Objects need no type system to keep their secrets; abstract data types do.</div>
+  <aside class="notes">Cook 2009, "On understanding data abstraction, revisited", section 3. The sharp version: an untyped lambda calculus has objects but cannot have abstract data types. Keep "abstract" and "algebraic" apart on this slide — say the whole word each time. Bullet 1 is the shared part; bullets 2 and 3 are what each way adds on top of it, and they add different things.</aside>
+</section>
+
+<!-- 27 -->
+<section>
+  <h2>Complementary approaches to data abstraction</h2>
+  <table class="dual">
+    <tr><th></th><th>abstract data type</th><th>object</th></tr>
+    <tr><td>what is abstracted</td><td>the representation <b>type</b></td><td>the <b>procedures</b> in a value</td></tr>
+    <tr><td>operation bodies</td><td>hidden</td><td>hidden</td></tr>
+    <tr><td>representation</td><td>one, hidden</td><td>none in the interface</td></tr>
+    <tr><td>an operation is written</td><td>once, for every value</td><td>by each value, for itself</td></tr>
+    <tr><td>sees another value’s inside</td><td>yes — <code>union1</code>, <code>equal1</code></td><td>no — <code>union2</code>; no <code>equal2</code></td></tr>
+    <tr><td>implementations</td><td>one per type; two do not mix</td><td>any number, one type; they mix</td></tr>
+  </table>
+  <p class="fragment small">Reynolds (1975) saw the two as <b>complementary</b>; Cook (2009) gave the table its rows.</p>
+  <div class="box fragment">Neither is a weaker form of the other. An object is not an abstract data type missing its type: it hides its data another way. An abstract data type is not an object missing dispatch: every value of <code>t</code> runs the same <code>contains</code>; there is nothing to choose at run time.<br><span class="hl">They hide different things, by different means</span> — the compiler, or the closure.</div>
+  <aside class="notes">Reynolds, "User-defined types and procedural data structures as complementary approaches to data abstraction", 1975. Cook, "On understanding data abstraction, revisited", OOPSLA 2009, table in section 4. The "sees another value's inside" row is extension 3 from part 2.</aside>
+</section>
+
+<!-- 28 -->
+<section>
+  <h2>The matrix: kinds × operations</h2>
+  <table class="matrix" id="matrix">
+    <tr><th></th><th class="hd" data-c="1"><code>contains</code></th><th class="hd" data-c="2"><code>size</code></th><th class="hd" data-c="3"><code>union</code></th><th class="hd" data-c="4"><code>equal</code></th></tr>
+    <tr><td class="s rl" data-r="1">Empty</td><td class="cell" data-r="1" data-c="1">✓</td><td class="cell" data-r="1" data-c="2">✓</td><td class="cell" data-r="1" data-c="3">✓</td><td class="cell" data-r="1" data-c="4">✓</td></tr>
+    <tr><td class="s rl" data-r="2">Insert</td><td class="cell" data-r="2" data-c="1">✓</td><td class="cell" data-r="2" data-c="2">✓</td><td class="cell" data-r="2" data-c="3">✓</td><td class="cell" data-r="2" data-c="4">✓</td></tr>
+    <tr><td class="s rl" data-r="3">Evens</td><td class="cell" data-r="3" data-c="1">✓</td><td class="cell" data-r="3" data-c="2">✓</td><td class="cell" data-r="3" data-c="3">✓</td><td class="ext">?</td></tr>
+  </table>
+  <div class="cols">
+    <div>
+      <div class="fragment" data-anim="col" data-n="1"><p><b>Algebraic data types</b> (Way 1): one function per operation, every kind inside it — a <span class="w1">column</span> at a time.</p></div>
+      <div class="fragment" data-anim="col" data-n="2"><p>One more operation is one more column, <code>equal</code> included: a function inspects both sets.</p></div>
+    </div>
+    <div>
+      <div class="fragment" data-anim="row" data-n="1"><p><b>Objects</b> (Way 2): one class per kind, every operation inside it — a <span class="w2">row</span> at a time.</p></div>
+      <div class="fragment" data-anim="row" data-n="2"><p>One more kind is one more row, <code>evens</code> included. <code>equal</code> gets no row: a row cannot inspect another.</p></div>
+    </div>
+  </div>
+  <div class="box fragment">Wadler (1998) named the problem of growing both ways at once, with the compiler still checking every cell: <b>the expression problem</b>. Its resolutions are session 10.</div>
+  <aside class="notes">Extension 1 was a new column, extension 2 a new row, extension 3 the equal column. Clicks: 1 fills contains/size/union for Empty and Insert (blue); 2 fills the equal column — Way 1 can; 3 clears and fills the Empty and Insert rows (orange); 4 fills the Evens row — Way 2 can; the corner cell, equal for Evens, stays open on both sides. Then the callout. The ledger owes S10 the resolutions; here only the phenomenon.</aside>
+</section>
+
+<!-- 29 -->
+<section>
+  <h2>One language, both ways</h2>
+  <div class="cols">
+    <div>
+      <h3>Way 2 — abstract class and subclasses</h3>
+      <pre><code class="language-java">abstract class Set { … }
+class Empty  extends Set { … }
+class Insert extends Set { … }
+class Evens  extends Set { … }</code></pre>
+      <p>Rows. The part before, as written.</p>
+    </div>
+    <div class="fragment">
+      <h3>Way 1 — <code>sealed</code>, records, <code>switch</code></h3>
+      <pre style="font-size:21px"><code class="language-java">sealed interface Shape
+  permits Circle, Square, Tri {}
+record Circle(double r) implements Shape {}
+record Square(double s) implements Shape {}
+record Tri(double b, double h) implements Shape {}
+
+static double area(Shape sh) {
+  return switch (sh) {
+    case Circle c -> Math.PI * c.r() * c.r();
+    case Square s -> s.s() * s.s();
+  };
+}</code></pre>
+    </div>
+  </div>
+  <div class="box fragment"><code>permits</code> is <code>|</code>, <code>record</code> is <code>of</code>, <code>switch</code> is <code>match</code>. Java required a quarter of a century, and three additions to the language, before it could express the second form. That delay is the measure of its <span class="hl">default</span>.</div>
+  <aside class="notes">Java 17 sealed, Java 21 pattern switch. Source demos/A.java, compiled with javac 26: Tri is deliberately missing and the next slide shows what happens. OCaml's objects are the mirror: available since 1996, rarely used. Paradigm ≠ language; a language only makes some choices the default.</aside>
+</section>
+
+<!-- 30 -->
+<section>
+  <h2>Exhaustiveness in three languages</h2>
+  <p>One case left out of a <code>match</code>, on purpose. Three compilers, three answers:</p>
+  <table>
+    <tr><td class="s">OCaml</td><td><pre class="out tr">Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+  Here is an example of a case that is not matched: Repeat (_, _)</pre></td></tr>
+    <tr><td class="s">Java 21+</td><td><pre class="out tr">A.java:10: error: the switch expression does not cover all possible input values</pre></td></tr>
+    <tr><td class="s">Python 3.10+</td><td><pre class="out tr">square: 9
+triangle: None</pre></td></tr>
+  </table>
+  <p class="fragment">OCaml warns and <span class="hl">names a missing value</span>. Java refuses to compile. Python runs, and the missing case becomes a <code>None</code> that travels on.</p>
+  <p class="fn">OCaml: the lab’s <code>melody</code> with <code>Repeat</code> added and no <code>match</code> updated. Java, Python: <code>Tri</code> left out of <code>area</code>.</p>
+  <aside class="notes">All three transcripts verified on 2026-09-16 (ocaml 5.4.0, javac 26, python 3.14): demos/A.java, demos/match.py, and demos/melody_no_repeat.ml (the lab reference with Repeat's arms deleted). Python's match has no static check at all: the closed list of shapes is not declared anywhere. Live version if time: run them in a terminal.</aside>
+</section>
+
+<!-- 31 -->
+<section>
+  <h2>The checks are dual</h2>
+  <div class="cols">
+    <div>
+      <h3>Way 1 — by column</h3>
+      <pre class="out tr">Warning 8 [partial-match]:
+this pattern-matching is not exhaustive.
+Here is an example of a case that
+is not matched: Repeat (_, _)</pre>
+      <p>Does every operation handle every kind?</p>
+    </div>
+    <div class="fragment">
+      <h3>Way 2 — by row</h3>
+      <pre class="out tr">B.java:9: error: Evens is not abstract
+and does not override abstract method
+size() in Set</pre>
+      <p>Does every kind provide every operation?</p>
+    </div>
+  </div>
+  <div class="box fragment">Each check is blind where the other sees. Extension is blocked exactly where the <span class="hl">declaration site belongs to someone else</span>: the <code>permits</code> list, or the abstract class.</div>
+  <p class="fn">An <code>instanceof</code> chain is not a <code>match</code>: nothing checks it — hence the visitor.</p>
+  <aside class="notes">Java's default methods are a partial escape for new operations on an interface. Neither check can be added to the other side: Way 1 has no list of operations, Way 2 has no list of kinds. Both transcripts verified: the left from the lab reference, the right from a demos/B.java with size() removed from Evens (javac 26). The unifying sentence is the one to remember: a closed list is closed by whoever wrote it.</aside>
+</section>
+
+<!-- 32 -->
+<section>
+  <h2>Visitor: pattern matching by hand</h2>
+  <div class="cols">
+    <div>
+      <pre><code class="language-java">interface Visitor&lt;R&gt; {
+  R onEmpty();
+  R onInsert(Set s, int n);
+}
+abstract class Set {
+  abstract &lt;R&gt; R accept(Visitor&lt;R&gt; v);
+}
+class Empty extends Set {
+  &lt;R&gt; R accept(Visitor&lt;R&gt; v)
+    { return v.onEmpty(); }
+}
+class Insert extends Set {
+  &lt;R&gt; R accept(Visitor&lt;R&gt; v)
+    { return v.onInsert(s, n); }
+}</code></pre>
+    </div>
+    <div>
+      <p>Way 1 would write one <code>match</code>, an arm per kind. Java has none; we build it by hand:</p>
+      <ul>
+        <li class="fragment"><b>the visitor</b>: one method per kind, <code>onEmpty</code> and <code>onInsert</code> — the arms</li>
+        <li class="fragment"><b><code>accept</code></b>: each kind’s one new method; it calls its own arm and hands over what it carries</li>
+        <li class="fragment"><code>s.accept(v)</code> <b>dispatches twice</b>: the set picks <code>accept</code>, <code>accept</code> picks the arm. <span class="hl">The set chose the arm, not the caller.</span></li>
+      </ul>
+      <p class="fragment">Way 1’s trade, cost included: <code>size</code> is one visitor, written outside; a new kind needs <code>onEvens</code> in every visitor.</p>
+    </div>
+  </div>
+  <p class="fn" style="bottom:56px"><code>Empty | Insert of int * set</code> ≅ <code>{ on_empty; on_insert }</code>: a sum of products is a product of functions.</p>
+  <aside class="notes">Java 21's switch on a sealed type does the same without the ceremony — a design pattern is often a missing language feature, written by hand (Norvig 1996, in plain words). Verified: demos/V.java prints 2 for size via an anonymous visitor; demos/visitor.ml does the same with a record of functions. The ∀r form is S4's Church/Böhm–Berarducci encoding — say "visitor" here, not "Church". The last line is Norvig's observation (1996) in plain words.</aside>
+</section>
+
+<!-- 33 -->
+<section>
+  <h2>What each way is good for</h2>
+  <div class="cols">
+    <div>
+      <h3>Objects</h3>
+      <ul>
+        <li><b>extension by strangers</b> — a framework defines <code>Widget</code>; plug-ins add kinds it never sees</li>
+        <li><b>state that changes, behind a wall</b> — a counter, a connection: only its own methods touch it (Parnas, 1972)</li>
+        <li><b>collections sharing only an interface</b> — a list of sets, of any kinds</li>
+      </ul>
+    </div>
+    <div class="fragment">
+      <h3>Algebraic data types</h3>
+      <ul>
+        <li><b>closed domains, modelled exactly</b> — messages, UI states, <code>Option</code></li>
+        <li><b>programs that process trees</b> — compilers, interpreters, query planners, JSON: few node kinds, many operations, some on two nodes at once</li>
+        <li><b>code that grows by a kind</b> — the compiler lists every site to fix</li>
+        <li><b>data that travels</b> — files, the network: only a tag and its payload can go</li>
+      </ul>
+    </div>
+  </div>
+  <p class="fn">Much “object” code is data with getters — the shape that <code>record</code> and <code>sealed</code> were added to Java to fix.</p>
+  <aside class="notes">Parnas 1972, "On the criteria to be used in decomposing systems into modules": hide the decisions likely to change. Trees: the node kinds are fixed by the language or format; the operations are open-ended and several are binary (equality of types, unification, rewrite rules matching nested patterns) — extension 3 again. Data that travels: serialisation is Way 1 by necessity; an object cannot be sent, only described. Part 6 closes the block: the default each language chooses, where the question goes next, and the melody type as the bridge to the lab.</aside>
+</section>
+
+<!-- part 6 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 6</div>
+  <h1>Conclusion</h1>
+  <div class="sub">Language defaults · the question in later sessions · the lab’s type</div>
+  <aside class="notes">Three slides: the default each language chooses; the three later answers to "what is a datatype"; the melody type as the bridge to block 2 and the lab.</aside>
+</section>
+
+<!-- 34 -->
+<section>
+  <h2>Every language chooses a default</h2>
+  <table class="defaults">
+    <tr><th>language</th><th>default</th><th>the other way</th></tr>
+    <tr><td>OCaml</td><td><b>Way 1</b></td><td><code>object … end</code> — rarely used</td></tr>
+    <tr><td>Rust, Swift, Haskell</td><td><b>Way 1</b></td><td><code>dyn Trait</code>, protocols, type classes</td></tr>
+    <tr><td>Java</td><td><b>Way 2</b></td><td><code>sealed</code> + <code>record</code> + <code>switch</code>, since 2021</td></tr>
+    <tr><td>Smalltalk</td><td><b>Way 2</b> only</td><td>no static list of kinds — session 9</td></tr>
+    <tr><td>Python, JavaScript</td><td><b>Way 2</b>, untyped</td><td><code>match</code>, unchecked; a <code>kind</code> field by hand</td></tr>
+    <tr><td>Go</td><td><b>Way 2</b>, by shape</td><td>none: a <code>switch</code> on constants, unchecked</td></tr>
+  </table>
+  <div class="box fragment">Paradigm ≠ language: a language only makes some choices the default. The friction of saying the other thing is the <span class="hl">evidence of the default</span>.</div>
+  <aside class="notes">Course slogan, now with evidence: OCaml's objects rarely used; Java's twenty years to sealed. Rust: enums are Way 1, trait objects are Way 2 — both first-class, which is why Rust code tends to use each where it fits. Haskell's type classes and Go's structural interfaces are S10's resolutions of the expression problem; here they are only "the other way".</aside>
+</section>
+
+<!-- 35 -->
+<section>
+  <h2>The same question in sessions 8, 9, 11 and 12</h2>
+  <p>This session answered <em>what is a datatype?</em> by how it <span class="hl">organises</span> its values: by construction, or by behaviour. Four later sessions answer it again:</p>
+  <table>
+    <tr><td class="s">S8</td><td>a type as a <b>protocol</b>: which messages, in which order — session types</td></tr>
+    <tr><td class="s">S9</td><td>what a type <b>claims</b> about a value: a type as a proof; Smalltalk’s one big sum</td></tr>
+    <tr><td class="s">S11</td><td>what a type <b>hides</b>: abstract data types. Way 1 behind a wall; session 2’s <code>.mli</code> returns</td></tr>
+    <tr><td class="s">S12</td><td>a type as a <b>relation</b>: tables, queries; a query plan is a tree — a Way 1 program</td></tr>
+  </table>
+  <aside class="notes">Four lines, four numbers; do not open any of them. S11 is where the "two ADTs" warning from part 3 pays off. S9 is where Smalltalk's lack of static types becomes "one big tagged union" (Harper).</aside>
+</section>
+
+<!-- 36 -->
+<section>
+  <h2>Lab 3: the <code>melody</code> type</h2>
+  <div class="cols">
+    <div>
+      <pre><code class="language-ocaml">type melody =
+  | Note of duration * pitch
+  | Rest of duration
+  | Seq  of melody * melody   (* after  *)
+  | Par  of melody * melody   (* together *)</code></pre>
+      <p>Every function in the lab is one <code>match</code> on this type. <code>melody.ml</code> has the holes; <code>dune exec ./main.exe</code> reports each one.</p>
+    </div>
+    <div>
+      <table>
+        <tr><td class="s">A</td><td><code>count_notes</code>, <code>length_in_beats</code>: <code>Seq</code> adds, <code>Par</code> takes the maximum</td></tr>
+        <tr><td class="s">B</td><td><code>to_events</code>, then a <code>.wav</code> of Bach’s Invention in C; add <code>Repeat</code>, follow the warnings</td></tr>
+        <tr><td class="s">C</td><td><code>transpose_octave</code>, <code>pretty</code>, <code>retrograde</code>, <code>simplify</code></td></tr>
+        <tr><td class="s">read</td><td>CS3110 chapter 3: sections 3.1, 3.5, 3.6, 3.8, 3.11, 3.12</td></tr>
+      </table>
+    </div>
+  </div>
+  <aside class="notes">The lab folder: melody.ml with TODO holes, tunes.ml (BWV 772, two voices, one let per bar, verified against LilyPond MIDI), main.ml (one check per TODO, writes bach.wav after B1), wav.ml provided. The S2 promise about persistent trees is kept here: Seq and Par build a persistent tree, and every Part C operation returns a new tree sharing the untouched subtrees. Reading: the lecture gives the idea, CS3110 gives the language.</aside>
+</section>
+
+</div>
+<div class="toc" id="toc" hidden>
+  <div class="toc-inner">
+    <div class="toc-title">Parts <span class="muted">— T closes · Esc overview · Shift+←/→ previous/next part · 1–9 jump</span></div>
+    <ol id="toc-list"></ol>
+  </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/smalltalk.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+<script>
+  window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<script>
+  // the code shown on a slide IS the code that runs: <pre> is filled from its <script class="src">
+  const dedent = t => { const ls = t.replace(/^\n+|\s+$/g, '').split('\n'); const ind = Math.min(...ls.filter(l => l.trim()).map(l => l.match(/^ */)[0].length)); return ls.map(l => l.slice(ind)).join('\n'); };
+  document.querySelectorAll('code[data-src]').forEach(c => { c.textContent = dedent(document.getElementById(c.dataset.src).textContent); });
+  const J = v => JSON.stringify(v).replace(/,/g, ', ');
+  const show = (id, text) => { document.getElementById(id).textContent = text; };
+  hljs.highlightAll();
+
+  // Parts become vertical stacks (columns in the overview); navigation itself is linear.
+  (() => {
+    const slides = document.querySelector('.reveal .slides');
+    let stack = null;
+    [...slides.children].forEach(s => {
+      if (s.classList.contains('part')) { stack = document.createElement('section'); slides.insertBefore(stack, s); stack.appendChild(s); }
+      else if (stack && s.tagName === 'SECTION') stack.appendChild(s);
+    });
+  })();
+  const parts = [...document.querySelectorAll('.reveal .slides > section')].map((s, h) => {
+    const d = s.querySelector('section.part') || (s.classList.contains('part') ? s : null);
+    return d ? { h, name: d.querySelector('h1').textContent, sub: (d.querySelector('.sub') || {}).textContent || '' } : null;
+  }).filter(Boolean);
+  const tocList = document.getElementById('toc-list');
+  parts.forEach(p => { const li = document.createElement('li'); li.innerHTML = `<b>${p.name}</b> <span class="muted">${p.sub}</span>`; li.onclick = () => { Reveal.slide(p.h, 0); toggleToc(false); }; tocList.appendChild(li); });
+  const toggleToc = (on) => { const t = document.getElementById('toc'); t.hidden = on === undefined ? !t.hidden : !on; };
+
+  Reveal.initialize({
+    width: 1600, height: 900, margin: 0.04, minScale: 0.2, maxScale: 2.0,
+    center: false, hash: true, transition: 'none', backgroundTransition: 'none',
+    slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
+    keyboard: { 84: () => toggleToc() },          // T: list of parts
+    plugins: [ RevealNotes ]
+  });
+
+
+  // No widows: if a line of text wraps with a short tail, shrink it a few percent
+  // until it fits on one line; if shrinking would not do it, leave it as it is.
+  function fixWidows(root) {
+    root.querySelectorAll('p, li, td, th, .box, h2, h3').forEach(el => {
+      if (el.dataset.widow || el.closest('pre') || el.classList.contains('fn') || el.querySelector('ul, ol, div, pre, table, br')) return;
+      el.dataset.widow = '1';
+      const cs = getComputedStyle(el), lh = parseFloat(cs.lineHeight);
+      if (!lh) return;
+      const inner = () => el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      const lines = () => Math.round(inner() / lh);
+      if (lines() !== 2) return;
+      const base = parseFloat(cs.fontSize), floor = 0.8;
+      for (let f = 0.98; f >= floor - 1e-9; f -= 0.02) { el.style.fontSize = (base * f) + 'px'; if (lines() === 1) return; }
+      el.style.fontSize = '';
+    });
+  }
+  const runWidows = () => document.querySelectorAll('.reveal .slides section').forEach(s => { if (getComputedStyle(s).display !== 'none') fixWidows(s); });
+  Reveal.on('ready', runWidows);
+  Reveal.on('slidechanged', runWidows);
+
+  // Part shortcuts: Shift+Right / Shift+Left = next / previous part; digits 1-9 = part n.
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+    const h = Reveal.getIndices().h;
+    // reveal.js binds Shift+Right / Shift+Left to last / first slide; stop it from seeing these.
+    const swallow = () => { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); };
+    if (e.shiftKey && e.key === 'ArrowRight') { const p = parts.find(p => p.h > h); if (p) Reveal.slide(p.h, 0); swallow(); }
+    else if (e.shiftKey && e.key === 'ArrowLeft') { const ps = parts.filter(p => p.h < h); const p = ps[ps.length - 1]; Reveal.slide(p ? p.h : 0, 0); swallow(); }
+    else if (/^[1-9]$/.test(e.key) && !e.shiftKey) { const p = parts[+e.key - 1]; if (p) { Reveal.slide(p.h, 0); swallow(); } }
+  }, true);
+
+  // Remember where we are across reloads and republishes (per browser; the URL hash wins when present).
+  const POS = 'pp26-s3-position';
+  const savePos = () => { try { localStorage.setItem(POS, JSON.stringify(Reveal.getIndices())); } catch (e) {} };
+  Reveal.on('slidechanged', savePos);
+  Reveal.on('fragmentshown', savePos);
+  Reveal.on('fragmenthidden', savePos);
+  Reveal.on('ready', () => {
+    if (location.hash && location.hash !== '#/' && location.hash !== '#/0') return;
+    try { const p = JSON.parse(localStorage.getItem(POS)); if (p && typeof p.h === 'number') Reveal.slide(p.h, p.v || 0, typeof p.f === 'number' ? p.f : undefined); } catch (e) {}
+  });
+  document.fonts.ready.then(() => setTimeout(runWidows, 50));
+
+  // Carousel: tabs follow the current-visible panel; clicking a tab jumps to its fragment.
+  const syncCar = () => document.querySelectorAll('.car').forEach(car => {
+    const panels = [...car.querySelectorAll('.car-panel')], tabs = [...car.querySelectorAll('.car-tabs span')];
+    const cur = panels.findIndex(p => p.classList.contains('current-fragment'));
+    tabs.forEach((t, i) => t.classList.toggle('on', i === cur));
+  });
+  ['fragmentshown', 'fragmenthidden', 'slidechanged', 'ready'].forEach(ev => Reveal.on(ev, syncCar));
+  document.querySelectorAll('.car-tabs span').forEach((t, i) => t.onclick = () => { const p = t.closest('.car').querySelectorAll('.car-panel')[i]; const idx = Reveal.getIndices(); Reveal.slide(idx.h, idx.v, +p.dataset.fragmentIndex); });
+
+  // The matrix slide: each click fills one whole column (Way 1) or one whole row (Way 2).
+  (() => {
+    const m = document.getElementById('matrix'); if (!m) return;
+    const sec = m.closest('section');
+    const clear = () => m.querySelectorAll('.on').forEach(e => e.classList.remove('on', 'w1', 'w2'));
+    const cell = (r, c) => m.querySelector(`td.cell[data-r="${r}"][data-c="${c}"]`);
+    const apply = () => {
+      clear();
+      const vis = [...sec.querySelectorAll('[data-anim].visible')];
+      const rows = vis.filter(f => f.dataset.anim === 'row').map(f => +f.dataset.n), cols = vis.filter(f => f.dataset.anim === 'col').map(f => +f.dataset.n);
+      const mark = (el, w) => { if (el) el.classList.add('on', w); };
+      if (rows.length) { const R = Math.max(...rows) === 1 ? 2 : 3; for (let r = 1; r <= R; r++) { mark(m.querySelector(`td.rl[data-r="${r}"]`), 'w2'); for (let c = 1; c <= 3; c++) mark(cell(r, c), 'w2'); } }
+      else if (cols.length) { const C = Math.max(...cols) === 1 ? 3 : 4; for (let c = 1; c <= C; c++) { mark(m.querySelector(`th.hd[data-c="${c}"]`), 'w1'); for (let r = 1; r <= 2; r++) mark(cell(r, c), 'w1'); } }
+    };
+    ['fragmentshown', 'fragmenthidden', 'slidechanged', 'ready'].forEach(ev => Reveal.on(ev, () => setTimeout(apply, 0)));
+  })();
+
+  // Local preview only: reload when the built file changes on disk (the position is remembered above).
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    let stamp = null;
+    setInterval(async () => {
+      try {
+        const r = await fetch(location.pathname, { method: 'HEAD', cache: 'no-store' });
+        const m = r.headers.get('Last-Modified') + '/' + r.headers.get('Content-Length');
+        if (stamp === null) stamp = m; else if (m !== stamp) { savePos(); location.reload(); }
+      } catch (e) {}
+    }, 1500);
+  }
+</script>
+</body>
+</html>
