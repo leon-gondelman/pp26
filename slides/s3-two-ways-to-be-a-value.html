@@ -727,7 +727,7 @@ s.contains(4);</code></pre>
       <div class="car-panel fragment current-visible" data-fragment-index="2">
         <pre class="mid"><code class="language-smalltalk">s := Insert new.
 x > 0 ifTrue: [ 'positive' ] ifFalse: [ 'not' ]</code></pre>
-        <p>A class is itself an object, and <code>new</code> is a message to it. Even <code>if</code> is a message: <code>ifTrue:ifFalse:</code> is sent to the boolean, and <span class="hl">the boolean object decides</span>. Compilers inline it; the meaning is the send.</p>
+        <p>A class is itself an object, and <code>new</code> is a message to it. Even <code>if</code> is a message: <code>ifTrue:ifFalse:</code> goes to the boolean with two blocks — closures — as arguments, and <span class="hl">the boolean object runs one of them</span>.</p>
       </div>
       <div class="car-panel fragment current-visible" data-fragment-index="3">
         <pre class="mid"><code class="language-js">const empty = { contains: x => false };
@@ -746,7 +746,7 @@ evens.contains = x => x % 2 === 0;</code></pre>
       </div>
     </div>
   </div>
-  <aside class="notes">Java panel verified: demos/Eq.java prints "true false". Fields: from outside, a field read is an operation with no arguments (Meyer's uniform access; Self's slots); public fields leak the representation — a product, Way 1. Dispatch ladder if a student asks how equals could see both: static (no dispatch) / a.equals(b) dispatches on the receiver only — the binary-method problem, Bruce et al. 1995 / visitor dispatches on both, next part / multimethods dispatch on all, S10. C++ (multiple inheritance, classes as structs with layout) is left out: it repeats Java's bundling, and inheritance is S10's axis. Smalltalk's booleans are two objects, True and False — demos/objbool.ml is the same in OCaml.</aside>
+  <aside class="notes">Java panel verified: demos/Eq.java prints "true false". Fields: from outside, a field read is an operation with no arguments (Meyer's uniform access; Self's slots); public fields leak the representation — a product, Way 1. Dispatch ladder if a student asks how equals could see both: static (no dispatch) / a.equals(b) dispatches on the receiver only — the binary-method problem, Bruce et al. 1995 / visitor dispatches on both, next part / multimethods dispatch on all, S10. C++ (multiple inheritance, classes as structs with layout) is left out: it repeats Java's bundling, and inheritance is S10's axis. Smalltalk compilers inline ifTrue:ifFalse: for speed; the meaning is still the send, and [ ... ] is a block — a closure, S5's subject. Smalltalk's booleans are two objects, True and False — demos/objbool.ml is the same in OCaml.</aside>
 </section>
 
 <!-- part 5 -->
