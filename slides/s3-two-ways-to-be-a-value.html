@@ -1124,7 +1124,24 @@ class Insert extends Set {
       else if (cols.length) { const C = Math.max(...cols) === 1 ? 3 : 4; for (let c = 1; c <= C; c++) { mark(m.querySelector(`th.hd[data-c="${c}"]`), 'w1'); for (let r = 1; r <= 2; r++) mark(cell(r, c), 'w1'); } }
     };
     ['fragmentshown', 'fragmenthidden', 'slidechanged', 'ready'].forEach(ev => Reveal.on(ev, () => setTimeout(apply, 0)));
+    window.__matrixApply = apply;
   })();
+
+  // Print (?print-pdf): the page is static, so run what the clicks would have run —
+  // the demos' Run buttons, the matrix in its final state, the carousel's first panel.
+  if (/print-pdf/.test(location.search)) {
+    const printPrep = () => {
+      document.querySelectorAll('button.run').forEach(b => { try { b.onclick(); } catch (e) {} });
+      document.querySelectorAll('.car').forEach(car => {
+        const p = car.querySelector('.car-panel'); if (p) p.classList.add('visible', 'current-fragment');
+        const t = car.querySelector('.car-tabs span'); if (t) t.classList.add('on');
+      });
+      document.querySelectorAll('[data-anim]').forEach(f => f.classList.add('visible'));
+      if (window.__matrixApply) window.__matrixApply();
+    };
+    Reveal.on('ready', () => setTimeout(printPrep, 300));
+    Reveal.on('pdf-ready', () => setTimeout(printPrep, 300));
+  }
 
   // Local preview only: reload when the built file changes on disk (the position is remembered above).
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
