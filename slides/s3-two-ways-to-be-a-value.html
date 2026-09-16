@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PP26 Session 3</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Fira+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="vendor/fonts/fonts.css">
 <style>
 /*!
 * reveal.js 5.1.0
@@ -395,7 +395,7 @@ const test3 = [3, 4, 5, 6]
   .map(x => contains2(union2(a2, evens), x));
       </script>
       <pre><code class="language-js" data-src="src-evens"></code></pre>
-      <p>One line — an <em>infinite</em> set — and it unions with the others as if nothing happened.</p>
+      <p>One line, and it holds <em>every</em> even number — infinitely many, more than any array could list. It unions with the others as if nothing happened.</p>
       <p><button class="run" onclick="show('out10', 'union2(a2, evens): ' + J(test3))">Run</button></p>
       <pre class="out" id="out10"> </pre>
     </div>
@@ -727,13 +727,13 @@ s.contains(4);</code></pre>
       <div class="car-panel fragment current-visible" data-fragment-index="2">
         <pre class="mid"><code class="language-smalltalk">s := Insert new.
 x > 0 ifTrue: [ 'positive' ] ifFalse: [ 'not' ]</code></pre>
-        <p>A class is itself an object, and <code>new</code> is a message to it. Even <code>if</code> is a message: <code>ifTrue:ifFalse:</code> goes to the boolean with two blocks — closures — as arguments, and <span class="hl">the boolean object runs one of them</span>.</p>
+        <p>A class is itself an object, and <code>new</code> is a message to it. Even <code>if</code> is a message — a method call the receiver chooses: <code>ifTrue:ifFalse:</code> is sent to the boolean with two blocks (closures) as arguments; <span class="hl"><code>true</code> runs the first, <code>false</code> the second</span>.</p>
       </div>
       <div class="car-panel fragment current-visible" data-fragment-index="3">
-        <pre class="mid"><code class="language-js">const empty = { contains: x => false };
-const evens = Object.create(empty);
-evens.contains = x => x % 2 === 0;</code></pre>
-        <p>No class underneath: <span class="hl">objects are made from objects</span>. A prototype is another object, asked when a property is missing. The <code>class</code> syntax of 2015 writes this down and adds no mechanism.</p>
+        <pre class="mid"><code class="language-js">const empty = { contains: x => false, kind: 'set' };
+const evens = Object.create(empty);   // its prototype is empty
+evens.contains = x => x % 2 === 0;    // its own; evens.kind is still found on empty</code></pre>
+        <p>No class underneath: <span class="hl">objects are made from objects</span>. The prototype is another object, asked for any property the new one lacks. The <code>class</code> syntax of 2015 writes this down and adds no mechanism.</p>
       </div>
       <div class="car-panel fragment current-visible" data-fragment-index="4">
         <pre class="mid"><code class="language-ocaml">let empty = object method contains _ = false end
@@ -1012,17 +1012,17 @@ class Insert extends Set {
 </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ocaml.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/smalltalk.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="vendor/hljs/highlight.min.js"></script>
+<script src="vendor/hljs/languages/ocaml.min.js"></script>
+<script src="vendor/hljs/languages/c.min.js"></script>
+<script src="vendor/hljs/languages/smalltalk.min.js"></script>
+<script src="vendor/hljs/languages/java.min.js"></script>
 <script>
   window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<script src="vendor/mathjax/tex-svg.js"></script>
 <script>
   // the code shown on a slide IS the code that runs: <pre> is filled from its <script class="src">
   const dedent = t => { const ls = t.replace(/^\n+|\s+$/g, '').split('\n'); const ind = Math.min(...ls.filter(l => l.trim()).map(l => l.match(/^ */)[0].length)); return ls.map(l => l.slice(ind)).join('\n'); };
