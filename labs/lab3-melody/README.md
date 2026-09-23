@@ -156,8 +156,9 @@ anywhere, it is computed. Once `retrograde` works, `main.ml` writes the canon to
 let crab = crab_theme // retrograde crab_theme
 ```
 **C4** `simplify` (needs `Repeat`; uncomment it): `Repeat (1, m)` is `m`;
-`Repeat (n, Repeat (k, m))` is `Repeat (n * k, m)`. The order of the two arms matters — swap
-them and see what the compiler says.
+`Repeat (n, Repeat (k, m))` is `Repeat (n * k, m)`. Both rules are special cases of the
+general `Repeat (n, m)` arm, so that arm must come after them — move it to the top and see
+what the compiler says.
 
 ## Homework
 

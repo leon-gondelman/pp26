@@ -158,6 +158,11 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
 .reveal table.matrix td.cell.on, .reveal .w1, .reveal .w2 { font-weight: 500; }
 .reveal .w1 { color: #2A6F97; }
 .reveal .w2 { color: var(--accent); }
+/* text styles offered by the in-browser editor (deck/liveedit.json) */
+.reveal .c-blue { color: #2A6F97; }
+.reveal .c-green { color: var(--green); }
+.reveal .sz-s { font-size: 0.85em; }
+.reveal .sz-l { font-size: 1.15em; }
 </style>
 </head>
 <body>
@@ -1052,6 +1057,7 @@ class Insert extends Set {
     width: 1600, height: 900, margin: 0.04, minScale: 0.2, maxScale: 2.0,
     center: false, hash: true, transition: 'none', backgroundTransition: 'none',
     slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
+    scrollActivationWidth: null,                  // never switch to reveal's scroll view in a narrow window
     keyboard: { 84: () => toggleToc() },          // T: list of parts
     plugins: [ RevealNotes ]
   });
@@ -1063,6 +1069,7 @@ class Insert extends Set {
     root.querySelectorAll('p, li, td, th, .box, h2, h3').forEach(el => {
       if (el.dataset.widow || el.closest('pre') || el.classList.contains('fn') || el.querySelector('ul, ol, div, pre, table, br')) return;
       el.dataset.widow = '1';
+      if (el.style.fontSize) return;               // sized by hand in the editor: not ours to shrink
       const cs = getComputedStyle(el), lh = parseFloat(cs.lineHeight);
       if (!lh) return;
       const inner = () => el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
@@ -1079,7 +1086,7 @@ class Insert extends Set {
 
   // Part shortcuts: Shift+Right / Shift+Left = next / previous part; digits 1-9 = part n.
   document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey || e.target.isContentEditable) return;
     const h = Reveal.getIndices().h;
     // reveal.js binds Shift+Right / Shift+Left to last / first slide; stop it from seeing these.
     const swallow = () => { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); };
@@ -1150,7 +1157,7 @@ class Insert extends Set {
       try {
         const r = await fetch(location.pathname, { method: 'HEAD', cache: 'no-store' });
         const m = r.headers.get('Last-Modified') + '/' + r.headers.get('Content-Length');
-        if (stamp === null) stamp = m; else if (m !== stamp) { savePos(); location.reload(); }
+        if (stamp === null) stamp = m; else if (m !== stamp) { if (window.__editHolds && window.__editHolds()) return; savePos(); location.reload(); }
       } catch (e) {}
     }, 1500);
   }

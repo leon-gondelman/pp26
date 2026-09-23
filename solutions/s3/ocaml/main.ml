@@ -1,4 +1,4 @@
-(* Tests, one line per check. `dune exec ./main.exe` — then listen to bach.wav. *)
+(* SOLUTION copy of main.ml: the lab's checks with Part B2 and C4 switched on — 30 in all. *)
 open Melody
 open Tunes
 
@@ -34,10 +34,8 @@ let () =
     [0.; 2.] (fun l -> String.concat " " (List.map string_of_float l));
   check "B1 voices: the grouping of Par does not change the events"
     (fun () -> to_events 120 (voices scale [thirds; canon]) = to_events 120 ((scale // thirds) // canon)) true string_of_bool;
-  (* Part B2: uncomment once Repeat and twice exist.
   check "B2 Repeat (2, voice1) lasts 176 beats" (fun () -> length_in_beats twice) 176. string_of_float;
   check "B2 Repeat (2, voice1) sounds like voice1 ++ voice1" (fun () -> to_events 120 twice = to_events 120 (voice1 ++ voice1)) true string_of_bool;
-  *)
   print_endline "Part C";
   check "C1 transpose_octave keeps the beats" (fun () -> length_in_beats (transpose_octave 1 bach)) 88. string_of_float;
   check "C1 transpose_octave 1 doubles the frequency"
@@ -54,11 +52,9 @@ let () =
   check "C3 the crab canon ends as it began: the retrograde's last note is the theme's first"
     (fun () -> let last l = List.hd (List.rev l) in
                (last (to_events 120 (retrograde crab_theme))).hz = (List.hd (to_events 120 crab_theme)).hz) true string_of_bool;
-  (* Part C4: uncomment once simplify exists.
   check "C4 simplify removes Repeat 1" (fun () -> pretty (simplify (Repeat (1, q C 4)))) "C4/4" str;
   check "C4 simplify merges nested Repeats" (fun () -> pretty (simplify (Repeat (2, Repeat (3, q C 4))))) "[C4/4]x6" str;
   check "C4 simplify keeps the events" (fun () -> to_events 120 (simplify twice) = to_events 120 twice) true string_of_bool;
-  *)
   Printf.printf "\n%d passed, %d failed, %d to do\n" !ok !bad !todo;
   (match to_events 120 bach with
    | exception Failure _ -> print_endline "bach.wav: after Part B1"
