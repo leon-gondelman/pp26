@@ -85,8 +85,8 @@ one as *todo* until it is filled, then as *pass* or *FAIL*.
 
 ## Warm-up — before the music
 
-One sheet, `warmup/warmup.pdf`, in two parts; about thirty-five minutes together, and what
-is left over is finished at home. Nothing here is themed.
+One sheet, `warmup/warmup.pdf`, in two parts; what is left over is finished at home. Nothing
+here is themed.
 
 **Part 1, on paper, in pairs** — a notification that goes out by email, SMS or push, as a
 type: write it; count the values of small types (sums add, products multiply — that is why
