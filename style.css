@@ -150,7 +150,10 @@ table.sessions{width:100%;border-collapse:collapse;font-size:.9rem;min-width:52r
 table.sessions th{text-align:left;font:600 .67rem/1 var(--sans);letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink3);padding:0 .8rem .7rem;
   border-bottom:1px solid var(--line);vertical-align:top}
-table.sessions th.lab{padding-bottom:.35rem;border-bottom:none}
+table.sessions th.lab{padding-bottom:.35rem;border-bottom:none;text-align:center}
+/* the lab's two halves are framed by two very faint rules */
+table.sessions th.lab,table.sessions .col-warmup{border-left:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
+table.sessions th.lab,table.sessions .col-quest{border-right:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
 table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:0}
 table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
   vertical-align:middle}
