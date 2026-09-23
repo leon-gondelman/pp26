@@ -173,6 +173,14 @@ tr.partrow .dim{font-weight:400;letter-spacing:.02em;text-transform:none;font-si
 tr.now td{background:var(--sunk)}
 tr.now td.date{box-shadow:inset 3px 0 0 var(--wine);color:var(--wine);font-weight:600}
 tr.done td.date{color:var(--ink3)}
+/* a lecture in two blocks: the session's row, then one sub-row per block */
+tr.has-blocks td.ttl,tr.has-blocks td.blocks{border-bottom:none;padding-bottom:.2rem}
+tr.block td{border-bottom:none;padding-top:.12rem;padding-bottom:.12rem}
+tr.block.last td{border-bottom:1px solid var(--line-soft);padding-bottom:.75rem}
+tr.block td.ttl{padding-left:2.55rem;font-size:.84rem;color:var(--ink2)}
+.blk{display:inline-block;min-width:3.6rem;font:500 .64rem/1 var(--mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink3)}
+td.ttl .blk-m{display:none}
 
 /* material chips, coloured by what the thing is */
 a.dl{display:inline-block;white-space:nowrap;text-decoration:none;margin:.1rem .2rem .1rem 0;
@@ -208,6 +216,10 @@ ul.materials li.c-quest{color:var(--lab);background:var(--lab-b);border-color:tr
 ul.materials li.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
 ul.materials li.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 ul.materials li.dim{width:100%;display:block;font-weight:400;color:var(--ink3)}
+/* a lecture block's heading inside the Lecture group: a line, not a pill */
+ul.materials li.blockhead{width:100%;display:block;background:none;border:0;padding:.3rem 0 0;
+  font:500 .84rem/1.3 var(--sans);color:var(--ink2)}
+ul.materials li.blockhead .blk{margin-right:.4rem}
 
 /* A group is a labelled row of those pills, not a box of its own. */
 ul.materials li.group{display:block;width:100%;border:0;background:none;padding:0;
@@ -312,6 +324,10 @@ footer.site .meta a:hover{text-decoration:underline}
   table.sessions tr.now{background:var(--sunk);border-radius:8px;
     padding-left:.6rem;box-shadow:inset 3px 0 0 var(--wine)}
   table.sessions tr.now td.date{box-shadow:none}
+  /* blocks: the phone copy inside the title cell shows, the sub-rows hide */
+  table.sessions tr.block{display:none}
+  table.sessions td.ttl .blk-m{display:block;margin-top:.45rem;font-size:.9rem;color:var(--ink2)}
+  table.sessions td.ttl .blk-m .mat{padding:.15rem 0 0}
 }
 @media (max-width:980px){
   body{display:block}
