@@ -149,7 +149,9 @@ code{font:400 .88em/1.4 var(--mono);background:var(--sunk);border:1px solid var(
 table.sessions{width:100%;border-collapse:collapse;font-size:.9rem;min-width:52rem}
 table.sessions th{text-align:left;font:600 .67rem/1 var(--sans);letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink3);padding:0 .8rem .7rem;
-  border-bottom:1px solid var(--line)}
+  border-bottom:1px solid var(--line);vertical-align:bottom}
+table.sessions th.lab{padding-bottom:.35rem;border-bottom:none}
+table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:0}
 table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
   vertical-align:middle}
 td.date{width:5.2rem;white-space:nowrap;color:var(--ink3);
