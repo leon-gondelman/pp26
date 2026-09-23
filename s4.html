@@ -2,10 +2,10 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S4 Functional Programming - PP26</title>
+<title>S4 Functional Programming and Control - PP26</title>
 <meta name="description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
 <meta name="theme-color" content="#211a52">
-<meta property="og:title" content="S4 Functional Programming - PP26">
+<meta property="og:title" content="S4 Functional Programming and Control - PP26">
 <meta property="og:description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homes.cs.aau.dk/~lego/pp26/">
@@ -25,7 +25,7 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
   <p class="brand-sub">SW7 &middot; Autumn 2026 &middot; AAU Copenhagen</p>
   <nav aria-label="Course"><ul><li><a href="index.html">Overview</a></li><li><a href="index.html#sessions">Schedule</a></li><li><a href="index.html#exam">Exam format</a></li><li><a href="index.html#materials">Materials</a></li><li><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle ↗</a></li><li><a href="https://github.com/leon-gondelman/pp26">Repository ↗</a></li></ul></nav>
   <p class="railhead">Sessions</p>
-  <nav aria-label="Sessions"><ol class="railsessions"><li><a href="s1.html"><span class="n">01</span><span>Intro</span></a></li><li><a href="s2.html"><span class="n">02</span><span>Persistent Data Structures</span></a></li><li><a href="s3.html"><span class="n">03</span><span>Algebraic Data Types and Objects</span></a></li><li><a href="s4.html" aria-current='page'><span class="n">04</span><span>Functional Programming</span></a></li><li><a href="s5.html"><span class="n">05</span><span>Higher-Order Functions</span></a></li><li><a href="s6.html"><span class="n">06</span><span>Asynchronous Programming</span></a></li><li><a href="s7.html"><span class="n">07</span><span>Multi-Threading</span></a></li><li><a href="s8.html"><span class="n">08</span><span>Message Passing</span></a></li><li><a href="s9.html"><span class="n">09</span><span>Static Type Systems</span></a></li><li><a href="s10.html"><span class="n">10</span><span>Polymorphism</span></a></li><li><a href="s11.html"><span class="n">11</span><span>Data Abstraction</span></a></li><li><a href="s12.html"><span class="n">12</span><span>Declarative Programming and Conclusion</span></a></li></ol></nav>
+  <nav aria-label="Sessions"><ol class="railsessions"><li><a href="s1.html"><span class="n">01</span><span>Intro</span></a></li><li><a href="s2.html"><span class="n">02</span><span>Data Modification: Persistent and Ephemeral Data Structures</span></a></li><li><a href="s3.html"><span class="n">03</span><span>Data Construction: Algebraic Data Types and Objects</span></a></li><li><a href="s4.html" aria-current='page'><span class="n">04</span><span>Functional Programming and Control</span></a></li><li><a href="s5.html"><span class="n">05</span><span>Control: Higher-Order Functions and Iterators</span></a></li><li><a href="s6.html"><span class="n">06</span><span>Asynchronous Programming</span></a></li><li><a href="s7.html"><span class="n">07</span><span>Multi-Threading</span></a></li><li><a href="s8.html"><span class="n">08</span><span>Message Passing</span></a></li><li><a href="s9.html"><span class="n">09</span><span>Parallel Programming</span></a></li><li><a href="s10.html"><span class="n">10</span><span>Static Type Systems</span></a></li><li><a href="s11.html"><span class="n">11</span><span>Polymorphism</span></a></li><li><a href="s12.html"><span class="n">12</span><span>Data Abstraction</span></a></li><li><a href="s13.html"><span class="n">13</span><span>Declarative Programming and Conclusion</span></a></li></ol></nav>
   <div class="railfoot">
     <a class="aaumark" href="https://www.en.aau.dk/">
       <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aalborg University" focusable="false"><path d="M56.913 45.79c-1.532-.698-3.072-.989-5.688-2.844-6.654-4.72-9.649-10.186-5.388-21.751 2.459-6.671 3.464-11.579 3.319-18.053-.082-.064-.406-.277-.483-.341-1.326 8.045-3.543 12.011-8.535 20.115-11.296 18.345-.675 29.574 4.344 33.605 4.99-2.878 9.253-7.061 12.431-12.222a29.9 29.9 0 0 1-.0-.0Z"/><path d="M44.807 3.108a44 44 0 0 0-.586-.312c-2.86 7.061-6.717 10.696-13.34 16.028-14.096 11.348-12.242 24.428-6.037 34.673a29.9 29.9 0 0 0 9.219.219c-5.916-9.028-8.436-19.409 1.243-31.63 5.75-7.262 8.16-11.708 9.501-18.978Z"/><path d="M42.83 2.093A30 30 0 0 0 30.001 0C13.432 0 0 13.432 0 30c0 7.61 2.834 14.558 7.503 19.845.363-14.55 4.184-21.62 17.203-28.462 8.876-4.665 14.2-8.256 18.124-19.29Z"/></svg><span>Aalborg University Copenhagen</span>
@@ -47,13 +47,74 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 <p class="crumb"><a href="index.html">&larr; all sessions</a></p>
 <section class="hero">
   <p class="dim">Session 4</p>
-  <h1>Functional Programming</h1>
-  <p class="lead">Not yet. This session&rsquo;s outline may still change.</p>
+  <h1>Functional Programming and Control</h1>
+  <p class="lead">Functional programming and control: who decides the next step? Recursion and the stack, the loop as a value, evaluation order and parameter passing — then the λ-calculus as the formalism.</p>
 </section>
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="dim">Published when the session runs.</li></ul>
+  <ul class="materials"><li class="group"><span class="glabel">Lecture</span><ul><li class="blockhead"><span class="blk">Block 1</span> Block 1 — control patterns: recursion, the stack, fold, evaluation</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> Block 2 — the formalism: the λ-calculus</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li></ul></li><li class="group"><span class="glabel">Warm-up</span><ul><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s4-lambda-on-paper.pdf">Warm-up — the λ-calculus on paper: five reductions, then four functions</a></span></li></ul></li><li class="group"><span class="glabel">Quest</span><ul><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html">Quest — an evaluator for the λ-calculus</a></span></li><li class="m-code c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab4-lambda">The lab folder — lambda.ml, term.ml, syntax.ml, main.ml</a></span></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-reading c-homework"><span class="mi"><a href="https://cs3110.github.io/textbook/chapters/interp/intro.html">CS3110, chapter 9 — sections 9.1 to 9.3</a></span></li><li class="m-homework c-homework"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html#homework">What to finish at home — on the lab page</a></span></li></ul></li></ul>
+</section>
+<section class="story">
+  <h2>This session</h2>
+  <p>Who, and how, decides the next step of a computation? Block&nbsp;1 asks it four
+     times in real languages &mdash; at a function call, across an iteration, in the
+     order and the moment arguments are evaluated &mdash; and finds each time that
+     the implicit choice is the functional paradigm&rsquo;s. Block&nbsp;2 formalises
+     those choices in the smallest functional language there is, the
+     &lambda;-calculus: three forms, one rule, and the strategy that picks the next
+     redex.</p>
+</section>
+
+<section>
+  <h2>The lecture, in two blocks</h2>
+  <table class="parts">
+    <tbody>
+      <tr><td class="p">1</td><td><strong>Control patterns: recursion, the stack, fold, evaluation.</strong>
+          Two definitions of computing (1936); a call on the machine and in the calculus; recursion and loops;
+          the loop as a value; evaluation order and parameter passing.
+          <a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.html">slides (web, with the demos)</a> &middot;
+          <a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.pdf">PDF</a></td></tr>
+      <tr><td class="p">2</td><td><strong>The formalism: the &lambda;-calculus.</strong>
+          Syntax, free variables, &beta;-reduction, substitution; normal and applicative order, the
+          small-step rules; booleans, numbers, <code>if</code> and recursion from three forms; laziness.
+          <a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.html">slides (web, with the steppers)</a> &middot;
+          <a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.pdf">PDF</a></td></tr>
+    </tbody>
+  </table>
+  <p class="p">The web slides run their code: Python in the page, JavaScript, and a &lambda;-calculus
+     stepper with a switch for the strategy. <kbd>&rarr;</kbd> moves one step; <kbd>T</kbd> lists the parts.</p>
+</section>
+
+<section>
+  <h2>The lab: warm-up, then the evaluator</h2>
+  <table class="parts">
+    <tbody>
+      <tr><td class="p">W</td><td><strong>Warm-up.</strong> Five reductions on paper, then four functions on the
+          term type: <code>size</code>, <code>free_vars</code>, <code>is_closed</code>, <code>subst</code> without capture.
+          <a href="https://leon-gondelman.github.io/pp26/handouts/s4-lambda-on-paper.pdf">the sheet (PDF)</a></td></tr>
+      <tr class="watch"><td class="p">A</td><td><strong>Small-step.</strong> One step under call by name, under call by value, and in
+          full normal order; <code>(&lambda;x. &lambda;y. y) &Omega;</code> ends under one and not the other, in our own code.</td></tr>
+      <tr><td class="p">B</td><td><strong>Big-step.</strong> An environment instead of substitution; a function value that
+          carries the environment it was made in &mdash; a closure.</td></tr>
+    </tbody>
+  </table>
+  <p class="p"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html">the lab page</a> &middot;
+     <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab4-lambda/README.md">README</a> &middot;
+     source files: <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab4-lambda/lambda.ml">lambda.ml</a> (the file we edit),
+     <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab4-lambda/term.ml">term.ml</a>, <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab4-lambda/syntax.ml">syntax.ml</a>,
+     <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab4-lambda/main.ml">main.ml</a> &middot; <a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab4-lambda">the whole folder</a>.
+     Nothing is handed in; the checks in <code>main.ml</code> say which parts remain.</p>
+</section>
+
+<section>
+  <h2>Homework</h2>
+  <ul class="refs">
+    <li><strong>Finish the lab</strong>, any part left open, in order; the extensions are on the lab page.</li>
+    <li class="must"><strong>Reading.</strong>
+        <a href="https://cs3110.github.io/textbook/chapters/interp/intro.html">CS3110, chapter 9</a>,
+        sections 9.1&ndash;9.3; Pierce, <em>Types and Programming Languages</em>, chapter 5.</li>
+  </ul>
 </section>
 
   </div>

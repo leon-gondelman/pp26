@@ -1,0 +1,3 @@
+(executable
+ (name main)
+ (flags (:standard -w +8-26-27-39 -warn-error -a)))

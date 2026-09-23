@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PP26 Session 4</title>
+<link rel="stylesheet" href="vendor/fonts/fonts.css">
+<script src="demos/lambda.js"></script>
+<script src="demos/fold.js"></script>
+<script src="demos/stack.js"></script>
+<script src="demos/turing.js"></script>
+<script src="demos/foldviz.js"></script>
+<script src="demos/pyrun.js"></script>
+<style>
+/*!
+* reveal.js 5.1.0
+* https://revealjs.com
+* MIT licensed
+*
+* Copyright (C) 2011-2024 Hakim El Hattab, https://hakim.se
+*/.reveal .r-stretch,.reveal .stretch{max-width:none;max-height:none}.reveal pre.r-stretch code,.reveal pre.stretch code{height:100%;max-height:100%;box-sizing:border-box}.reveal .r-fit-text{display:inline-block;white-space:nowrap}.reveal .r-stack{display:grid;grid-template-rows:100%}.reveal .r-stack>*{grid-area:1/1;margin:auto}.reveal .r-hstack,.reveal .r-vstack{display:flex}.reveal .r-hstack img,.reveal .r-hstack video,.reveal .r-vstack img,.reveal .r-vstack video{min-width:0;min-height:0;object-fit:contain}.reveal .r-vstack{flex-direction:column;align-items:center;justify-content:center}.reveal .r-hstack{flex-direction:row;align-items:center;justify-content:center}.reveal .items-stretch{align-items:stretch}.reveal .items-start{align-items:flex-start}.reveal .items-center{align-items:center}.reveal .items-end{align-items:flex-end}.reveal .justify-between{justify-content:space-between}.reveal .justify-around{justify-content:space-around}.reveal .justify-start{justify-content:flex-start}.reveal .justify-center{justify-content:center}.reveal .justify-end{justify-content:flex-end}html.reveal-full-page{width:100%;height:100%;height:100vh;height:calc(var(--vh,1vh) * 100);height:100svh;overflow:hidden}.reveal-viewport{height:100%;overflow:hidden;position:relative;line-height:1;margin:0;background-color:#fff;color:#000;--r-controls-spacing:12px}.reveal-viewport:fullscreen{top:0!important;left:0!important;width:100%!important;height:100%!important;transform:none!important}.reveal .fragment{transition:all .2s ease}.reveal .fragment:not(.custom){opacity:0;visibility:hidden;will-change:opacity}.reveal .fragment.visible{opacity:1;visibility:inherit}.reveal .fragment.disabled{transition:none}.reveal .fragment.grow{opacity:1;visibility:inherit}.reveal .fragment.grow.visible{transform:scale(1.3)}.reveal .fragment.shrink{opacity:1;visibility:inherit}.reveal .fragment.shrink.visible{transform:scale(.7)}.reveal .fragment.zoom-in{transform:scale(.1)}.reveal .fragment.zoom-in.visible{transform:none}.reveal .fragment.fade-out{opacity:1;visibility:inherit}.reveal .fragment.fade-out.visible{opacity:0;visibility:hidden}.reveal .fragment.semi-fade-out{opacity:1;visibility:inherit}.reveal .fragment.semi-fade-out.visible{opacity:.5;visibility:inherit}.reveal .fragment.strike{opacity:1;visibility:inherit}.reveal .fragment.strike.visible{text-decoration:line-through}.reveal .fragment.fade-up{transform:translate(0,40px)}.reveal .fragment.fade-up.visible{transform:translate(0,0)}.reveal .fragment.fade-down{transform:translate(0,-40px)}.reveal .fragment.fade-down.visible{transform:translate(0,0)}.reveal .fragment.fade-right{transform:translate(-40px,0)}.reveal .fragment.fade-right.visible{transform:translate(0,0)}.reveal .fragment.fade-left{transform:translate(40px,0)}.reveal .fragment.fade-left.visible{transform:translate(0,0)}.reveal .fragment.current-visible,.reveal .fragment.fade-in-then-out{opacity:0;visibility:hidden}.reveal .fragment.current-visible.current-fragment,.reveal .fragment.fade-in-then-out.current-fragment{opacity:1;visibility:inherit}.reveal .fragment.fade-in-then-semi-out{opacity:0;visibility:hidden}.reveal .fragment.fade-in-then-semi-out.visible{opacity:.5;visibility:inherit}.reveal .fragment.fade-in-then-semi-out.current-fragment{opacity:1;visibility:inherit}.reveal .fragment.highlight-blue,.reveal .fragment.highlight-current-blue,.reveal .fragment.highlight-current-green,.reveal .fragment.highlight-current-red,.reveal .fragment.highlight-green,.reveal .fragment.highlight-red{opacity:1;visibility:inherit}.reveal .fragment.highlight-red.visible{color:#ff2c2d}.reveal .fragment.highlight-green.visible{color:#17ff2e}.reveal .fragment.highlight-blue.visible{color:#1b91ff}.reveal .fragment.highlight-current-red.current-fragment{color:#ff2c2d}.reveal .fragment.highlight-current-green.current-fragment{color:#17ff2e}.reveal .fragment.highlight-current-blue.current-fragment{color:#1b91ff}.reveal:after{content:"";font-style:italic}.reveal iframe{z-index:1}.reveal a{position:relative}@keyframes bounce-right{0%,10%,25%,40%,50%{transform:translateX(0)}20%{transform:translateX(10px)}30%{transform:translateX(-5px)}}@keyframes bounce-left{0%,10%,25%,40%,50%{transform:translateX(0)}20%{transform:translateX(-10px)}30%{transform:translateX(5px)}}@keyframes bounce-down{0%,10%,25%,40%,50%{transform:translateY(0)}20%{transform:translateY(10px)}30%{transform:translateY(-5px)}}.reveal .controls{display:none;position:absolute;top:auto;bottom:var(--r-controls-spacing);right:var(--r-controls-spacing);left:auto;z-index:11;color:#000;pointer-events:none;font-size:10px}.reveal .controls button{position:absolute;padding:0;background-color:transparent;border:0;outline:0;cursor:pointer;color:currentColor;transform:scale(.9999);transition:color .2s ease,opacity .2s ease,transform .2s ease;z-index:2;pointer-events:auto;font-size:inherit;visibility:hidden;opacity:0;-webkit-appearance:none;-webkit-tap-highlight-color:transparent}.reveal .controls .controls-arrow:after,.reveal .controls .controls-arrow:before{content:"";position:absolute;top:0;left:0;width:2.6em;height:.5em;border-radius:.25em;background-color:currentColor;transition:all .15s ease,background-color .8s ease;transform-origin:.2em 50%;will-change:transform}.reveal .controls .controls-arrow{position:relative;width:3.6em;height:3.6em}.reveal .controls .controls-arrow:before{transform:translateX(.5em) translateY(1.55em) rotate(45deg)}.reveal .controls .controls-arrow:after{transform:translateX(.5em) translateY(1.55em) rotate(-45deg)}.reveal .controls .controls-arrow:hover:before{transform:translateX(.5em) translateY(1.55em) rotate(40deg)}.reveal .controls .controls-arrow:hover:after{transform:translateX(.5em) translateY(1.55em) rotate(-40deg)}.reveal .controls .controls-arrow:active:before{transform:translateX(.5em) translateY(1.55em) rotate(36deg)}.reveal .controls .controls-arrow:active:after{transform:translateX(.5em) translateY(1.55em) rotate(-36deg)}.reveal .controls .navigate-left{right:6.4em;bottom:3.2em;transform:translateX(-10px)}.reveal .controls .navigate-left.highlight{animation:bounce-left 2s 50 both ease-out}.reveal .controls .navigate-right{right:0;bottom:3.2em;transform:translateX(10px)}.reveal .controls .navigate-right .controls-arrow{transform:rotate(180deg)}.reveal .controls .navigate-right.highlight{animation:bounce-right 2s 50 both ease-out}.reveal .controls .navigate-up{right:3.2em;bottom:6.4em;transform:translateY(-10px)}.reveal .controls .navigate-up .controls-arrow{transform:rotate(90deg)}.reveal .controls .navigate-down{right:3.2em;bottom:-1.4em;padding-bottom:1.4em;transform:translateY(10px)}.reveal .controls .navigate-down .controls-arrow{transform:rotate(-90deg)}.reveal .controls .navigate-down.highlight{animation:bounce-down 2s 50 both ease-out}.reveal .controls[data-controls-back-arrows=faded] .navigate-up.enabled{opacity:.3}.reveal .controls[data-controls-back-arrows=faded] .navigate-up.enabled:hover{opacity:1}.reveal .controls[data-controls-back-arrows=hidden] .navigate-up.enabled{opacity:0;visibility:hidden}.reveal .controls .enabled{visibility:visible;opacity:.9;cursor:pointer;transform:none}.reveal .controls .enabled.fragmented{opacity:.5}.reveal .controls .enabled.fragmented:hover,.reveal .controls .enabled:hover{opacity:1}.reveal:not(.rtl) .controls[data-controls-back-arrows=faded] .navigate-left.enabled{opacity:.3}.reveal:not(.rtl) .controls[data-controls-back-arrows=faded] .navigate-left.enabled:hover{opacity:1}.reveal:not(.rtl) .controls[data-controls-back-arrows=hidden] .navigate-left.enabled{opacity:0;visibility:hidden}.reveal.rtl .controls[data-controls-back-arrows=faded] .navigate-right.enabled{opacity:.3}.reveal.rtl .controls[data-controls-back-arrows=faded] .navigate-right.enabled:hover{opacity:1}.reveal.rtl .controls[data-controls-back-arrows=hidden] .navigate-right.enabled{opacity:0;visibility:hidden}.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-down,.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-up{display:none}.reveal:not(.has-vertical-slides) .controls .navigate-left,.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-left{bottom:1.4em;right:5.5em}.reveal:not(.has-vertical-slides) .controls .navigate-right,.reveal[data-navigation-mode=linear].has-horizontal-slides .navigate-right{bottom:1.4em;right:.5em}.reveal:not(.has-horizontal-slides) .controls .navigate-up{right:1.4em;bottom:5em}.reveal:not(.has-horizontal-slides) .controls .navigate-down{right:1.4em;bottom:.5em}.reveal.has-dark-background .controls{color:#fff}.reveal.has-light-background .controls{color:#000}.reveal.no-hover .controls .controls-arrow:active:before,.reveal.no-hover .controls .controls-arrow:hover:before{transform:translateX(.5em) translateY(1.55em) rotate(45deg)}.reveal.no-hover .controls .controls-arrow:active:after,.reveal.no-hover .controls .controls-arrow:hover:after{transform:translateX(.5em) translateY(1.55em) rotate(-45deg)}@media screen and (min-width:500px){.reveal-viewport{--r-controls-spacing:0.8em}.reveal .controls[data-controls-layout=edges]{top:0;right:0;bottom:0;left:0}.reveal .controls[data-controls-layout=edges] .navigate-down,.reveal .controls[data-controls-layout=edges] .navigate-left,.reveal .controls[data-controls-layout=edges] .navigate-right,.reveal .controls[data-controls-layout=edges] .navigate-up{bottom:auto;right:auto}.reveal .controls[data-controls-layout=edges] .navigate-left{top:50%;left:var(--r-controls-spacing);margin-top:-1.8em}.reveal .controls[data-controls-layout=edges] .navigate-right{top:50%;right:var(--r-controls-spacing);margin-top:-1.8em}.reveal .controls[data-controls-layout=edges] .navigate-up{top:var(--r-controls-spacing);left:50%;margin-left:-1.8em}.reveal .controls[data-controls-layout=edges] .navigate-down{bottom:calc(var(--r-controls-spacing) - 1.4em + .3em);left:50%;margin-left:-1.8em}}.reveal .progress{position:absolute;display:none;height:3px;width:100%;bottom:0;left:0;z-index:10;background-color:rgba(0,0,0,.2);color:#fff}.reveal .progress:after{content:"";display:block;position:absolute;height:10px;width:100%;top:-10px}.reveal .progress span{display:block;height:100%;width:100%;background-color:currentColor;transition:transform .8s cubic-bezier(.26,.86,.44,.985);transform-origin:0 0;transform:scaleX(0)}.reveal .slide-number{position:absolute;display:block;right:8px;bottom:8px;z-index:31;font-family:Helvetica,sans-serif;font-size:12px;line-height:1;color:#fff;background-color:rgba(0,0,0,.4);padding:5px}.reveal .slide-number a{color:currentColor}.reveal .slide-number-delimiter{margin:0 3px}.reveal{position:relative;width:100%;height:100%;overflow:hidden;touch-action:pinch-zoom}.reveal.embedded{touch-action:pan-y}.reveal.embedded.is-vertical-slide{touch-action:none}.reveal .slides{position:absolute;width:100%;height:100%;top:0;right:0;bottom:0;left:0;margin:auto;pointer-events:none;overflow:visible;z-index:1;text-align:center;perspective:600px;perspective-origin:50% 40%}.reveal .slides>section{perspective:600px}.reveal .slides>section,.reveal .slides>section>section{display:none;position:absolute;width:100%;pointer-events:auto;z-index:10;transform-style:flat;transition:transform-origin .8s cubic-bezier(.26,.86,.44,.985),transform .8s cubic-bezier(.26,.86,.44,.985),visibility .8s cubic-bezier(.26,.86,.44,.985),opacity .8s cubic-bezier(.26,.86,.44,.985)}.reveal[data-transition-speed=fast] .slides section{transition-duration:.4s}.reveal[data-transition-speed=slow] .slides section{transition-duration:1.2s}.reveal .slides section[data-transition-speed=fast]{transition-duration:.4s}.reveal .slides section[data-transition-speed=slow]{transition-duration:1.2s}.reveal .slides>section.stack{padding-top:0;padding-bottom:0;pointer-events:none;height:100%}.reveal .slides>section.present,.reveal .slides>section>section.present{display:block;z-index:11;opacity:1}.reveal .slides>section:empty,.reveal .slides>section>section:empty,.reveal .slides>section>section[data-background-interactive],.reveal .slides>section[data-background-interactive]{pointer-events:none}.reveal.center,.reveal.center .slides,.reveal.center .slides section{min-height:0!important}.reveal .slides>section:not(.present),.reveal .slides>section>section:not(.present){pointer-events:none}.reveal.overview .slides>section,.reveal.overview .slides>section>section{pointer-events:auto}.reveal .slides>section.future,.reveal .slides>section.future>section,.reveal .slides>section.past,.reveal .slides>section.past>section,.reveal .slides>section>section.future,.reveal .slides>section>section.past{opacity:0}.reveal .slides>section[data-transition=slide].past,.reveal .slides>section[data-transition~=slide-out].past,.reveal.slide .slides>section:not([data-transition]).past{transform:translate(-150%,0)}.reveal .slides>section[data-transition=slide].future,.reveal .slides>section[data-transition~=slide-in].future,.reveal.slide .slides>section:not([data-transition]).future{transform:translate(150%,0)}.reveal .slides>section>section[data-transition=slide].past,.reveal .slides>section>section[data-transition~=slide-out].past,.reveal.slide .slides>section>section:not([data-transition]).past{transform:translate(0,-150%)}.reveal .slides>section>section[data-transition=slide].future,.reveal .slides>section>section[data-transition~=slide-in].future,.reveal.slide .slides>section>section:not([data-transition]).future{transform:translate(0,150%)}.reveal .slides>section[data-transition=linear].past,.reveal .slides>section[data-transition~=linear-out].past,.reveal.linear .slides>section:not([data-transition]).past{transform:translate(-150%,0)}.reveal .slides>section[data-transition=linear].future,.reveal .slides>section[data-transition~=linear-in].future,.reveal.linear .slides>section:not([data-transition]).future{transform:translate(150%,0)}.reveal .slides>section>section[data-transition=linear].past,.reveal .slides>section>section[data-transition~=linear-out].past,.reveal.linear .slides>section>section:not([data-transition]).past{transform:translate(0,-150%)}.reveal .slides>section>section[data-transition=linear].future,.reveal .slides>section>section[data-transition~=linear-in].future,.reveal.linear .slides>section>section:not([data-transition]).future{transform:translate(0,150%)}.reveal .slides section[data-transition=default].stack,.reveal.default .slides section.stack{transform-style:preserve-3d}.reveal .slides>section[data-transition=default].past,.reveal .slides>section[data-transition~=default-out].past,.reveal.default .slides>section:not([data-transition]).past{transform:translate3d(-100%,0,0) rotateY(-90deg) translate3d(-100%,0,0)}.reveal .slides>section[data-transition=default].future,.reveal .slides>section[data-transition~=default-in].future,.reveal.default .slides>section:not([data-transition]).future{transform:translate3d(100%,0,0) rotateY(90deg) translate3d(100%,0,0)}.reveal .slides>section>section[data-transition=default].past,.reveal .slides>section>section[data-transition~=default-out].past,.reveal.default .slides>section>section:not([data-transition]).past{transform:translate3d(0,-300px,0) rotateX(70deg) translate3d(0,-300px,0)}.reveal .slides>section>section[data-transition=default].future,.reveal .slides>section>section[data-transition~=default-in].future,.reveal.default .slides>section>section:not([data-transition]).future{transform:translate3d(0,300px,0) rotateX(-70deg) translate3d(0,300px,0)}.reveal .slides section[data-transition=convex].stack,.reveal.convex .slides section.stack{transform-style:preserve-3d}.reveal .slides>section[data-transition=convex].past,.reveal .slides>section[data-transition~=convex-out].past,.reveal.convex .slides>section:not([data-transition]).past{transform:translate3d(-100%,0,0) rotateY(-90deg) translate3d(-100%,0,0)}.reveal .slides>section[data-transition=convex].future,.reveal .slides>section[data-transition~=convex-in].future,.reveal.convex .slides>section:not([data-transition]).future{transform:translate3d(100%,0,0) rotateY(90deg) translate3d(100%,0,0)}.reveal .slides>section>section[data-transition=convex].past,.reveal .slides>section>section[data-transition~=convex-out].past,.reveal.convex .slides>section>section:not([data-transition]).past{transform:translate3d(0,-300px,0) rotateX(70deg) translate3d(0,-300px,0)}.reveal .slides>section>section[data-transition=convex].future,.reveal .slides>section>section[data-transition~=convex-in].future,.reveal.convex .slides>section>section:not([data-transition]).future{transform:translate3d(0,300px,0) rotateX(-70deg) translate3d(0,300px,0)}.reveal .slides section[data-transition=concave].stack,.reveal.concave .slides section.stack{transform-style:preserve-3d}.reveal .slides>section[data-transition=concave].past,.reveal .slides>section[data-transition~=concave-out].past,.reveal.concave .slides>section:not([data-transition]).past{transform:translate3d(-100%,0,0) rotateY(90deg) translate3d(-100%,0,0)}.reveal .slides>section[data-transition=concave].future,.reveal .slides>section[data-transition~=concave-in].future,.reveal.concave .slides>section:not([data-transition]).future{transform:translate3d(100%,0,0) rotateY(-90deg) translate3d(100%,0,0)}.reveal .slides>section>section[data-transition=concave].past,.reveal .slides>section>section[data-transition~=concave-out].past,.reveal.concave .slides>section>section:not([data-transition]).past{transform:translate3d(0,-80%,0) rotateX(-70deg) translate3d(0,-80%,0)}.reveal .slides>section>section[data-transition=concave].future,.reveal .slides>section>section[data-transition~=concave-in].future,.reveal.concave .slides>section>section:not([data-transition]).future{transform:translate3d(0,80%,0) rotateX(70deg) translate3d(0,80%,0)}.reveal .slides section[data-transition=zoom],.reveal.zoom .slides section:not([data-transition]){transition-timing-function:ease}.reveal .slides>section[data-transition=zoom].past,.reveal .slides>section[data-transition~=zoom-out].past,.reveal.zoom .slides>section:not([data-transition]).past{visibility:hidden;transform:scale(16)}.reveal .slides>section[data-transition=zoom].future,.reveal .slides>section[data-transition~=zoom-in].future,.reveal.zoom .slides>section:not([data-transition]).future{visibility:hidden;transform:scale(.2)}.reveal .slides>section>section[data-transition=zoom].past,.reveal .slides>section>section[data-transition~=zoom-out].past,.reveal.zoom .slides>section>section:not([data-transition]).past{transform:scale(16)}.reveal .slides>section>section[data-transition=zoom].future,.reveal .slides>section>section[data-transition~=zoom-in].future,.reveal.zoom .slides>section>section:not([data-transition]).future{transform:scale(.2)}.reveal.cube .slides{perspective:1300px}.reveal.cube .slides section{padding:30px;min-height:700px;backface-visibility:hidden;box-sizing:border-box;transform-style:preserve-3d}.reveal.center.cube .slides section{min-height:0}.reveal.cube .slides section:not(.stack):before{content:"";position:absolute;display:block;width:100%;height:100%;left:0;top:0;background:rgba(0,0,0,.1);border-radius:4px;transform:translateZ(-20px)}.reveal.cube .slides section:not(.stack):after{content:"";position:absolute;display:block;width:90%;height:30px;left:5%;bottom:0;background:0 0;z-index:1;border-radius:4px;box-shadow:0 95px 25px rgba(0,0,0,.2);transform:translateZ(-90px) rotateX(65deg)}.reveal.cube .slides>section.stack{padding:0;background:0 0}.reveal.cube .slides>section.past{transform-origin:100% 0;transform:translate3d(-100%,0,0) rotateY(-90deg)}.reveal.cube .slides>section.future{transform-origin:0 0;transform:translate3d(100%,0,0) rotateY(90deg)}.reveal.cube .slides>section>section.past{transform-origin:0 100%;transform:translate3d(0,-100%,0) rotateX(90deg)}.reveal.cube .slides>section>section.future{transform-origin:0 0;transform:translate3d(0,100%,0) rotateX(-90deg)}.reveal.page .slides{perspective-origin:0 50%;perspective:3000px}.reveal.page .slides section{padding:30px;min-height:700px;box-sizing:border-box;transform-style:preserve-3d}.reveal.page .slides section.past{z-index:12}.reveal.page .slides section:not(.stack):before{content:"";position:absolute;display:block;width:100%;height:100%;left:0;top:0;background:rgba(0,0,0,.1);transform:translateZ(-20px)}.reveal.page .slides section:not(.stack):after{content:"";position:absolute;display:block;width:90%;height:30px;left:5%;bottom:0;background:0 0;z-index:1;border-radius:4px;box-shadow:0 95px 25px rgba(0,0,0,.2);-webkit-transform:translateZ(-90px) rotateX(65deg)}.reveal.page .slides>section.stack{padding:0;background:0 0}.reveal.page .slides>section.past{transform-origin:0 0;transform:translate3d(-40%,0,0) rotateY(-80deg)}.reveal.page .slides>section.future{transform-origin:100% 0;transform:translate3d(0,0,0)}.reveal.page .slides>section>section.past{transform-origin:0 0;transform:translate3d(0,-40%,0) rotateX(80deg)}.reveal.page .slides>section>section.future{transform-origin:0 100%;transform:translate3d(0,0,0)}.reveal .slides section[data-transition=fade],.reveal.fade .slides section:not([data-transition]),.reveal.fade .slides>section>section:not([data-transition]){transform:none;transition:opacity .5s}.reveal.fade.overview .slides section,.reveal.fade.overview .slides>section>section{transition:none}.reveal .slides section[data-transition=none],.reveal.none .slides section:not([data-transition]){transform:none;transition:none}.reveal .pause-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#000;visibility:hidden;opacity:0;z-index:100;transition:all 1s ease}.reveal .pause-overlay .resume-button{position:absolute;bottom:20px;right:20px;color:#ccc;border-radius:2px;padding:6px 14px;border:2px solid #ccc;font-size:16px;background:0 0;cursor:pointer}.reveal .pause-overlay .resume-button:hover{color:#fff;border-color:#fff}.reveal.paused .pause-overlay{visibility:visible;opacity:1}.reveal .no-transition,.reveal .no-transition *,.reveal .slides.disable-slide-transitions section{transition:none!important}.reveal .slides.disable-slide-transitions section{transform:none!important}.reveal .backgrounds{position:absolute;width:100%;height:100%;top:0;left:0;perspective:600px}.reveal .slide-background{display:none;position:absolute;width:100%;height:100%;opacity:0;visibility:hidden;overflow:hidden;background-color:rgba(0,0,0,0);transition:all .8s cubic-bezier(.26,.86,.44,.985)}.reveal .slide-background-content{position:absolute;width:100%;height:100%;background-position:50% 50%;background-repeat:no-repeat;background-size:cover}.reveal .slide-background.stack{display:block}.reveal .slide-background.present{opacity:1;visibility:visible;z-index:2}.print-pdf .reveal .slide-background{opacity:1!important;visibility:visible!important}.reveal .slide-background video{position:absolute;width:100%;height:100%;max-width:none;max-height:none;top:0;left:0;object-fit:cover}.reveal .slide-background[data-background-size=contain] video{object-fit:contain}.reveal>.backgrounds .slide-background[data-background-transition=none],.reveal[data-background-transition=none]>.backgrounds .slide-background:not([data-background-transition]){transition:none}.reveal>.backgrounds .slide-background[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background:not([data-background-transition]){opacity:1}.reveal>.backgrounds .slide-background.past[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background.past:not([data-background-transition]){transform:translate(-100%,0)}.reveal>.backgrounds .slide-background.future[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background.future:not([data-background-transition]){transform:translate(100%,0)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){transform:translate(0,-100%)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=slide],.reveal[data-background-transition=slide]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){transform:translate(0,100%)}.reveal>.backgrounds .slide-background.past[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(-100%,0,0) rotateY(-90deg) translate3d(-100%,0,0)}.reveal>.backgrounds .slide-background.future[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(100%,0,0) rotateY(90deg) translate3d(100%,0,0)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(0,-100%,0) rotateX(90deg) translate3d(0,-100%,0)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=convex],.reveal[data-background-transition=convex]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(0,100%,0) rotateX(-90deg) translate3d(0,100%,0)}.reveal>.backgrounds .slide-background.past[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(-100%,0,0) rotateY(90deg) translate3d(-100%,0,0)}.reveal>.backgrounds .slide-background.future[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(100%,0,0) rotateY(-90deg) translate3d(100%,0,0)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){opacity:0;transform:translate3d(0,-100%,0) rotateX(-90deg) translate3d(0,-100%,0)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=concave],.reveal[data-background-transition=concave]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){opacity:0;transform:translate3d(0,100%,0) rotateX(90deg) translate3d(0,100%,0)}.reveal>.backgrounds .slide-background[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background:not([data-background-transition]){transition-timing-function:ease}.reveal>.backgrounds .slide-background.past[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background.past:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(16)}.reveal>.backgrounds .slide-background.future[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background.future:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(.2)}.reveal>.backgrounds .slide-background>.slide-background.past[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background>.slide-background.past:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(16)}.reveal>.backgrounds .slide-background>.slide-background.future[data-background-transition=zoom],.reveal[data-background-transition=zoom]>.backgrounds .slide-background>.slide-background.future:not([data-background-transition]){opacity:0;visibility:hidden;transform:scale(.2)}.reveal[data-transition-speed=fast]>.backgrounds .slide-background{transition-duration:.4s}.reveal[data-transition-speed=slow]>.backgrounds .slide-background{transition-duration:1.2s}.reveal [data-auto-animate-target^=unmatched]{will-change:opacity}.reveal section[data-auto-animate]:not(.stack):not([data-auto-animate=running]) [data-auto-animate-target^=unmatched]{opacity:0}.reveal.overview{perspective-origin:50% 50%;perspective:700px}.reveal.overview .slides{-moz-transform-style:preserve-3d}.reveal.overview .slides section{height:100%;top:0!important;opacity:1!important;overflow:hidden;visibility:visible!important;cursor:pointer;box-sizing:border-box}.reveal.overview .slides section.present,.reveal.overview .slides section:hover{outline:10px solid rgba(150,150,150,.4);outline-offset:10px}.reveal.overview .slides section .fragment{opacity:1;transition:none}.reveal.overview .slides section:after,.reveal.overview .slides section:before{display:none!important}.reveal.overview .slides>section.stack{padding:0;top:0!important;background:0 0;outline:0;overflow:visible}.reveal.overview .backgrounds{perspective:inherit;-moz-transform-style:preserve-3d}.reveal.overview .backgrounds .slide-background{opacity:1;visibility:visible;outline:10px solid rgba(150,150,150,.1);outline-offset:10px}.reveal.overview .backgrounds .slide-background.stack{overflow:visible}.reveal.overview .slides section,.reveal.overview-deactivating .slides section{transition:none}.reveal.overview .backgrounds .slide-background,.reveal.overview-deactivating .backgrounds .slide-background{transition:none}.reveal.rtl .slides,.reveal.rtl .slides h1,.reveal.rtl .slides h2,.reveal.rtl .slides h3,.reveal.rtl .slides h4,.reveal.rtl .slides h5,.reveal.rtl .slides h6{direction:rtl;font-family:sans-serif}.reveal.rtl code,.reveal.rtl pre{direction:ltr}.reveal.rtl ol,.reveal.rtl ul{text-align:right}.reveal.rtl .progress span{transform-origin:100% 0}.reveal.has-parallax-background .backgrounds{transition:all .8s ease}.reveal.has-parallax-background[data-transition-speed=fast] .backgrounds{transition-duration:.4s}.reveal.has-parallax-background[data-transition-speed=slow] .backgrounds{transition-duration:1.2s}.reveal>.overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1000;background:rgba(0,0,0,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:all .3s ease}.reveal>.overlay .spinner{position:absolute;display:block;top:50%;left:50%;width:32px;height:32px;margin:-16px 0 0 -16px;z-index:10;background-image:url(data:image/gif;base64,R0lGODlhIAAgAPMAAJmZmf%2F%2F%2F6%2Bvr8nJybW1tcDAwOjo6Nvb26ioqKOjo7Ozs%2FLy8vz8%2FAAAAAAAAAAAACH%2FC05FVFNDQVBFMi4wAwEAAAAh%2FhpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh%2BQQJCgAAACwAAAAAIAAgAAAE5xDISWlhperN52JLhSSdRgwVo1ICQZRUsiwHpTJT4iowNS8vyW2icCF6k8HMMBkCEDskxTBDAZwuAkkqIfxIQyhBQBFvAQSDITM5VDW6XNE4KagNh6Bgwe60smQUB3d4Rz1ZBApnFASDd0hihh12BkE9kjAJVlycXIg7CQIFA6SlnJ87paqbSKiKoqusnbMdmDC2tXQlkUhziYtyWTxIfy6BE8WJt5YJvpJivxNaGmLHT0VnOgSYf0dZXS7APdpB309RnHOG5gDqXGLDaC457D1zZ%2FV%2FnmOM82XiHRLYKhKP1oZmADdEAAAh%2BQQJCgAAACwAAAAAIAAgAAAE6hDISWlZpOrNp1lGNRSdRpDUolIGw5RUYhhHukqFu8DsrEyqnWThGvAmhVlteBvojpTDDBUEIFwMFBRAmBkSgOrBFZogCASwBDEY%2FCZSg7GSE0gSCjQBMVG023xWBhklAnoEdhQEfyNqMIcKjhRsjEdnezB%2BA4k8gTwJhFuiW4dokXiloUepBAp5qaKpp6%2BHo7aWW54wl7obvEe0kRuoplCGepwSx2jJvqHEmGt6whJpGpfJCHmOoNHKaHx61WiSR92E4lbFoq%2BB6QDtuetcaBPnW6%2BO7wDHpIiK9SaVK5GgV543tzjgGcghAgAh%2BQQJCgAAACwAAAAAIAAgAAAE7hDISSkxpOrN5zFHNWRdhSiVoVLHspRUMoyUakyEe8PTPCATW9A14E0UvuAKMNAZKYUZCiBMuBakSQKG8G2FzUWox2AUtAQFcBKlVQoLgQReZhQlCIJesQXI5B0CBnUMOxMCenoCfTCEWBsJColTMANldx15BGs8B5wlCZ9Po6OJkwmRpnqkqnuSrayqfKmqpLajoiW5HJq7FL1Gr2mMMcKUMIiJgIemy7xZtJsTmsM4xHiKv5KMCXqfyUCJEonXPN2rAOIAmsfB3uPoAK%2B%2BG%2Bw48edZPK%2BM6hLJpQg484enXIdQFSS1u6UhksENEQAAIfkECQoAAAAsAAAAACAAIAAABOcQyEmpGKLqzWcZRVUQnZYg1aBSh2GUVEIQ2aQOE%2BG%2BcD4ntpWkZQj1JIiZIogDFFyHI0UxQwFugMSOFIPJftfVAEoZLBbcLEFhlQiqGp1Vd140AUklUN3eCA51C1EWMzMCezCBBmkxVIVHBWd3HHl9JQOIJSdSnJ0TDKChCwUJjoWMPaGqDKannasMo6WnM562R5YluZRwur0wpgqZE7NKUm%2BFNRPIhjBJxKZteWuIBMN4zRMIVIhffcgojwCF117i4nlLnY5ztRLsnOk%2BaV%2BoJY7V7m76PdkS4trKcdg0Zc0tTcKkRAAAIfkECQoAAAAsAAAAACAAIAAABO4QyEkpKqjqzScpRaVkXZWQEximw1BSCUEIlDohrft6cpKCk5xid5MNJTaAIkekKGQkWyKHkvhKsR7ARmitkAYDYRIbUQRQjWBwJRzChi9CRlBcY1UN4g0%2FVNB0AlcvcAYHRyZPdEQFYV8ccwR5HWxEJ02YmRMLnJ1xCYp0Y5idpQuhopmmC2KgojKasUQDk5BNAwwMOh2RtRq5uQuPZKGIJQIGwAwGf6I0JXMpC8C7kXWDBINFMxS4DKMAWVWAGYsAdNqW5uaRxkSKJOZKaU3tPOBZ4DuK2LATgJhkPJMgTwKCdFjyPHEnKxFCDhEAACH5BAkKAAAALAAAAAAgACAAAATzEMhJaVKp6s2nIkolIJ2WkBShpkVRWqqQrhLSEu9MZJKK9y1ZrqYK9WiClmvoUaF8gIQSNeF1Er4MNFn4SRSDARWroAIETg1iVwuHjYB1kYc1mwruwXKC9gmsJXliGxc%2BXiUCby9ydh1sOSdMkpMTBpaXBzsfhoc5l58Gm5yToAaZhaOUqjkDgCWNHAULCwOLaTmzswadEqggQwgHuQsHIoZCHQMMQgQGubVEcxOPFAcMDAYUA85eWARmfSRQCdcMe0zeP1AAygwLlJtPNAAL19DARdPzBOWSm1brJBi45soRAWQAAkrQIykShQ9wVhHCwCQCACH5BAkKAAAALAAAAAAgACAAAATrEMhJaVKp6s2nIkqFZF2VIBWhUsJaTokqUCoBq%2BE71SRQeyqUToLA7VxF0JDyIQh%2FMVVPMt1ECZlfcjZJ9mIKoaTl1MRIl5o4CUKXOwmyrCInCKqcWtvadL2SYhyASyNDJ0uIiRMDjI0Fd30%2FiI2UA5GSS5UDj2l6NoqgOgN4gksEBgYFf0FDqKgHnyZ9OX8HrgYHdHpcHQULXAS2qKpENRg7eAMLC7kTBaixUYFkKAzWAAnLC7FLVxLWDBLKCwaKTULgEwbLA4hJtOkSBNqITT3xEgfLpBtzE%2FjiuL04RGEBgwWhShRgQExHBAAh%2BQQJCgAAACwAAAAAIAAgAAAE7xDISWlSqerNpyJKhWRdlSAVoVLCWk6JKlAqAavhO9UkUHsqlE6CwO1cRdCQ8iEIfzFVTzLdRAmZX3I2SfZiCqGk5dTESJeaOAlClzsJsqwiJwiqnFrb2nS9kmIcgEsjQydLiIlHehhpejaIjzh9eomSjZR%2BipslWIRLAgMDOR2DOqKogTB9pCUJBagDBXR6XB0EBkIIsaRsGGMMAxoDBgYHTKJiUYEGDAzHC9EACcUGkIgFzgwZ0QsSBcXHiQvOwgDdEwfFs0sDzt4S6BK4xYjkDOzn0unFeBzOBijIm1Dgmg5YFQwsCMjp1oJ8LyIAACH5BAkKAAAALAAAAAAgACAAAATwEMhJaVKp6s2nIkqFZF2VIBWhUsJaTokqUCoBq%2BE71SRQeyqUToLA7VxF0JDyIQh%2FMVVPMt1ECZlfcjZJ9mIKoaTl1MRIl5o4CUKXOwmyrCInCKqcWtvadL2SYhyASyNDJ0uIiUd6GGl6NoiPOH16iZKNlH6KmyWFOggHhEEvAwwMA0N9GBsEC6amhnVcEwavDAazGwIDaH1ipaYLBUTCGgQDA8NdHz0FpqgTBwsLqAbWAAnIA4FWKdMLGdYGEgraigbT0OITBcg5QwPT4xLrROZL6AuQAPUS7bxLpoWidY0JtxLHKhwwMJBTHgPKdEQAACH5BAkKAAAALAAAAAAgACAAAATrEMhJaVKp6s2nIkqFZF2VIBWhUsJaTokqUCoBq%2BE71SRQeyqUToLA7VxF0JDyIQh%2FMVVPMt1ECZlfcjZJ9mIKoaTl1MRIl5o4CUKXOwmyrCInCKqcWtvadL2SYhyASyNDJ0uIiUd6GAULDJCRiXo1CpGXDJOUjY%2BYip9DhToJA4RBLwMLCwVDfRgbBAaqqoZ1XBMHswsHtxtFaH1iqaoGNgAIxRpbFAgfPQSqpbgGBqUD1wBXeCYp1AYZ19JJOYgH1KwA4UBvQwXUBxPqVD9L3sbp2BNk2xvvFPJd%2BMFCN6HAAIKgNggY0KtEBAAh%2BQQJCgAAACwAAAAAIAAgAAAE6BDISWlSqerNpyJKhWRdlSAVoVLCWk6JKlAqAavhO9UkUHsqlE6CwO1cRdCQ8iEIfzFVTzLdRAmZX3I2SfYIDMaAFdTESJeaEDAIMxYFqrOUaNW4E4ObYcCXaiBVEgULe0NJaxxtYksjh2NLkZISgDgJhHthkpU4mW6blRiYmZOlh4JWkDqILwUGBnE6TYEbCgevr0N1gH4At7gHiRpFaLNrrq8HNgAJA70AWxQIH1%2BvsYMDAzZQPC9VCNkDWUhGkuE5PxJNwiUK4UfLzOlD4WvzAHaoG9nxPi5d%2BjYUqfAhhykOFwJWiAAAIfkECQoAAAAsAAAAACAAIAAABPAQyElpUqnqzaciSoVkXVUMFaFSwlpOCcMYlErAavhOMnNLNo8KsZsMZItJEIDIFSkLGQoQTNhIsFehRww2CQLKF0tYGKYSg%2BygsZIuNqJksKgbfgIGepNo2cIUB3V1B3IvNiBYNQaDSTtfhhx0CwVPI0UJe0%2Bbm4g5VgcGoqOcnjmjqDSdnhgEoamcsZuXO1aWQy8KAwOAuTYYGwi7w5h%2BKr0SJ8MFihpNbx%2B4Erq7BYBuzsdiH1jCAzoSfl0rVirNbRXlBBlLX%2BBP0XJLAPGzTkAuAOqb0WT5AH7OcdCm5B8TgRwSRKIHQtaLCwg1RAAAOwAAAAAAAAAAAA%3D%3D);visibility:visible;opacity:.6;transition:all .3s ease}.reveal>.overlay header{position:absolute;left:0;top:0;width:100%;padding:5px;z-index:2;box-sizing:border-box}.reveal>.overlay header a{display:inline-block;width:40px;height:40px;line-height:36px;padding:0 10px;float:right;opacity:.6;box-sizing:border-box}.reveal>.overlay header a:hover{opacity:1}.reveal>.overlay header a .icon{display:inline-block;width:20px;height:20px;background-position:50% 50%;background-size:100%;background-repeat:no-repeat}.reveal>.overlay header a.close .icon{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABkklEQVRYR8WX4VHDMAxG6wnoJrABZQPYBCaBTWAD2g1gE5gg6OOsXuxIlr40d81dfrSJ9V4c2VLK7spHuTJ/5wpM07QXuXc5X0opX2tEJcadjHuV80li/FgxTIEK/5QBCICBD6xEhSMGHgQPgBgLiYVAB1dpSqKDawxTohFw4JSEA3clzgIBPCURwE2JucBR7rhPJJv5OpJwDX+SfDjgx1wACQeJG1aChP9K/IMmdZ8DtESV1WyP3Bt4MwM6sj4NMxMYiqUWHQu4KYA/SYkIjOsm3BXYWMKFDwU2khjCQ4ELJUJ4SmClRArOCmSXGuKma0fYD5CbzHxFpCSGAhfAVSSUGDUk2BWZaff2g6GE15BsBQ9nwmpIGDiyHQddwNTMKkbZaf9fajXQca1EX44puJZUsnY0ObGmITE3GVLCbEhQUjGVt146j6oasWN+49Vph2w1pZ5EansNZqKBm1txbU57iRRcZ86RWMDdWtBJUHBHwoQPi1GV+JCbntmvok7iTX4/Up9mgyTc/FJYDTcndgH/AA5A/CHsyEkVAAAAAElFTkSuQmCC)}.reveal>.overlay header a.external .icon{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAcElEQVRYR+2WSQoAIQwEzf8f7XiOMkUQxUPlGkM3hVmiQfQR9GYnH1SsAQlI4DiBqkCMoNb9y2e90IAEJPAcgdznU9+engMaeJ7Azh5Y1U67gAho4DqBqmB1buAf0MB1AlVBek83ZPkmJMGc1wAR+AAqod/B97TRpQAAAABJRU5ErkJggg==)}.reveal>.overlay .viewport{position:absolute;display:flex;top:50px;right:0;bottom:0;left:0}.reveal>.overlay.overlay-preview .viewport iframe{width:100%;height:100%;max-width:100%;max-height:100%;border:0;opacity:0;visibility:hidden;transition:all .3s ease}.reveal>.overlay.overlay-preview.loaded .viewport iframe{opacity:1;visibility:visible}.reveal>.overlay.overlay-preview.loaded .viewport-inner{position:absolute;z-index:-1;left:0;top:45%;width:100%;text-align:center;letter-spacing:normal}.reveal>.overlay.overlay-preview .x-frame-error{opacity:0;transition:opacity .3s ease .3s}.reveal>.overlay.overlay-preview.loaded .x-frame-error{opacity:1}.reveal>.overlay.overlay-preview.loaded .spinner{opacity:0;visibility:hidden;transform:scale(.2)}.reveal>.overlay.overlay-help .viewport{overflow:auto;color:#fff}.reveal>.overlay.overlay-help .viewport .viewport-inner{width:600px;margin:auto;padding:20px 20px 80px 20px;text-align:center;letter-spacing:normal}.reveal>.overlay.overlay-help .viewport .viewport-inner .title{font-size:20px}.reveal>.overlay.overlay-help .viewport .viewport-inner table{border:1px solid #fff;border-collapse:collapse;font-size:16px}.reveal>.overlay.overlay-help .viewport .viewport-inner table td,.reveal>.overlay.overlay-help .viewport .viewport-inner table th{width:200px;padding:14px;border:1px solid #fff;vertical-align:middle}.reveal>.overlay.overlay-help .viewport .viewport-inner table th{padding-top:20px;padding-bottom:20px}.reveal .playback{position:absolute;left:15px;bottom:20px;z-index:30;cursor:pointer;transition:all .4s ease;-webkit-tap-highlight-color:transparent}.reveal.overview .playback{opacity:0;visibility:hidden}.reveal .hljs{min-height:100%}.reveal .hljs table{margin:initial}.reveal .hljs-ln-code,.reveal .hljs-ln-numbers{padding:0;border:0}.reveal .hljs-ln-numbers{opacity:.6;padding-right:.75em;text-align:right;vertical-align:top}.reveal .hljs.has-highlights tr:not(.highlight-line){opacity:.4}.reveal .hljs.has-highlights.fragment{transition:all .2s ease}.reveal .hljs:not(:first-child).fragment{position:absolute;top:0;left:0;width:100%;box-sizing:border-box}.reveal pre[data-auto-animate-target]{overflow:hidden}.reveal pre[data-auto-animate-target] code{height:100%}.reveal .roll{display:inline-block;line-height:1.2;overflow:hidden;vertical-align:top;perspective:400px;perspective-origin:50% 50%}.reveal .roll:hover{background:0 0;text-shadow:none}.reveal .roll span{display:block;position:relative;padding:0 2px;pointer-events:none;transition:all .4s ease;transform-origin:50% 0;transform-style:preserve-3d;backface-visibility:hidden}.reveal .roll:hover span{background:rgba(0,0,0,.5);transform:translate3d(0,0,-45px) rotateX(90deg)}.reveal .roll span:after{content:attr(data-title);display:block;position:absolute;left:0;top:0;padding:0 2px;backface-visibility:hidden;transform-origin:50% 0;transform:translate3d(0,110%,0) rotateX(-90deg)}.reveal aside.notes{display:none}.reveal .speaker-notes{display:none;position:absolute;width:33.3333333333%;height:100%;top:0;left:100%;padding:14px 18px 14px 18px;z-index:1;font-size:18px;line-height:1.4;border:1px solid rgba(0,0,0,.05);color:#222;background-color:#f5f5f5;overflow:auto;box-sizing:border-box;text-align:left;font-family:Helvetica,sans-serif;-webkit-overflow-scrolling:touch}.reveal .speaker-notes .notes-placeholder{color:#ccc;font-style:italic}.reveal .speaker-notes:focus{outline:0}.reveal .speaker-notes:before{content:"Speaker notes";display:block;margin-bottom:10px;opacity:.5}.reveal.show-notes{max-width:75%;overflow:visible}.reveal.show-notes .speaker-notes{display:block}@media screen and (min-width:1600px){.reveal .speaker-notes{font-size:20px}}@media screen and (max-width:1024px){.reveal.show-notes{border-left:0;max-width:none;max-height:70%;max-height:70vh;overflow:visible}.reveal.show-notes .speaker-notes{top:100%;left:0;width:100%;height:30vh;border:0}}@media screen and (max-width:600px){.reveal.show-notes{max-height:60%;max-height:60vh}.reveal.show-notes .speaker-notes{top:100%;height:40vh}.reveal .speaker-notes{font-size:14px}}.reveal .jump-to-slide{position:absolute;top:15px;left:15px;z-index:30;font-size:32px;-webkit-tap-highlight-color:transparent}.reveal .jump-to-slide-input{background:0 0;padding:8px;font-size:inherit;color:currentColor;border:0}.reveal .jump-to-slide-input::placeholder{color:currentColor;opacity:.5}.reveal.has-dark-background .jump-to-slide-input{color:#fff}.reveal.has-light-background .jump-to-slide-input{color:#222}.reveal .jump-to-slide-input:focus{outline:0}.zoomed .reveal *,.zoomed .reveal :after,.zoomed .reveal :before{backface-visibility:visible!important}.zoomed .reveal .controls,.zoomed .reveal .progress{opacity:0}.zoomed .reveal .roll span{background:0 0}.zoomed .reveal .roll span:after{visibility:hidden}.reveal-viewport.loading-scroll-mode{visibility:hidden}.reveal-viewport.reveal-scroll{margin:0 auto;overflow:auto;overflow-x:hidden;overflow-y:auto;z-index:1;--r-scrollbar-width:7px;--r-scrollbar-trigger-size:5px;--r-controls-spacing:8px}@media screen and (max-width:500px){.reveal-viewport.reveal-scroll{--r-scrollbar-width:3px;--r-scrollbar-trigger-size:3px}}.reveal-viewport.reveal-scroll .backgrounds,.reveal-viewport.reveal-scroll .controls,.reveal-viewport.reveal-scroll .playback,.reveal-viewport.reveal-scroll .progress,.reveal-viewport.reveal-scroll .slide-number,.reveal-viewport.reveal-scroll .speaker-notes{display:none!important}.reveal-viewport.reveal-scroll .overlay,.reveal-viewport.reveal-scroll .pause-overlay{position:fixed}.reveal-viewport.reveal-scroll .reveal{overflow:visible;touch-action:manipulation}.reveal-viewport.reveal-scroll .slides{position:static;pointer-events:initial;left:auto;top:auto;width:100%!important;margin:0;padding:0;overflow:visible;display:block;perspective:none;perspective-origin:50% 50%}.reveal-viewport.reveal-scroll .scroll-page{position:relative;width:100%;height:calc(var(--page-height) + var(--page-scroll-padding));z-index:1;overflow:visible}.reveal-viewport.reveal-scroll .scroll-page-sticky{position:sticky;height:var(--page-height);top:0}.reveal-viewport.reveal-scroll .scroll-page-content{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}.reveal-viewport.reveal-scroll .scroll-page section{visibility:visible!important;display:block!important;position:absolute!important;width:var(--slide-width)!important;height:var(--slide-height)!important;top:50%!important;left:50%!important;opacity:1!important;transform:scale(var(--slide-scale)) translate(-50%,-50%)!important;transform-style:flat!important;transform-origin:0 0!important}.reveal-viewport.reveal-scroll .slide-background{display:block!important;position:absolute;top:0;left:0;width:100%;height:100%;z-index:auto!important;visibility:visible;opacity:1;touch-action:manipulation}.reveal-viewport.reveal-scroll[data-scrollbar=auto]::-webkit-scrollbar,.reveal-viewport.reveal-scroll[data-scrollbar=true]::-webkit-scrollbar{display:none}.reveal-viewport.reveal-scroll[data-scrollbar=auto],.reveal-viewport.reveal-scroll[data-scrollbar=true]{scrollbar-width:none}.reveal-viewport.has-dark-background,.reveal.has-dark-background{--r-overlay-element-bg-color:240,240,240;--r-overlay-element-fg-color:0,0,0}.reveal-viewport.has-light-background,.reveal.has-light-background{--r-overlay-element-bg-color:0,0,0;--r-overlay-element-fg-color:240,240,240}.reveal-viewport.reveal-scroll .scrollbar{position:sticky;top:50%;z-index:20;opacity:0;transition:all .3s ease}.reveal-viewport.reveal-scroll .scrollbar.visible,.reveal-viewport.reveal-scroll .scrollbar:hover{opacity:1}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-inner{position:absolute;width:var(--r-scrollbar-width);height:calc(var(--viewport-height) - var(--r-controls-spacing) * 2);right:var(--r-controls-spacing);top:0;transform:translateY(-50%);border-radius:var(--r-scrollbar-width);z-index:10}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-playhead{position:absolute;width:var(--r-scrollbar-width);height:var(--r-scrollbar-width);top:0;left:0;border-radius:var(--r-scrollbar-width);background-color:rgba(var(--r-overlay-element-bg-color),1);z-index:11;transition:background-color .2s ease}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide{position:absolute;width:100%;background-color:rgba(var(--r-overlay-element-bg-color),.2);box-shadow:0 0 0 1px rgba(var(--r-overlay-element-fg-color),.1);border-radius:var(--r-scrollbar-width);transition:background-color .2s ease}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide:after{content:"";position:absolute;width:200%;height:100%;top:0;left:-50%;background:rgba(0,0,0,0);z-index:-1}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active,.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide:hover{background-color:rgba(var(--r-overlay-element-bg-color),.4)}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-trigger{position:absolute;width:100%;transition:background-color .2s ease}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active.has-triggers{background-color:rgba(var(--r-overlay-element-bg-color),.4);z-index:10}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger:after{content:"";position:absolute;width:var(--r-scrollbar-trigger-size);height:var(--r-scrollbar-trigger-size);border-radius:20px;top:50%;left:50%;transform:translate(-50%,-50%);background-color:rgba(var(--r-overlay-element-bg-color),1);transition:transform .2s ease,opacity .2s ease;opacity:.4}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger.active:after,.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger.active~.scrollbar-trigger:after{opacity:1}.reveal-viewport.reveal-scroll .scrollbar .scrollbar-slide.active .scrollbar-trigger~.scrollbar-trigger.active:after{transform:translate(calc(var(--r-scrollbar-width) * -2),0);background-color:rgba(var(--r-overlay-element-bg-color),1)}html.reveal-print *{-webkit-print-color-adjust:exact}html.reveal-print{width:100%;height:100%;overflow:visible}html.reveal-print body{margin:0 auto!important;border:0;padding:0;float:none!important;overflow:visible}html.reveal-print .nestedarrow,html.reveal-print .reveal .controls,html.reveal-print .reveal .playback,html.reveal-print .reveal .progress,html.reveal-print .reveal.overview,html.reveal-print .state-background{display:none!important}html.reveal-print .reveal pre code{overflow:hidden!important}html.reveal-print .reveal{width:auto!important;height:auto!important;overflow:hidden!important}html.reveal-print .reveal .slides{position:static;width:100%!important;height:auto!important;zoom:1!important;pointer-events:initial;left:auto;top:auto;margin:0!important;padding:0!important;overflow:visible;display:block;perspective:none;perspective-origin:50% 50%}html.reveal-print .reveal .slides .pdf-page{position:relative;overflow:hidden;z-index:1;page-break-after:always}html.reveal-print .reveal .slides .pdf-page:last-of-type{page-break-after:avoid}html.reveal-print .reveal .slides section{visibility:visible!important;display:block!important;position:absolute!important;margin:0!important;padding:0!important;box-sizing:border-box!important;min-height:1px;opacity:1!important;transform-style:flat!important;transform:none!important}html.reveal-print .reveal section.stack{position:relative!important;margin:0!important;padding:0!important;page-break-after:avoid!important;height:auto!important;min-height:auto!important}html.reveal-print .reveal img{box-shadow:none}html.reveal-print .reveal .backgrounds{display:none}html.reveal-print .reveal .slide-background{display:block!important;position:absolute;top:0;left:0;width:100%;height:100%;z-index:auto!important}html.reveal-print .reveal.show-notes{max-width:none;max-height:none}html.reveal-print .reveal .speaker-notes-pdf{display:block;width:100%;height:auto;max-height:none;top:auto;right:auto;bottom:auto;left:auto;z-index:100}html.reveal-print .reveal .speaker-notes-pdf[data-layout=separate-page]{position:relative;color:inherit;background-color:transparent;padding:20px;page-break-after:always;border:0}html.reveal-print .reveal .slide-number-pdf{display:block;position:absolute;font-size:14px;visibility:visible}html.reveal-print .aria-status{display:none}@media print{html:not(.print-pdf){overflow:visible;width:auto;height:auto}html:not(.print-pdf) body{margin:0;padding:0;overflow:visible}html:not(.print-pdf) .reveal{background:#fff;font-size:20pt}html:not(.print-pdf) .reveal .backgrounds,html:not(.print-pdf) .reveal .controls,html:not(.print-pdf) .reveal .progress,html:not(.print-pdf) .reveal .slide-number,html:not(.print-pdf) .reveal .state-background{display:none!important}html:not(.print-pdf) .reveal li,html:not(.print-pdf) .reveal p,html:not(.print-pdf) .reveal td{font-size:20pt!important;color:#000}html:not(.print-pdf) .reveal h1,html:not(.print-pdf) .reveal h2,html:not(.print-pdf) .reveal h3,html:not(.print-pdf) .reveal h4,html:not(.print-pdf) .reveal h5,html:not(.print-pdf) .reveal h6{color:#000!important;height:auto;line-height:normal;text-align:left;letter-spacing:normal}html:not(.print-pdf) .reveal h1{font-size:28pt!important}html:not(.print-pdf) .reveal h2{font-size:24pt!important}html:not(.print-pdf) .reveal h3{font-size:22pt!important}html:not(.print-pdf) .reveal h4{font-size:22pt!important;font-variant:small-caps}html:not(.print-pdf) .reveal h5{font-size:21pt!important}html:not(.print-pdf) .reveal h6{font-size:20pt!important;font-style:italic}html:not(.print-pdf) .reveal a:link,html:not(.print-pdf) .reveal a:visited{color:#000!important;font-weight:700;text-decoration:underline}html:not(.print-pdf) .reveal div,html:not(.print-pdf) .reveal ol,html:not(.print-pdf) .reveal p,html:not(.print-pdf) .reveal ul{visibility:visible;position:static;width:auto;height:auto;display:block;overflow:visible;margin:0;text-align:left!important}html:not(.print-pdf) .reveal pre,html:not(.print-pdf) .reveal table{margin-left:0;margin-right:0}html:not(.print-pdf) .reveal pre code{padding:20px}html:not(.print-pdf) .reveal blockquote{margin:20px 0}html:not(.print-pdf) .reveal .slides{position:static!important;width:auto!important;height:auto!important;left:0!important;top:0!important;margin-left:0!important;margin-top:0!important;padding:0!important;zoom:1!important;transform:none!important;overflow:visible!important;display:block!important;text-align:left!important;perspective:none;perspective-origin:50% 50%}html:not(.print-pdf) .reveal .slides section{visibility:visible!important;position:static!important;width:auto!important;height:auto!important;display:block!important;overflow:visible!important;left:0!important;top:0!important;margin-left:0!important;margin-top:0!important;padding:60px 20px!important;z-index:auto!important;opacity:1!important;page-break-after:always!important;transform-style:flat!important;transform:none!important;transition:none!important}html:not(.print-pdf) .reveal .slides section.stack{padding:0!important}html:not(.print-pdf) .reveal .slides section:last-of-type{page-break-after:avoid!important}html:not(.print-pdf) .reveal .slides section .fragment{opacity:1!important;visibility:visible!important;transform:none!important}html:not(.print-pdf) .reveal .r-fit-text{white-space:normal!important}html:not(.print-pdf) .reveal section img{display:block;margin:15px 0;background:#fff;border:1px solid #666;box-shadow:none}html:not(.print-pdf) .reveal section small{font-size:.8em}html:not(.print-pdf) .reveal .hljs{max-height:100%;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;font-size:15pt}html:not(.print-pdf) .reveal .hljs .hljs-ln-numbers{white-space:nowrap}html:not(.print-pdf) .reveal .hljs td{font-size:inherit!important;color:inherit!important}}
+/* ---------- metropolis-like theme, 16:9, large type ---------- */
+:root {
+  --bg: #FAFAFA; --fg: #23373B; --muted: #6F7F84; --accent: #EB811B; --green: #14B03D;
+  --band: #23373B; --band-fg: #FAFAFA; --code-bg: #EEF1F2; --rule: #C9D1D4; --box: #FFF4EA;
+}
+html, body { background: var(--bg); color: var(--fg); margin: 0; }
+.reveal { font-family: "Fira Sans", "Helvetica Neue", Arial, sans-serif; font-weight: 300; font-size: 38px; line-height: 1.35; color: var(--fg); }
+.reveal .slides { text-align: left; }
+.reveal .slides section { padding: 0 90px 0 90px; box-sizing: border-box; height: 100%; }
+.reveal strong, .reveal b { font-weight: 500; }
+.reveal em { font-style: italic; }
+.reveal h1, .reveal h2, .reveal h3 { font-family: "Fira Sans", sans-serif; font-weight: 400; letter-spacing: -0.01em; text-transform: none; text-shadow: none; }
+.reveal h2 { font-size: 54px; line-height: 1.15; margin: 0 -90px 38px -90px; padding: 26px 90px 22px 90px; background: var(--band); color: var(--band-fg); }
+.reveal h3 { font-size: 40px; color: var(--fg); margin: 0 0 16px 0; }
+.reveal p { margin: 0 0 26px 0; }
+.reveal ul, .reveal ol { margin: 0 0 28px 0; padding-left: 1.1em; }
+.reveal li { margin: 0 0 10px 0; }
+.reveal li li { font-size: 0.92em; }
+.reveal a { color: var(--accent); }
+.reveal .muted { color: var(--muted); }
+.reveal .accent { color: var(--accent); }
+.reveal .small { font-size: 0.78em; }
+.reveal .progress { color: var(--accent); height: 6px; }
+.reveal .slide-number { font-family: "Fira Mono", monospace; font-size: 20px; color: var(--muted); background: transparent; right: 24px; bottom: 16px; }
+.reveal .controls { color: var(--accent); }
+
+/* title slide */
+.reveal section.title { background: var(--band); color: var(--band-fg); padding: 90px 110px; }
+.reveal section.title .eyebrow { font-family: "Fira Mono", monospace; font-size: 26px; color: var(--accent); letter-spacing: .06em; margin-bottom: 40px; }
+.reveal section.title h1 { font-size: 78px; font-weight: 300; color: var(--band-fg); margin: 0 0 14px 0; line-height: 1.1; }
+.reveal section.title .sub { font-size: 40px; font-weight: 300; color: #CFD8DB; margin-bottom: 70px; }
+.reveal section.title .meta { font-size: 26px; color: #9FB0B5; }
+.reveal section.title .rule { width: 120px; height: 5px; background: var(--accent); margin: 34px 0 34px 0; }
+
+/* callout box, like a metropolis alert block */
+.reveal .box { border-left: 8px solid var(--accent); background: var(--box); padding: 20px 28px; margin: 34px 0 0 0; font-weight: 400; font-size: 0.8em; }
+.reveal .box.small { font-size: 0.8em; }
+.reveal table.counts td:last-child { text-align: right; padding-right: 0; }
+.reveal .cols p { text-align: left; }
+.reveal mjx-container[display="true"] { margin: 6px 0 !important; }
+
+/* tables: horizontal rules only */
+.reveal table { border-collapse: collapse; margin: 0 0 28px 0; font-size: 0.86em; width: 100%; }
+.reveal table th { font-weight: 500; text-align: left; border-bottom: 3px solid var(--fg); padding: 10px 18px 12px 0; }
+.reveal table td { border-bottom: 1px solid var(--rule); padding: 11px 18px 11px 0; vertical-align: top; }
+.reveal table tr:last-child td { border-bottom: 0; }
+.reveal table td.s { font-family: "Fira Mono", monospace; font-size: 0.85em; color: var(--muted); white-space: nowrap; }
+
+/* code */
+.reveal code { font-family: "Fira Mono", "Menlo", monospace; font-size: 0.9em; }
+.reveal :not(pre) > code { background: var(--code-bg); color: #2A6F97; padding: 1px 9px 2px 9px; border-radius: 5px; white-space: nowrap; }
+.reveal .box :not(pre) > code, .reveal td :not(pre) > code { background: rgba(35, 55, 59, 0.07); }
+.reveal h2 code { background: transparent; color: inherit; padding: 0; }
+.reveal .stepper code, .reveal .anim code, .reveal .fold code { background: transparent; color: inherit; padding: 0; }
+.reveal pre { font-family: "Fira Mono", monospace; font-size: 32px; line-height: 1.55; width: 100%; box-sizing: border-box; margin: 8px 0 32px 0; box-shadow: none; overflow: visible; }
+.reveal pre code { display: block; font-size: 1em; line-height: 1.6; background: var(--code-bg); color: var(--fg); padding: 24px 34px; border-radius: 4px; max-height: none; overflow-x: auto; overflow-y: visible; white-space: pre; }
+.reveal pre code .cm { color: var(--muted); font-style: italic; }
+.reveal pre code .kw { color: #2A6F97; }
+.reveal pre code .cons { color: var(--accent); }
+/* highlight.js mapping */
+.hljs-keyword, .hljs-built_in { color: #2A6F97; }
+.hljs-type { color: var(--accent); }
+.hljs-string { color: var(--green); }
+.hljs-comment { color: var(--muted); font-style: italic; }
+.hljs-number, .hljs-literal { color: #7A3E9D; }
+
+/* two columns */
+.reveal .cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 50px; }
+.reveal .cols > * { min-width: 0; }
+
+/* speaker notes are hidden in the deck */
+.reveal aside.notes { display: none; }
+
+/* print */
+@media print { .reveal h2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+
+/* part dividers: the title theme, one size down */
+.reveal section.part { background: var(--band); color: var(--band-fg); padding: 120px 110px; }
+.reveal section.part .eyebrow { font-family: "Fira Mono", monospace; font-size: 26px; color: var(--accent); letter-spacing: .06em; margin-bottom: 36px; }
+.reveal section.part h1 { font-size: 72px; font-weight: 300; color: var(--band-fg); margin: 0 0 16px 0; line-height: 1.1; }
+.reveal section.part .sub { font-size: 38px; font-weight: 300; color: #CFD8DB; }
+/* live demo */
+.reveal button.run { font-family: "Fira Sans", sans-serif; font-size: 26px; font-weight: 500; color: #fff; background: var(--accent); border: 0; border-radius: 4px; padding: 6px 22px; cursor: pointer; }
+.reveal button.run:hover { filter: brightness(1.08); }
+.reveal pre.out { font-size: 30px; line-height: 1.5; background: #1E2A2E; color: #F2B04C; padding: 18px 28px; border-radius: 4px; margin: 0 0 22px 0; min-height: 1.6em; white-space: pre; box-sizing: border-box; max-width: 100%; overflow-x: auto; }
+.reveal .cols h3 { font-size: 32px; color: var(--muted); margin: 0 0 8px 0; }
+.reveal .cols pre { font-size: 23px; margin: 6px 0 18px 0; }
+.reveal .cols pre code { padding: 18px 24px; }
+.reveal .cols p { font-size: 0.88em; margin-bottom: 12px; }
+.reveal .cols li { font-size: 0.88em; }
+.reveal script.src { display: none; }
+
+.reveal .cols pre.out { font-size: 26px; }
+.reveal .slides section .fragment.visible { opacity: 1; visibility: inherit; }
+/* a current-visible fragment (the carousel panels) shows only while it is the current one */
+.reveal .slides section .fragment.current-visible.visible:not(.current-fragment) { opacity: 0; visibility: hidden; }
+/* footline (current part) and the T overlay */
+.reveal .toc { position: absolute; inset: 0; background: rgba(35, 55, 59, 0.94); color: var(--band-fg); z-index: 40; display: flex; align-items: center; justify-content: center; }
+.reveal .toc[hidden] { display: none; }
+.reveal .toc-inner { min-width: 700px; }
+.reveal .toc-title { font-size: 26px; color: var(--accent); font-family: "Fira Mono", monospace; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 26px; }
+.reveal .toc-title .muted { color: #9FB0B5; text-transform: none; letter-spacing: 0; }
+.reveal .toc ol { list-style: none; padding: 0; margin: 0; counter-reset: part; }
+.reveal .toc li { font-size: 34px; padding: 12px 18px; border-radius: 4px; cursor: pointer; counter-increment: part; }
+.reveal .toc li::before { content: counter(part) "  "; font-family: "Fira Mono", monospace; color: var(--accent); font-size: 26px; }
+.reveal .toc li:hover { background: rgba(255,255,255,0.08); }
+.reveal .toc li .muted { color: #9FB0B5; font-size: 26px; margin-left: 12px; }
+/* the one focus of a slide */
+.reveal .hl { color: var(--accent); font-weight: 500; font-style: normal; }
+.reveal .lang { color: #2A6F97; font-weight: 500; }
+.reveal h2 .hl { color: var(--accent); }
+/* footnote pinned above the footline */
+.reveal .fn { position: absolute; left: 90px; right: 90px; bottom: 72px; margin: 0; font-size: 28px; line-height: 1.35; color: var(--fg); }
+.reveal sup { font-size: 0.8em; font-weight: 500; color: var(--accent); }
+.reveal table.names td:first-child { width: 56%; }
+/* transcripts (compiler output shown verbatim) and the kinds × operations matrix */
+.reveal pre.out.tr { font-size: 24px; line-height: 1.45; margin: 0; padding: 12px 24px; }
+.reveal pre.mid { font-size: 26px; }
+.reveal table.defaults td:first-child, .reveal table.defaults th:first-child { width: 28%; }
+.reveal table.defaults td:nth-child(2), .reveal table.defaults th:nth-child(2) { width: 22%; }
+.reveal table.dual td:first-child, .reveal table.dual th:first-child { width: 30%; }
+.reveal table td pre.out.tr { margin: 4px 0; font-size: 22px; }
+.reveal table.matrix th, .reveal table.matrix td { text-align: center; }
+.reveal table.matrix th:first-child, .reveal table.matrix td:first-child { text-align: left; }
+.reveal table.matrix .ext { color: var(--muted); font-weight: 500; }
+.reveal table.matrix { margin-bottom: 14px; }
+/* carousel: one language at a time */
+.reveal .car-tabs { display: flex; gap: 8px; margin: 0 0 14px 0; }
+.reveal .car-tabs span { font-size: 26px; font-weight: 500; color: var(--muted); padding: 4px 18px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; }
+.reveal .car-tabs span.on { color: var(--accent); border-color: var(--accent); }
+.reveal .car-panels { position: relative; min-height: 300px; }
+.reveal .car-panel { position: absolute; inset: 0; }
+.reveal .car-panel pre { margin: 0 0 14px 0; }
+.reveal .car-panel p { font-size: 0.88em; margin: 0; }
+.reveal table.ways td { border-bottom: 0; padding-top: 6px; padding-bottom: 10px; }
+.reveal table.ways td.s { font-weight: 300; width: 14%; }
+.reveal table.ways td.s.hl { color: var(--accent); font-weight: 400; }
+/* matrix animation */
+.reveal table.matrix td.cell { color: transparent; position: relative; transition: background .3s, color .3s; border-radius: 4px; }
+.reveal table.matrix td.cell::after { content: '–'; color: var(--rule); position: absolute; left: 0; right: 18px; text-align: center; }
+.reveal table.matrix td.cell.on::after { content: none; }
+.reveal table.matrix td.cell.on.w1 { color: #2A6F97; background: #E3EEF5; }
+.reveal table.matrix td.cell.on.w2 { color: var(--accent); background: var(--box); }
+.reveal table.matrix th.hd, .reveal table.matrix td.rl { transition: background .3s, color .3s; border-radius: 4px; }
+.reveal table.matrix th.hd.on.w1 { color: #2A6F97; background: #E3EEF5; }
+.reveal table.matrix td.rl.on.w2 { color: var(--accent); background: var(--box); }
+.reveal table.matrix td.cell.on, .reveal .w1, .reveal .w2 { font-weight: 500; }
+.reveal .w1 { color: #2A6F97; }
+.reveal .w2 { color: var(--accent); }
+/* text styles offered by the in-browser editor (deck/liveedit.json) */
+.reveal .c-blue { color: #2A6F97; }
+.reveal .c-green { color: var(--green); }
+.reveal .sz-s { font-size: 0.85em; }
+.reveal .sz-l { font-size: 1.15em; }
+
+/* ---------- session 4 additions ---------- */
+/* the spine table: who decides the next step */
+.reveal table.spine td.s { width: 12%; }
+.reveal table.spine tr.now td { color: var(--accent); font-weight: 500; background: var(--box); }
+.reveal table.spine tr.dim td { color: var(--muted); }
+/* the roadmap: three columns */
+.reveal .cols3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+.reveal .cols3 > * { min-width: 0; }
+.reveal .cols3 h3 { font-size: 34px; color: var(--accent); margin-bottom: 10px; }
+.reveal .cols3 p, .reveal .cols3 li { font-size: 0.82em; }
+.reveal .cols3 { gap: 22px; }
+.reveal .cols3 pre { font-size: 24px; margin: 6px 0 14px 0; }
+.reveal .cols3 pre code { padding: 14px 14px; }
+.reveal .cols pre.out.tr { font-size: 21px; }
+/* live / recorded labels on output boxes */
+.reveal pre.out { position: relative; }
+.reveal pre.out[data-label]::after { content: attr(data-label); position: absolute; top: 6px; right: 12px; font-family: "Fira Sans", sans-serif; font-size: 20px; color: #9FB0B5; }
+.reveal pre.out.rec::after { content: 'recorded'; position: absolute; top: 6px; right: 12px; font-family: "Fira Sans", sans-serif; font-size: 20px; color: #9FB0B5; }
+/* the λ stepper */
+.reveal .stepper { margin: 0 0 14px 0; }
+.reveal .stepper .st-term { font-family: "Fira Mono", monospace; font-size: 36px; background: var(--code-bg); padding: 16px 26px; border-radius: 4px; min-height: 1.6em; overflow-x: auto; white-space: nowrap; }
+.reveal .stepper .st-n { color: var(--muted); font-size: 24px; margin-right: 10px; }
+.reveal .stepper .st-trace { font-family: "Fira Mono", monospace; font-size: 27px; line-height: 1.45; color: var(--fg); margin: 8px 0 8px 0; min-height: 6.2em; white-space: pre; overflow-x: auto; }
+.reveal .stepper .st-ctl { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; font-size: 24px; }
+.reveal .stepper .st-ctl label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+.reveal .stepper .st-ctl input { width: 22px; height: 22px; }
+.reveal .stepper button.run { font-size: 22px; padding: 4px 16px; }
+.reveal .cols .stepper .st-term { font-size: 28px; padding: 12px 18px; }
+.reveal .cols .stepper .st-trace { font-size: 22px; min-height: 5.6em; }
+.reveal .cols .stepper .st-ctl { font-size: 23px; gap: 14px; }
+.reveal .cols .stepper .st-ctl input { width: 20px; height: 20px; }
+.reveal .cols .stepper button.run { font-size: 22px; padding: 3px 12px; }
+.reveal .stepper.narrow .st-trace { min-height: 3em; }
+/* animations */
+.reveal .anim .ct-cols, .reveal .anim .ts-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; min-height: 330px; align-items: start; }
+.reveal .anim .ct-h { font-size: 30px; color: var(--fg); font-weight: 500; margin-bottom: 10px; }
+.reveal .anim .frame { font-family: "Fira Mono", monospace; font-size: 29px; color: var(--fg); background: var(--code-bg); border-left: 8px solid var(--rule); padding: 8px 16px; margin: 0 0 6px 0; }
+.reveal .anim .frame.top { border-left-color: var(--accent); }
+.reveal .anim .frame.empty { color: var(--fg); font-style: italic; border-left-color: transparent; background: transparent; }
+.reveal .anim .frame .s { color: #2A6F97; margin-right: 14px; }
+.reveal .anim .ct-term code { font-size: 32px; display: block; background: var(--code-bg); padding: 16px 22px; border-radius: 4px; white-space: nowrap; overflow-x: auto; }
+.reveal .anim .ct-term b, .reveal .fold .fd-expr b { color: var(--accent); font-weight: 500; }
+.reveal .an-ctl { display: flex; gap: 16px; align-items: center; font-size: 26px; color: var(--muted); margin-top: 12px; }
+.reveal .an-what, .reveal .fd-what { color: var(--accent); font-weight: 500; font-size: 28px; }
+.reveal .anim button.run, .reveal .fold button.run { font-size: 22px; padding: 4px 16px; }
+.reveal .ts-svg { width: 100%; height: auto; }
+.reveal .ts-svg .edge { stroke: var(--rule); stroke-width: 3; }
+.reveal .ts-svg .node circle { fill: #fff; stroke: var(--fg); stroke-width: 3; }
+.reveal .ts-svg .node text { font-family: "Fira Mono", monospace; font-size: 20px; text-anchor: middle; fill: var(--fg); }
+.reveal .ts-svg .node.onstack circle { stroke: #2A6F97; stroke-width: 5; }
+.reveal .ts-svg .node.done circle { fill: var(--code-bg); stroke: var(--rule); }
+.reveal .ts-svg .node.done text { fill: var(--muted); }
+.reveal .ts-svg .node.cur circle { fill: var(--box); stroke: var(--accent); stroke-width: 5; }
+.reveal .ts-svg .node.cur text { fill: var(--accent); }
+.reveal .ts-count { font-family: "Fira Mono", monospace; font-size: 30px; margin-top: 14px; }
+/* fold animation */
+.reveal .fold { margin: 0 0 12px 0; }
+.reveal .fold .fd-list { font-family: "Fira Mono", monospace; font-size: 34px; margin-bottom: 10px; }
+.reveal .fold .fd-list .used { color: var(--rule); }
+.reveal .fold .fd-expr { font-family: "Fira Mono", monospace; font-size: 34px; background: var(--code-bg); padding: 14px 24px; border-radius: 4px; min-height: 1.6em; white-space: nowrap; overflow-x: auto; }
+.reveal .fold .fd-side { margin: 10px 0 6px 0; min-height: 2.6em; }
+.reveal .fold .fd-side .frame { font-size: 22px; padding: 5px 12px; margin-bottom: 4px; }
+.reveal .fold .fd-hist { font-family: "Fira Mono", monospace; font-size: 24px; color: var(--fg); }
+.reveal .fold .fd-ctl { display: flex; gap: 16px; align-items: center; font-size: 26px; color: var(--muted); }
+.reveal .cols .fold .fd-list, .reveal .cols .fold .fd-expr { font-size: 25px; }
+.reveal .cols .fold .fd-expr { padding: 10px 18px; }
+.reveal .cols .fold .fd-side, .reveal .cols .fold .fd-ctl { font-size: 22px; }
+/* the today slide and small tables */
+.reveal table.small { font-size: 0.78em; }
+.reveal pre.tight { margin-bottom: 10px; }
+.reveal p.tight { margin-bottom: 8px; }
+.reveal table.strat td:first-child { width: 22%; font-weight: 500; }
+/* a quotation, and a list with air between the items */
+.reveal blockquote.quote { border-left: 8px solid var(--rule); background: transparent; box-shadow: none; width: auto; margin: 4px 0 24px 0; padding: 8px 28px; font-style: italic; font-size: 0.92em; line-height: 1.4; }
+.reveal ul.spaced li { margin-bottom: 18px; }
+.reveal table.answers { font-size: 0.8em; }
+.reveal table.answers td:first-child, .reveal table.answers th:first-child { width: 38%; }
+.reveal table.answers td:nth-child(2), .reveal table.answers th:nth-child(2) { width: 34%; }
+.reveal table.answers td:last-child, .reveal table.answers th:last-child { width: 28%; color: var(--accent); font-weight: 500; padding-right: 0; }
+.reveal table.answers td:last-child .muted { color: var(--muted); font-weight: 300; }
+.reveal table.contrast td:first-child { width: 24%; color: var(--fg); font-weight: 300; }
+.reveal table.contrast td:nth-child(2) { width: 38%; }
+.reveal table.contrast td:last-child { width: 38%; color: var(--fg); font-weight: 300; }
+.reveal table.contrast { margin-bottom: 10px; }
+.reveal table.two td:last-child, .reveal table.contrast td { color: var(--fg); font-weight: 300; }
+.reveal table.two td:last-child { color: var(--accent); font-weight: 500; width: 16%; }
+.reveal table.two td:first-child { width: 84%; }
+.reveal table.contrast tr.ours td { background: var(--box); }
+.reveal table.contrast tr.ours td:first-child b { color: var(--accent); }
+.reveal table.two { margin-bottom: 12px; }
+.reveal table.contrast td:first-child { width: 22%; }
+.reveal table.contrast td:nth-child(2), .reveal table.contrast td:last-child { width: 39%; }
+.reveal .cols pre.run { font-size: 21px; margin: 14px 0 0 0; }
+.reveal .cols pre.run code { padding: 12px 18px; line-height: 1.5; }
+/* the Turing machine */
+.reveal .turing { margin: 6px 0 0 0; }
+.reveal .tm-svg { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto; }
+.reveal .turing .an-ctl { justify-content: center; }
+.reveal .tm-svg .cell { fill: #fff; stroke: var(--fg); stroke-width: 3; }
+.reveal .tm-svg .cell.head { fill: var(--box); stroke: var(--accent); stroke-width: 5; }
+.reveal .tm-svg .sym { font-family: "Fira Mono", monospace; font-size: 40px; text-anchor: middle; fill: var(--fg); }
+.reveal .tm-svg .sym.blank { fill: var(--rule); }
+.reveal .tm-svg .marker { fill: var(--accent); }
+.reveal .tm-svg .state { font-family: "Fira Mono", monospace; font-size: 26px; text-anchor: middle; fill: var(--accent); font-weight: 500; }
+.reveal table.rules tr.on td { background: var(--box); color: var(--accent); font-weight: 500; }
+.reveal table.rules tr.next td { border-bottom-color: var(--accent); }
+.reveal .turing .an-ctl { margin-top: 4px; }
+/* the spine's topic column; the today slide */
+.reveal table.spine td.t, .reveal table.spine th.t { width: 22%; color: var(--muted); font-weight: 300; }
+.reveal table.spine tr.now td.t { color: var(--accent); font-weight: 500; }
+.reveal .today > div { background: var(--code-bg); border-radius: 6px; padding: 18px 28px 6px 28px; }
+.reveal .today h3, .reveal .today-h { font-size: 34px; color: var(--accent); margin: 0 0 10px 0; }
+.reveal .today p { font-size: 0.85em; }
+.reveal .today-h { margin-top: 14px; }
+.reveal ul.row4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; list-style: none; padding: 0; margin: 0; }
+.reveal ul.row4 li { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 150px; font-size: 0.72em; line-height: 1.3; background: var(--code-bg); border: 3px solid var(--rule); border-radius: 6px; padding: 14px 20px; margin: 0; }
+/* a row of named tiles */
+.reveal ul.tiles { display: flex; justify-content: center; align-items: center; gap: 0; list-style: none; padding: 0; margin: 6px 0 0 0; }
+.reveal ul.tiles li { width: 150px; height: 150px; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; font-size: 0.66em; font-weight: 400; text-align: center; background: var(--code-bg); border: 3px solid var(--rule); border-radius: 8px; padding: 8px; margin: 0; line-height: 1.2; color: var(--muted); }
+.reveal ul.tiles li + li::before { content: '→'; position: absolute; margin-left: -42px; color: var(--rule); font-size: 30px; }
+.reveal ul.tiles li + li { margin-left: 52px; }
+.reveal ul.tiles li.now { color: var(--fg); font-weight: 500; }
+.reveal .tiles-cap { font-size: 0.7em; color: var(--muted); margin: 22px 0 8px 0; text-align: center; }
+.reveal .anim .ct-ctl { display: block; }
+.reveal .anim .ct-ctl .an-what { margin-top: 10px; }
+.reveal ul.obs li { font-size: 0.86em; margin-bottom: 8px; }
+.reveal ul.obs pre.ex { font-size: 22px; margin: 8px 0 4px 0; }
+.reveal ul.obs pre.ex code { padding: 12px 20px; line-height: 1.5; }
+.reveal .car-panels.obs { min-height: 250px; margin-top: 10px; }
+.reveal .car-panels.obs p { font-size: 1em; margin-bottom: 14px; }
+.reveal .car-panels.obs pre.ex { font-size: 24px; margin: 0; }
+.reveal .car-panels.obs pre.ex code { padding: 14px 22px; }
+/* the big fold picture */
+.reveal .foldviz .fv-svg { width: 100%; max-width: 1060px; height: auto; display: block; margin: 0 auto; }
+.reveal .fv-svg .fv-title { font-family: "Fira Mono", monospace; font-size: 34px; text-anchor: middle; fill: var(--fg); }
+.reveal .fv-svg .fv-expr { font-family: "Fira Mono", monospace; font-size: 30px; text-anchor: middle; fill: var(--fg); }
+.reveal .fv-svg .fv-el rect { fill: #fff; stroke: var(--fg); stroke-width: 3; }
+.reveal .fv-svg .fv-el text { font-family: "Fira Mono", monospace; font-size: 40px; text-anchor: middle; fill: var(--fg); }
+.reveal .fv-svg .fv-el.on rect { fill: var(--code-bg); stroke: var(--rule); }
+.reveal .fv-svg .fv-el.on text { fill: var(--muted); }
+.reveal .fv-svg .fv-f { opacity: 0.18; transition: opacity .5s; }
+.reveal .fv-svg .fv-f circle { fill: #fff; stroke: #2A6F97; stroke-width: 4; }
+.reveal .fv-svg .fv-f text { font-family: "Fira Mono", monospace; font-size: 42px; font-style: italic; text-anchor: middle; fill: #2A6F97; }
+.reveal .fv-svg .fv-f.on { opacity: 1; }
+.reveal .fv-svg .fv-f.pending circle { stroke: var(--accent); stroke-dasharray: 10 8; }
+.reveal .fv-svg .fv-f.pending text { fill: var(--accent); }
+.reveal .fv-svg .fv-v { opacity: 0; transition: opacity .5s; }
+.reveal .fv-svg .fv-v.on { opacity: 1; }
+.reveal .fv-svg .fv-v rect { fill: var(--box); stroke: var(--accent); stroke-width: 4; }
+.reveal .fv-svg .fv-v text { font-family: "Fira Mono", monospace; font-size: 40px; font-weight: 500; text-anchor: middle; fill: var(--accent); }
+.reveal .fv-svg .fv-arr { stroke: var(--fg); stroke-width: 4; fill: none; opacity: 0; transition: stroke-dashoffset .7s ease-out, opacity .2s; }
+.reveal .fv-svg .fv-arr.on { opacity: 1; stroke-dashoffset: 0 !important; }
+.reveal .fv-svg .fv-head { fill: var(--fg); }
+.reveal .fv-ctl { display: grid; grid-template-columns: auto 1fr auto; gap: 30px; align-items: center; font-size: 24px; }
+.reveal .fv-sw span { cursor: pointer; padding: 4px 14px; border-radius: 4px; border: 2px solid var(--rule); margin-right: 6px; color: var(--fg); font-family: "Fira Mono", monospace; font-size: 24px; }
+.reveal .fv-sw span.on { color: var(--accent); border-color: var(--accent); }
+.reveal .fv-what { text-align: right; }
+/* the fold tree picture */
+.reveal .fv-svg .fv-n circle { fill: #fff; stroke: var(--fg); stroke-width: 3; transition: fill .4s, stroke .4s; }
+.reveal .fv-svg .fv-n text { font-family: "Fira Mono", monospace; font-size: 38px; text-anchor: middle; fill: var(--fg); transition: fill .4s, opacity .4s; }
+.reveal .fv-svg .fv-n .fv-val { font-size: 26px; font-weight: 500; text-anchor: start; fill: #2A6F97; }
+.reveal .fv-svg .fv-n.cons.on circle { fill: var(--code-bg); stroke: var(--rule); }
+.reveal .fv-svg .fv-n.cons.on text { fill: var(--rule); }
+.reveal .fv-svg .fv-n.leaf.el.on text { fill: var(--rule); }
+.reveal .fv-svg .fv-n.nil.on text { fill: var(--rule); }
+.reveal .fv-svg .fv-n.fn, .reveal .fv-svg .fv-n.zed, .reveal .fv-svg .fv-e[data-id^="r"], .reveal .fv-svg .fv-n.leaf[data-id^="y"] { opacity: 0; transition: opacity .4s; }
+.reveal .fv-svg .fv-n.fn.on, .reveal .fv-svg .fv-n.zed.on, .reveal .fv-svg .fv-e.on, .reveal .fv-svg .fv-n.leaf[data-id^="y"].on { opacity: 1; }
+.reveal .fv-svg .fv-n.fn circle { stroke: var(--accent); stroke-width: 4; }
+.reveal .fv-svg .fv-n.fn text:first-of-type { fill: var(--accent); font-style: italic; }
+.reveal .fv-svg .fv-n.fn.known circle { fill: var(--box); }
+.reveal .fv-svg .fv-n.zed text { fill: var(--accent); font-size: 30px; }
+.reveal .fv-svg .fv-n.leaf[data-id^="y"] text { fill: var(--fg); }
+.reveal .fv-svg .fv-e { stroke: var(--fg); stroke-width: 3; }
+.reveal .fv-svg .fv-e[data-id^="l"] { opacity: 1; }
+.reveal .fv-svg .fv-big { stroke: var(--fg); stroke-width: 4; }
+/* the language's name in the corner of a code box */
+.reveal pre { position: relative; }
+.reveal pre[data-lang]::after { content: attr(data-lang); position: absolute; top: 4px; right: 12px; font-family: "Fira Sans", sans-serif; font-variant: small-caps; font-weight: 400; font-size: 20px; letter-spacing: .04em; color: #9FB0B5; pointer-events: none; }
+.reveal table.concl { font-size: 0.7em; margin-bottom: 14px; }
+.reveal table.concl td:nth-child(2), .reveal table.concl th:nth-child(2) { width: 30%; font-weight: 400; }
+.reveal table.concl td.s { width: 5%; color: var(--accent); font-weight: 500; }
+.reveal ul.tiles li.now { border-color: var(--accent); background: var(--box); }
+.reveal section.part .sub2 { font-size: 26px; color: #9FB0B5; }
+.reveal ol.qs4 { padding-left: 1.3em; }
+.reveal ol.qs4 li { font-size: 0.86em; margin-bottom: 10px; }
+.reveal ol.qs4 li::marker { color: var(--accent); font-weight: 500; }
+.reveal ol.sites { margin: 18px 0 0 0; padding-left: 1.4em; }
+.reveal ol.sites li { font-size: 0.82em; margin-bottom: 8px; }
+.reveal ol.sites li::marker { color: var(--accent); font-weight: 500; }
+.reveal .cols > .big p, .reveal .cols > .big li { font-size: 1em; }
+.reveal .cols .stepper.big .st-term { font-size: 30px; }
+.reveal .cols .stepper.big .st-trace { font-size: 21px; }
+.reveal .cols .stepper.big .st-ctl { font-size: 23px; }
+.reveal pre.lines { font-size: 23px; margin: 0 0 8px 0; }
+.reveal pre.lines code { padding: 12px 20px; line-height: 1.5; }
+.reveal .cols .anim .ts-cols { gap: 20px; min-height: 0; }
+.reveal .cols .anim .frame { font-size: 24px; padding: 6px 12px; }
+.reveal .cols .anim .ct-h { font-size: 26px; }
+.reveal .cols .ts-count { font-size: 26px; }
+.reveal .cols .an-ctl { font-size: 22px; gap: 10px; }
+.reveal .cols .an-what { font-size: 24px; }
+/* code with a highlighted current line */
+.reveal pre.code-lines { font-size: 21px; margin: 0 0 4px 0; }
+.reveal pre.code-lines code { padding: 8px 20px; line-height: 1.45; }
+.reveal pre.code-lines [data-line] { display: inline-block; width: 100%; border-radius: 3px; transition: background .25s; }
+.reveal pre.code-lines [data-line].on { background: var(--box); box-shadow: -8px 0 0 var(--accent); }
+.reveal .treestack .ts-cols { min-height: 0; grid-template-columns: 380px minmax(0, 1fr); gap: 50px; align-items: start; }
+.reveal .treestack .ts-svg { max-width: 380px; }
+.reveal table.conv { margin: 4px 0 8px 0; }
+.reveal table.conv td { padding-top: 7px; padding-bottom: 7px; }
+.reveal table.conv td.s { font-size: 0.95em; color: var(--fg); }
+.reveal table.conv td:first-child { width: 48%; }
+.reveal p.aside { font-size: 0.86em; color: var(--fg); }
+/* captions and notes in prose are never grey */
+.reveal p.muted, .reveal p.small.muted, .reveal .tiles-cap { color: var(--fg); }
+.reveal .cols.rules mjx-container[display="true"] { margin: 22px 0 !important; }
+.reveal .cols.rules h3 { margin-bottom: 18px; }
+.reveal .cols.rules > div { display: flex; flex-direction: column; }
+.reveal .cols.rules p { margin-top: auto; padding-top: 14px; }
+/* slide 6: buttons under the term, the trace below them */
+.reveal .stepper.big { display: flex; flex-direction: column; }
+.reveal .stepper.big .st-term { order: 1; }
+.reveal .stepper.big .st-ctl { order: 2; margin: 10px 0 6px 0; }
+.reveal .stepper.big .st-trace { order: 3; min-height: 3em; }
+/* the Turing slide and the conclusion, after the wider spacing */
+.reveal .tm-svg { max-width: 560px !important; }
+.reveal .turing .an-ctl { margin-top: 0; }
+.reveal table.concl { font-size: 0.66em; }
+.reveal table.concl td { padding-top: 8px; padding-bottom: 8px; }
+.reveal .rules .rule { position: relative; }
+.reveal .rules .rn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-variant: small-caps; font-size: 26px; letter-spacing: .04em; color: var(--fg); }
+.reveal .cols.rules mjx-container[display="true"] { margin: 18px 0 !important; text-align: left !important; }
+.reveal .cols.rules { gap: 110px; }
+.reveal .cols.rules .rn { right: 8px; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- 1 -->
+<section class="title" data-background-color="#23373B">
+  <div class="eyebrow">PROGRAMMING PARADIGMS · SESSION 4 · BLOCK 2</div>
+  <h1>Functional programming and control</h1>
+  <div class="sub"><b>Block 2</b> — the formalism: the λ-calculus</div>
+  <div class="rule"></div>
+  <div class="meta">SW7 · Aalborg University Copenhagen · Autumn 2026</div>
+  <aside class="notes">Block 1 ended on an open question: when is an argument evaluated? This block answers it in the smallest language there is.</aside>
+</section>
+
+
+<!-- part 4 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 5</div>
+  <h1>The calculus</h1>
+  <div class="sub">Block 1’s answers in one formalism: the smallest language that computes everything, and the one language semantics is written in</div>
+</section>
+
+<!-- 29 -->
+<section>
+  <h2>Syntax: Three forms</h2>
+  <table>
+    <tr><td class="s">x</td><td>a <b>variable</b></td></tr>
+    <tr><td class="s">λx. t</td><td>a <b>function</b> of one argument <code>x</code>, with body <code>t</code></td></tr>
+    <tr><td class="s">t u</td><td>an <b>application</b> of <code>t</code> to <code>u</code></td></tr>
+  </table>
+  <table class="conv">
+    <tr><td>application groups to the left</td><td class="s">f a b &nbsp;=&nbsp; (f a) b</td></tr>
+    <tr><td>a body extends as far right as it can</td><td class="s">λx. x y &nbsp;=&nbsp; λx. (x y)</td></tr>
+    <tr><td><b>currying</b>: a function of two arguments is a function returning a function (session 5)</td><td class="s">λx. λy. t &nbsp;=&nbsp; λx y. t</td></tr>
+  </table>
+  <p class="aside" style="position: relative; left: 2px; top: 150px"><em>Note:</em> In JavaScript the three forms are <code>x</code>, <code>x =&gt; e</code> and <code>f(a)</code>:                                        <code>λx. 2 + x</code> reads <code>x =&gt; 2 + x</code> — except that <code>2</code> and <code>+</code> are not in the calculus.</p>
+  <div class="box fragment" style="position: relative; left: -2px; top: -100px">No numbers, no booleans, no <code>let</code>, no <code>if</code>. Everything else is <span class="hl">defined</span> from these three forms.</div>
+  <aside class="notes">Church 1936. The lab's type: Var of string | Lam of string * term | App of term * term — exactly this table. A function of two arguments is a function returning a function; block 1's fold was already written that way.</aside>
+</section>
+
+<!-- 30 -->
+<section>
+  <h2>Free and bound variables</h2>
+  <p>In <code>λx. x y</code>, <code>x</code> is <b>bound</b> by the <code>λ</code>; <code>y</code> is <b>free</b>: nothing in the term says what it is. A term with no free variable is <b>closed</b>.</p>
+  <pre class="mid tight" data-lang="λ-calculus"><code class="nohighlight">free (x)      = {x}
+free (λx. t)  = free t − {x}
+free (t u)    = free t ∪ free u</code></pre>
+  <p>These three lines are the whole definition; the lab's warm-up writes them in OCaml.</p>
+  <p class="fragment"><em>Note:</em> The same name can be bound in one place and free in another: in <code>x (λx. x)</code>, the first <code>x</code> is free.</p>
+  <aside class="notes">Bound: the λ decides its meaning — it is a placeholder for the argument. Free: an unknown, or a name defined elsewhere. Closed terms are the programs; open terms are pieces of programs.</aside>
+</section>
+
+<!-- 32 -->
+<section>
+  <h2>β-reduction</h2>
+  <p style="width: 1436px; position: relative; left: -22px; top: 0px"><code>t[x := u]</code> is <code>t</code> with <code>u</code> put in for every free <code>x</code> — <b>substitution</b>.                            One rule: <code>(λx. t) u  →  t[x := u]</code>: the body, with the argument substituted for the variable.</p>
+  <p style="position: relative; left: -20px; top: 12px">An application of a <code>λ</code> is a <b>redex</b>. A term with no redex is in <b>normal form</b>: the computation is over. <code>t →* u</code>: <code>u</code> is reached from <code>t</code> in some number of steps.</p>
+  <div class="st" data-term="(λx. λy. x y) (λz. z z) (λw. w)" data-strategy="normal" data-buttons="1"></div>
+  <p class="fn">In the trace, <b>β</b> is the rule; <b>δ</b> unfolds a name such as <code>Y</code> into its definition — a courtesy, not a rule.</p>
+  <aside class="notes">Step it to λw. w: four β-steps. The stepper is the lab's evaluator in JavaScript; the lab writes it in OCaml and must agree with every example on these slides. Run shows the whole trace.</aside>
+</section>
+
+<!-- 31 -->
+<section>
+  <h2>Substitution and capture</h2>
+  <p class="tight">Substitution is defined case by case:</p>
+  <pre class="mid tight" data-lang="λ-calculus" style="font-size: 0.753em"><code class="nohighlight">x[x := u]        =  u
+y[x := u]        =  y                    if y ≠ x
+(t s)[x := u]    =  t[x := u] s[x := u]
+(λy. t)[x := u]  =  λy. t[x := u]        <span class="hl">if y ≠ x, y not free in u</span></code></pre>
+  <p class="tight" style="position: relative; left: 0px; top: 14px">The last case carries a condition, and the condition matters: in <code>(λx. λy. x) y</code>, putting <code>y</code> in for <code>x</code> without it gives <code>λy. y</code> — the free <code>y</code> has been <b>captured</b> by the <code>λy</code>, and the meaning has changed.</p>
+  <p class="fragment tight" style="font-size: 0.903em; position: relative; left: 0px; top: 54px"><span class="hl">The solution</span>: a bound variable can be renamed without changing the meaning of the term:                 <b>α-conversion</b>. Rename the binder first, then substitute: <code>(λx. λy'. x) y → λy'. y</code>.</p>
+  <aside class="notes">To show the rename live: on the β-reduction slide, the stepper given (λx. λy. x) y renames on its own and says so in the trace, —β, α: y → y'→. Every λ-implementer's first bug lives here; the lab's tests include this exact term.</aside>
+</section>
+
+<!-- 33 -->
+<section>
+  <h2>Which redex first?</h2>
+  <p>This term has two redexes, so the rule allows two different first steps.              <b>Normal order</b> takes the outermost one, the leftmost among those; <b>applicative order</b> takes the innermost.</p>
+  <div class="cols">
+    <div>
+      <h3>normal order</h3>
+      <div class="st narrow" data-term="(λx. λy. x) ((λz. z) a) ((λz. z) b)" data-strategy="normal" data-extras="0"></div>
+    </div>
+    <div>
+      <h3>applicative order</h3>
+      <div class="st narrow" data-term="(λx. λy. x) ((λz. z) a) ((λz. z) b)" data-strategy="applicative" data-extras="0"></div>
+    </div>
+  </div>
+  <div class="box fragment">Church and Rosser, 1936: a term has <span class="hl">at most one</span> normal form. A path may fail to reach it — the next slide — but no path reaches a different one. The order changes the path, and whether we arrive; never the answer.</div>
+  <aside class="notes">Both reach a. Normal order never evaluated (λz. z) b — it was thrown away. Applicative order did. Confluence is the theorem behind parallel map over pure code, five weeks from now: when the answer does not depend on the order, the steps may run at the same time.</aside>
+</section>
+
+<!-- 34 -->
+<section>
+  <h2>Does the order matter?</h2>
+  <p><code>Ω = (λx. x x) (λx. x x)</code> reduces to itself, forever. Apply a function that ignores its argument to it:</p>
+  <div class="cols">
+    <div>
+      <h3>normal order</h3>
+      <div class="st narrow" data-term="(λx. λy. y) Ω" data-strategy="normal" data-extras="0"></div>
+    </div>
+    <div>
+      <h3>applicative order</h3>
+      <div class="st narrow" data-term="(λx. λy. y) Ω" data-strategy="applicative" data-cap="30" data-extras="0"></div>
+    </div>
+  </div>
+  <div class="box fragment">The order never changes the answer; it decides <span class="hl">whether we get one</span>. Normal order finds the normal form whenever one exists.</div>
+  <aside class="notes">Left: one step, λy. y. Right: applicative order must first reduce the argument, and Ω steps to Ω. The last sentence is the standardisation theorem (Curry and Feys 1958; Barendregt 1984, ch. 11).</aside>
+</section>
+
+<!-- 35 -->
+<section>
+  <h2>Reduction orders and parameter-passing modes</h2>
+  <table>
+    <tr><th>reduction order</th><th>the mode, block 1</th><th>languages</th></tr>
+    <tr><td>applicative: arguments first</td><td><b>call-by-value</b></td><td>C, Java, Python, JavaScript, OCaml, Scheme</td></tr>
+    <tr><td>normal: arguments when used, each time</td><td><b>call-by-name</b></td><td>Algol 60 — its default</td></tr>
+    <tr><td>normal, with sharing: each argument once</td><td><b>call-by-need</b></td><td>Haskell</td></tr>
+  </table>
+  <div class="box fragment">Evaluation strategy: a design decision every language has made, mostly the same way.</div>
+  <p class="fn">Programming languages evaluate <b>weakly</b>: a function body runs only when the function is called, never inside a <code>λ</code>. So does the lab's evaluator; the stepper has a switch.</p>
+  <aside class="notes">Plotkin 1975 gave both strategies their calculi; Wadsworth 1971 call-by-need. Algol 60's call-by-name was implemented with thunks — session 5's word. Weak reduction: a function body is not run until the function is called; that is why the stepper stops at a λ when "weak" is on.</aside>
+</section>
+
+
+<!-- 35b -->
+<section>
+  <h2>Small-step operational semantics: the rules</h2>
+  <div class="cols rules">
+    <div>
+      <h3>call by value</h3>
+      <div class="rule"><span class="rn">e-app1</span>\[\frac{t_1 \to t_1'}{t_1\; t_2 \to t_1'\; t_2}\]</div>
+      <div class="rule"><span class="rn">e-app2</span>\[\frac{t_2 \to t_2'}{v\; t_2 \to v\; t_2'}\]</div>
+      <div class="rule"><span class="rn">e-appabs</span>\[(\lambda x.\, t)\; v \;\to\; t[x := v]\]</div>
+      <p class="small">First the function part is reduced, then the argument, until each is a value <code>v</code> — a <code>λ</code>; only then does β apply.</p>
+    </div>
+    <div>
+      <h3>call by name</h3>
+      <div class="rule"><span class="rn">e-app1</span>\[\frac{t_1 \to t_1'}{t_1\; t_2 \to t_1'\; t_2}\]</div>
+      <div class="rule"><span class="rn">e-appabs</span>\[(\lambda x.\, t_1)\; t_2 \;\to\; t_1[x := t_2]\]</div>
+      <p class="small">Only the function part is reduced, until it is a <code>λ</code>; then β applies with the argument still unevaluated.</p>
+    </div>
+  </div>
+  <div class="box fragment">No rule reduces inside a <code>λ</code>: both are weak. The lab’s <code>step_cbv</code> and <code>step_cbn</code> are these rules, one <code>match</code> case each.</div>
+  <aside class="notes">Pierce, TAPL chapter 5, in his notation. Read a rule as "if the premise steps, the conclusion steps". Normal order is call by name plus a rule that reduces under λ, and in the argument once the function part is stuck — the lab's step_normal.</aside>
+</section>
+
+<!-- part 5 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 6</div>
+  <h1>Everything from functions</h1>
+  <div class="sub">Booleans, numbers, if, recursion — defined, not built in</div>
+</section>
+
+<!-- 37 -->
+<section>
+  <h2>Booleans are choices</h2>
+  <pre data-lang="λ-calculus"><code class="nohighlight">true  = λt. λf. t          if = λc. λt. λe. c t e
+false = λt. λf. f</code></pre>
+  <p>A boolean is a function that, given two things, picks one. <code>if</code> only hands the two branches to the condition.</p>
+  <div class="st narrow" data-term="if true a b" data-strategy="normal"></div>
+  <p class="fragment"><code>if</code> is a function — under normal order.</p>
+  <aside class="notes">Session 3 cut Church booleans from its cold open and promised them here. and = λa b. a b false, not = λb. b false true, if a student asks. Smalltalk's ifTrue:ifFalse: is this idea as a message send.</aside>
+</section>
+
+<!-- 38 -->
+<section>
+  <h2><code>if</code> as a function under call-by-value</h2>
+  <p class="tight">Block 1’s <code>my_if</code> failed: both branches are evaluated before <code>if</code> runs. Two repairs — the language evaluates by name, or the branches are delayed by hand:</p>
+  <pre class="mid tight" data-lang="λ-calculus"><code class="nohighlight">fact  = λf n. if (iszero n) 1 (mul n (f (pred n)))
+factv = λf n. if (iszero n) (λd. 1) (λd. mul n (f (pred n))) I
+Z     = a term that supplies the recursive call — defined three slides on</code></pre>
+  <div class="cols">
+    <div>
+      <div class="st narrow" data-term="Z fact 2" data-strategy="applicative" data-weak="1" data-names="1" data-cap="400" data-extras="0" data-lines="2"></div>
+      <p class="tight"><b>Never ends:</b> both branches are evaluated before <code>if</code> chooses.</p>
+    </div>
+    <div>
+      <div class="st narrow" data-term="Z factv 2" data-strategy="applicative" data-weak="1" data-names="1" data-cap="1000" data-extras="0" data-lines="2"></div>
+      <p class="tight"><b>Ends, with 2:</b> only the chosen branch is applied — a <span class="hl">thunk</span>, block 1’s <code>fun () -></code>.</p>
+    </div>
+  </div>
+  <div class="box fragment">Here, the branches delayed by hand; on the previous slide, the language evaluating by name.</div>
+  <aside class="notes">Left never ends under call-by-value: the recursive branch is evaluated even when n is 0. Right: the branches are functions of a dummy argument; whichever is chosen is applied to I afterwards. Same problem, two owners: the language, or the program. Z is explained two slides on; here it only makes recursion available.</aside>
+</section>
+
+<!-- 39 -->
+<section>
+  <h2>Numbers are repetitions</h2>
+  <p class="tight">The number <em>n</em> is the function that applies <code>f</code> to <code>x</code> <em>n</em> times; <code>succ</code> adds one more application, <code>add</code> chains them.</p>
+  <pre class="mid tight" data-lang="λ-calculus"><code class="nohighlight">0 = λf x. x        1 = λf x. f x        3 = λf x. f (f (f x))
+succ = λn f x. f (n f x)          add = λm n f x. m f (n f x)</code></pre>
+  <div class="st narrow" data-term="add 2 1" data-strategy="normal" data-names="1" data-lines="3"></div>
+  <div class="box fragment">A number applies a function <em>n</em> times: <span class="hl">a number is its own <code>fold</code></span> — block 1’s <em>The body as a parameter</em>, literally.</div>
+  <aside class="notes">The names switch is on: the stepper prints λf x. f (f (f x)) as 3. Turn it off to show the term. mul = λm n f. m (n f): m repetitions of n repetitions. Böhm and Berarducci 1985: every algebraic data type has such an encoding — a value is its own fold — which is session 3's ∀r remark.</aside>
+</section>
+
+<!-- 40 -->
+<section>
+  <h2>Recursion without <code>let rec</code></h2>
+  <p>The calculus has no <code>let rec</code>, so <code>fact</code> cannot call itself by name. Instead it takes the function to call as an argument <code>f</code>: <code>fact = λf n. if (iszero n) 1 (mul n (f (pred n)))</code>. Recursion then needs a term <code>fix</code> that hands a function itself: <code>fix g = g (fix g)</code>.</p>
+  <pre class="mid tight" data-lang="λ-calculus"><code class="nohighlight">Y = λf. (λx. f (x x)) (λx. f (x x))            Y g  →  g (Y g)</code></pre>
+  <div class="st narrow" data-term="Y fact 3" data-strategy="normal" data-names="1" data-lines="3"></div>
+  <aside class="notes">Curry's Y. One β-step shows Y g → (λx. g (x x)) (λx. g (x x)) → g ((λx. g (x x)) (λx. g (x x))) = g (Y g). Run: about 2 000 steps to 6, because pred is built from pairs. The point is the existence: recursion is not a primitive either.</aside>
+</section>
+
+<!-- 41 -->
+<section>
+  <h2>Y under call-by-value</h2>
+  <script class="src" type="text/x-python" id="src-yz">
+    Y = lambda f: (lambda x: f(x(x)))(lambda x: f(x(x)))
+    Z = lambda f: (lambda x: f(lambda v: x(x)(v)))(lambda x: f(lambda v: x(x)(v)))
+    fact = lambda self: lambda n: 1 if n == 0 else n * self(n - 1)
+    print(Z(fact)(5))
+    print(Y(fact)(5))
+  </script>
+  <pre class="mid tight"><code class="language-python" data-src="src-yz"></code></pre>
+  <div class="cols">
+    <div>
+      <p class="tight"><button class="run" onclick="Py.run('src-yz', 'out-yz', this)">Run</button></p>
+      <pre class="out" id="out-yz" data-recorded="120&#10;RecursionError: maximum recursion depth exceeded"> </pre>
+      <p><code>Y g</code> evaluates the argument <code>x x</code> first — forever. <code>Z</code> wraps it in a thunk, <code>λv. x x v</code>: the repair of <em>if under call-by-value</em> again.</p>
+    </div>
+    <div>
+      <pre class="out tr rec"># let y f = (fun x -> f (x x)) (fun x -> f (x x))
+Error: The value x has type 'a -> 'b
+  but an expression was expected of type 'a
+  The type variable 'a occurs inside 'a -> 'b</pre>
+      <p>OCaml refuses <code>Y</code>'s <em>type</em> before it can run it — a problem on top of the order problem; session 10.</p>
+    </div>
+  </div>
+  <aside class="notes">Python is live here: Z(fact)(5) = 120, then Y overflows Python's counter. Scheme, JavaScript, Python, OCaml all need Z; Haskell runs Y. OCaml with -rectypes accepts both types; Y then loops and Z computes 120 — recorded in demos/.</aside>
+</section>
+
+<!-- 42 -->
+<section>
+  <h2>Laziness: by-name with sharing</h2>
+  <div class="cols">
+    <div>
+      <p>Call-by-name evaluates an argument every time it is used. <b>Call-by-need</b> evaluates it once, when first used, and remembers the result.</p>
+      <pre><code class="language-ocaml">let x = lazy (print_string "once "; 6 * 7);;
+Lazy.force x;;
+Lazy.force x;;</code></pre>
+      <pre class="out tr rec">once - : int = 42
+- : int = 42</pre>
+    </div>
+    <div>
+      <pre><code class="language-haskell">ghci> (\x -> 1) undefined
+1
+ghci> fibs = 0:1:zipWith (+) fibs (tail fibs)
+ghci> take 10 fibs
+[0,1,1,2,3,5,8,13,21,34]</code></pre>
+      <p>An argument never used is never evaluated; a list with no end is a value.</p>
+    </div>
+  </div>
+  <div class="box fragment">When the <em>language</em> decides laziness, an infinite list is a value. Session 5: when the <em>program</em> decides it — thunks and streams in a strict language.</div>
+  <aside class="notes">Wadsworth 1971; Hughes 1989 on laziness as the glue that lets a producer and a consumer be written apart. The Haskell lines are written from the language definition, not recorded on this machine (no ghc installed). OCaml's lazy is call-by-need on demand: the program asks for it, which is session 5's row of the table.</aside>
+</section>
+
+<!-- 43 -->
+<section>
+  <h2>Evaluation strategies, stated</h2>
+  <p class="tight">The three strategies, side by side: when an argument is evaluated, and what each choice costs.</p>
+  <table class="strat">
+    <tr><th>strategy</th><th>an argument is evaluated</th><th>what it costs</th></tr>
+    <tr><td>call-by-value</td><td>before the call, once</td><td>work on arguments never used; <code>Ω</code> is fatal</td></tr>
+    <tr><td>call-by-name</td><td>at each use</td><td>the same argument evaluated many times</td></tr>
+    <tr><td>call-by-need</td><td>at first use, once</td><td>the order of effects is no longer readable from the program</td></tr>
+  </table>
+  <p class="fn fragment">That last cost is why Haskell keeps effects out of ordinary expressions — a consequence of laziness.</p>
+  <aside class="notes">Three rows, one shape each: when, and at what price. Effects under call-by-need happen when a value is first demanded, which depends on the whole program; so Haskell's IO type makes the order explicit again. Peyton Jones: laziness kept Haskell pure.</aside>
+</section>
+
+
+<!-- 36 -->
+<section>
+  <h2>Control as syntax, control as a value</h2>
+  <table class="ways">
+    <tr><td class="s">no syntax</td><td>The calculus has no <code>;</code>, no <code>while</code>, no <code>if</code>. The text says <em>where</em> a step may happen, never <em>which</em>: the order is not in the program.</td></tr>
+    <tr class="fragment"><td class="s">values</td><td>So control lives in values, and the values are functions: a boolean <b>picks</b>, a numeral <b>repeats</b>, <code>Y</code> <b>recurses</b>, a thunk <b>delays</b>, a continuation <b>continues</b>. This part, and session 5.</td></tr>
+    <tr class="fragment"><td class="s">syntax again</td><td>A functional language keeps some control syntax — <code>if</code>, <code>&amp;&amp;</code>, <code>let … in</code>, <code>;</code>. Each fixes an order the calculus left open. Block 1’s <code>my_if</code> is <code>if</code> with the syntax taken away.</td></tr>
+  </table>
+  <div class="box fragment">Functions as values are not a feature the calculus happens to have. They are what a language without control syntax <span class="hl">must</span> have — and they suffice.</div>
+  <aside class="notes">The answer to "why recursion instead of loops" and "why higher-order": with no control construct, repetition can only be a function applied again (Y), and its steps are still the strategy's to choose — Y under call-by-value diverges. Every control construct OCaml keeps is a place where the language pre-decides: if delays its branches, && skips its right side, let sequences under call-by-value. Slide 26 of block 1 is the proof by removal.</aside>
+</section>
+
+
+<!-- part 6 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 7</div>
+  <h1>Conclusion</h1>
+  <div class="sub">The first answer, and the lab</div>
+</section>
+
+<!-- 48 -->
+<section>
+  <h2>Who decides the next step — after session 4</h2>
+  <table class="spine">
+    <tr><th class="s">session</th><th class="t">topic</th><th>who decides the next step</th></tr>
+    <tr class="now"><td class="s">S4</td><td class="t">evaluation</td><td>the language: whether a call keeps a frame, in what order the arguments go — and <b>when</b> an argument is evaluated — its evaluation strategy</td></tr>
+    <tr><td class="s">S5</td><td class="t">higher-order functions</td><td>the program, by passing the next step as a function: a loop body, a thunk, a continuation</td></tr>
+    <tr class="dim"><td class="s">S6</td><td class="t">async</td><td>the program yields; an event loop decides</td></tr>
+    <tr class="dim"><td class="s">S7</td><td class="t">threads</td><td>the operating system — preemption</td></tr>
+    <tr class="dim"><td class="s">S8</td><td class="t">message passing</td><td>the other process — communication</td></tr>
+    <tr class="dim"><td class="s">S9</td><td class="t">parallelism</td><td>nobody needs to — the answer is order-independent</td></tr>
+  </table>
+  <aside class="notes">The session's last slide: the S4 row is filled. Next week the program takes over: thunks we write, iterators we drive, continuations we pass — every S5 word appeared today under another name: the explicit stack, the λd. thunk, the fold.</aside>
+</section>
+
+<!-- 46 -->
+<section>
+  <h2>Lab 4: an evaluator for the calculus</h2>
+  <div class="cols">
+    <div>
+      <pre><code class="language-ocaml">type term =
+  | Var of string
+  | Lam of string * term
+  | App of term * term
+
+type value =
+  | Closure of string * term * env
+and env = (string * value) list</code></pre>
+    </div>
+    <div>
+      <table>
+        <tr><td class="s">warm-up</td><td>reductions on paper; <code>free_vars</code>, <code>subst</code> without capture</td></tr>
+        <tr><td class="s">A</td><td><code>step</code> under call-by-value and call-by-name, with a trace: <code>Ω</code> and <code>(λx y. y) Ω</code> in our own code</td></tr>
+        <tr><td class="s">B</td><td>a big-step evaluator with environments: a function value is a <b>closure</b></td></tr>
+        <tr><td class="s">home</td><td>Church arithmetic as terms; <code>Y</code> and <code>Z</code> in our evaluator; a small ML</td></tr>
+      </table>
+      <p class="fragment">What does the closure carry? — session 5's first question.</p>
+    </div>
+  </div>
+  <aside class="notes">Session 3's ladder promised a constructor carrying a function: the home extension's meta-circular evaluator, VFun of (value -> value), is it. The same evaluator gets a type checker in session 10.</aside>
+</section>
+
+<!-- 47 -->
+<section>
+  <h2>References</h2>
+  <ul class="small">
+    <li>Turing, 1936–37. On computable numbers, with an application to the Entscheidungsproblem. Church, 1936. An unsolvable problem of elementary number theory. Kleene, 1936.</li>
+    <li>Church and Rosser, 1936. Some properties of conversion. Curry and Feys, 1958. Barendregt, 1984. The Lambda Calculus.</li>
+    <li>Plotkin, 1975. Call-by-name, call-by-value and the λ-calculus. Wadsworth, 1971. Ariola and Felleisen, 1997. The call-by-need lambda calculus.</li>
+    <li>Landin, 1964. The mechanical evaluation of expressions. Reynolds, 1972. Definitional interpreters for higher-order programming languages.</li>
+    <li>Steele, 1977. Debunking the "expensive procedure call" myth. Clinger, 1998. Proper tail recursion and space efficiency.</li>
+    <li>Wirth, 1976. Algorithms + Data Structures = Programs. Kowalski, 1979. Algorithm = Logic + Control. Backus, 1978. Can programming be liberated from the von Neumann style?</li>
+    <li>Böhm and Berarducci, 1985. Automatic synthesis of typed Λ-programs on term algebras. Hughes, 1989. Why functional programming matters.</li>
+  </ul>
+  <aside class="notes">Nothing on a slide today comes from outside this list.</aside>
+</section>
+
+</div>
+<div class="toc" id="toc" hidden>
+  <div class="toc-inner">
+    <div class="toc-title">Parts <span class="muted">— T closes · Esc overview · Shift+←/→ previous/next part · 1–9 jump</span></div>
+    <ol id="toc-list"></ol>
+  </div>
+</div>
+</div>
+
+<script>
+  // block 2: one λ-stepper per .st element; its term and settings are in data- attributes
+  window.__anims = [];
+  document.querySelectorAll('.st').forEach(el => {
+    Lambda.mount(el, { term: el.dataset.term, strategy: el.dataset.strategy || 'normal', weak: el.dataset.weak === '1',
+                       names: el.dataset.names === '1', cap: +el.dataset.cap || 2500, lines: +el.dataset.lines || (el.classList.contains('narrow') ? 4 : 6), extras: el.dataset.extras !== '0', buttons: el.dataset.buttons === '1' });
+  });
+</script>
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="vendor/hljs/highlight.min.js"></script>
+<script src="vendor/hljs/languages/ocaml.min.js"></script>
+<script src="vendor/hljs/languages/c.min.js"></script>
+<script src="vendor/hljs/languages/python.min.js"></script>
+<script src="vendor/hljs/languages/haskell.min.js"></script>
+<script src="vendor/hljs/languages/java.min.js"></script>
+<script src="vendor/hljs/languages/javascript.min.js"></script>
+<script>
+  window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="vendor/mathjax/tex-svg.js"></script>
+<script>
+  // the code shown on a slide IS the code that runs: <pre> is filled from its <script class="src">
+  const dedent = t => { const ls = t.replace(/^\n+|\s+$/g, '').split('\n'); const ind = Math.min(...ls.filter(l => l.trim()).map(l => l.match(/^ */)[0].length)); return ls.map(l => l.slice(ind)).join('\n'); };
+  document.querySelectorAll('code[data-src]').forEach(c => { c.textContent = dedent(document.getElementById(c.dataset.src).textContent); });
+  const J = v => JSON.stringify(v).replace(/,/g, ', ');
+  const show = (id, text) => { document.getElementById(id).textContent = text; };
+  // a small label with the language's name in the corner of every code box
+  const LANG = { ocaml: 'OCaml', python: 'Python', js: 'JavaScript', javascript: 'JavaScript', c: 'C', java: 'Java', haskell: 'Haskell', smalltalk: 'Smalltalk', go: 'Go' };
+  document.querySelectorAll('pre > code').forEach(c => { const pre = c.parentElement; if (pre.dataset.lang) return; const m = [...c.classList].map(k => k.match(/^language-(.+)$/)).find(Boolean); if (m && LANG[m[1]]) pre.dataset.lang = LANG[m[1]]; });
+  hljs.highlightAll();
+
+  // Parts become vertical stacks (columns in the overview); navigation itself is linear.
+  (() => {
+    const slides = document.querySelector('.reveal .slides');
+    let stack = null;
+    [...slides.children].forEach(s => {
+      if (s.classList.contains('part')) { stack = document.createElement('section'); slides.insertBefore(stack, s); stack.appendChild(s); }
+      else if (stack && s.tagName === 'SECTION') stack.appendChild(s);
+    });
+  })();
+  const parts = [...document.querySelectorAll('.reveal .slides > section')].map((s, h) => {
+    const d = s.querySelector('section.part') || (s.classList.contains('part') ? s : null);
+    return d ? { h, name: d.querySelector('h1').textContent, sub: (d.querySelector('.sub') || {}).textContent || '' } : null;
+  }).filter(Boolean);
+  const tocList = document.getElementById('toc-list');
+  parts.forEach(p => { const li = document.createElement('li'); li.innerHTML = `<b>${p.name}</b> <span class="muted">${p.sub}</span>`; li.onclick = () => { Reveal.slide(p.h, 0); toggleToc(false); }; tocList.appendChild(li); });
+  const toggleToc = (on) => { const t = document.getElementById('toc'); t.hidden = on === undefined ? !t.hidden : !on; };
+
+  Reveal.initialize({
+    width: 1600, height: 900, margin: 0.04, minScale: 0.2, maxScale: 2.0,
+    center: false, hash: true, transition: 'none', backgroundTransition: 'none',
+    slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
+    scrollActivationWidth: null,                  // never switch to reveal's scroll view in a narrow window
+    keyboard: { 84: () => toggleToc() },          // T: list of parts
+    plugins: [ RevealNotes ]
+  });
+
+
+  // No widows: if a line of text wraps with a short tail, shrink it a few percent
+  // until it fits on one line; if shrinking would not do it, leave it as it is.
+  function fixWidows(root) {
+    root.querySelectorAll('p, li, td, th, .box, h2, h3').forEach(el => {
+      if (el.dataset.widow || el.closest('pre') || el.classList.contains('fn') || el.querySelector('ul, ol, div, pre, table, br')) return;
+      el.dataset.widow = '1';
+      if (el.style.fontSize) return;               // sized by hand in the editor: not ours to shrink
+      const cs = getComputedStyle(el), lh = parseFloat(cs.lineHeight);
+      if (!lh) return;
+      const inner = () => el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      const lines = () => Math.round(inner() / lh);
+      if (lines() !== 2) return;
+      const base = parseFloat(cs.fontSize), floor = 0.8;
+      for (let f = 0.98; f >= floor - 1e-9; f -= 0.02) { el.style.fontSize = (base * f) + 'px'; if (lines() === 1) return; }
+      el.style.fontSize = '';
+    });
+  }
+  const runWidows = () => document.querySelectorAll('.reveal .slides section').forEach(s => { if (getComputedStyle(s).display !== 'none') fixWidows(s); });
+  Reveal.on('ready', runWidows);
+  Reveal.on('slidechanged', runWidows);
+
+  // Part shortcuts: Shift+Right / Shift+Left = next / previous part; digits 1-9 = part n.
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey || e.target.isContentEditable) return;
+    const h = Reveal.getIndices().h;
+    // reveal.js binds Shift+Right / Shift+Left to last / first slide; stop it from seeing these.
+    const swallow = () => { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); };
+    if (e.shiftKey && e.key === 'ArrowRight') { const p = parts.find(p => p.h > h); if (p) Reveal.slide(p.h, 0); swallow(); }
+    else if (e.shiftKey && e.key === 'ArrowLeft') { const ps = parts.filter(p => p.h < h); const p = ps[ps.length - 1]; Reveal.slide(p ? p.h : 0, 0); swallow(); }
+    else if (/^[1-9]$/.test(e.key) && !e.shiftKey) { const p = parts[+e.key - 1]; if (p) { Reveal.slide(p.h, 0); swallow(); } }
+  }, true);
+
+  // Remember where we are across reloads and republishes (per browser; the URL hash wins when present).
+  const POS = 'pp26-position-' + location.pathname.split('/').pop();
+  const savePos = () => { try { localStorage.setItem(POS, JSON.stringify(Reveal.getIndices())); } catch (e) {} };
+  Reveal.on('slidechanged', savePos);
+  Reveal.on('fragmentshown', savePos);
+  Reveal.on('fragmenthidden', savePos);
+  Reveal.on('ready', () => {
+    if (location.hash && location.hash !== '#/' && location.hash !== '#/0') return;
+    try { const p = JSON.parse(localStorage.getItem(POS)); if (p && typeof p.h === 'number') Reveal.slide(p.h, p.v || 0, typeof p.f === 'number' ? p.f : undefined); } catch (e) {}
+  });
+  document.fonts.ready.then(() => setTimeout(runWidows, 50));
+
+  // Carousel: tabs follow the current-visible panel; clicking a tab jumps to its fragment.
+  const syncCar = () => document.querySelectorAll('.car').forEach(car => {
+    const panels = [...car.querySelectorAll('.car-panel')], tabs = [...car.querySelectorAll('.car-tabs span')];
+    const cur = panels.findIndex(p => p.classList.contains('current-fragment'));
+    tabs.forEach((t, i) => t.classList.toggle('on', i === cur));
+  });
+  ['fragmentshown', 'fragmenthidden', 'slidechanged', 'ready'].forEach(ev => Reveal.on(ev, syncCar));
+  document.querySelectorAll('.car-tabs span').forEach((t, i) => t.onclick = () => { const p = t.closest('.car').querySelectorAll('.car-panel')[i]; const idx = Reveal.getIndices(); Reveal.slide(idx.h, idx.v, +p.dataset.fragmentIndex); });
+
+  // The matrix slide: each click fills one whole column (Way 1) or one whole row (Way 2).
+  (() => {
+    const m = document.getElementById('matrix'); if (!m) return;
+    const sec = m.closest('section');
+    const clear = () => m.querySelectorAll('.on').forEach(e => e.classList.remove('on', 'w1', 'w2'));
+    const cell = (r, c) => m.querySelector(`td.cell[data-r="${r}"][data-c="${c}"]`);
+    const apply = () => {
+      clear();
+      const vis = [...sec.querySelectorAll('[data-anim].visible')];
+      const rows = vis.filter(f => f.dataset.anim === 'row').map(f => +f.dataset.n), cols = vis.filter(f => f.dataset.anim === 'col').map(f => +f.dataset.n);
+      const mark = (el, w) => { if (el) el.classList.add('on', w); };
+      if (rows.length) { const R = Math.max(...rows) === 1 ? 2 : 3; for (let r = 1; r <= R; r++) { mark(m.querySelector(`td.rl[data-r="${r}"]`), 'w2'); for (let c = 1; c <= 3; c++) mark(cell(r, c), 'w2'); } }
+      else if (cols.length) { const C = Math.max(...cols) === 1 ? 3 : 4; for (let c = 1; c <= C; c++) { mark(m.querySelector(`th.hd[data-c="${c}"]`), 'w1'); for (let r = 1; r <= 2; r++) mark(cell(r, c), 'w1'); } }
+    };
+    ['fragmentshown', 'fragmenthidden', 'slidechanged', 'ready'].forEach(ev => Reveal.on(ev, () => setTimeout(apply, 0)));
+    window.__matrixApply = apply;
+  })();
+
+  // Print (?print-pdf): the page is static, so run what the clicks would have run —
+  // the demos' Run buttons, the matrix in its final state, the carousel's first panel.
+  if (/print-pdf/.test(location.search)) {
+    const printPrep = () => {
+      document.querySelectorAll('button.run').forEach(b => { if (!b.closest('.stepper, .anim, .fold')) { try { b.onclick(); } catch (e) {} } });
+      (window.__anims || []).forEach(a => { try { a.finish(); } catch (e) {} });
+      document.querySelectorAll('.car').forEach(car => {
+        const p = car.querySelector('.car-panel'); if (p) p.classList.add('visible', 'current-fragment');
+        const t = car.querySelector('.car-tabs span'); if (t) t.classList.add('on');
+      });
+      document.querySelectorAll('[data-anim]').forEach(f => f.classList.add('visible'));
+      if (window.__matrixApply) window.__matrixApply();
+    };
+    Reveal.on('ready', () => setTimeout(printPrep, 300));
+    Reveal.on('pdf-ready', () => setTimeout(printPrep, 300));
+  }
+
+  // Local preview only: reload when the built file changes on disk (the position is remembered above).
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    let stamp = null;
+    setInterval(async () => {
+      try {
+        const r = await fetch(location.pathname, { method: 'HEAD', cache: 'no-store' });
+        const m = r.headers.get('Last-Modified') + '/' + r.headers.get('Content-Length');
+        if (stamp === null) stamp = m; else if (m !== stamp) { if (window.__editHolds && window.__editHolds()) return; savePos(); location.reload(); }
+      } catch (e) {}
+    }, 1500);
+  }
+</script>
+</body>
+</html>

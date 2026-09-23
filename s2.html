@@ -2,10 +2,10 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S2 Persistent Data Structures - PP26</title>
+<title>S2 Data Modification: Persistent and Ephemeral Data Structures - PP26</title>
 <meta name="description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
 <meta name="theme-color" content="#211a52">
-<meta property="og:title" content="S2 Persistent Data Structures - PP26">
+<meta property="og:title" content="S2 Data Modification: Persistent and Ephemeral Data Structures - PP26">
 <meta property="og:description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homes.cs.aau.dk/~lego/pp26/">
@@ -25,7 +25,7 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
   <p class="brand-sub">SW7 &middot; Autumn 2026 &middot; AAU Copenhagen</p>
   <nav aria-label="Course"><ul><li><a href="index.html">Overview</a></li><li><a href="index.html#sessions">Schedule</a></li><li><a href="index.html#exam">Exam format</a></li><li><a href="index.html#materials">Materials</a></li><li><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle ↗</a></li><li><a href="https://github.com/leon-gondelman/pp26">Repository ↗</a></li></ul></nav>
   <p class="railhead">Sessions</p>
-  <nav aria-label="Sessions"><ol class="railsessions"><li><a href="s1.html"><span class="n">01</span><span>Intro</span></a></li><li><a href="s2.html" aria-current='page'><span class="n">02</span><span>Persistent Data Structures</span></a></li><li><a href="s3.html"><span class="n">03</span><span>Algebraic Data Types and Objects</span></a></li><li><a href="s4.html"><span class="n">04</span><span>Functional Programming</span></a></li><li><a href="s5.html"><span class="n">05</span><span>Higher-Order Functions</span></a></li><li><a href="s6.html"><span class="n">06</span><span>Asynchronous Programming</span></a></li><li><a href="s7.html"><span class="n">07</span><span>Multi-Threading</span></a></li><li><a href="s8.html"><span class="n">08</span><span>Message Passing</span></a></li><li><a href="s9.html"><span class="n">09</span><span>Static Type Systems</span></a></li><li><a href="s10.html"><span class="n">10</span><span>Polymorphism</span></a></li><li><a href="s11.html"><span class="n">11</span><span>Data Abstraction</span></a></li><li><a href="s12.html"><span class="n">12</span><span>Declarative Programming and Conclusion</span></a></li></ol></nav>
+  <nav aria-label="Sessions"><ol class="railsessions"><li><a href="s1.html"><span class="n">01</span><span>Intro</span></a></li><li><a href="s2.html" aria-current='page'><span class="n">02</span><span>Data Modification: Persistent and Ephemeral Data Structures</span></a></li><li><a href="s3.html"><span class="n">03</span><span>Data Construction: Algebraic Data Types and Objects</span></a></li><li><a href="s4.html"><span class="n">04</span><span>Functional Programming and Control</span></a></li><li><a href="s5.html"><span class="n">05</span><span>Control: Higher-Order Functions and Iterators</span></a></li><li><a href="s6.html"><span class="n">06</span><span>Asynchronous Programming</span></a></li><li><a href="s7.html"><span class="n">07</span><span>Multi-Threading</span></a></li><li><a href="s8.html"><span class="n">08</span><span>Message Passing</span></a></li><li><a href="s9.html"><span class="n">09</span><span>Parallel Programming</span></a></li><li><a href="s10.html"><span class="n">10</span><span>Static Type Systems</span></a></li><li><a href="s11.html"><span class="n">11</span><span>Polymorphism</span></a></li><li><a href="s12.html"><span class="n">12</span><span>Data Abstraction</span></a></li><li><a href="s13.html"><span class="n">13</span><span>Declarative Programming and Conclusion</span></a></li></ol></nav>
   <div class="railfoot">
     <a class="aaumark" href="https://www.en.aau.dk/">
       <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aalborg University" focusable="false"><path d="M56.913 45.79c-1.532-.698-3.072-.989-5.688-2.844-6.654-4.72-9.649-10.186-5.388-21.751 2.459-6.671 3.464-11.579 3.319-18.053-.082-.064-.406-.277-.483-.341-1.326 8.045-3.543 12.011-8.535 20.115-11.296 18.345-.675 29.574 4.344 33.605 4.99-2.878 9.253-7.061 12.431-12.222a29.9 29.9 0 0 1-.0-.0Z"/><path d="M44.807 3.108a44 44 0 0 0-.586-.312c-2.86 7.061-6.717 10.696-13.34 16.028-14.096 11.348-12.242 24.428-6.037 34.673a29.9 29.9 0 0 0 9.219.219c-5.916-9.028-8.436-19.409 1.243-31.63 5.75-7.262 8.16-11.708 9.501-18.978Z"/><path d="M42.83 2.093A30 30 0 0 0 30.001 0C13.432 0 0 13.432 0 30c0 7.61 2.834 14.558 7.503 19.845.363-14.55 4.184-21.62 17.203-28.462 8.876-4.665 14.2-8.256 18.124-19.29Z"/></svg><span>Aalborg University Copenhagen</span>
@@ -47,7 +47,7 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 <p class="crumb"><a href="index.html">&larr; all sessions</a></p>
 <section class="hero">
   <p class="dim">Session 2</p>
-  <h1>Persistent Data Structures</h1>
+  <h1>Data Modification: Persistent and Ephemeral Data Structures</h1>
   <p class="lead">Structures that keep their past: what they cost, what they buy, and how to spot one from its interface.</p>
 </section>
 
