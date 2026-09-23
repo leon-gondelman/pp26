@@ -13,7 +13,7 @@ handout PDF under `handouts/`.
 | `s2/ocaml/homework.ml` | the nine OCaml exercises |
 | `s3/index.html` | lab 3, every part explained — [read it as a page](https://leon-gondelman.github.io/pp26/solutions/s3/index.html) |
 | `s3/ocaml/melody.ml` | lab 3, every part, commented; `main.ml` and `tunes.ml` beside it with all checks on |
-| `s3/types-on-paper-solutions.pdf` | the warm-up sheet, worked |
+| `s3/s3-warmup-solutions.pdf` | the warm-up sheet, worked |
 | `s3/ocaml/warmup.ml` | the warm-up ladder, solved |
 
 The code files are drop-in replacements for the ones with holes in them, and

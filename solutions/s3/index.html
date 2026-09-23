@@ -644,6 +644,8 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
           <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/melody.ml"><code>melody.ml</code> — every part, commented</a></li>
           <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/main.ml"><code>main.ml</code> — all 30 checks on</a></li>
           <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/tunes.ml"><code>tunes.ml</code> — with <code>twice</code></a></li>
+          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/warmup.ml"><code>warmup.ml</code> — the warm-up's Part 2, solved</a></li>
+          <li><a class="lr" href="s3-warmup-solutions.pdf">the warm-up sheet, worked</a></li>
         </ul>
       </div>
       <p class="lr-foot"><a href="https://leon-gondelman.github.io/pp26/labs/lab3-melody/index.html">&larr; the lab</a> &nbsp;·&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/">Programming Paradigms</a></p>
@@ -655,7 +657,7 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
   <div class="wrap">
     <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;·&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s3.html">Session 3</a> &nbsp;·&nbsp; lab 3 &nbsp;·&nbsp; solutions</p>
     <h1>A Little Music Language, solved</h1>
-    <p class="standfirst">Every hole of lab 3 filled, arm by arm, with the reasoning next to the code. The interesting part of each function is the one <code>match</code> and what each arm decides; the code without the commentary is about sixty lines. Two compiler warnings do most of the teaching, and the three homework questions get worked answers at the end.</p>
+    <p class="standfirst">Every hole of lab 3 filled, arm by arm, with the reasoning next to the code. The interesting part of each function is the one <code>match</code> and what each arm decides; the code without the commentary is about sixty lines. Two compiler warnings carry most of the lesson, and the three homework questions receive worked answers at the end.</p>
     <nav class="toc">
       <a href="#use">00 · how to use these</a>
       <a href="#part-a">01 · part A</a>
@@ -677,7 +679,8 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
     <p>The solution is three files that drop into the lab folder over the ones with holes: <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/melody.ml"><code>melody.ml</code></a> with every part done and <code>Repeat</code> in the type, and the lab's own <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/main.ml"><code>main.ml</code></a> and <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/tunes.ml"><code>tunes.ml</code></a> with the B2 and C4 checks switched on. Together they build without a warning and report <em>30 passed</em>.</p>
     <pre><code>cp melody.ml main.ml tunes.ml  ../lab3-melody/      # over the versions with holes
 cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
-    <p>The better way to use them is after our own version works, or after it stops: put the two <code>melody.ml</code> side by side and compare one arm at a time. Every function is one <code>match</code> on <code>melody</code>, so a disagreement is always local to one constructor of one function — and that locality is the thesis of the session. This page walks through the arms in the lab's order and says what each one decides and why; the same commentary sits in the file.</p>
+    <p>The warm-up has its own answer key, <a href="s3-warmup-solutions.pdf">s3-warmup-solutions.pdf</a>, and its companion file solved, <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/warmup.ml"><code>warmup.ml</code></a>.</p>
+    <p>They are most useful once our own version works, or once it is stuck: put the two <code>melody.ml</code> side by side and compare them one arm at a time. Every function is one <code>match</code> on <code>melody</code>, so a disagreement is always local to one constructor of one function — and that locality is the thesis of the session. This page walks through the arms in the lab's order and says what each one decides and why; the same commentary sits in the file.</p>
   </div>
 </section>
 
@@ -710,7 +713,7 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
   match rest with
   | [] -> first
   | v :: more -> Par (first, voices v more)</code></pre>
-    <p><code>Par</code> takes exactly two melodies, so three voices is a <code>Par</code> inside a <code>Par</code>. The question was why the function takes the first voice separately instead of a plain list, and the answer is the empty list: <code>voices []</code> would have to produce a chord with no notes, and there is no <code>melody</code> that <em>is</em> that. The type has no empty melody (the homework's second question asks what it would cost to add one). Head plus list is the lecture's non-empty list, and it makes the bad call unwritable instead of an exception at run time.</p>
+    <p><code>Par</code> takes exactly two melodies, so three voices is a <code>Par</code> inside a <code>Par</code>. The question was why the function takes the first voice separately instead of a plain list, and the answer is the empty list: <code>voices []</code> would have to produce a chord with no notes, and no value of type <code>melody</code> represents one. The type has no empty melody (the homework's second question asks what it would cost to add one). A first element followed by a list is the lecture's non-empty list; with it, the meaningless call cannot be written at all, where a plain list would turn it into an exception at run time.</p>
     <p>The result nests to the right, <code>Par (v1, Par (v2, v3))</code>. Part B checks that the grouping changes nothing about the sound; the only place it is visible is <code>pretty</code>, whose parentheses show it.</p>
   </div>
 </section>
@@ -740,7 +743,7 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
     | Repeat (n, m) -> go t (Seq (m, Repeat (n - 1, m)))
   in
   fst (go 0. m)</code></pre>
-    <p>The inner function threads a clock. <code>go t m</code> returns two things: the events of <code>m</code> when it starts at beat <code>t</code>, <em>and</em> the beat at which <code>m</code> ends. The second result exists for <code>Seq</code> — <code>b</code> starts where <code>a</code> ended, and nobody else knows where that is. <code>Par</code> needs it only to compare: both halves start at <code>t</code>, and the <code>Par</code> ends when the later one does. Once the pair is there, each arm reads as its own definition.</p>
+    <p>The inner function threads a clock. <code>go t m</code> returns two things: the events of <code>m</code> when it starts at beat <code>t</code>, <em>and</em> the beat at which <code>m</code> ends. The second result exists for <code>Seq</code>: <code>b</code> starts where <code>a</code> ended, and only the computation of <code>a</code> knows where that is. <code>Par</code> needs it only to compare: both halves start at <code>t</code>, and the <code>Par</code> ends when the later one does. Once the pair is there, each arm reads as its own definition.</p>
     <div class="music">
       <h3>The mistake we can hear</h3>
       <ul>
@@ -748,11 +751,11 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
         <li>Forgetting the rests: <code>Rest d -> [], t</code> instead of <code>t +. beats d</code>. No event is right — a rest is the absence of one — but the clock must still advance, or the crab canon's third bar comes in early.</li>
       </ul>
     </div>
-    <p>Events come out in reading order, <code>a</code>'s before <code>b</code>'s. The <code>.wav</code> writer does not care, and neither do the checks: a version that lists <code>b</code> first also passes. (The published lab now has one check rewritten so that this is true; an earlier version looked at the ninth event of the canon and failed the other order with a confusing message.)</p>
+    <p>Events come out in reading order, <code>a</code>'s before <code>b</code>'s. The <code>.wav</code> writer is indifferent to the order, and so are the checks: a version that lists <code>b</code> first also passes. (One check was rewritten to make this true; an earlier version read the ninth event of the canon and failed the other order with a misleading message.)</p>
 
     <h3>B2 — add <code>Repeat</code></h3>
     <p>One line in the type — <code>| Repeat of int * melody</code> — and the build prints the checklist: six times <em>this pattern-matching is not exhaustive</em>, one per function that matches on <code>melody</code>, each with the missing case spelled out. Section 04 shows the output. Nothing had to be searched for; the compiler knows every column of the table.</p>
-    <p>The arm above defines <code>Repeat</code> by <em>rewriting</em> it into <code>Seq</code>: <code>n</code> times <code>m</code> is <code>m</code>, then <code>n − 1</code> times <code>m</code>; zero times is nothing, ending where it began. That makes the B2 check — <code>Repeat (2, voice1)</code> sounds exactly like <code>voice1 ++ voice1</code> — true by construction rather than by luck: the two produce the same events because one turns into the other. A counting loop that runs <code>go</code> <code>n</code> times and threads the clock is equally correct, and is what most of us wrote first.</p>
+    <p>The arm above defines <code>Repeat</code> by <em>rewriting</em> it into <code>Seq</code>: <code>n</code> times <code>m</code> is <code>m</code>, then <code>n − 1</code> times <code>m</code>; zero times is nothing, ending where it began. That makes the B2 check — <code>Repeat (2, voice1)</code> sounds exactly like <code>voice1 ++ voice1</code> — true by construction rather than by coincidence: the two produce the same events because one is rewritten into the other. A counting loop that runs <code>go</code> <code>n</code> times and threads the clock is equally correct.</p>
   </div>
 </section>
 
@@ -769,7 +772,7 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
   | Seq (a, b) -> Seq (transpose_octave k a, transpose_octave k b)
   | Par (a, b) -> Par (transpose_octave k a, transpose_octave k b)
   | Repeat (n, m) -> Repeat (n, transpose_octave k m)</code></pre>
-    <p><code>{ p with octave = … }</code> is a functional record update: a <em>new</em> pitch that copies <code>p</code> and changes one field, while <code>p</code> itself is untouched. Every arm builds a new node from the old one; <code>Rest _ -> m</code> hands back the very same rest. So the result shares every rest with the original and rebuilds only the spine above the notes that changed — session 2's persistent tree, and it comes free, because nothing here is ever mutated and sharing is therefore always safe.</p>
+    <p><code>{ p with octave = … }</code> is a functional record update: a <em>new</em> pitch that copies <code>p</code> and changes one field, while <code>p</code> itself is untouched. Every arm builds a new node from the old one; <code>Rest _ -> m</code> returns the rest itself, unchanged. The result therefore shares every rest with the original and rebuilds only the spine above the notes that changed: session 2's persistent tree, at no cost, because nothing here is ever mutated and sharing is therefore always safe.</p>
     <p>The type says nothing about a playable range, so transposing by ten octaves is allowed and produces frequencies no speaker reproduces. Whether a type should promise more than it does here is a session 9 question.</p>
 
     <h3>C2 — print</h3>
@@ -804,7 +807,7 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
   | Seq (a, b) -> Seq (simplify a, simplify b)
   | Par (a, b) -> Par (simplify a, simplify b)
   | Note _ | Rest _ -> m</code></pre>
-    <p>Two rewrite rules and a walk over the rest of the tree. The <em>order</em> of the arms is the lesson, and it is more precise than "the rules go first". Patterns are tried top to bottom and the first that fits wins. <code>Repeat (1, m)</code> and <code>Repeat (n, Repeat (k, m))</code> are both special cases of <code>Repeat (n, m)</code>, so the general arm must come <em>after</em> them: put it first and it swallows every <code>Repeat</code>, the compiler reports both rules as unused (section 04), and the checks fail with <code>[C4/4]x1</code> and <code>[[C4/4]x3]x2</code> left unsimplified. The two rules themselves may be in either order: <code>Repeat (1, Repeat (k, m))</code> fits both, and both send it to the same place.</p>
+    <p>Two rewrite rules and a walk over the rest of the tree. The <em>order</em> of the arms is the point, and the rule is more precise than "the special cases first". Patterns are tried top to bottom and the first that fits wins. <code>Repeat (1, m)</code> and <code>Repeat (n, Repeat (k, m))</code> are both special cases of <code>Repeat (n, m)</code>, so the general arm must come <em>after</em> them: put it first and it captures every <code>Repeat</code>, the compiler reports both rules as unused (section 04), and the checks fail with <code>[C4/4]x1</code> and <code>[[C4/4]x3]x2</code> left unsimplified. The two rules themselves may be in either order: <code>Repeat (1, Repeat (k, m))</code> fits both, and both send it to the same place.</p>
     <p>Both rules call <code>simplify</code> again on their result instead of returning it, because the result may itself be simplifiable: <code>Repeat (2, Repeat (3, Repeat (4, x)))</code> becomes <code>Repeat (6, Repeat (4, x))</code>, a repeat of a repeat, which becomes <code>Repeat (24, x)</code>. One rewrite is rarely enough. <code>Repeat (0, m)</code> is left alone: it plays as nothing and could become an empty melody, if the type had one.</p>
   </div>
 </section>
@@ -812,7 +815,7 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
 <section id="compiler">
   <div class="col">
     <p class="kicker">04 — what the compiler said</p>
-    <h2>Two warnings that do the teaching</h2>
+    <h2>Two warnings, and what they teach</h2>
     <h3>Warning 8, after B2: the checklist</h3>
     <p>Adding <code>| Repeat of int * melody</code> to the type and rebuilding, with no function touched yet:</p>
     <pre><code>File "melody.ml", lines 39-43, characters 2-36:
@@ -825,7 +828,7 @@ File "melody.ml", lines 78-82, characters 2-36:       (* transpose_octave *)
 File "melody.ml", lines 94-98, characters 2-36:       (* pretty *)
 File "melody.ml", lines 101-104, characters 2-36:     (* retrograde *)</code></pre>
     <p>Six sites: every function that matches on <code>melody</code>, and not <code>voices</code>, which matches on a list. Dune compiles each module twice, to bytecode and to native code, so the six appear twice — twelve lines of warning, six things to fix. The <code>dune</code> file keeps warning 8 a warning rather than an error (<code>-warn-error -a</code>) so that the build succeeds and the list can be worked through one function at a time, with the checks running in between.</p>
-    <h3>Warning 11, in C4: the arm that can never fire</h3>
+    <h3>Warning 11, in C4: the arm that can never be reached</h3>
     <p>With the general <code>Repeat (n, m)</code> arm moved above the two rules:</p>
     <pre><code>File "melody.ml", line 124, characters 4-17:
 124 |   | Repeat (1, m) -> simplify m
@@ -846,7 +849,7 @@ Warning 11 [redundant-case]: this match case is unused.</code></pre>
     <h2>Worked answers to the homework questions</h2>
 
     <h3>How would we model a tie?</h3>
-    <p>A tie joins two notes of the same pitch into one sound: <code>d4 ~ d16</code> is one D lasting five sixteenths, a length no single <code>duration</code> names. The temptation is a constructor in <code>melody</code>, <code>Tie of melody * melody</code>; it is the wrong level. <code>to_events</code> would then have to merge two adjacent events into one, checking that they are the same pitch and that nothing sits between them — work, and a constructor that can be built wrongly. The tie is a property of a <em>duration</em>, so it belongs in <code>duration</code>:</p>
+    <p>A tie joins two notes of the same pitch into one sound: <code>d4 ~ d16</code> is one D lasting five sixteenths, a length no single <code>duration</code> names. The first idea is a constructor in <code>melody</code>, <code>Tie of melody * melody</code>, but that is the wrong level. <code>to_events</code> would then have to merge two adjacent events into one, checking that they have the same pitch and that nothing lies between them: extra work, and a constructor that admits malformed values. The tie is a property of a <em>duration</em>, so it belongs in <code>duration</code>:</p>
     <pre><code>type duration =
   | Whole | Half | Quarter | Eighth | Sixteenth | ThirtySecond
   | Dotted of duration
@@ -854,13 +857,13 @@ Warning 11 [redundant-case]: this match case is unused.</code></pre>
     <p>The cost is two arms, <code>beats</code> and <code>string_of_duration</code>, and the compiler names both. Nothing in <code>melody</code> or its functions changes, because none of them looks inside a duration. (<code>Dotted d</code> is then a special case, <code>Tied (d, half d)</code>, and could go — or stay, as notation.) The rule: put the constructor at the level of the thing it modifies.</p>
 
     <h3>What would an empty melody be?</h3>
-    <p>A constructor <code>Empty</code> in <code>melody</code>, with <code>Seq (Empty, m)</code> and <code>Par (Empty, m)</code> sounding like <code>m</code>: the unit for both operators. It is an honest addition, and adding it costs exactly what the lecture said a new kind costs. Every function gets an arm — <code>count_notes Empty = 0</code>, <code>length_in_beats Empty = 0.</code>, <code>go t Empty = [], t</code>, <code>transpose_octave</code> and <code>retrograde</code> return it, <code>simplify</code> can now drop it: <code>Seq (Empty, m) -> simplify m</code>. One arm is not free: <code>pretty Empty = ""</code> makes <code>pretty (q C 4 ++ Empty ++ q D 4)</code> print two spaces, so the <code>Seq</code> arm has to learn to skip an empty side. That is the real shape of the expensive direction — not that the compiler cannot find the sites, but that some of them need thought.</p>
+    <p>A constructor <code>Empty</code> in <code>melody</code>, with <code>Seq (Empty, m)</code> and <code>Par (Empty, m)</code> sounding like <code>m</code>: the unit for both operators. It is a legitimate addition, and it costs exactly what the lecture said a new kind costs. Every function gets an arm — <code>count_notes Empty = 0</code>, <code>length_in_beats Empty = 0.</code>, <code>go t Empty = [], t</code>, <code>transpose_octave</code> and <code>retrograde</code> return it, <code>simplify</code> can now drop it: <code>Seq (Empty, m) -> simplify m</code>. One arm is not free: <code>pretty Empty = ""</code> makes <code>pretty (q C 4 ++ Empty ++ q D 4)</code> print two spaces, so the <code>Seq</code> arm must skip an empty side. That is the real shape of the expensive direction — not that the compiler cannot find the sites, but that some of them need thought.</p>
     <p>What it buys: <code>voices</code> can take a plain list and fold with <code>Empty</code> as the starting value, <code>Repeat (0, m)</code> simplifies to <code>Empty</code>, and a tune can be built up from nothing in a loop. Whether that is worth a case in every function is a design decision; the type as shipped says no, and makes the empty chord unwritable instead.</p>
 
     <h3>Where does <code>pretty</code> live, in Java?</h3>
-    <p>Three answers, and they are the three columns and rows of the lecture's table.</p>
+    <p>Three answers, corresponding to the rows and columns of the lecture's table.</p>
     <table class="parts">
-      <tr><td class="k">abstract class</td><td><code>abstract class Melody { abstract String pretty(); }</code> and a <code>pretty()</code> body in <em>each</em> subclass — <code>Note</code>, <code>Rest</code>, <code>Seq</code>, <code>Par</code>, <code>Repeat</code>: five files. The operation is spread over the kinds. Adding <code>Repeat</code> is one new class and nothing else moves; adding <code>retrograde</code> touches all five.</td></tr>
+      <tr><td class="k">abstract class</td><td><code>abstract class Melody { abstract String pretty(); }</code> and a <code>pretty()</code> body in <em>each</em> subclass — <code>Note</code>, <code>Rest</code>, <code>Seq</code>, <code>Par</code>, <code>Repeat</code>: five files. The operation is spread over the kinds. Adding <code>Repeat</code> is one new class and nothing else changes; adding <code>retrograde</code> touches all five.</td></tr>
       <tr><td class="k">sealed + records</td><td><code>sealed interface Melody permits Note, Rest, Seq, Par, Repeat</code>, each a <code>record</code>, and <code>pretty</code> is <em>one static method</em> with a <code>switch</code> over the five patterns, which the compiler checks for exhaustiveness exactly as OCaml does. This is the OCaml file, in Java 21 syntax: adding an operation is one method, adding a kind makes every <code>switch</code> fail to compile until it is extended — warning 8, as an error.</td></tr>
       <tr><td class="k">visitor</td><td>The abstract-class layout with the operation pulled back out: an interface <code>Visitor&lt;R&gt;</code> with one <code>visit</code> per kind, an <code>accept</code> in each class, and <code>pretty</code> as a class <code>PrettyVisitor implements Visitor&lt;String&gt;</code>. The operation is one place again, at the price of one interface that every kind and every operation must know. Matching, done by hand — which is why Java 21's <code>switch</code> made it mostly unnecessary.</td></tr>
     </table>
@@ -871,7 +874,7 @@ Warning 11 [redundant-case]: this match case is unused.</code></pre>
   <div class="col">
     <p class="kicker">06 — properties</p>
     <h2>Five things that are true of every melody</h2>
-    <p>Each of these is one line in the toplevel, on any <code>m</code> from <code>tunes.ml</code> or our own. They are the kind of check that, in session 5, we will let a library generate melodies for.</p>
+    <p>Each of these is one line in the toplevel, on any <code>m</code> from <code>tunes.ml</code> or our own. In session 5 a library will generate the melodies for checks of this kind.</p>
     <pre><code>count_notes m = List.length (to_events 120 m)
 length_in_beats (transpose_octave k m) = length_in_beats m
 length_in_beats (retrograde m)         = length_in_beats m

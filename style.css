@@ -177,7 +177,7 @@ a.dl{display:inline-block;white-space:nowrap;text-decoration:none;margin:.1rem .
 a.dl:hover{filter:brightness(.96);border-color:var(--ink3)}
 a.dl.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
 a.dl.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
-a.dl.c-deepdive{color:var(--lab);background:var(--lab-b);border-color:transparent}
+a.dl.c-quest{color:var(--lab);background:var(--lab-b);border-color:transparent}
 a.dl.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
 a.dl.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 
@@ -199,7 +199,7 @@ ul.materials li .mi{min-width:0}
 ul.materials li .mi .dim{font-weight:400;opacity:.7;margin:0 .25em}
 ul.materials li.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
 ul.materials li.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
-ul.materials li.c-deepdive{color:var(--lab);background:var(--lab-b);border-color:transparent}
+ul.materials li.c-quest{color:var(--lab);background:var(--lab-b);border-color:transparent}
 ul.materials li.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
 ul.materials li.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 ul.materials li.dim{width:100%;display:block;font-weight:400;color:var(--ink3)}

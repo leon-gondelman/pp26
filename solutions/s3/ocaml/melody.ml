@@ -78,10 +78,10 @@ let rec length_in_beats m =
 (* A3. Par takes exactly two voices, so three voices is a Par inside a Par.
    The first voice is a separate argument, and that is the point of the
    exercise: with `voices : melody list -> melody` the empty list would have
-   to produce a chord with no notes, and there is no melody that IS that.
+   to produce a chord with no notes, and no value of type melody represents one.
    (No Empty constructor -- see the homework question.) Head plus list is the
-   lecture's non-empty list, and it makes the bad call unwritable instead of
-   an exception at run time. The result nests to the right,
+   lecture's non-empty list: the meaningless call cannot be written at all,
+   where a plain list would turn it into an exception at run time. The result nests to the right,
    Par (v1, Par (v2, v3)); the grouping changes `pretty`'s parentheses and
    nothing about the sound, which Part B checks. *)
 let rec voices first rest =
@@ -102,13 +102,14 @@ type event = { at : float; hz : float; secs : float }   (* a rest is the ABSENCE
      Seq: run a from t, run b from where a ended.
      Par: run both from t; the end is the later end.
 
-   The classic wrong Seq passes t to b as well -- every note starts at 0 and
+   The usual wrong Seq passes t to b as well -- every note starts at 0 and
    the whole piece is one chord. We can hear that mistake.
 
    B2. Repeat is defined by REWRITING it into Seq: n times m is m, then
    n-1 times m; zero times is nothing, ending where it began. That makes
    "Repeat (2, v) sounds like v ++ v" true by construction rather than by
-   luck -- the two produce the same events because one turns into the other.
+   coincidence: the two produce the same events because one is rewritten
+   into the other.
    A counting loop that runs `go` n times and threads t works just as well.
 
    Events come out in reading order, a's before b's. The .wav writer does
@@ -137,10 +138,10 @@ let to_events tempo m =
 
 (* C1. `{ p with octave = ... }` is a functional record update: a NEW pitch
    that copies p and changes one field; p itself is untouched. Every arm
-   builds a new node from the old one. `Rest _ -> m` returns the very same
-   rest, and the Seq/Par arms rebuild only the spine above the leaves that
-   changed -- this is session 2's picture, the persistent tree, and it comes
-   free: nothing here is ever mutated, so sharing is always safe. The type
+   builds a new node from the old one. `Rest _ -> m` returns the rest
+   itself, unchanged, and the Seq/Par arms rebuild only the spine above the leaves that
+   changed: session 2's persistent tree, at no cost, because nothing here
+   is ever mutated and sharing is therefore always safe. The type
    says nothing about a playable range, so transposing by 10 octaves is
    allowed and sounds like nothing; whether a type should promise more than
    this is a session 9 question. *)
@@ -183,7 +184,7 @@ let rec pretty m =
    retrograde (retrograde m) = m -- so the theme played against its own
    retrograde ends exactly as it began.
 
-   A subtlety worth knowing. This is the retrograde of the NOTATION, voice by
+   One subtlety. This is the retrograde of the NOTATION, voice by
    voice. When the two voices of a Par have different lengths it is not the
    reversal of the SOUND: the shorter voice starts at the beginning before
    and still starts at the beginning after, whereas played backwards on tape
@@ -199,11 +200,11 @@ let rec retrograde m =
 
 (* C4. Two rewrite rules and a walk over the rest of the tree.
 
-   The ORDER of the arms is the lesson, and it is more precise than "the two
-   rules must come first". Patterns are tried top to bottom, and the first
+   The ORDER of the arms is the point, and the rule is more precise than "the
+   special cases first". Patterns are tried top to bottom, and the first
    that fits wins. `Repeat (1, m)` and `Repeat (n, Repeat (k, m))` are both
    special cases of `Repeat (n, m)`, so the general arm must come AFTER
-   them: put it first and it swallows every Repeat, and the compiler says so
+   them: put it first and it captures every Repeat, and the compiler says so
    -- Warning 11, "this match case is unused", once for each of the two rules
    -- and the C4 checks fail with [C4/4]x1 and [[C4/4]x3]x2 unsimplified.
    The two rules themselves may be in either order: Repeat (1, Repeat (k, m))

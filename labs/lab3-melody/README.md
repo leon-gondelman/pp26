@@ -85,19 +85,18 @@ one as *todo* until it is filled, then as *pass* or *FAIL*.
 
 ## Warm-up — before the music
 
-Two plain exercises, about forty minutes together; what is left over is finished at home.
+One sheet, `warmup/warmup.pdf`, in two parts; about thirty-five minutes together, and what
+is left over is finished at home. Nothing here is themed.
 
-**W1, on paper** — `types-on-paper.pdf`. An email message as a type: write the address, the
-recipient, the header and the message; count the values of small types (sums add, products
-multiply — that is why the word is *algebraic*); find the missing case and the unreachable
-case in two given `match`es; model a message's states; then fill the kinds × operations
-table for recipients, in OCaml and as Java classes. Six exercises, in pairs.
+**Part 1, on paper, in pairs** — a notification that goes out by email, SMS or push, as a
+type: write it; count the values of small types (sums add, products multiply — that is why
+the word is *algebraic*); find the missing case and the unreachable case in two given
+`match`es; then the kinds × operations grid — three channels, two operations, add WhatsApp,
+add `schedule`, and what the compiler says in OCaml and in Java when a cell is forgotten.
 
-**W2, at the keyboard** — `warmup/warmup.ml`, eight small types of growing size, one per
-section of [CS3110 chapter 3](https://cs3110.github.io/textbook/chapters/data/intro.html):
-a list function, an enumeration, a record with `{ p with … }`, a variant with payloads (then
-add a constructor and read the two warnings), a `match` with an arm the compiler proves
-unreachable, a type synonym, `option`, and a ten-line expression tree. Runs without dune:
+**Part 2, at the keyboard** — five small types in `warmup/warmup.ml`, stated on the sheet: a
+variant, a record with `{ p with … }`, payloads (then add a constructor and read the two
+warnings), `option`, and a ten-line expression tree. Runs without dune:
 
 ```
 ocaml warmup/warmup.ml        # pass / FAIL / todo, one line per check
