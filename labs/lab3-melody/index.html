@@ -637,6 +637,7 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
       <div class="lr-what">
         <h2>What to do</h2>
         <ul class="lr-todo">
+          <li><a class="do" href="#warmup"><span class="k">W</span><span class="t">Warm-up</span><span class="d">a sheet on paper, then <code>warmup.ml</code></span></a></li>
           <li><a class="do" href="#part-a"><span class="k">A</span><span class="t">Two numbers</span><span class="d">count it, time it</span></a></li>
           <li><a class="do" href="#part-b"><span class="k">B</span><span class="t">To sound</span><span class="d">timed notes, a .wav, then <code>Repeat</code></span></a></li>
           <li><a class="do" href="#part-c"><span class="k">C</span><span class="t">Transformations</span><span class="d">transpose, print, reverse, simplify</span></a></li>
@@ -645,7 +646,7 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
       </div>
       <div class="lr-sections">
         <h2>On this page</h2>
-        <ul class="lr-toc"><li><a href="#description">00 · description</a></li><li><a href="#music">01 · all the music we need</a></li><li><a href="#type">02 · the type</a></li><li><a href="#parts">03 · the assignments</a></li><li><a href="#homework">04 · homework</a></li></ul>
+        <ul class="lr-toc"><li><a href="#description">00 · description</a></li><li><a href="#music">01 · all the music we need</a></li><li><a href="#type">02 · the type</a></li><li><a href="#warmup">03 · warm-up</a></li><li><a href="#parts">04 · the deep dive</a></li><li><a href="#homework">05 · homework</a></li></ul>
       </div>
       <div>
         <h2>Code</h2>
@@ -670,8 +671,9 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
       <a href="#description">00 · description</a>
       <a href="#music">01 · all the music we need</a>
       <a href="#type">02 · the type</a>
-      <a class="assign" href="#parts">03 · the assignments</a>
-      <a class="assign" href="#homework">04 · homework</a>
+      <a class="assign" href="#warmup">03 · warm-up</a>
+      <a class="assign" href="#parts">04 · the deep dive</a>
+      <a class="assign" href="#homework">05 · homework</a>
     </nav>
   </div>
 </header>
@@ -734,9 +736,21 @@ let ( // ) a b = Par (a, b)</code></pre>
   </div>
 </section>
 
+<section id="warmup">
+  <div class="col">
+    <p class="kicker">03 — warm-up</p>
+    <h2>Before the music: two plain exercises<span class="badge">assignment</span></h2>
+    <p>Nothing themed here, and nothing to buy into. First on paper, then a small OCaml file; together about forty minutes, and whatever is left over is finished at home.</p>
+    <table class="parts">
+      <tr><td class="k">W1</td><td><b>On paper</b> — <a class="file" href="types-on-paper.pdf">types-on-paper.pdf</a>. An email message as a type: write the address, the recipient, the header and the message; count the values of small types (sums add, products multiply — that is why the word is <em>algebraic</em>); find the missing case and the unreachable case in two given <code>match</code>es; model a message's states; then fill the kinds × operations table for recipients, in OCaml and as Java classes. Six exercises, in pairs, before anyone opens a laptop.</td></tr>
+      <tr><td class="k">W2</td><td><b>At the keyboard</b> — <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/warmup/warmup.ml">warmup/warmup.ml</a>, eight small types of growing size, one per section of <a href="https://cs3110.github.io/textbook/chapters/data/intro.html">CS3110 chapter 3</a>: a list function, an enumeration, a record with <code>{ p with … }</code>, a variant with payloads (then add a constructor and read the two warnings), a <code>match</code> with an arm the compiler proves unreachable, a type synonym, <code>option</code>, and a ten-line expression tree with <code>eval</code> and <code>to_string</code>. Runs without dune:<pre><code>ocaml warmup/warmup.ml        # pass / FAIL / todo, one line per check</code></pre>The last rung is the shape of <code>melody</code>: leaves and binary nodes. After it, Part B is the same walk with a clock.</td></tr>
+    </table>
+  </div>
+</section>
+
 <section id="parts">
   <div class="col">
-    <p class="kicker">03 — the assignments</p>
+    <p class="kicker">04 — the deep dive</p>
     <h2>What we build, and in what order<span class="badge">assignment</span></h2>
     <p><code>melody.ml</code> is the file we edit. Each hole is a <code>failwith "TODO …"</code>; <code>main.ml</code> reports each one as <em>todo</em> until it is filled, then as <em>pass</em> or <em>FAIL</em>.</p>
 
@@ -765,7 +779,7 @@ let ( // ) a b = Par (a, b)</code></pre>
 
 <section id="homework">
   <div class="col">
-    <p class="kicker">04 — homework</p>
+    <p class="kicker">05 — homework</p>
     <h2>What to finish at home<span class="badge">assignment</span></h2>
     <ul>
       <li>CS3110, chapter 3: sections 3.1, 3.5, 3.6, 3.8, 3.11, 3.12. The lecture gives the idea; the reading gives the language.</li>
@@ -775,7 +789,7 @@ let ( // ) a b = Par (a, b)</code></pre>
   </div>
 
   <footer class="col">
-    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/melody.ml">melody.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/tunes.ml">tunes.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/main.ml">main.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/wav.ml">wav.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/README.md">README.md</a></p>
+    <p><b>Files:</b> <a class="file" href="types-on-paper.pdf">types-on-paper.pdf</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/warmup/warmup.ml">warmup.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/melody.ml">melody.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/tunes.ml">tunes.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/main.ml">main.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/wav.ml">wav.ml</a> · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/README.md">README.md</a></p>
     <p style="margin-top:16px">Programming Paradigms, session 3 — algebraic data types and objects.</p>
   </footer>
 </section>

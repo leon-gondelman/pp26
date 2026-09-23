@@ -48,6 +48,7 @@ the lab's last part returns to it.
 
 | Part | What | Where | Time |
 |------|------|-------|------|
+| W | **Warm-up, on paper**: the queue by hand, before any code | `queue-on-paper.pdf` | ~20 min |
 | A | Persistent queue in **Python** | `python/pqueue.py`, 4 TODOs | ~30 min |
 | B | Watch it drive the **maze solver**; swap queue for stack | `python/solver.py` | ~15 min |
 | C | The same queue in **OCaml**, against a given `.mli` | `ocaml/lib/pqueue.ml`, 3 TODOs | ~30 min |

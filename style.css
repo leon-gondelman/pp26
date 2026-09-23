@@ -11,6 +11,7 @@
   --wine:#7a1f2e; --wine-l:#f4e7ea;
   --lec:#1d4ed8; --lec-b:#e6edfd;
   --lab:#0d6b63; --lab-b:#d9f2ef;
+  --warm:#5f6b0a; --warm-b:#eef2d3;
   --hw:#a2540a;  --hw-b:#fbeeda;
   --sol:#6d28d9; --sol-b:#f0e9fd;
   --serif:"Newsreader",Georgia,"Times New Roman",serif;
@@ -28,6 +29,7 @@
     --wine:#e39aa7; --wine-l:#2f191e;
     --lec:#8fb0ff; --lec-b:#15203a;
     --lab:#6fd3c4; --lab-b:#0f2b29;
+    --warm:#cfd96a; --warm-b:#232a10;
     --hw:#e0a962;  --hw-b:#2c2113;
     --sol:#bfa3fb; --sol-b:#231a3a;
     color-scheme:dark;
@@ -41,6 +43,7 @@
   --wine:#e39aa7; --wine-l:#2f191e;
   --lec:#8fb0ff; --lec-b:#15203a;
   --lab:#6fd3c4; --lab-b:#0f2b29;
+  --warm:#cfd96a; --warm-b:#232a10;
   --hw:#e0a962;  --hw-b:#2c2113;
   --sol:#bfa3fb; --sol-b:#231a3a;
   color-scheme:dark;
@@ -173,7 +176,8 @@ a.dl{display:inline-block;white-space:nowrap;text-decoration:none;margin:.1rem .
   transition:filter .12s ease,border-color .12s ease}
 a.dl:hover{filter:brightness(.96);border-color:var(--ink3)}
 a.dl.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
-a.dl.c-lab{color:var(--lab);background:var(--lab-b);border-color:transparent}
+a.dl.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
+a.dl.c-deepdive{color:var(--lab);background:var(--lab-b);border-color:transparent}
 a.dl.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
 a.dl.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 
@@ -194,7 +198,8 @@ ul.materials li a:hover{text-decoration:underline}
 ul.materials li .mi{min-width:0}
 ul.materials li .mi .dim{font-weight:400;opacity:.7;margin:0 .25em}
 ul.materials li.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
-ul.materials li.c-lab{color:var(--lab);background:var(--lab-b);border-color:transparent}
+ul.materials li.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
+ul.materials li.c-deepdive{color:var(--lab);background:var(--lab-b);border-color:transparent}
 ul.materials li.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
 ul.materials li.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 ul.materials li.dim{width:100%;display:block;font-weight:400;color:var(--ink3)}

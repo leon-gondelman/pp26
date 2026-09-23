@@ -621,7 +621,7 @@ ul.refs .where{
       <span class="up">PP26 &middot; Session 2</span><b>Lab 2 &mdash; Persistent Queue</b></a>
       <div class="lr-what">
         <h2>What to do</h2>
-        <ul class="lr-todo"><li><a class="do" href="queue-on-paper.pdf"><span class="k">paper</span><span class="t">On paper</span><span class="d">the two-list queue, by hand</span></a></li><li><a class="do" href="python-pqueue.html"><span class="k">A</span><span class="t">Python</span><span class="d"><code>python/pqueue.py</code> — four TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-b--the-payoff"><span class="k">B</span><span class="t">The payoff</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="ocaml-pqueue.html"><span class="k">C</span><span class="t">OCaml</span><span class="d"><code>ocaml/lib/pqueue.ml</code> — three TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-d--breaking-the-bank"><span class="k">D</span><span class="t">Breaking the bank</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="java-pqueue.html"><span class="k">E</span><span class="t">Java · homework</span><span class="d"><code>java/PQueue.java</code> — four TODOs</span></a></li></ul>
+        <ul class="lr-todo"><li><a class="do" href="queue-on-paper.pdf"><span class="k">W</span><span class="t">Warm-up</span><span class="d">the two-list queue, on paper</span></a></li><li><a class="do" href="python-pqueue.html"><span class="k">A</span><span class="t">Python</span><span class="d"><code>python/pqueue.py</code> — four TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-b--the-payoff"><span class="k">B</span><span class="t">The payoff</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="ocaml-pqueue.html"><span class="k">C</span><span class="t">OCaml</span><span class="d"><code>ocaml/lib/pqueue.ml</code> — three TODOs</span></a></li><li><a class="" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md#part-d--breaking-the-bank"><span class="k">D</span><span class="t">Breaking the bank</span><span class="d">run it — nothing to write</span></a></li><li><a class="do" href="java-pqueue.html"><span class="k">E</span><span class="t">Java · homework</span><span class="d"><code>java/PQueue.java</code> — four TODOs</span></a></li></ul>
         <p class="lr-readme"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/README.md">full instructions &mdash; README</a></p>
       </div>
       <div class="lr-sections">
@@ -713,7 +713,7 @@ ul.refs .where{
         <p>Part E: the queue a third time in Java, plus a set of OCaml exercises. Start it only once the Python and OCaml work of the lab is running — the details are in <a href="#homework">§05</a>.</p>
       </div>
     </div>
-    <figcaption style="max-width:none">The paper part opens <a href="#parts">§03</a>, and it comes before the keyboard. The pseudocode is projected during the introduction; every implementation that follows goes faster if the reversal has already been traced once by hand.</figcaption>
+    <figcaption style="max-width:none">The warm-up on paper opens <a href="#parts">§03</a>, and it comes before the keyboard. The pseudocode is projected during the introduction; every implementation that follows goes faster if the reversal has already been traced once by hand.</figcaption>
 
   </div>
 </section>
@@ -932,11 +932,11 @@ make(front, back) = (front, back)</pre>
     <h2>What we build, and in what order<span class="badge">assignment</span></h2>
     <p class="lede">One structure, built once by hand and then twice at the keyboard. The code parts are guarded by tests; make them pass in order, because the test classes are named so that they run in teaching order and the ones about persistence come last — a correct <em>ephemeral</em> queue passes everything before them.</p>
 
-    <h3 class="sub" id="paper">First, away from the keyboard</h3>
+    <h3 class="sub" id="paper">Warm-up &mdash; away from the keyboard</h3>
     <p>Fifteen minutes with a pen, before an editor is opened. This is the difference between implementing <code>make</code> from understanding and implementing it from guesswork.</p>
     <p>The handout <a class="file" href="queue-on-paper.pdf">queue-on-paper.pdf</a> walks the structure by hand: enqueue five elements, dequeue until the reversal fires, and draw the cons cells that two versions share. Bring it along — the pseudocode is projected during the introduction, and every implementation that follows goes faster if the reversal has already been traced once by hand.</p>
 
-    <h3 class="sub">Then, at the keyboard</h3>
+    <h3 class="sub">The deep dive &mdash; at the keyboard</h3>
     <p>Python first, because it has the fewest obstacles between us and the structure; then the same queue in OCaml, against an interface file that states the specification in the type system. The third implementation, in Java, is homework — <a href="#homework">§05</a>.</p>
   </div>
 

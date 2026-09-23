@@ -83,6 +83,28 @@ Change them, add our own, listen. Windows: use WSL or the OCaml installer as in 
 `melody.ml` is the file we edit. Each hole is a `failwith "TODO …"`; `main.ml` reports each
 one as *todo* until it is filled, then as *pass* or *FAIL*.
 
+## Warm-up — before the music
+
+Two plain exercises, about forty minutes together; what is left over is finished at home.
+
+**W1, on paper** — `types-on-paper.pdf`. An email message as a type: write the address, the
+recipient, the header and the message; count the values of small types (sums add, products
+multiply — that is why the word is *algebraic*); find the missing case and the unreachable
+case in two given `match`es; model a message's states; then fill the kinds × operations
+table for recipients, in OCaml and as Java classes. Six exercises, in pairs.
+
+**W2, at the keyboard** — `warmup/warmup.ml`, eight small types of growing size, one per
+section of [CS3110 chapter 3](https://cs3110.github.io/textbook/chapters/data/intro.html):
+a list function, an enumeration, a record with `{ p with … }`, a variant with payloads (then
+add a constructor and read the two warnings), a `match` with an arm the compiler proves
+unreachable, a type synonym, `option`, and a ten-line expression tree. Runs without dune:
+
+```
+ocaml warmup/warmup.ml        # pass / FAIL / todo, one line per check
+```
+
+The last rung is the shape of `melody`: leaves and binary nodes.
+
 ## Part A — two numbers
 
 **A1** Count the notes. A `Par` counts both voices: the upper voice has 245, the piece 467.
