@@ -817,14 +817,14 @@ let evens_squared = compose (List.map square) (List.filter even)</code></pre></d
   | [] -> acc
   | x :: xs -> fold_left f (f acc x) xs</code></pre>
       <p><code>f</code> runs <b>as soon as</b> an element is met, from the left, and its result is carried along as <code>acc</code>.</p>
-      <p>The recursive call is the last thing done — a <b>tail call</b>, like <code>sum acc</code> on slide 17. The frame is reused: a loop, no stack.</p>
+      <p>The recursive call is the last thing done — a <b>tail call</b>, like <code>sum acc</code> on <em>Does a tail call need the stack?</em>. The frame is reused: a loop, no stack.</p>
     </div>
     <div>
       <pre><code class="language-ocaml">let rec fold_right f xs z = match xs with
   | [] -> z
   | x :: xs -> f x (fold_right f xs z)</code></pre>
       <p><code>f</code> runs <b>only after</b> the rest of the list is done, so the first application to run is the last element's — from the right.</p>
-      <p>The recursive call is <em>inside</em> <code>f x _</code>: not a tail call. One pending frame per element — the stack of slide 13.</p>
+      <p>The recursive call is <em>inside</em> <code>f x _</code>: not a tail call. One pending frame per element — the stack of <em>The same call, in the calculus</em>.</p>
     </div>
   </div>
   <div class="box fragment">Two orders of applying the same <code>f</code>: left to right with a carried value, or right to left with pending work.</div>
