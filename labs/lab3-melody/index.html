@@ -138,6 +138,13 @@ code{
   background:var(--surface-2); padding:.12em .34em; border-radius:3px;
   color:var(--ink);
 }
+/* a code block on its own: one framed box, not a chip per line */
+pre>code{
+  display:block; padding:14px 16px; overflow-x:auto;
+  font-size:13.5px; line-height:1.65;
+  background:var(--surface); border:1px solid var(--rule); border-radius:6px;
+  box-shadow:var(--shadow);
+}
 
 /* ---- code blocks ---- */
 figure{margin:26px 0}
@@ -617,6 +624,26 @@ table.parts th{text-align:left; border-bottom:2px solid var(--rule-2); padding:6
 table.parts td{border-bottom:1px solid var(--rule); padding:8px 10px 8px 0; vertical-align:top}
 table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; color:var(--ink-3)}
 </style>
+<style id="hilite">
+/* Pygments token colours (tools/hilite.py); the same palette as the slides. */
+.hl-code .k,.hl-code .kd,.hl-code .kn,.hl-code .kr,.hl-code .kp,.hl-code .ow{color:#2a6f97}
+.hl-code .kt,.hl-code .nc,.hl-code .nn,.hl-code .nb,.hl-code .bp{color:#c05a0e}
+.hl-code .s,.hl-code .s1,.hl-code .s2,.hl-code .sb,.hl-code .sc,.hl-code .se,.hl-code .sd{color:#0f8a2f}
+.hl-code .c,.hl-code .c1,.hl-code .cm,.hl-code .cp{color:#6f7f84;font-style:italic}
+.hl-code .m,.hl-code .mi,.hl-code .mf,.hl-code .mh{color:#7a3e9d}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .hl-code .k,:root:not([data-theme="light"]) .hl-code .kd,:root:not([data-theme="light"]) .hl-code .kn,:root:not([data-theme="light"]) .hl-code .kr,:root:not([data-theme="light"]) .hl-code .kp,:root:not([data-theme="light"]) .hl-code .ow{color:#7fb3e0}
+  :root:not([data-theme="light"]) .hl-code .kt,:root:not([data-theme="light"]) .hl-code .nc,:root:not([data-theme="light"]) .hl-code .nn,:root:not([data-theme="light"]) .hl-code .nb,:root:not([data-theme="light"]) .hl-code .bp{color:#f0a060}
+  :root:not([data-theme="light"]) .hl-code .s,:root:not([data-theme="light"]) .hl-code .s1,:root:not([data-theme="light"]) .hl-code .s2,:root:not([data-theme="light"]) .hl-code .sb,:root:not([data-theme="light"]) .hl-code .sc,:root:not([data-theme="light"]) .hl-code .se,:root:not([data-theme="light"]) .hl-code .sd{color:#5fd37f}
+  :root:not([data-theme="light"]) .hl-code .c,:root:not([data-theme="light"]) .hl-code .c1,:root:not([data-theme="light"]) .hl-code .cm,:root:not([data-theme="light"]) .hl-code .cp{color:#8a929f}
+  :root:not([data-theme="light"]) .hl-code .m,:root:not([data-theme="light"]) .hl-code .mi,:root:not([data-theme="light"]) .hl-code .mf,:root:not([data-theme="light"]) .hl-code .mh{color:#c39be0}
+}
+:root[data-theme="dark"] .hl-code .k,:root[data-theme="dark"] .hl-code .kd,:root[data-theme="dark"] .hl-code .kn,:root[data-theme="dark"] .hl-code .kr,:root[data-theme="dark"] .hl-code .kp,:root[data-theme="dark"] .hl-code .ow{color:#7fb3e0}
+:root[data-theme="dark"] .hl-code .kt,:root[data-theme="dark"] .hl-code .nc,:root[data-theme="dark"] .hl-code .nn,:root[data-theme="dark"] .hl-code .nb,:root[data-theme="dark"] .hl-code .bp{color:#f0a060}
+:root[data-theme="dark"] .hl-code .s,:root[data-theme="dark"] .hl-code .s1,:root[data-theme="dark"] .hl-code .s2,:root[data-theme="dark"] .hl-code .sb,:root[data-theme="dark"] .hl-code .sc,:root[data-theme="dark"] .hl-code .se,:root[data-theme="dark"] .hl-code .sd{color:#5fd37f}
+:root[data-theme="dark"] .hl-code .c,:root[data-theme="dark"] .hl-code .c1,:root[data-theme="dark"] .hl-code .cm,:root[data-theme="dark"] .hl-code .cp{color:#8a929f}
+:root[data-theme="dark"] .hl-code .m,:root[data-theme="dark"] .hl-code .mi,:root[data-theme="dark"] .hl-code .mf,:root[data-theme="dark"] .hl-code .mh{color:#c39be0}
+</style>
 </head>
 <body>
 <!-- pp26:labrail -->
@@ -686,11 +713,11 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
     <h2>What this lab is for</h2>
     <p>Part 3 of the lecture built an algebraic data type from an enumeration up to a recursive type. Part 5 showed what such a type buys: every value has a closed list of shapes, every operation is one <code>match</code>, and the compiler checks that every operation handles every shape. The lab makes that concrete on a type with four shapes and a dozen operations, and lets us hear the result.</p>
     <p>The piece we test on is Bach's Invention no. 1 in C major, BWV 772: two voices, 22 bars, 467 notes, in <code>tunes.ml</code>, one <code>let</code> per bar and voice. <code>voice1</code> is the upper voice alone; <code>bach</code> is both together. Nothing assessed needs an ear: the checks are on counts, beats and event lists.</p>
-    <pre><code>dune build
-dune exec ./main.exe        # pass / FAIL / todo, one line per check</code></pre>
+    <pre><code class="hl-code language-bash">dune<span class="w"> </span>build
+dune<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>./main.exe<span class="w">        </span><span class="c1"># pass / FAIL / todo, one line per check</span></code></pre>
     <p>Then open <code>bach.wav</code> in any player, and <code>examples.wav</code>: one voice alone, a C major scale; then a cadence of four chords, the scale in parallel thirds, and a canon. They are written at the end of <code>tunes.ml</code> in a few lines each; a chord is three voices that start together:</p>
-    <pre><code>let chord a b c = q a 4 // q b 4 // q c 4
-let canon = scale // (r Whole ++ scale)</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="n">chord</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="o">=</span> <span class="n">q</span> <span class="n">a</span> <span class="mi">4</span> <span class="o">//</span> <span class="n">q</span> <span class="n">b</span> <span class="mi">4</span> <span class="o">//</span> <span class="n">q</span> <span class="n">c</span> <span class="mi">4</span>
+<span class="k">let</span> <span class="n">canon</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">//</span> <span class="o">(</span><span class="n">r</span> <span class="nc">Whole</span> <span class="o">++</span> <span class="n">scale</span><span class="o">)</span></code></pre>
     <p>Change them, add our own, listen. Windows: use WSL or the OCaml installer as in lab 2.</p>
   </div>
 </section>
@@ -717,20 +744,20 @@ let canon = scale // (r Whole ++ scale)</code></pre>
   <div class="col">
     <p class="kicker">02 — the type</p>
     <h2>The language, as a type</h2>
-    <pre><code>type note = C | Cs | D | Ds | E | F | Fs | G | Gs | A | As | B   (* Cs is C sharp *)
-type pitch = { note : note; octave : int }          (* C4 is middle C *)
-type duration =
-  | Whole | Half | Quarter | Eighth | Sixteenth | ThirtySecond
-  | Dotted of duration            (* a dotted note lasts one and a half times as long *)
+    <pre><code class="hl-code language-ocaml"><span class="k">type</span> <span class="n">note</span> <span class="o">=</span> <span class="nc">C</span> <span class="o">|</span> <span class="nc">Cs</span> <span class="o">|</span> <span class="nc">D</span> <span class="o">|</span> <span class="nc">Ds</span> <span class="o">|</span> <span class="nc">E</span> <span class="o">|</span> <span class="nc">F</span> <span class="o">|</span> <span class="nc">Fs</span> <span class="o">|</span> <span class="nc">G</span> <span class="o">|</span> <span class="nc">Gs</span> <span class="o">|</span> <span class="nc">A</span> <span class="o">|</span> <span class="nc">As</span> <span class="o">|</span> <span class="nc">B</span>   <span class="c">(* Cs is C sharp *)</span>
+<span class="k">type</span> <span class="n">pitch</span> <span class="o">=</span> <span class="o">{</span> <span class="n">note</span> <span class="o">:</span> <span class="n">note</span><span class="o">;</span> <span class="n">octave</span> <span class="o">:</span> <span class="kt">int</span> <span class="o">}</span>          <span class="c">(* C4 is middle C *)</span>
+<span class="k">type</span> <span class="n">duration</span> <span class="o">=</span>
+  <span class="o">|</span> <span class="nc">Whole</span> <span class="o">|</span> <span class="nc">Half</span> <span class="o">|</span> <span class="nc">Quarter</span> <span class="o">|</span> <span class="nc">Eighth</span> <span class="o">|</span> <span class="nc">Sixteenth</span> <span class="o">|</span> <span class="nc">ThirtySecond</span>
+  <span class="o">|</span> <span class="nc">Dotted</span> <span class="k">of</span> <span class="n">duration</span>            <span class="c">(* a dotted note lasts one and a half times as long *)</span>
 
-type melody =
-  | Note of duration * pitch
-  | Rest of duration
-  | Seq  of melody * melody      (* one after the other *)
-  | Par  of melody * melody      (* at the same time    *)
+<span class="k">type</span> <span class="n">melody</span> <span class="o">=</span>
+  <span class="o">|</span> <span class="nc">Note</span> <span class="k">of</span> <span class="n">duration</span> <span class="o">*</span> <span class="n">pitch</span>
+  <span class="o">|</span> <span class="nc">Rest</span> <span class="k">of</span> <span class="n">duration</span>
+  <span class="o">|</span> <span class="nc">Seq</span>  <span class="k">of</span> <span class="n">melody</span> <span class="o">*</span> <span class="n">melody</span>      <span class="c">(* one after the other *)</span>
+  <span class="o">|</span> <span class="nc">Par</span>  <span class="k">of</span> <span class="n">melody</span> <span class="o">*</span> <span class="n">melody</span>      <span class="c">(* at the same time    *)</span>
 
-let ( ++ ) a b = Seq (a, b)
-let ( // ) a b = Par (a, b)</code></pre>
+<span class="k">let</span> <span class="o">(</span> <span class="o">++</span> <span class="o">)</span> <span class="n">a</span> <span class="n">b</span> <span class="o">=</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span>
+<span class="k">let</span> <span class="o">(</span> <span class="o">//</span> <span class="o">)</span> <span class="n">a</span> <span class="n">b</span> <span class="o">=</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span></code></pre>
     <p>Provided: <code>beats : duration -> float</code> and <code>frequency : pitch -> float</code>. With the two operators a tune reads left to right: <code>q C 4 ++ q D 4 ++ q E 4 ++ q C 4</code>, and a chord is <code>q C 4 // q E 4 // q G 4</code>.</p>
     <p>A <code>Seq</code> or a <code>Par</code> holds two melodies: the type is a <b>tree</b>. Every Part C operation returns a new tree and shares the parts it did not change — the persistent structures of session 2, without any extra work.</p>
   </div>
@@ -743,7 +770,7 @@ let ( // ) a b = Par (a, b)</code></pre>
     <p>Nothing here is themed. One sheet, <a class="file" href="warmup/warmup.pdf">warmup.pdf</a>, in two parts; whatever is left over is finished at home.</p>
     <table class="parts">
       <tr><td class="k">Part 1</td><td><b>On paper, in pairs</b> — a notification that goes out by email, SMS or push, as a type: write it; count the values of small types (sums add, products multiply — that is why the word is <em>algebraic</em>); find the missing case and the unreachable case in two given <code>match</code>es; then the kinds × operations grid — three channels, two operations, add WhatsApp, add <code>schedule</code>, and what the compiler says in OCaml and in Java when a cell is forgotten. Four exercises, before anyone opens a laptop.</td></tr>
-      <tr><td class="k">Part 2</td><td><b>At the keyboard</b> — five small types in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/warmup/warmup.ml">warmup/warmup.ml</a>, stated on the sheet: a variant, a record with <code>{ p with … }</code>, payloads (then add a constructor and read the two warnings), <code>option</code>, and a ten-line expression tree with <code>eval</code> and <code>to_string</code>. Runs without dune:<pre><code>ocaml warmup/warmup.ml        # pass / FAIL / todo, one line per check</code></pre>The last rung is the shape of <code>melody</code>: leaves and binary nodes. After it, Part B is the same walk with a clock.</td></tr>
+      <tr><td class="k">Part 2</td><td><b>At the keyboard</b> — five small types in <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab3-melody/warmup/warmup.ml">warmup/warmup.ml</a>, stated on the sheet: a variant, a record with <code>{ p with … }</code>, payloads (then add a constructor and read the two warnings), <code>option</code>, and a ten-line expression tree with <code>eval</code> and <code>to_string</code>. Runs without dune:<pre><code class="hl-code language-bash">ocaml<span class="w"> </span>warmup/warmup.ml<span class="w">        </span><span class="c1"># pass / FAIL / todo, one line per check</span></code></pre>The last rung is the shape of <code>melody</code>: leaves and binary nodes. After it, Part B is the same walk with a clock.</td></tr>
     </table>
   </div>
 </section>
@@ -756,22 +783,22 @@ let ( // ) a b = Par (a, b)</code></pre>
 
     <h3 id="part-a">Part A — two numbers</h3>
     <table class="parts">
-      <tr><td class="k">A1</td><td>Count the notes. A <code>Par</code> counts both voices: the upper voice has 245, the piece 467.<pre><code>count_notes : melody -> int</code></pre></td></tr>
-      <tr><td class="k">A2</td><td>The length in beats. <code>Seq</code> adds; <code>Par</code> takes the maximum — the constructor decides the operation. Each voice is 88 beats, and so is the piece: 88, not 176.<pre><code>length_in_beats : melody -> float</code></pre></td></tr>
-      <tr><td class="k">A3</td><td>Three voices via two. <code>Par</code> takes two melodies; a chord of three is a <code>Par</code> inside a <code>Par</code>, and the grouping does not change the sound. Write the function that takes the first voice and a list of the others. Why does it not take just a list? — think about the chord with no notes.<pre><code>voices : melody -> melody list -> melody</code></pre></td></tr>
+      <tr><td class="k">A1</td><td>Count the notes. A <code>Par</code> counts both voices: the upper voice has 245, the piece 467.<pre><code class="hl-code language-ocaml"><span class="n">count_notes</span> <span class="o">:</span> <span class="n">melody</span> <span class="o">-&gt;</span> <span class="kt">int</span></code></pre></td></tr>
+      <tr><td class="k">A2</td><td>The length in beats. <code>Seq</code> adds; <code>Par</code> takes the maximum — the constructor decides the operation. Each voice is 88 beats, and so is the piece: 88, not 176.<pre><code class="hl-code language-ocaml"><span class="n">length_in_beats</span> <span class="o">:</span> <span class="n">melody</span> <span class="o">-&gt;</span> <span class="kt">float</span></code></pre></td></tr>
+      <tr><td class="k">A3</td><td>Three voices via two. <code>Par</code> takes two melodies; a chord of three is a <code>Par</code> inside a <code>Par</code>, and the grouping does not change the sound. Write the function that takes the first voice and a list of the others. Why does it not take just a list? — think about the chord with no notes.<pre><code class="hl-code language-ocaml"><span class="n">voices</span> <span class="o">:</span> <span class="n">melody</span> <span class="o">-&gt;</span> <span class="n">melody</span> <span class="kt">list</span> <span class="o">-&gt;</span> <span class="n">melody</span></code></pre></td></tr>
     </table>
 
     <h3 id="part-b">Part B — from a melody to sound</h3>
     <table class="parts">
-      <tr><td class="k">B1</td><td>Compile the melody to events. An event is a note with a start time, a frequency and a length, in seconds. The skeleton threads a clock: the inner function returns the events of a melody started at a given beat, together with the beat at which it ends. <code>Note</code> and <code>Rest</code> are done; <code>Seq</code> and <code>Par</code> are the holes. A rest produces no event — it is the absence of one. A wrong <code>Seq</code> plays everything at once; we will hear it.<pre><code>to_events : int -> melody -> event list      (* the int is the tempo *)</code></pre></td></tr>
+      <tr><td class="k">B1</td><td>Compile the melody to events. An event is a note with a start time, a frequency and a length, in seconds. The skeleton threads a clock: the inner function returns the events of a melody started at a given beat, together with the beat at which it ends. <code>Note</code> and <code>Rest</code> are done; <code>Seq</code> and <code>Par</code> are the holes. A rest produces no event — it is the absence of one. A wrong <code>Seq</code> plays everything at once; we will hear it.<pre><code class="hl-code language-ocaml"><span class="n">to_events</span> <span class="o">:</span> <span class="kt">int</span> <span class="o">-&gt;</span> <span class="n">melody</span> <span class="o">-&gt;</span> <span class="n">event</span> <span class="kt">list</span>      <span class="c">(* the int is the tempo *)</span></code></pre></td></tr>
       <tr><td class="k">B2</td><td>Add a constructor: <code>Repeat of int * melody</code>. Rebuild. The compiler now warns, once per function, <em>this pattern-matching is not exhaustive</em>, with the missing case — that list of warnings is the checklist. Then uncomment <code>twice</code> in <code>tunes.ml</code> and the B2 checks in <code>main.ml</code>: repeating a voice twice must sound exactly like writing it twice.</td></tr>
     </table>
 
     <h3 id="part-c">Part C — operations on melodies</h3>
     <table class="parts">
-      <tr><td class="k">C1</td><td>Move a melody up or down by whole octaves. The <code>Note</code> case is done: it builds a new pitch record from the old one, changing only the octave field. Beats unchanged; frequencies doubled for one octave up.<pre><code>transpose_octave : int -> melody -> melody</code></pre></td></tr>
-      <tr><td class="k">C2</td><td>Print a melody. Exactly this format: <code>C4/4</code>, <code>C#5/8.</code>, <code>r/8</code>, <code>a b</code> for a sequence, <code>(a // b)</code> for two voices, <code>[m]x2</code> for a repeat.<pre><code>pretty : melody -> string</code></pre></td></tr>
-      <tr><td class="k">C3</td><td>Play a melody backwards. <code>Seq</code> swaps its two halves; <code>Par</code> does not — time reverses, simultaneity does not.<pre><code>retrograde : melody -> melody</code></pre>Bach's <em>Crab Canon</em> (Musical Offering, BWV 1079) plays a theme against its own retrograde, at the same time. The theme is in <code>tunes.ml</code> as <code>crab_theme</code>; the second voice is not written anywhere, it is computed. Once <code>retrograde</code> works, <code>main.ml</code> writes the canon to <code>crab.wav</code>:<pre><code>let crab = crab_theme // retrograde crab_theme</code></pre></td></tr>
+      <tr><td class="k">C1</td><td>Move a melody up or down by whole octaves. The <code>Note</code> case is done: it builds a new pitch record from the old one, changing only the octave field. Beats unchanged; frequencies doubled for one octave up.<pre><code class="hl-code language-ocaml"><span class="n">transpose_octave</span> <span class="o">:</span> <span class="kt">int</span> <span class="o">-&gt;</span> <span class="n">melody</span> <span class="o">-&gt;</span> <span class="n">melody</span></code></pre></td></tr>
+      <tr><td class="k">C2</td><td>Print a melody. Exactly this format: <code>C4/4</code>, <code>C#5/8.</code>, <code>r/8</code>, <code>a b</code> for a sequence, <code>(a // b)</code> for two voices, <code>[m]x2</code> for a repeat.<pre><code class="hl-code language-ocaml"><span class="n">pretty</span> <span class="o">:</span> <span class="n">melody</span> <span class="o">-&gt;</span> <span class="kt">string</span></code></pre></td></tr>
+      <tr><td class="k">C3</td><td>Play a melody backwards. <code>Seq</code> swaps its two halves; <code>Par</code> does not — time reverses, simultaneity does not.<pre><code class="hl-code language-ocaml"><span class="n">retrograde</span> <span class="o">:</span> <span class="n">melody</span> <span class="o">-&gt;</span> <span class="n">melody</span></code></pre>Bach's <em>Crab Canon</em> (Musical Offering, BWV 1079) plays a theme against its own retrograde, at the same time. The theme is in <code>tunes.ml</code> as <code>crab_theme</code>; the second voice is not written anywhere, it is computed. Once <code>retrograde</code> works, <code>main.ml</code> writes the canon to <code>crab.wav</code>:<pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="n">crab</span> <span class="o">=</span> <span class="n">crab_theme</span> <span class="o">//</span> <span class="n">retrograde</span> <span class="n">crab_theme</span></code></pre></td></tr>
       <tr><td class="k">C4</td><td><code>simplify</code> (needs <code>Repeat</code>; uncomment it): <code>Repeat (1, m)</code> is <code>m</code>; <code>Repeat (n, Repeat (k, m))</code> is <code>Repeat (n * k, m)</code>. Both rules are special cases of the general <code>Repeat (n, m)</code> arm, so that arm must come after them — move it to the top and see what the compiler says.</td></tr>
     </table>
   </div>

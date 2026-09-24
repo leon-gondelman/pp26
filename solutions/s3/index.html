@@ -138,6 +138,13 @@ code{
   background:var(--surface-2); padding:.12em .34em; border-radius:3px;
   color:var(--ink);
 }
+/* a code block on its own: one framed box, not a chip per line */
+pre>code{
+  display:block; padding:14px 16px; overflow-x:auto;
+  font-size:13.5px; line-height:1.65;
+  background:var(--surface); border:1px solid var(--rule); border-radius:6px;
+  box-shadow:var(--shadow);
+}
 
 /* ---- code blocks ---- */
 figure{margin:26px 0}
@@ -617,6 +624,26 @@ table.parts th{text-align:left; border-bottom:2px solid var(--rule-2); padding:6
 table.parts td{border-bottom:1px solid var(--rule); padding:8px 10px 8px 0; vertical-align:top}
 table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; color:var(--ink-3)}
 </style>
+<style id="hilite">
+/* Pygments token colours (tools/hilite.py); the same palette as the slides. */
+.hl-code .k,.hl-code .kd,.hl-code .kn,.hl-code .kr,.hl-code .kp,.hl-code .ow{color:#2a6f97}
+.hl-code .kt,.hl-code .nc,.hl-code .nn,.hl-code .nb,.hl-code .bp{color:#c05a0e}
+.hl-code .s,.hl-code .s1,.hl-code .s2,.hl-code .sb,.hl-code .sc,.hl-code .se,.hl-code .sd{color:#0f8a2f}
+.hl-code .c,.hl-code .c1,.hl-code .cm,.hl-code .cp{color:#6f7f84;font-style:italic}
+.hl-code .m,.hl-code .mi,.hl-code .mf,.hl-code .mh{color:#7a3e9d}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .hl-code .k,:root:not([data-theme="light"]) .hl-code .kd,:root:not([data-theme="light"]) .hl-code .kn,:root:not([data-theme="light"]) .hl-code .kr,:root:not([data-theme="light"]) .hl-code .kp,:root:not([data-theme="light"]) .hl-code .ow{color:#7fb3e0}
+  :root:not([data-theme="light"]) .hl-code .kt,:root:not([data-theme="light"]) .hl-code .nc,:root:not([data-theme="light"]) .hl-code .nn,:root:not([data-theme="light"]) .hl-code .nb,:root:not([data-theme="light"]) .hl-code .bp{color:#f0a060}
+  :root:not([data-theme="light"]) .hl-code .s,:root:not([data-theme="light"]) .hl-code .s1,:root:not([data-theme="light"]) .hl-code .s2,:root:not([data-theme="light"]) .hl-code .sb,:root:not([data-theme="light"]) .hl-code .sc,:root:not([data-theme="light"]) .hl-code .se,:root:not([data-theme="light"]) .hl-code .sd{color:#5fd37f}
+  :root:not([data-theme="light"]) .hl-code .c,:root:not([data-theme="light"]) .hl-code .c1,:root:not([data-theme="light"]) .hl-code .cm,:root:not([data-theme="light"]) .hl-code .cp{color:#8a929f}
+  :root:not([data-theme="light"]) .hl-code .m,:root:not([data-theme="light"]) .hl-code .mi,:root:not([data-theme="light"]) .hl-code .mf,:root:not([data-theme="light"]) .hl-code .mh{color:#c39be0}
+}
+:root[data-theme="dark"] .hl-code .k,:root[data-theme="dark"] .hl-code .kd,:root[data-theme="dark"] .hl-code .kn,:root[data-theme="dark"] .hl-code .kr,:root[data-theme="dark"] .hl-code .kp,:root[data-theme="dark"] .hl-code .ow{color:#7fb3e0}
+:root[data-theme="dark"] .hl-code .kt,:root[data-theme="dark"] .hl-code .nc,:root[data-theme="dark"] .hl-code .nn,:root[data-theme="dark"] .hl-code .nb,:root[data-theme="dark"] .hl-code .bp{color:#f0a060}
+:root[data-theme="dark"] .hl-code .s,:root[data-theme="dark"] .hl-code .s1,:root[data-theme="dark"] .hl-code .s2,:root[data-theme="dark"] .hl-code .sb,:root[data-theme="dark"] .hl-code .sc,:root[data-theme="dark"] .hl-code .se,:root[data-theme="dark"] .hl-code .sd{color:#5fd37f}
+:root[data-theme="dark"] .hl-code .c,:root[data-theme="dark"] .hl-code .c1,:root[data-theme="dark"] .hl-code .cm,:root[data-theme="dark"] .hl-code .cp{color:#8a929f}
+:root[data-theme="dark"] .hl-code .m,:root[data-theme="dark"] .hl-code .mi,:root[data-theme="dark"] .hl-code .mf,:root[data-theme="dark"] .hl-code .mh{color:#c39be0}
+</style>
 </head>
 <body>
 <!-- pp26:labrail -->
@@ -677,8 +704,8 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
     <p class="kicker">00 — how to use these</p>
     <h2>Three files, and a way to read them</h2>
     <p>The solution is three files that drop into the lab folder over the ones with holes: <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/melody.ml"><code>melody.ml</code></a> with every part done and <code>Repeat</code> in the type, and the lab's own <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/main.ml"><code>main.ml</code></a> and <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/tunes.ml"><code>tunes.ml</code></a> with the B2 and C4 checks switched on. Together they build without a warning and report <em>30 passed</em>.</p>
-    <pre><code>cp melody.ml main.ml tunes.ml  ../lab3-melody/      # over the versions with holes
-cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
+    <pre><code class="hl-code language-bash">cp<span class="w"> </span>melody.ml<span class="w"> </span>main.ml<span class="w"> </span>tunes.ml<span class="w">  </span>../lab3-melody/<span class="w">      </span><span class="c1"># over the versions with holes</span>
+<span class="nb">cd</span><span class="w"> </span>../lab3-melody<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>dune<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>dune<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>./main.exe</code></pre>
     <p>The warm-up has its own answer key, <a href="s3-warmup-solutions.pdf">s3-warmup-solutions.pdf</a>, and its companion file solved, <a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s3/ocaml/warmup.ml"><code>warmup.ml</code></a>.</p>
     <p>They are most useful once our own version works, or once it is stuck: put the two <code>melody.ml</code> side by side and compare them one arm at a time. Every function is one <code>match</code> on <code>melody</code>, so a disagreement is always local to one constructor of one function — and that locality is the thesis of the session. This page walks through the arms in the lab's order and says what each one decides and why; the same commentary sits in the file.</p>
   </div>
@@ -690,29 +717,29 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
     <h2>Two numbers, and a third voice</h2>
 
     <h3>A1 — count the notes</h3>
-    <pre><code>let rec count_notes m =
-  match m with
-  | Note _ -> 1
-  | Rest _ -> 0
-  | Seq (a, b) | Par (a, b) -> count_notes a + count_notes b
-  | Repeat (n, m) -> n * count_notes m</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">count_notes</span> <span class="n">m</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">m</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="nc">Note</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="mi">1</span>
+  <span class="o">|</span> <span class="nc">Rest</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="mi">0</span>
+  <span class="o">|</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">|</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">count_notes</span> <span class="n">a</span> <span class="o">+</span> <span class="n">count_notes</span> <span class="n">b</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">n</span> <span class="o">*</span> <span class="n">count_notes</span> <span class="n">m</span></code></pre>
     <p><code>Seq</code> and <code>Par</code> have the same <em>shape</em> — two children — and counting does not care which one it is, so one or-pattern covers both. The upper voice has 245 notes, the piece 467: a <code>Par</code> counts both sides, because both are played.</p>
     <p>What we count is <em>performed</em> notes: a <code>Repeat</code> counts its body <code>n</code> times. The other choice, counting the notes as written, is defensible, but this one keeps a property that is worth having: for every melody, <code>count_notes m</code> equals the number of events <code>to_events</code> produces, since a rest produces no event and a note exactly one.</p>
 
     <h3>A2 — the length in beats</h3>
-    <pre><code>let rec length_in_beats m =
-  match m with
-  | Note (d, _) | Rest d -> beats d
-  | Seq (a, b) -> length_in_beats a +. length_in_beats b
-  | Par (a, b) -> Float.max (length_in_beats a) (length_in_beats b)
-  | Repeat (n, m) -> float_of_int n *. length_in_beats m</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">length_in_beats</span> <span class="n">m</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">m</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="nc">Note</span> <span class="o">(</span><span class="n">d</span><span class="o">,</span> <span class="o">_)</span> <span class="o">|</span> <span class="nc">Rest</span> <span class="n">d</span> <span class="o">-&gt;</span> <span class="n">beats</span> <span class="n">d</span>
+  <span class="o">|</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">length_in_beats</span> <span class="n">a</span> <span class="o">+.</span> <span class="n">length_in_beats</span> <span class="n">b</span>
+  <span class="o">|</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nn">Float</span><span class="p">.</span><span class="n">max</span> <span class="o">(</span><span class="n">length_in_beats</span> <span class="n">a</span><span class="o">)</span> <span class="o">(</span><span class="n">length_in_beats</span> <span class="n">b</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">float_of_int</span> <span class="n">n</span> <span class="o">*.</span> <span class="n">length_in_beats</span> <span class="n">m</span></code></pre>
     <p>The same two arms as in A1, and now they differ: one after the other <em>adds</em>, at the same time takes the <em>longer</em>. This is the sentence the lab was built around — the constructor decides the operation — and it is why <code>bach</code> is 88 beats and not 176: its two voices run together, each 88 beats long. The result is a float because a dotted thirty-second is 3/16 of a beat and no integer names that.</p>
 
     <h3>A3 — three voices via two</h3>
-    <pre><code>let rec voices first rest =
-  match rest with
-  | [] -> first
-  | v :: more -> Par (first, voices v more)</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">voices</span> <span class="n">first</span> <span class="n">rest</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">rest</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="n">first</span>
+  <span class="o">|</span> <span class="n">v</span> <span class="o">::</span> <span class="n">more</span> <span class="o">-&gt;</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">first</span><span class="o">,</span> <span class="n">voices</span> <span class="n">v</span> <span class="n">more</span><span class="o">)</span></code></pre>
     <p><code>Par</code> takes exactly two melodies, so three voices is a <code>Par</code> inside a <code>Par</code>. The question was why the function takes the first voice separately instead of a plain list, and the answer is the empty list: <code>voices []</code> would have to produce a chord with no notes, and no value of type <code>melody</code> represents one. The type has no empty melody (the homework's second question asks what it would cost to add one). A first element followed by a list is the lecture's non-empty list; with it, the meaningless call cannot be written at all, where a plain list would turn it into an exception at run time.</p>
     <p>The result nests to the right, <code>Par (v1, Par (v2, v3))</code>. Part B checks that the grouping changes nothing about the sound; the only place it is visible is <code>pretty</code>, whose parentheses show it.</p>
   </div>
@@ -724,25 +751,25 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
     <h2>From a melody to sound</h2>
 
     <h3>B1 — compile to timed events</h3>
-    <pre><code>let to_events tempo m =
-  let sec b = b *. 60. /. float_of_int tempo in
-  (* go t m = (the events of m when it starts at beat t, the beat at which m ends) *)
-  let rec go t m =
-    match m with
-    | Note (d, p) -> [ { at = sec t; hz = frequency p; secs = sec (beats d) } ], t +. beats d
-    | Rest d -> [], t +. beats d
-    | Seq (a, b) ->
-        let ea, t1 = go t a in          (* a runs from t and ends at t1 ...  *)
-        let eb, t2 = go t1 b in         (* ... which is where b starts       *)
-        ea @ eb, t2
-    | Par (a, b) ->
-        let ea, t1 = go t a in          (* both from t ...                   *)
-        let eb, t2 = go t b in
-        ea @ eb, Float.max t1 t2        (* ... and the Par ends with the later one *)
-    | Repeat (0, _) -> [], t
-    | Repeat (n, m) -> go t (Seq (m, Repeat (n - 1, m)))
-  in
-  fst (go 0. m)</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="n">to_events</span> <span class="n">tempo</span> <span class="n">m</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">sec</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*.</span> <span class="mi">60</span><span class="o">.</span> <span class="o">/.</span> <span class="n">float_of_int</span> <span class="n">tempo</span> <span class="k">in</span>
+  <span class="c">(* go t m = (the events of m when it starts at beat t, the beat at which m ends) *)</span>
+  <span class="k">let</span> <span class="k">rec</span> <span class="n">go</span> <span class="n">t</span> <span class="n">m</span> <span class="o">=</span>
+    <span class="k">match</span> <span class="n">m</span> <span class="k">with</span>
+    <span class="o">|</span> <span class="nc">Note</span> <span class="o">(</span><span class="n">d</span><span class="o">,</span> <span class="n">p</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">[</span> <span class="o">{</span> <span class="n">at</span> <span class="o">=</span> <span class="n">sec</span> <span class="n">t</span><span class="o">;</span> <span class="n">hz</span> <span class="o">=</span> <span class="n">frequency</span> <span class="n">p</span><span class="o">;</span> <span class="n">secs</span> <span class="o">=</span> <span class="n">sec</span> <span class="o">(</span><span class="n">beats</span> <span class="n">d</span><span class="o">)</span> <span class="o">}</span> <span class="o">],</span> <span class="n">t</span> <span class="o">+.</span> <span class="n">beats</span> <span class="n">d</span>
+    <span class="o">|</span> <span class="nc">Rest</span> <span class="n">d</span> <span class="o">-&gt;</span> <span class="bp">[]</span><span class="o">,</span> <span class="n">t</span> <span class="o">+.</span> <span class="n">beats</span> <span class="n">d</span>
+    <span class="o">|</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span>
+        <span class="k">let</span> <span class="n">ea</span><span class="o">,</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">go</span> <span class="n">t</span> <span class="n">a</span> <span class="k">in</span>          <span class="c">(* a runs from t and ends at t1 ...  *)</span>
+        <span class="k">let</span> <span class="n">eb</span><span class="o">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">go</span> <span class="n">t1</span> <span class="n">b</span> <span class="k">in</span>         <span class="c">(* ... which is where b starts       *)</span>
+        <span class="n">ea</span> <span class="o">@</span> <span class="n">eb</span><span class="o">,</span> <span class="n">t2</span>
+    <span class="o">|</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span>
+        <span class="k">let</span> <span class="n">ea</span><span class="o">,</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">go</span> <span class="n">t</span> <span class="n">a</span> <span class="k">in</span>          <span class="c">(* both from t ...                   *)</span>
+        <span class="k">let</span> <span class="n">eb</span><span class="o">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">go</span> <span class="n">t</span> <span class="n">b</span> <span class="k">in</span>
+        <span class="n">ea</span> <span class="o">@</span> <span class="n">eb</span><span class="o">,</span> <span class="nn">Float</span><span class="p">.</span><span class="n">max</span> <span class="n">t1</span> <span class="n">t2</span>        <span class="c">(* ... and the Par ends with the later one *)</span>
+    <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="o">_)</span> <span class="o">-&gt;</span> <span class="bp">[]</span><span class="o">,</span> <span class="n">t</span>
+    <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">go</span> <span class="n">t</span> <span class="o">(</span><span class="nc">Seq</span> <span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">m</span><span class="o">)))</span>
+  <span class="k">in</span>
+  <span class="n">fst</span> <span class="o">(</span><span class="n">go</span> <span class="mi">0</span><span class="o">.</span> <span class="n">m</span><span class="o">)</span></code></pre>
     <p>The inner function threads a clock. <code>go t m</code> returns two things: the events of <code>m</code> when it starts at beat <code>t</code>, <em>and</em> the beat at which <code>m</code> ends. The second result exists for <code>Seq</code>: <code>b</code> starts where <code>a</code> ended, and only the computation of <code>a</code> knows where that is. <code>Par</code> needs it only to compare: both halves start at <code>t</code>, and the <code>Par</code> ends when the later one does. Once the pair is there, each arm reads as its own definition.</p>
     <div class="music">
       <h3>The mistake we can hear</h3>
@@ -765,33 +792,33 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
     <h2>Operations on melodies</h2>
 
     <h3>C1 — transpose by octaves</h3>
-    <pre><code>let rec transpose_octave k m =
-  match m with
-  | Note (d, p) -> Note (d, { p with octave = p.octave + k })
-  | Rest _ -> m
-  | Seq (a, b) -> Seq (transpose_octave k a, transpose_octave k b)
-  | Par (a, b) -> Par (transpose_octave k a, transpose_octave k b)
-  | Repeat (n, m) -> Repeat (n, transpose_octave k m)</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">transpose_octave</span> <span class="n">k</span> <span class="n">m</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">m</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="nc">Note</span> <span class="o">(</span><span class="n">d</span><span class="o">,</span> <span class="n">p</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Note</span> <span class="o">(</span><span class="n">d</span><span class="o">,</span> <span class="o">{</span> <span class="n">p</span> <span class="k">with</span> <span class="n">octave</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">octave</span> <span class="o">+</span> <span class="n">k</span> <span class="o">})</span>
+  <span class="o">|</span> <span class="nc">Rest</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="n">m</span>
+  <span class="o">|</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">transpose_octave</span> <span class="n">k</span> <span class="n">a</span><span class="o">,</span> <span class="n">transpose_octave</span> <span class="n">k</span> <span class="n">b</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">transpose_octave</span> <span class="n">k</span> <span class="n">a</span><span class="o">,</span> <span class="n">transpose_octave</span> <span class="n">k</span> <span class="n">b</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">transpose_octave</span> <span class="n">k</span> <span class="n">m</span><span class="o">)</span></code></pre>
     <p><code>{ p with octave = … }</code> is a functional record update: a <em>new</em> pitch that copies <code>p</code> and changes one field, while <code>p</code> itself is untouched. Every arm builds a new node from the old one; <code>Rest _ -> m</code> returns the rest itself, unchanged. The result therefore shares every rest with the original and rebuilds only the spine above the notes that changed: session 2's persistent tree, at no cost, because nothing here is ever mutated and sharing is therefore always safe.</p>
     <p>The type says nothing about a playable range, so transposing by ten octaves is allowed and produces frequencies no speaker reproduces. Whether a type should promise more than it does here is a session 9 question.</p>
 
     <h3>C2 — print</h3>
-    <pre><code>let rec pretty m =
-  match m with
-  | Note (d, p) -> Printf.sprintf "%s%d/%s" (string_of_note p.note) p.octave (string_of_duration d)
-  | Rest d -> "r/" ^ string_of_duration d
-  | Seq (a, b) -> pretty a ^ " " ^ pretty b
-  | Par (a, b) -> "(" ^ pretty a ^ " // " ^ pretty b ^ ")"
-  | Repeat (n, m) -> Printf.sprintf "[%s]x%d" (pretty m) n</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">pretty</span> <span class="n">m</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">m</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="nc">Note</span> <span class="o">(</span><span class="n">d</span><span class="o">,</span> <span class="n">p</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nn">Printf</span><span class="p">.</span><span class="n">sprintf</span> <span class="s2">&quot;%s%d/%s&quot;</span> <span class="o">(</span><span class="n">string_of_note</span> <span class="n">p</span><span class="o">.</span><span class="n">note</span><span class="o">)</span> <span class="n">p</span><span class="o">.</span><span class="n">octave</span> <span class="o">(</span><span class="n">string_of_duration</span> <span class="n">d</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Rest</span> <span class="n">d</span> <span class="o">-&gt;</span> <span class="s2">&quot;r/&quot;</span> <span class="o">^</span> <span class="n">string_of_duration</span> <span class="n">d</span>
+  <span class="o">|</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">pretty</span> <span class="n">a</span> <span class="o">^</span> <span class="s2">&quot; &quot;</span> <span class="o">^</span> <span class="n">pretty</span> <span class="n">b</span>
+  <span class="o">|</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;(&quot;</span> <span class="o">^</span> <span class="n">pretty</span> <span class="n">a</span> <span class="o">^</span> <span class="s2">&quot; // &quot;</span> <span class="o">^</span> <span class="n">pretty</span> <span class="n">b</span> <span class="o">^</span> <span class="s2">&quot;)&quot;</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nn">Printf</span><span class="p">.</span><span class="n">sprintf</span> <span class="s2">&quot;[%s]x%d&quot;</span> <span class="o">(</span><span class="n">pretty</span> <span class="n">m</span><span class="o">)</span> <span class="n">n</span></code></pre>
     <p>This is a new <em>operation</em>: one function is added and nothing else in the file changes — the cheap direction of the lecture's table. The format is a tiny grammar, and it explains the parentheses: a sequence is written with spaces and no brackets, so a <code>Par</code> must bring its own, or <code>C4/4 D4/4 // E4/4</code> would not say which notes the second voice plays against. A chord of three prints as <code>((C4/4 // E4/4) // G4/4)</code>; the nesting that <code>voices</code> chose is visible here, and only here.</p>
 
     <h3>C3 — retrograde</h3>
-    <pre><code>let rec retrograde m =
-  match m with
-  | Note _ | Rest _ -> m
-  | Seq (a, b) -> Seq (retrograde b, retrograde a)     (* time reverses ... *)
-  | Par (a, b) -> Par (retrograde a, retrograde b)     (* ... simultaneity does not *)
-  | Repeat (n, m) -> Repeat (n, retrograde m)</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">retrograde</span> <span class="n">m</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">m</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="nc">Note</span> <span class="o">_</span> <span class="o">|</span> <span class="nc">Rest</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="n">m</span>
+  <span class="o">|</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">retrograde</span> <span class="n">b</span><span class="o">,</span> <span class="n">retrograde</span> <span class="n">a</span><span class="o">)</span>     <span class="c">(* time reverses ... *)</span>
+  <span class="o">|</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">retrograde</span> <span class="n">a</span><span class="o">,</span> <span class="n">retrograde</span> <span class="n">b</span><span class="o">)</span>     <span class="c">(* ... simultaneity does not *)</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">retrograde</span> <span class="n">m</span><span class="o">)</span></code></pre>
     <p>Time runs backwards: a <code>Seq</code> swaps its two halves and reverses each. Simultaneity is not a direction, so a <code>Par</code> keeps its two voices where they are and reverses each one. Two facts follow, and the crab canon depends on both: <code>retrograde</code> preserves <code>length_in_beats</code>, and it is an involution — <code>retrograde (retrograde m) = m</code> — so the theme played against its own retrograde ends exactly as it began, which the last C3 check listens for.</p>
     <div class="music">
       <h3>A subtlety: the notation reversed is not always the sound reversed</h3>
@@ -799,14 +826,14 @@ cd ../lab3-melody && dune build && dune exec ./main.exe</code></pre>
     </div>
 
     <h3>C4 — simplify</h3>
-    <pre><code>let rec simplify m =
-  match m with
-  | Repeat (1, m) -> simplify m                                 (* one repetition is no repetition *)
-  | Repeat (n, Repeat (k, m)) -> simplify (Repeat (n * k, m))  (* a repeat of a repeat            *)
-  | Repeat (n, m) -> Repeat (n, simplify m)                     (* the general arm, LAST           *)
-  | Seq (a, b) -> Seq (simplify a, simplify b)
-  | Par (a, b) -> Par (simplify a, simplify b)
-  | Note _ | Rest _ -> m</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">simplify</span> <span class="n">m</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">m</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">simplify</span> <span class="n">m</span>                                 <span class="c">(* one repetition is no repetition *)</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">m</span><span class="o">))</span> <span class="o">-&gt;</span> <span class="n">simplify</span> <span class="o">(</span><span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">k</span><span class="o">,</span> <span class="n">m</span><span class="o">))</span>  <span class="c">(* a repeat of a repeat            *)</span>
+  <span class="o">|</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Repeat</span> <span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">simplify</span> <span class="n">m</span><span class="o">)</span>                     <span class="c">(* the general arm, LAST           *)</span>
+  <span class="o">|</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Seq</span> <span class="o">(</span><span class="n">simplify</span> <span class="n">a</span><span class="o">,</span> <span class="n">simplify</span> <span class="n">b</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Par</span> <span class="o">(</span><span class="n">simplify</span> <span class="n">a</span><span class="o">,</span> <span class="n">simplify</span> <span class="n">b</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Note</span> <span class="o">_</span> <span class="o">|</span> <span class="nc">Rest</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="n">m</span></code></pre>
     <p>Two rewrite rules and a walk over the rest of the tree. The <em>order</em> of the arms is the point, and the rule is more precise than "the special cases first". Patterns are tried top to bottom and the first that fits wins. <code>Repeat (1, m)</code> and <code>Repeat (n, Repeat (k, m))</code> are both special cases of <code>Repeat (n, m)</code>, so the general arm must come <em>after</em> them: put it first and it captures every <code>Repeat</code>, the compiler reports both rules as unused (section 04), and the checks fail with <code>[C4/4]x1</code> and <code>[[C4/4]x3]x2</code> left unsimplified. The two rules themselves may be in either order: <code>Repeat (1, Repeat (k, m))</code> fits both, and both send it to the same place.</p>
     <p>Both rules call <code>simplify</code> again on their result instead of returning it, because the result may itself be simplifiable: <code>Repeat (2, Repeat (3, Repeat (4, x)))</code> becomes <code>Repeat (6, Repeat (4, x))</code>, a repeat of a repeat, which becomes <code>Repeat (24, x)</code>. One rewrite is rarely enough. <code>Repeat (0, m)</code> is left alone: it plays as nothing and could become an empty melody, if the type had one.</p>
   </div>
@@ -850,10 +877,10 @@ Warning 11 [redundant-case]: this match case is unused.</code></pre>
 
     <h3>How would we model a tie?</h3>
     <p>A tie joins two notes of the same pitch into one sound: <code>d4 ~ d16</code> is one D lasting five sixteenths, a length no single <code>duration</code> names. The first idea is a constructor in <code>melody</code>, <code>Tie of melody * melody</code>, but that is the wrong level. <code>to_events</code> would then have to merge two adjacent events into one, checking that they have the same pitch and that nothing lies between them: extra work, and a constructor that admits malformed values. The tie is a property of a <em>duration</em>, so it belongs in <code>duration</code>:</p>
-    <pre><code>type duration =
-  | Whole | Half | Quarter | Eighth | Sixteenth | ThirtySecond
-  | Dotted of duration
-  | Tied of duration * duration        (* d4 ~ d16  is  Tied (Quarter, Sixteenth) *)</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="k">type</span> <span class="n">duration</span> <span class="o">=</span>
+  <span class="o">|</span> <span class="nc">Whole</span> <span class="o">|</span> <span class="nc">Half</span> <span class="o">|</span> <span class="nc">Quarter</span> <span class="o">|</span> <span class="nc">Eighth</span> <span class="o">|</span> <span class="nc">Sixteenth</span> <span class="o">|</span> <span class="nc">ThirtySecond</span>
+  <span class="o">|</span> <span class="nc">Dotted</span> <span class="k">of</span> <span class="n">duration</span>
+  <span class="o">|</span> <span class="nc">Tied</span> <span class="k">of</span> <span class="n">duration</span> <span class="o">*</span> <span class="n">duration</span>        <span class="c">(* d4 ~ d16  is  Tied (Quarter, Sixteenth) *)</span></code></pre>
     <p>The cost is two arms, <code>beats</code> and <code>string_of_duration</code>, and the compiler names both. Nothing in <code>melody</code> or its functions changes, because none of them looks inside a duration. (<code>Dotted d</code> is then a special case, <code>Tied (d, half d)</code>, and could go — or stay, as notation.) The rule: put the constructor at the level of the thing it modifies.</p>
 
     <h3>What would an empty melody be?</h3>
@@ -875,11 +902,11 @@ Warning 11 [redundant-case]: this match case is unused.</code></pre>
     <p class="kicker">06 — properties</p>
     <h2>Five things that are true of every melody</h2>
     <p>Each of these is one line in the toplevel, on any <code>m</code> from <code>tunes.ml</code> or our own. In session 5 a library will generate the melodies for checks of this kind.</p>
-    <pre><code>count_notes m = List.length (to_events 120 m)
-length_in_beats (transpose_octave k m) = length_in_beats m
-length_in_beats (retrograde m)         = length_in_beats m
-retrograde (retrograde m)              = m
-to_events 120 (simplify m)             = to_events 120 m</code></pre>
+    <pre><code class="hl-code language-ocaml"><span class="n">count_notes</span> <span class="n">m</span> <span class="o">=</span> <span class="nn">List</span><span class="p">.</span><span class="n">length</span> <span class="o">(</span><span class="n">to_events</span> <span class="mi">120</span> <span class="n">m</span><span class="o">)</span>
+<span class="n">length_in_beats</span> <span class="o">(</span><span class="n">transpose_octave</span> <span class="n">k</span> <span class="n">m</span><span class="o">)</span> <span class="o">=</span> <span class="n">length_in_beats</span> <span class="n">m</span>
+<span class="n">length_in_beats</span> <span class="o">(</span><span class="n">retrograde</span> <span class="n">m</span><span class="o">)</span>         <span class="o">=</span> <span class="n">length_in_beats</span> <span class="n">m</span>
+<span class="n">retrograde</span> <span class="o">(</span><span class="n">retrograde</span> <span class="n">m</span><span class="o">)</span>              <span class="o">=</span> <span class="n">m</span>
+<span class="n">to_events</span> <span class="mi">120</span> <span class="o">(</span><span class="n">simplify</span> <span class="n">m</span><span class="o">)</span>             <span class="o">=</span> <span class="n">to_events</span> <span class="mi">120</span> <span class="n">m</span></code></pre>
     <p>The last one is what <code>simplify</code> means: a different tree, the same sound. The first one is why <code>count_notes</code> counts a <code>Repeat</code> the way it does.</p>
   </div>
 

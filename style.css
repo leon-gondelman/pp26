@@ -112,7 +112,10 @@ main{min-width:0;display:flex;flex-direction:column}
 .inner{padding:2.6rem 3rem 4.5rem;max-width:64rem;flex:1;width:100%;box-sizing:border-box;margin-inline:auto}
 /* The schedule carries four columns of chips and is the one block that wants
    more room than the reading measure; let it use the width the rail leaves. */
-.inner>section#sessions{max-width:none;width:min(78rem,100%)}
+/* ... so it breaks out of the column, centred, up to 78rem or the main area
+   minus the page margins; the phone rules put it back in the flow. */
+.inner>section#sessions{--sw:min(78rem,calc(100vw - var(--rail) - 6rem));
+  max-width:none;width:var(--sw);margin-inline:calc((100% - var(--sw)) / 2)}
 
 /* ---------------------------------------------------------------- hero */
 .hero{margin-bottom:2.2rem}
@@ -159,7 +162,8 @@ table.sessions th.lab,table.sessions .col-warmup{border-left:1px solid color-mix
 table.sessions th.lab,table.sessions .col-quest{border-right:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
 table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:.3rem}
 table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
-  vertical-align:middle}
+  vertical-align:top}
+table.sessions td.date{padding-top:.85rem}
 td.date{width:5.2rem;padding-right:1.6rem;white-space:nowrap;color:var(--ink3);
   font:500 .79rem/1 var(--mono);font-variant-numeric:tabular-nums}
 /* hanging indents: a wrapped title lines up with its own first word, not with
@@ -170,7 +174,7 @@ td.ttl>a:hover{color:var(--acc)}
 td.ttl .mat a.dl{font-size:.705rem}
 td.ttl .n{display:inline-block;width:1.5rem;text-indent:0;color:var(--ink3);
   font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums}
-td.ttl{width:32%;min-width:16rem}
+td.ttl{width:30%;min-width:16rem}
 td.mat{width:auto}
 td.mat .none{color:var(--faint)}
 tr.partrow td{background:var(--side);padding:.55rem .8rem;
@@ -353,6 +357,7 @@ footer.site .meta a:hover{text-decoration:underline}
   .topbar{padding:.75rem 1.4rem}
   .topbar .where{display:none}
   .inner{padding:1.8rem 1.4rem 3rem}
+  .inner>section#sessions{width:100%;margin-inline:0}
   footer.site{padding:1.6rem 1.4rem 2.4rem}
   footer.site .meta{margin-left:0;text-align:left}
   .field{grid-template-columns:1fr;gap:.1rem}
@@ -361,7 +366,6 @@ footer.site .meta a:hover{text-decoration:underline}
    a little more room and the schedule uses all of it */
 @media (min-width:1600px){
   .inner{max-width:70rem}
-  .inner>section#sessions{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
