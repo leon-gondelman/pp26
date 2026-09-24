@@ -114,7 +114,7 @@ and env = (string * value) list
 (* B1. No substitution anywhere. A variable is looked up; a λ is not run but
    packaged with the environment it was MADE in; an application evaluates the
    function to a closure, the argument to a value (call by value: the argument
-   first, always), then the body in the closure's own environment env' — not the
+   before the body, always), then the body in the closure's own environment env' — not the
    caller's env — extended with the parameter. Using env instead of env' is
    dynamic scope, and the third B1 check catches it. *)
 let rec eval env = function

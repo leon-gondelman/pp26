@@ -501,7 +501,7 @@ y[x := u]        =  y                    if y ≠ x
     </div>
   </div>
   <div class="box fragment">Church and Rosser, 1936: a term has <span class="hl">at most one</span> normal form. A path may fail to reach it — the next slide — but no path reaches a different one. The order changes the path, and whether we arrive; never the answer.</div>
-  <aside class="notes">Both reach a. Normal order never evaluated (λz. z) b — it was thrown away. Applicative order did. Confluence is the theorem behind parallel map over pure code, five weeks from now: when the answer does not depend on the order, the steps may run at the same time.</aside>
+  <aside class="notes">Both reach a. Normal order never evaluated (λz. z) b — it was thrown away. Applicative order did. Confluence is the formal ancestor of parallel map over pure code, five weeks from now: when the answer does not depend on the order, the steps may run at the same time.</aside>
 </section>
 
 <!-- 34 -->
@@ -527,8 +527,8 @@ y[x := u]        =  y                    if y ≠ x
   <h2>Reduction orders and parameter-passing modes</h2>
   <table>
     <tr><th>reduction order</th><th>the mode, block 1</th><th>languages</th></tr>
-    <tr><td>applicative: arguments first</td><td><b>call-by-value</b></td><td>C, Java, Python, JavaScript, OCaml, Scheme</td></tr>
-    <tr><td>normal: arguments when used, each time</td><td><b>call-by-name</b></td><td>Algol 60 — its default</td></tr>
+    <tr><td>applicative: arguments first</td><td><b>call-by-value</b> (weak)</td><td>C, Java, Python, JavaScript, OCaml, Scheme</td></tr>
+    <tr><td>normal: arguments when used, each time</td><td><b>call-by-name</b> (weak)</td><td>Algol 60 — its default</td></tr>
     <tr><td>normal, with sharing: each argument once</td><td><b>call-by-need</b></td><td>Haskell</td></tr>
   </table>
   <div class="box fragment">Evaluation strategy: a design decision every language has made, mostly the same way.</div>
@@ -613,7 +613,7 @@ succ = λn f x. f (n f x)          add = λm n f x. m f (n f x)</code></pre>
 <section>
   <h2>Recursion without <code>let rec</code></h2>
   <p>The calculus has no <code>let rec</code>, so <code>fact</code> cannot call itself by name. Instead it takes the function to call as an argument <code>f</code>: <code>fact = λf n. if (iszero n) 1 (mul n (f (pred n)))</code>. Recursion then needs a term <code>fix</code> that hands a function itself: <code>fix g = g (fix g)</code>.</p>
-  <pre class="mid tight" data-lang="λ-calculus"><code class="nohighlight">Y = λf. (λx. f (x x)) (λx. f (x x))            Y g  →  g (Y g)</code></pre>
+  <pre class="mid tight" data-lang="λ-calculus"><code class="nohighlight">Y = λf. (λx. f (x x)) (λx. f (x x))            Y g  →* g (Y g)</code></pre>
   <div class="st narrow" data-term="Y fact 3" data-strategy="normal" data-names="1" data-lines="3"></div>
   <aside class="notes">Curry's Y. One β-step shows Y g → (λx. g (x x)) (λx. g (x x)) → g ((λx. g (x x)) (λx. g (x x))) = g (Y g). Run: about 2 000 steps to 6, because pred is built from pairs. The point is the existence: recursion is not a primitive either.</aside>
 </section>

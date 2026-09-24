@@ -561,7 +561,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
   <ul>
     <li>Turing, 1937, in an appendix: every function the lambda-calculus defines, a machine computes, and the other way round.</li>
     <li>Kleene, 1936: a third definition, <em>recursive functions</em> — the same functions again.</li>
-    <li>Every definition of "computable" proposed since computes the same functions. This is the <b>Church–Turing thesis</b>.</li>
+    <li>Every model of effective computation proposed since has turned out to compute the same functions. This is the <b>Church–Turing thesis</b>.</li>
   </ul>
   <div class="box fragment">Equal in what they can compute. Differerent in one design decision: <span class="hl">who decides the next step</span>.</div>
   <aside class="notes">The thesis is not a theorem: it says that the informal notion of "effectively computable" is captured by these definitions. Every language we use is equivalent to both, so the choice between the two paradigms is never about power.</aside>
@@ -705,7 +705,7 @@ RecursionError: maximum recursion depth exceeded</pre>
 <span data-line="6">        else: stack += [m[2], m[1]]</span>
 <span data-line="7">    return n</span></code></pre>
   <div id="ts"></div>
-  <div class="box fragment">Each entry is <em>what to do next</em> once the current subtree is counted — the rest of the computation. Session 5 names it: a <span class="hl">continuation</span>. Sessions 6 and 7 hand it to a scheduler: a thread is a stack the operating system saves; a coroutine is a stack the program saves itself.</div>
+  <div class="box fragment">Each entry is <em>what to do next</em> once the current subtree is counted — the rest of the computation. Session 5 names it: a <span class="hl">continuation</span>. Sessions 6 and 7 hand it to a scheduler: a thread is a stack the operating system saves; a coroutine is a suspended computation the program saves itself.</div>
   <aside class="notes">Reynolds 1972, definitional interpreters: making the stack explicit is the first step from a recursive evaluator to a machine. Said, not proved; three sessions pay it back.</aside>
 </section>
 
@@ -740,8 +740,8 @@ sum 0 [3; 1; 4]      (* 8 *)</code></pre>
   <h2>Proper tail calls are a language decision</h2>
   <table>
     <tr><th>guaranteed</th><th>not guaranteed</th></tr>
-    <tr><td>Scheme — a requirement of the standard since 1975</td><td>Python — refused on purpose: the traceback would lose frames</td></tr>
-    <tr><td>OCaml, Haskell, Erlang — every loop is written this way</td><td>Java — the JVM has no tail-call instruction</td></tr>
+    <tr><td>Scheme — central to the original 1975 design; required by every standard since</td><td>Python — refused on purpose: the traceback would lose frames</td></tr>
+    <tr><td>Haskell, Erlang — iteration is normally written this way; OCaml optimises it, and also has <code>for</code> and <code>while</code></td><td>Java — the JVM has no tail-call instruction</td></tr>
     <tr><td>Lua, Elixir</td><td>C — an optimisation the compiler may or may not apply</td></tr>
   </table>
   <div class="box fragment">Whether a tail call needs a frame is decided by the language, not by the program. Same program, two behaviours.</div>
@@ -848,7 +848,7 @@ fold_right:  3 − (1 − (4 − 0))  =  6</code></pre>
       <p>Two results: subtraction does care.</p>
     </div>
   </div>
-  <div class="box fragment">The order of applying <code>f</code> is part of the meaning — unless <code>f</code> is <b>associative</b>. Session 9 makes that the condition for running a fold in parallel.</div>
+  <div class="box fragment">The order of applying <code>f</code> is part of the meaning — unless <code>f</code> is <b>associative</b> and the seed is its <b>identity</b>: then only the parenthesisation changes. Session 9 makes that the condition for running a fold in parallel.</div>
   <p class="fragment"><b>Algorithm = Logic + Control</b> (Kowalski, 1979), read off the code: <code>f</code> and <code>z</code> are the logic, <code>fold_left</code> or <code>fold_right</code> the control. With <code>+</code> the control changes only the cost; with <code>−</code> it changes the answer.</p>
   <aside class="notes">Kowalski's claim that control "only affects efficiency" holds exactly when the logic is order-independent — associative here. The next slide shows both orders as one picture.</aside>
 </section>

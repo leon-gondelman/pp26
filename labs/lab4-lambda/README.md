@@ -123,7 +123,7 @@ step_cbn : term -> term option
 **A2** Call-by-value, weak. The function part first, until it is a value; then the argument,
 until it is a value; then the redex. `is_value`, provided, says that a `λ` is a value and an
 application is not — and so is a free variable such as `a`: it cannot be reduced, so call by
-value must treat it as done. That is what lets the checks use `a` and `b` as placeholders.
+value must treat it as done. That is what lets the checks use `a` and `b` as placeholders: for the open terms in our tests we additionally treat variables as values; for closed programs the distinction disappears and the slide rules apply as written.
 
 ```ocaml
 step_cbv : term -> term option
