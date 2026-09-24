@@ -53,7 +53,7 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="group"><span class="glabel">Lecture</span><ul><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence.pdf">Lecture slides</a></span></li><li class="m-code c-lecture"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">OCaml tour — tour.ml</a></span></li></ul></li><li class="group"><span class="glabel">Warm-up</span><ul><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">Warm-up — the two-list queue, on paper</a></span></li></ul></li><li class="group"><span class="glabel">Quest</span><ul><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Quest — one queue, three languages</a></span></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework c-homework"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">OCaml exercises — homework.ml</a></span></li></ul></li><li class="group"><span class="glabel">Solutions</span><ul><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s2/queue-on-paper-solutions.pdf">Warm-up — the nine paper exercises, worked</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/python/pqueue.py">Part A — the queue in Python</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/ocaml/pqueue.ml">Part C — the queue in OCaml</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/java/PQueue.java">Part E — the queue in Java</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/ocaml/homework.ml">OCaml exercises — homework.ml</a></span></li></ul></li></ul>
+  <ul class="materials"><li class="group"><span class="glabel">Lecture</span><ul><li class="m-code c-lecture"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">OCaml tour — tour.ml</a></span></li><li class="blockhead"><span class="blk">Block 1</span> Block 1 — persistent data structures</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence-block-1.pdf">Slides (PDF)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> Block 2 — introduction to OCaml</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence-block-2.pdf">Slides (PDF)</a></span></li></ul></li><li class="group"><span class="glabel">Warm-up</span><ul><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s2-queue-on-paper.pdf">Warm-up — the two-list queue, on paper</a></span></li></ul></li><li class="group"><span class="glabel">Quest</span><ul><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab2-persistent-queue/index.html">Quest — one queue, three languages</a></span></li></ul></li><li class="group"><span class="glabel">Homework</span><ul><li class="m-homework c-homework"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/homework.ml">OCaml exercises — homework.ml</a></span></li></ul></li><li class="group"><span class="glabel">Solutions</span><ul><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s2/queue-on-paper-solutions.pdf">Warm-up — the nine paper exercises, worked</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/python/pqueue.py">Part A — the queue in Python</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/ocaml/pqueue.ml">Part C — the queue in OCaml</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/java/PQueue.java">Part E — the queue in Java</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s2/ocaml/homework.ml">OCaml exercises — homework.ml</a></span></li></ul></li></ul>
 </section>
 <section class="story">
   <h2>The question</h2>
@@ -106,7 +106,23 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
 </section>
 
 <section>
-  <h2>The lecture, in order</h2>
+  <h2>The lecture, in two blocks</h2>
+  <table class="parts">
+    <tbody>
+      <tr><td class="p">1</td><td><strong>Persistent data structures.</strong>
+          Recipe or definition; a stack twice, the checkpoint trick and where it fails;
+          immutability &rArr; safe sharing &rArr; persistence, in Java and in Python;
+          languages that start persistent.
+          <a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence-block-1.pdf">slides (PDF)</a></td></tr>
+      <tr><td class="p">2</td><td><strong>Introduction to OCaml.</strong>
+          Enough of the language to write the lab: lists and what <code>::</code> shares,
+          <code>match</code>, records, <code>option</code>, how to compile and run &mdash;
+          and the same stack with a <em>mutable</em> record.
+          <a href="https://leon-gondelman.github.io/pp26/slides/s2-persistence-block-2.pdf">slides (PDF)</a></td></tr>
+    </tbody>
+  </table>
+
+  <p class="p">Block&nbsp;1, in order:</p>
   <ol class="arc">
     <li><strong>Recipe or definition.</strong> Two readings of what an
         algorithm is, and why declarative programming needs the second one.</li>
@@ -135,15 +151,16 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
         cell, Haskell with no assignment to take away, and OCaml&rsquo;s
         persistent stack in five lines. No keyword was required in any of
         them: the default did the work.</li>
-    <li><strong>A first look at OCaml.</strong> Enough of the language to
-        write the lab and deliberately no more: lists and what <code>::</code>
-        shares, <code>match</code>, records, <code>option</code> in place of
-        <code>null</code>, and how to compile and run. It closes on the same
-        stack written with a <em>mutable</em> record &mdash; same language,
-        same data, and the whole difference visible in one type.</li>
   </ol>
 
-  <p class="p">The OCaml half is also a program.
+  <p class="p"><strong>Block&nbsp;2 is a first look at OCaml.</strong> Enough of the language to
+     write the lab and deliberately no more: lists and what <code>::</code>
+     shares, <code>match</code>, records, <code>option</code> in place of
+     <code>null</code>, and how to compile and run. It closes on the same
+     stack written with a <em>mutable</em> record &mdash; same language,
+     same data, and the whole difference visible in one type.</p>
+
+  <p class="p">The OCaml block is also a program.
      <a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab2-persistent-queue/tour.ml">tour.ml</a>
      walks the same ten steps in the same order, so the claims made on the
      slides can be checked instead of believed &mdash; structural sharing,
