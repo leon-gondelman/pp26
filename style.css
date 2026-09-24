@@ -153,7 +153,7 @@ code{font:400 .88em/1.4 var(--mono);background:var(--sunk);border:1px solid var(
 /* ---------------------------------------------------------------- sessions table */
 .tablewrap{overflow-x:auto}
 table.sessions{width:100%;border-collapse:collapse;font-size:.9rem;min-width:52rem}
-table.sessions th{text-align:left;font:600 .67rem/1 var(--sans);letter-spacing:.12em;
+table.sessions th{text-align:left;white-space:nowrap;font:600 .67rem/1 var(--sans);letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink3);padding:0 .8rem .7rem;
   border-bottom:1px solid var(--line);vertical-align:top}
 table.sessions th.lab{padding-bottom:.35rem;border-bottom:none;text-align:center}
