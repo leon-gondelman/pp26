@@ -15,6 +15,9 @@ handout PDF under `handouts/`.
 | `s3/ocaml/melody.ml` | lab 3, every part, commented; `main.ml` and `tunes.ml` beside it with all checks on |
 | `s3/s3-warmup-solutions.pdf` | the warm-up sheet, worked |
 | `s3/ocaml/warmup.ml` | the warm-up ladder, solved |
+| `s4/index.html` | lab 4, the warm-up and both parts explained — [read it as a page](https://leon-gondelman.github.io/pp26/solutions/s4/index.html) |
+| `s4/ocaml/lambda.ml` | lab 4, every hole filled, commented; `main.ml` beside it with all 31 checks |
+| `s4/s4-warmup-solutions.pdf` | the warm-up sheet, worked |
 
 The code files are drop-in replacements for the ones with holes in them, and
 they carry more commentary than a solution normally would: the interesting

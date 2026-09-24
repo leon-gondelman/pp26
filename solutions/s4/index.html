@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An Evaluator for the λ-Calculus — solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#f5f4f0; --surface:#ffffff; --surface-2:#eae8e2; --sunken:#f0eeea;
+  --ink:#15171c; --ink-2:#3b4250; --ink-3:#5f6774; --rule:#d8d5cd; --rule-2:#c5c1b8;
+  --queue:#0a5f96; --queue-soft:#e2edf6; --queue-line:#94bcd9;
+  --stack:#7f4e06; --stack-soft:#f6ecd8; --stack-line:#d7b67c;
+  --start:#1b7a45; --exit:#9b2e92; --wall:#adaeaa;
+  --queue-tint:#88b5d4; --stack-tint:#cfa65d;
+  --task:#7a1f2e; --task-soft:#f4e7ea; --task-line:#d2a2ad;
+  --shadow:0 1px 2px rgba(30,26,20,.06), 0 8px 24px -12px rgba(30,26,20,.16);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111318; --surface:#181b22; --surface-2:#232833; --sunken:#14171d;
+    --ink:#e8eaef; --ink-2:#b6bdc9; --ink-3:#8a929f; --rule:#2a2f39; --rule-2:#363c48;
+    --queue:#62b8ee; --queue-soft:#14283a; --queue-line:#2d5a79;
+    --stack:#e3ab55; --stack-soft:#2d2413; --stack-line:#6c572b;
+    --start:#52c283; --exit:#e07cd6; --wall:#4a505a;
+    --queue-tint:#376c90; --stack-tint:#7f6433;
+    --task:#e39aa7; --task-soft:#2f191e; --task-line:#6f3a46;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0f1217; --surface:#161a21; --surface-2:#1d222b; --sunken:#12161c;
+  --ink:#e6eaf0; --ink-2:#b2bac6; --ink-3:#828b99; --rule:#282e38; --rule-2:#333b47;
+  --queue:#5db6ec; --queue-soft:#132738; --queue-line:#2b5876;
+  --stack:#e2a951; --stack-soft:#2c2312; --stack-line:#6b552a;
+  --start:#4fc07f; --exit:#e07ad4; --wall:#464e5a;
+  --queue-tint:#356a8e; --stack-tint:#7d6231;
+  --task:#ff9d8b; --task-soft:#2f1613; --task-line:#7c3c31;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px; line-height:1.62; font-weight:400;
+  text-rendering:optimizeLegibility;
+}
+.wrap{max-width:930px; margin:0 auto; padding:0 28px 96px}
+.col{max-width:660px; margin-left:auto; margin-right:auto}
+.figure-wide + .col{margin-top:34px}
+.compare + .col, .mazes + .legend{margin-top:20px}
+
+/* ---- masthead ---- */
+header.masthead{
+  border-bottom:1px solid var(--rule); background:var(--surface);
+}
+.masthead .wrap{padding-top:44px; padding-bottom:36px}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 18px;
+}
+h1{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:600;
+  font-size:clamp(34px,5.2vw,52px); line-height:1.06; letter-spacing:-.02em;
+  margin:0 0 20px; text-wrap:balance;
+}
+.standfirst{font-size:19px; line-height:1.55; color:var(--ink-2); margin:0; max-width:640px}
+.standfirst strong{font-weight:600; color:var(--ink)}
+
+nav.toc{
+  display:grid; grid-auto-flow:column; grid-template-rows:repeat(4,auto);
+  gap:0 48px; margin-top:32px; max-width:600px;
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; letter-spacing:.03em;
+}
+nav.toc a{
+  color:var(--ink-3); text-decoration:none; padding:5px 0;
+  border-bottom:1px solid transparent; justify-self:start;
+}
+nav.toc a:hover{color:var(--queue); border-bottom-color:var(--queue-line)}
+nav.toc a.assign{color:var(--task); font-weight:500}
+nav.toc a.assign:hover{color:var(--task); border-bottom-color:var(--task-line)}
+
+/* ---- sections ---- */
+section{padding-top:68px}
+h2{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:600;
+  font-size:29px; line-height:1.2; letter-spacing:-.012em; margin:0 0 6px;
+  text-wrap:balance;
+}
+.col h4{
+  font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:15px;
+  letter-spacing:-.004em; color:var(--ink-2); margin:26px 0 6px;
+}
+h3{
+  font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:16px;
+  letter-spacing:-.005em; margin:34px 0 8px;
+}
+h3.sub{
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:20px; font-weight:600;
+  letter-spacing:-.01em; margin:46px 0 10px; padding-top:22px;
+  border-top:1px solid var(--rule);
+}
+.kicker{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 12px;
+  display:flex; align-items:center; gap:12px;
+}
+.kicker::after{content:""; flex:1; height:1px; background:var(--rule); max-width:180px}
+.kicker.task{color:var(--task)}
+.kicker.task::after{background:var(--task-line)}
+.badge{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.12em; text-transform:uppercase; font-weight:600;
+  color:var(--task); background:var(--task-soft); border:1px solid var(--task-line);
+  border-radius:3px; padding:2px 7px; vertical-align:3px; margin-left:10px;
+}
+p{margin:0 0 17px}
+.lede{font-size:18.5px; color:var(--ink-2); margin-bottom:22px}
+
+a{color:var(--queue)}
+a.file{
+  font-family:"IBM Plex Mono",monospace; font-size:.9em; font-weight:500;
+  color:var(--ink); text-decoration:none;
+  border-bottom:1.5px solid var(--queue-line);
+  padding-bottom:1px; white-space:nowrap;
+}
+a.file:hover{color:var(--queue); border-bottom-color:var(--queue); background:var(--queue-soft)}
+a.file::before{content:"↗ "; font-size:.85em; color:var(--ink-3)}
+a:focus-visible, a.file:focus-visible{outline:2px solid var(--queue); outline-offset:3px; border-radius:2px}
+
+code{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.875em;
+  background:color-mix(in srgb,var(--surface-2) 55%,transparent); padding:.1em .3em; border-radius:3px;
+  color:var(--ink);
+  /* a chip never breaks inside an expression: the line breaks before it */
+  white-space:nowrap; -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}
+@media (max-width:600px){ code{white-space:normal} }
+/* a code block on its own: one framed box, not a chip per line */
+pre>code{
+  display:block; padding:14px 16px; overflow-x:auto; white-space:pre;
+  font-size:13.5px; line-height:1.65;
+  background:var(--surface); border:1px solid var(--rule); border-radius:6px;
+  box-shadow:var(--shadow);
+}
+
+/* ---- code blocks ---- */
+figure{margin:26px 0}
+.code{
+  background:var(--surface); border:1px solid var(--rule); border-radius:6px;
+  overflow-x:auto; box-shadow:var(--shadow);
+}
+.code-head{
+  display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+  padding:9px 16px; border-bottom:1px solid var(--rule);
+  background:var(--sunken); border-radius:6px 6px 0 0;
+  font-family:"IBM Plex Mono",monospace; font-size:12px;
+  position:sticky; left:0;
+}
+.code-head .path{font-weight:500}
+.code-head .lines{color:var(--ink-3); letter-spacing:.03em; white-space:nowrap}
+.code pre{
+  margin:0; padding:16px; font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  font-size:13.5px; line-height:1.65; color:var(--ink);
+}
+.code .c{color:var(--ink-3)}
+.code .hl{
+  display:inline-block; width:100%;
+  background:var(--queue-soft); box-shadow:-6px 0 0 var(--queue-soft), inset 3px 0 0 var(--queue);
+  padding-left:3px; margin-left:-3px;
+}
+.code .hl-s{
+  display:inline-block; width:100%;
+  background:var(--stack-soft); box-shadow:-6px 0 0 var(--stack-soft), inset 3px 0 0 var(--stack);
+  padding-left:3px; margin-left:-3px;
+}
+figcaption{
+  font-size:14px; color:var(--ink-3); margin-top:10px; line-height:1.5;
+  max-width:640px;
+}
+figcaption b{color:var(--ink-2); font-weight:600}
+
+/* ---- diagram ---- */
+.figure-wide{margin:30px 0 0}
+.diagram{
+  background:var(--surface); border:1px solid var(--rule); border-radius:8px;
+  padding:22px 18px 14px; box-shadow:var(--shadow); overflow-x:auto;
+}
+.diagram svg{display:block; width:100%; min-width:620px; height:auto}
+.d-box{fill:var(--surface-2); stroke:var(--rule-2); stroke-width:1}
+.d-box-solver{fill:var(--surface-2); stroke:var(--ink-3); stroke-width:1.5}
+.d-box-q{fill:var(--queue-soft); stroke:var(--queue-line); stroke-width:1.5}
+.d-box-s{fill:var(--stack-soft); stroke:var(--stack-line); stroke-width:1.5}
+.d-name{font-family:"IBM Plex Mono",monospace; font-size:14px; font-weight:500; fill:var(--ink)}
+.d-sub{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; fill:var(--ink-3)}
+.d-sub-q{fill:var(--queue)} .d-sub-s{fill:var(--stack)}
+.d-band{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.13em; fill:var(--ink-3)}
+.d-edge{stroke:var(--rule-2); stroke-width:1.5; fill:none}
+.d-edge-q{stroke:var(--queue-line); stroke-width:1.5; fill:none}
+.d-edge-s{stroke:var(--stack-line); stroke-width:1.5; fill:none}
+.d-arrow{fill:var(--rule-2)} .d-arrow-q{fill:var(--queue-line)} .d-arrow-s{fill:var(--stack-line)}
+.d-note{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; font-style:italic; fill:var(--ink-3)}
+
+/* ---- two-up compare ---- */
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0}
+.panel{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:18px 20px 20px; box-shadow:var(--shadow); min-width:0;
+}
+.panel.q{border-top:3px solid var(--queue)}
+.panel.s{border-top:3px solid var(--stack)}
+.panel h4{
+  margin:0 0 2px; font-family:"IBM Plex Mono",monospace; font-size:13.5px; font-weight:600;
+}
+.panel.q h4{color:var(--queue)} .panel.s h4{color:var(--stack)}
+.panel .role{font-size:12.5px; color:var(--ink-3); margin:0 0 14px; line-height:1.45}
+.panel p{font-size:15px; margin:0 0 12px}
+.panel p:last-child{margin-bottom:0}
+.panel pre{
+  margin:0 0 12px; font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+  line-height:1.6; background:var(--surface); border:1px solid var(--rule);
+  border-radius:5px; padding:12px; overflow-x:auto; color:var(--ink);
+}
+.panel pre .c{color:var(--ink-3)}
+
+/* ---- interface table ---- */
+.iface{
+  width:100%; border-collapse:collapse; margin:24px 0 8px;
+  font-family:"IBM Plex Mono",monospace; font-size:13px;
+}
+.iface th{
+  text-align:left; font-weight:600; font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); padding:0 14px 8px 0;
+  border-bottom:1px solid var(--rule-2); white-space:nowrap;
+}
+.iface th.q{color:var(--queue)} .iface th.s{color:var(--stack)}
+.iface td{padding:9px 14px 9px 0; border-bottom:1px solid var(--rule); vertical-align:baseline}
+.iface td:first-child{color:var(--ink-2)}
+.iface td.q{color:var(--queue); font-weight:500}
+.iface td.s{color:var(--stack); font-weight:500}
+.iface tr:last-child td{border-bottom:none}
+
+/* ---- results table ---- */
+.results{
+  width:100%; border-collapse:collapse; margin:22px 0 8px; font-size:14px;
+  font-variant-numeric:tabular-nums;
+}
+.results caption{
+  text-align:left; font-size:12.5px; color:var(--ink-3); padding-bottom:10px;
+  font-family:"IBM Plex Mono",monospace;
+}
+.results th{
+  text-align:right; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600; padding:0 0 8px 18px;
+  border-bottom:1px solid var(--rule-2);
+}
+.results th:first-child{text-align:left; padding-left:0}
+.results th.q{color:var(--queue)} .results th.s{color:var(--stack)}
+.results td{text-align:right; padding:10px 0 10px 18px; border-bottom:1px solid var(--rule)}
+.results td:first-child{
+  text-align:left; padding-left:0; font-family:"IBM Plex Mono",monospace; font-size:13px;
+}
+.results td .dim{color:var(--ink-3); font-size:12px}
+.results td.q{color:var(--queue); font-weight:500}
+.results td.s{color:var(--stack); font-weight:500}
+.results tr:last-child td{border-bottom:none}
+
+/* ---- maze renders ---- */
+.mazes{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0 0}
+.maze-card{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:16px 16px 14px; box-shadow:var(--shadow); overflow-x:auto; min-width:0;
+}
+.maze-card h4{
+  margin:0 0 3px; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600;
+}
+.maze-card.q h4{color:var(--queue)} .maze-card.s h4{color:var(--stack)}
+.maze-card .stat{font-size:12.5px; color:var(--ink-3); margin:0 0 12px}
+.maze{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:12px;
+  line-height:1.02; white-space:pre; margin:0; letter-spacing:0;
+}
+.maze .w{color:var(--wall)}
+.maze .o{color:transparent}
+.maze-card.q .maze .v{color:var(--queue-tint)}
+.maze-card.s .maze .v{color:var(--stack-tint)}
+.maze .p-q{color:var(--queue); font-weight:600}
+.maze .p-s{color:var(--stack); font-weight:600}
+.maze .s{color:var(--start); font-weight:600}
+.maze .e{color:var(--exit); font-weight:600}
+.legend{
+  display:flex; flex-wrap:wrap; gap:6px 18px; margin:16px 0 0;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-3);
+}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{font-style:normal; font-size:13px}
+
+/* ---- callout ---- */
+.callout{
+  border-left:3px solid var(--stack); background:var(--stack-soft);
+  padding:16px 20px; border-radius:0 6px 6px 0; margin:26px 0;
+}
+.callout p{margin:0; font-size:15.5px; color:var(--ink-2)}
+.callout p + p{margin-top:10px}
+.callout strong{color:var(--ink); font-weight:600}
+
+/* ---- run block ---- */
+.shell{
+  background:var(--sunken); border:1px solid var(--rule); border-radius:6px;
+  padding:16px 18px; overflow-x:auto; box-shadow:var(--shadow);
+  font-family:"IBM Plex Mono",monospace; font-size:13px; line-height:1.9;
+}
+.shell .prompt{color:var(--ink-3); user-select:none}
+.shell .c{color:var(--ink-3)}
+.shell div{white-space:pre}
+
+/* ---- checkpoints ---- */
+ul.marks{list-style:none; padding:0; margin:18px 0}
+ul.marks li{
+  padding:12px 0 12px 30px; border-bottom:1px solid var(--rule); position:relative;
+  font-size:16px;
+}
+ul.marks li:last-child{border-bottom:none}
+ul.marks li::before{
+  content:"—"; position:absolute; left:0; top:12px; color:var(--queue);
+  font-family:"IBM Plex Mono",monospace;
+}
+ul.marks b{font-weight:600}
+
+footer{
+  margin-top:80px; padding-top:26px; border-top:1px solid var(--rule);
+  font-size:13.5px; color:var(--ink-3); line-height:1.6;
+}
+footer p{margin:0 0 8px; max-width:640px}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .compare, .mazes{grid-template-columns:1fr}
+  .wrap{padding:0 20px 72px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}
+
+/* ================= session-page additions ================= */
+
+/* ---- masthead course link ---- */
+.eyebrow a{color:inherit; text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.eyebrow a:hover{color:var(--queue); border-bottom-color:var(--queue)}
+
+/* ---- objectives ---- */
+.objectives{
+  display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0 8px;
+}
+.obj{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:16px 18px 18px; box-shadow:var(--shadow); min-width:0;
+}
+.obj h4{
+  margin:0 0 10px; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.obj ul{margin:0; padding-left:18px}
+.obj li{font-size:14.5px; line-height:1.5; margin-bottom:8px; color:var(--ink-2)}
+.obj li:last-child{margin-bottom:0}
+.obj li b{color:var(--ink); font-weight:600}
+
+/* ---- in-class / homework split ---- */
+.split{
+  display:grid; grid-template-columns:1fr 1fr; gap:0; margin:26px 0 0;
+  border:1px solid var(--rule); border-radius:8px; overflow:hidden;
+  background:var(--surface); box-shadow:var(--shadow);
+}
+.split > div{padding:16px 20px 18px}
+.split > div + div{border-left:1px solid var(--rule); background:var(--sunken)}
+.split h4{
+  margin:0 0 8px; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.13em; text-transform:uppercase; font-weight:600;
+}
+.split .now h4{color:var(--queue)}
+.split .later h4{color:var(--stack)}
+.split p{font-size:14.5px; margin:0; color:var(--ink-2); line-height:1.55}
+.split code{font-size:.85em}
+
+/* ---- session forward-link chip ---- */
+.sn{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.06em; text-transform:uppercase; white-space:nowrap;
+  color:var(--stack); background:var(--stack-soft);
+  border:1px solid var(--stack-line); border-radius:3px;
+  padding:1px 5px; margin-left:6px; vertical-align:1px; font-weight:500;
+}
+
+/* ---- cross-language table ---- */
+.xwrap{overflow-x:auto; margin:26px 0 8px; -webkit-overflow-scrolling:touch}
+.xlang{
+  border-collapse:collapse; font-size:13.5px; min-width:760px; width:100%;
+}
+.xlang th{
+  text-align:left; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.11em; text-transform:uppercase; font-weight:600;
+  color:var(--ink-3); padding:0 16px 9px 0; border-bottom:1px solid var(--rule-2);
+  vertical-align:bottom;
+}
+.xlang th.py{color:var(--queue)} .xlang th.ml{color:var(--start)} .xlang th.jv{color:var(--stack)}
+.xlang td{
+  padding:11px 16px 11px 0; border-bottom:1px solid var(--rule);
+  vertical-align:top; line-height:1.45;
+}
+.xlang td:first-child{
+  color:var(--ink-3); font-size:12.5px; width:20%;
+  font-family:"IBM Plex Mono",monospace;
+}
+.xlang tbody tr:hover td{background:var(--surface-2)}
+.xlang tr:last-child td{border-bottom:none}
+.xlang tr.count td{font-weight:600; color:var(--ink)}
+.xlang tr.count td:first-child{color:var(--ink-2)}
+.xlang code{font-size:.86em; white-space:nowrap}
+.xlang .no{color:var(--ink-3); font-style:italic}
+
+/* ---- route cards ---- */
+.routes{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:26px 0 0}
+.routes.two{grid-template-columns:repeat(2,1fr); max-width:660px; margin-left:auto; margin-right:auto}
+.routes.one{grid-template-columns:1fr; max-width:660px; margin-left:auto; margin-right:auto}
+.route{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  padding:16px 18px 18px; box-shadow:var(--shadow); min-width:0;
+  display:flex; flex-direction:column;
+}
+.route.py{border-top:3px solid var(--queue)}
+.route.ml{border-top:3px solid var(--start)}
+.route.jv{border-top:3px solid var(--stack)}
+.route h4{
+  margin:0 0 2px; font-family:"IBM Plex Mono",monospace;
+  font-size:14px; font-weight:600;
+}
+.route.py h4{color:var(--queue)} .route.ml h4{color:var(--start)} .route.jv h4{color:var(--stack)}
+.route .part{font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-3); font-family:"IBM Plex Mono",monospace; margin:0 0 12px}
+.route p{font-size:14px; margin:0 0 12px; color:var(--ink-2); line-height:1.5}
+.route pre{
+  margin:0 0 12px; font-family:"IBM Plex Mono",monospace; font-size:11.5px;
+  line-height:1.75; background:var(--sunken); border:1px solid var(--rule);
+  border-radius:5px; padding:10px 12px; color:var(--ink);
+  white-space:pre-wrap; overflow-wrap:anywhere;
+}
+.route .links{margin-top:auto; padding-top:4px; font-size:13px; line-height:1.5}
+.route .links span{display:block; margin-bottom:6px}
+.route .links span:last-child{margin-bottom:0}
+.route .todo{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3);
+  border-top:1px solid var(--rule); padding-top:10px; margin-top:4px;
+}
+.route .soon{color:var(--ink-3); font-style:italic; font-size:13px}
+
+/* ---- demo ---- */
+.demo{
+  border:1px solid var(--rule); border-radius:8px; background:var(--surface);
+  box-shadow:var(--shadow); padding:18px 18px 14px; margin:26px 0 0;
+}
+.demo-boards{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.board{min-width:0}
+.board h4{
+  margin:0 0 2px; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600;
+}
+.board.q h4{color:var(--queue)} .board.s h4{color:var(--stack)}
+.board .stat{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3);
+  margin:0 0 10px; font-variant-numeric:tabular-nums;
+}
+.board canvas{
+  display:block; width:100%; height:auto;
+  border:1px solid var(--rule); border-radius:4px; background:var(--sunken);
+}
+.demo-bar{
+  display:flex; align-items:center; gap:14px; margin-top:16px;
+  padding-top:14px; border-top:1px solid var(--rule);
+}
+.demo-bar button{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:500;
+  color:var(--ink); background:var(--surface-2);
+  border:1px solid var(--rule-2); border-radius:5px;
+  padding:5px 14px; cursor:pointer; min-width:76px;
+}
+.demo-bar button:hover{border-color:var(--queue); color:var(--queue)}
+.demo-bar button:focus-visible{outline:2px solid var(--queue); outline-offset:2px}
+.demo-bar input[type=range]{flex:1; min-width:0; accent-color:var(--queue)}
+.demo-bar .step{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-3);
+  white-space:nowrap; font-variant-numeric:tabular-nums; min-width:96px; text-align:right;
+}
+
+/* ---- related work ---- */
+ul.refs{list-style:none; padding:0; margin:18px 0 0}
+ul.refs li{
+  padding:11px 0; border-bottom:1px solid var(--rule);
+  font-size:14.5px; line-height:1.5; color:var(--ink-2);
+}
+ul.refs li:last-child{border-bottom:none}
+ul.refs b{color:var(--ink); font-weight:600}
+ul.refs .where{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3);
+  display:block; margin-top:2px;
+}
+
+@media (max-width:760px){
+  .objectives, .split, .routes, .routes.two, .demo-boards{grid-template-columns:1fr}
+  nav.toc{grid-auto-flow:row; grid-template-rows:none}
+  .split > div + div{border-left:none; border-top:1px solid var(--rule)}
+}
+/* ---- lab rail (generated; edit the injector, not this) -----------------
+   Wide screens: the rail is an absolute left column spanning the page. Its
+   top block is decoration, sized to the masthead by script, so the menu
+   begins level with section 00; the menu itself is sticky, so the snippet
+   scrolls away and the navigation stays. Narrow screens: a compact block of
+   links, and the page keeps its own boxed contents list under the standfirst. */
+:root{--labrail:21rem; --masthead-h:340px}
+.labrail{background:var(--surface); border-right:1px solid var(--rule);
+  padding:22px 20px 28px; font-size:14.5px; line-height:1.5; z-index:20}
+@media (min-width:1180px){
+  body{position:relative; padding-left:var(--labrail)}
+  .labrail{position:absolute; left:0; top:0; bottom:0; width:var(--labrail);
+    padding:0}
+  .lr-art{height:var(--masthead-h); padding:26px 22px; display:flex;
+    flex-direction:column; justify-content:flex-end; overflow:hidden}
+  .lr-nav{position:sticky; top:0; max-height:100vh; overflow-y:auto;
+    padding:22px 20px 28px}
+  header.masthead nav.toc{display:none}   /* it lives in the rail up here */
+}
+.lr-art svg{width:100%; height:auto; display:block}
+.lr-art .cap{font:500 10.5px/1.4 "IBM Plex Sans",sans-serif; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); border-top:1px solid var(--rule);
+  padding-top:10px; margin:14px 0 0}
+.lr-art{display:none}
+@media (min-width:1180px){.lr-art{display:flex}}
+
+.labrail .lr-brand{display:block; text-decoration:none; color:var(--ink);
+  margin-bottom:20px}
+.labrail .lr-brand .up{display:block; font:500 11px/1 "IBM Plex Mono",monospace;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px}
+.labrail .lr-brand b{font:600 16px/1.28 "IBM Plex Sans",sans-serif; letter-spacing:-.01em}
+.labrail h2{display:flex; align-items:center; gap:10px;
+  font:600 11.5px/1 "IBM Plex Sans",sans-serif; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink); margin:26px 0 10px; padding:0; border:0}
+.labrail h2::after{content:""; flex:1; height:1px; background:var(--rule-2)}
+.labrail .lr-nav>div:first-of-type h2{margin-top:18px}
+.labrail ul{list-style:none; margin:0; padding:0}
+.labrail a.lr{display:block; padding:6px 10px; border-radius:7px;
+  text-decoration:none; color:var(--ink-2); font-size:14.5px}
+.labrail a.lr:hover{background:var(--sunken); color:var(--ink)}
+.labrail a.lr[aria-current]{background:var(--queue-soft); color:var(--queue); font-weight:600}
+.labrail a.lr code{font:500 13.5px/1.5 "IBM Plex Mono",monospace; background:none;
+  padding:0; color:inherit}
+
+.labrail a.lr .t{display:block}
+.labrail a.lr .d{display:block; font:400 12px/1.35 "IBM Plex Sans",sans-serif;
+  color:var(--ink-3); margin-top:1px}
+.labrail a.lr[aria-current] .d{color:var(--queue); opacity:.85; font-weight:400}
+
+/* The assignment itself, first: one line per part, letter in mono, the parts
+   where code gets written in the lab's task colour; run-and-watch parts muted. */
+.labrail .lr-todo a{display:grid; grid-template-columns:2.4rem 1fr; gap:0 6px;
+  align-items:baseline; padding:5px 10px; border-radius:7px; text-decoration:none;
+  color:var(--ink-2)}
+.labrail .lr-todo a:hover{background:var(--sunken); color:var(--ink)}
+.labrail .lr-todo .k{font:500 12.5px/1.5 "IBM Plex Mono",monospace; color:var(--ink-3);
+  letter-spacing:.02em}
+.labrail .lr-todo .t{font-size:14.5px; font-weight:600}
+.labrail .lr-todo .d{grid-column:2; font:400 12px/1.35 "IBM Plex Sans",sans-serif;
+  color:var(--ink-3); margin-top:1px}
+.labrail .lr-todo .d code{font:500 11.5px/1.4 "IBM Plex Mono",monospace; background:none;
+  padding:0; color:inherit}
+.labrail .lr-todo a.do .k,.labrail .lr-todo a.do .t{color:var(--task)}
+.labrail .lr-todo a.do:hover{background:var(--task-soft)}
+.labrail .lr-readme{margin:6px 0 0; padding:0 10px; font-size:12.5px}
+.labrail .lr-readme a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.labrail .lr-readme a:hover{color:var(--task); border-color:var(--task-line)}
+
+/* A helper note sits under the guide it serves: indented, on a hairline,
+   lighter weight — subordinate, not equal. */
+.labrail li.sub a.lr{margin-left:12px; padding-left:12px; border-left:2px solid var(--rule);
+  border-radius:0 7px 7px 0}
+.labrail li.sub a.lr .t{font-weight:400; font-size:13.5px}
+.labrail li.sub a.lr[aria-current]{border-left-color:var(--queue)}
+
+/* This page's own sections, in the page's own voice: mono, numbered, with the
+   assignment marker the boxed list used. The current one lights up on scroll. */
+.labrail .lr-toc a{display:block; padding:5.5px 10px; border-radius:7px;
+  text-decoration:none; font:400 14px/1.45 "IBM Plex Mono",monospace;
+  letter-spacing:.02em; color:var(--ink-3)}
+.labrail .lr-toc a:hover{background:var(--sunken); color:var(--queue)}
+.labrail .lr-toc a.on{background:var(--queue-soft); color:var(--queue); font-weight:500}
+.labrail .lr-toc a.assign{color:var(--task); font-weight:500}
+.labrail .lr-toc a.assign.on{background:var(--task-soft); color:var(--task)}
+
+.labrail .lr-foot{margin:24px 0 0; padding-top:15px; border-top:1px solid var(--rule);
+  font-size:13px}
+.labrail .lr-foot a{color:var(--ink-3); text-decoration:none}
+.labrail .lr-foot a:hover{color:var(--queue)}
+@media (max-width:1179px){
+  /* Narrow: the lab is long-form reading, so the navigation goes AFTER it
+     rather than ahead of it. The page already names itself in its masthead
+     and keeps its own boxed contents list, so nothing is lost from the top. */
+  body{display:flex; flex-direction:column}
+  .labrail{order:99; position:static; width:auto; border-right:0;
+    border-top:1px solid var(--rule); border-bottom:0; display:grid;
+    align-items:start; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:0 24px}
+  .labrail .lr-nav{display:contents}
+  .labrail .lr-brand{grid-column:1/-1}
+  .labrail .lr-sections{display:none}
+  .labrail h2{margin-top:16px}
+  .labrail .lr-foot{grid-column:1/-1}
+}
+</style>
+<style>
+.music{border:1px solid var(--rule); border-left:4px solid var(--queue); background:var(--queue-soft); padding:14px 20px; border-radius:6px; margin:18px 0}
+.music h3{margin:0 0 8px; font-size:15px; letter-spacing:.04em; text-transform:uppercase; color:var(--queue)}
+.music ul{margin:0; padding-left:1.2em}
+table.parts{width:100%; border-collapse:collapse; margin:14px 0 22px; font-size:15.5px}
+table.parts th{text-align:left; border-bottom:2px solid var(--rule-2); padding:6px 10px 8px 0; font-weight:600}
+table.parts td{border-bottom:1px solid var(--rule); padding:8px 10px 8px 0; vertical-align:top}
+table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; color:var(--ink-3)}
+</style>
+<style id="hilite">
+/* Pygments token colours (tools/hilite.py); the same palette as the slides. */
+.hl-code .k,.hl-code .kd,.hl-code .kn,.hl-code .kr,.hl-code .kp,.hl-code .ow{color:#2a6f97}
+.hl-code .kt,.hl-code .nc,.hl-code .nn,.hl-code .nb,.hl-code .bp{color:#c05a0e}
+.hl-code .s,.hl-code .s1,.hl-code .s2,.hl-code .sb,.hl-code .sc,.hl-code .se,.hl-code .sd{color:#0f8a2f}
+.hl-code .c,.hl-code .c1,.hl-code .cm,.hl-code .cp{color:#6f7f84;font-style:italic}
+.hl-code .m,.hl-code .mi,.hl-code .mf,.hl-code .mh{color:#7a3e9d}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .hl-code .k,:root:not([data-theme="light"]) .hl-code .kd,:root:not([data-theme="light"]) .hl-code .kn,:root:not([data-theme="light"]) .hl-code .kr,:root:not([data-theme="light"]) .hl-code .kp,:root:not([data-theme="light"]) .hl-code .ow{color:#7fb3e0}
+  :root:not([data-theme="light"]) .hl-code .kt,:root:not([data-theme="light"]) .hl-code .nc,:root:not([data-theme="light"]) .hl-code .nn,:root:not([data-theme="light"]) .hl-code .nb,:root:not([data-theme="light"]) .hl-code .bp{color:#f0a060}
+  :root:not([data-theme="light"]) .hl-code .s,:root:not([data-theme="light"]) .hl-code .s1,:root:not([data-theme="light"]) .hl-code .s2,:root:not([data-theme="light"]) .hl-code .sb,:root:not([data-theme="light"]) .hl-code .sc,:root:not([data-theme="light"]) .hl-code .se,:root:not([data-theme="light"]) .hl-code .sd{color:#5fd37f}
+  :root:not([data-theme="light"]) .hl-code .c,:root:not([data-theme="light"]) .hl-code .c1,:root:not([data-theme="light"]) .hl-code .cm,:root:not([data-theme="light"]) .hl-code .cp{color:#8a929f}
+  :root:not([data-theme="light"]) .hl-code .m,:root:not([data-theme="light"]) .hl-code .mi,:root:not([data-theme="light"]) .hl-code .mf,:root:not([data-theme="light"]) .hl-code .mh{color:#c39be0}
+}
+:root[data-theme="dark"] .hl-code .k,:root[data-theme="dark"] .hl-code .kd,:root[data-theme="dark"] .hl-code .kn,:root[data-theme="dark"] .hl-code .kr,:root[data-theme="dark"] .hl-code .kp,:root[data-theme="dark"] .hl-code .ow{color:#7fb3e0}
+:root[data-theme="dark"] .hl-code .kt,:root[data-theme="dark"] .hl-code .nc,:root[data-theme="dark"] .hl-code .nn,:root[data-theme="dark"] .hl-code .nb,:root[data-theme="dark"] .hl-code .bp{color:#f0a060}
+:root[data-theme="dark"] .hl-code .s,:root[data-theme="dark"] .hl-code .s1,:root[data-theme="dark"] .hl-code .s2,:root[data-theme="dark"] .hl-code .sb,:root[data-theme="dark"] .hl-code .sc,:root[data-theme="dark"] .hl-code .se,:root[data-theme="dark"] .hl-code .sd{color:#5fd37f}
+:root[data-theme="dark"] .hl-code .c,:root[data-theme="dark"] .hl-code .c1,:root[data-theme="dark"] .hl-code .cm,:root[data-theme="dark"] .hl-code .cp{color:#8a929f}
+:root[data-theme="dark"] .hl-code .m,:root[data-theme="dark"] .hl-code .mi,:root[data-theme="dark"] .hl-code .mf,:root[data-theme="dark"] .hl-code .mh{color:#c39be0}
+</style>
+</head>
+<body>
+<!-- pp26:labrail -->
+<aside class="labrail">
+  <div class="lr-nav">
+    <a class="lr-brand" href="https://homes.cs.aau.dk/~lego/pp26/s4.html">
+      <span class="up">PP26 &middot; Session 4</span><b>Lab 4 &mdash; Solutions</b></a>
+      <div class="lr-sections">
+        <h2>On this page</h2>
+        <ul class="lr-toc"><li><a href="#use">00 · how to use these</a></li><li><a href="#paper">01 · warm-up, on paper</a></li><li><a href="#code">02 · warm-up, in code</a></li><li><a href="#part-a">03 · part A</a></li><li><a href="#part-b">04 · part B</a></li><li><a href="#extensions">05 · the extensions</a></li></ul>
+      </div>
+      <div>
+        <h2>Code</h2>
+        <ul>
+          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/lambda.ml"><code>lambda.ml</code> — every hole filled, commented</a></li>
+          <li><a class="lr" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/main.ml"><code>main.ml</code> — the 31 checks</a></li>
+        </ul>
+      </div>
+      <p class="lr-foot"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html">&larr; the lab</a> &nbsp;·&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/">Programming Paradigms</a></p>
+  </div>
+</aside>
+<!-- /pp26:labrail -->
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow"><a href="https://homes.cs.aau.dk/~lego/pp26/">PP26</a> &nbsp;·&nbsp; <a href="https://homes.cs.aau.dk/~lego/pp26/s4.html">Session 4</a> &nbsp;·&nbsp; lab 4 &nbsp;·&nbsp; solutions</p>
+    <h1>An Evaluator for the λ-Calculus — solutions</h1>
+    <p class="standfirst">The five paper exercises reduced step by step, then every hole of <code>lambda.ml</code> filled with the reasoning next to the code. The code without the commentary is about forty lines; the interesting part of each function is which case it is in and what that case decides. The two evaluation strategies are two <code>match</code> functions that differ in one clause each.</p>
+    <nav class="toc">
+      <a href="#use">00 · how to use these</a>
+      <a href="#paper">01 · warm-up, on paper</a>
+      <a href="#code">02 · warm-up, in code</a>
+      <a href="#part-a">03 · part A</a>
+      <a href="#part-b">04 · part B</a>
+      <a href="#extensions">05 · the extensions</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="use">
+  <div class="col">
+    <p class="kicker">00 — how to use these</p>
+    <h2>One file, and a way to read it</h2>
+    <p><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/lambda.ml"><code>lambda.ml</code></a> is a drop-in replacement for the file with the holes; copy it over ours and <code>dune exec ./main.exe</code> reports 31 passes. It carries more comments than a solution normally would, because the point of each function is <em>why</em> its cases are what they are.</p>
+    <p>The paper solutions below write one β-step per line and name the redex. Where a definition such as <code>if</code> or <code>succ</code> is unfolded, the line says so; unfolding a name is not a β-step, only a convenience of writing.</p>
+    <p>A note on notation: <code>λx y. t</code> abbreviates <code>λx. λy. t</code>, and application groups to the left, so <code>f a b</code> is <code>(f a) b</code>.</p>
+  </div>
+</section>
+
+<section id="paper">
+  <div class="col">
+    <p class="kicker">01 — warm-up, on paper</p>
+    <h2>Five reductions</h2>
+
+    <h3>P1 — <code>((λx. λy. x y) (λz. z z)) (λw. w)</code></h3>
+    <pre><code>(λx. λy. x y) (λz. z z) (λw. w)
+→ (λy. (λz. z z) y) (λw. w)        x := λz. z z
+→ (λz. z z) (λw. w)                y := λw. w
+→ (λw. w) (λw. w)                  z := λw. w
+→ λw. w                            w := λw. w</code></pre>
+    <p>Four β-steps; the normal form is the identity. Every step here reduces the leftmost-outermost redex, but at no point was there a second one to choose from, so every strategy takes the same path.</p>
+
+    <h3>P2 — <code>(λx. λy. x y) y</code></h3>
+    <p>In <code>λx. λy. x y</code>, <code>x</code> and <code>y</code> are bound. In the whole term, the argument <code>y</code> is free — it is a different <code>y</code> from the bound one, which only happens to have the same name.</p>
+    <p>Substituting naively gives <code>λy. y y</code>: the free <code>y</code> has fallen under the <code>λy</code> and is now bound — <em>captured</em>; the term no longer mentions the outer <code>y</code> at all. So the binder is renamed first:</p>
+    <pre><code>(λx. λy. x y) y  =  (λx. λy'. x y') y      α: y → y' inside the function
+→ λy'. y y'                                 x := y</code></pre>
+    <p>The normal form is <code>λy'. y y'</code>, with the left <code>y</code> still free. Whether we write <code>y'</code>, <code>z</code> or <code>w</code> for the renamed binder does not matter: terms that differ only in the names of bound variables are the same term.</p>
+
+    <h3>P3 — <code>(λx. I) Ω</code>, two orders</h3>
+    <p>With <code>I = λz. z</code> and <code>Ω = (λu. u u) (λu. u u)</code>. The term has two redexes: the outer application, and <code>Ω</code> itself inside the argument.</p>
+    <p><b>Normal order</b> (leftmost-outermost first): the outer redex is <code>(λx. I) Ω</code>; <code>x</code> does not occur in <code>I</code>, so the argument is thrown away.</p>
+    <pre><code>(λx. I) Ω
+→ I  =  λz. z                     x := Ω, and x is not used</code></pre>
+    <p><b>Applicative order</b> (leftmost-innermost first): the innermost redex is <code>Ω</code>, so it must be reduced before the outer application — and <code>Ω</code> reduces to itself.</p>
+    <pre><code>(λx. I) ((λu. u u) (λu. u u))
+→ (λx. I) ((λu. u u) (λu. u u))   u := λu. u u  — the same term
+→ (λx. I) ((λu. u u) (λu. u u))
+→ …                                forever</code></pre>
+    <p>Why: normal order never evaluates an argument that is not used; applicative order evaluates every argument, used or not. A normal form exists (<code>λz. z</code>) and normal order finds it; applicative order never reaches it. This is the lecture's <em>Does the order matter?</em>, on paper.</p>
+
+    <h3>P4 — <code>if true a b</code> and <code>if false a b</code></h3>
+    <p>Unfold <code>if = λc. λt. λe. c t e</code> and <code>true = λt. λf. t</code>:</p>
+    <pre><code>(λc. λt. λe. c t e) true a b
+→ (λt. λe. true t e) a b           c := true
+→ (λe. true a e) b                 t := a
+→ true a b                         e := b
+=  (λt. λf. t) a b                 unfold true
+→ (λf. a) b                        t := a
+→ a                                f := b</code></pre>
+    <p>With <code>false = λt. λf. f</code> the last two steps give <code>(λf. f) b → b</code>. So <code>if</code> does nothing but pass the two branches to the boolean, and the boolean is the one that chooses: a boolean <em>is</em> a two-way choice.</p>
+
+    <h3>P5 — <code>succ 1</code></h3>
+    <p>Unfold <code>succ = λn. λf. λx. f (n f x)</code> and <code>1 = λf. λx. f x</code>:</p>
+    <pre><code>(λn. λf. λx. f (n f x)) (λf. λx. f x)
+→ λf. λx. f ((λf. λx. f x) f x)     n := 1
+→ λf. λx. f ((λx. f x) x)           the inner f := f
+→ λf. λx. f (f x)                   the inner x := x</code></pre>
+    <p>The normal form is <code>λf. λx. f (f x)</code>: <code>f</code> applied twice, which is the numeral <code>2</code>. Note that the last two steps reduce <em>inside</em> a <code>λ</code>; a weak strategy — the one real languages use — would stop after the first step and leave <code>λf. λx. f ((λf. λx. f x) f x)</code>, which is <code>2</code> too, only not yet written out.</p>
+  </div>
+</section>
+
+<section id="code">
+  <div class="col">
+    <p class="kicker">02 — warm-up, in code</p>
+    <h2>The term as data</h2>
+
+    <h3>W1 — <code>size</code></h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">size</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="nc">Var</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="mi">1</span>
+  <span class="o">|</span> <span class="nc">Lam</span> <span class="o">(_,</span> <span class="n">t</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">size</span> <span class="n">t</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">size</span> <span class="n">f</span> <span class="o">+</span> <span class="n">size</span> <span class="n">a</span></code></pre>
+    <p>One case per constructor, one recursive call per sub-term — the shape of every function on this type, and the same shape as <code>count_notes</code> on session 3's melody tree.</p>
+
+    <h3>W2 — <code>free_vars</code></h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">free_vars</span> <span class="n">t</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">fv</span> <span class="o">=</span> <span class="k">match</span> <span class="n">t</span> <span class="k">with</span>
+    <span class="o">|</span> <span class="nc">Var</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="o">[</span><span class="n">x</span><span class="o">]</span>
+    <span class="o">|</span> <span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="o">(</span><span class="k">fun</span> <span class="n">y</span> <span class="o">-&gt;</span> <span class="n">y</span> <span class="o">&lt;&gt;</span> <span class="n">x</span><span class="o">)</span> <span class="o">(</span><span class="n">free_vars</span> <span class="n">b</span><span class="o">)</span>
+    <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">free_vars</span> <span class="n">f</span> <span class="o">@</span> <span class="n">free_vars</span> <span class="n">a</span>
+  <span class="k">in</span> <span class="nn">List</span><span class="p">.</span><span class="n">sort_uniq</span> <span class="n">compare</span> <span class="n">fv</span></code></pre>
+    <p>The three equations of the lecture, line for line: a variable is free in itself; a <code>λ</code> removes its own variable from the free variables of its body; an application collects both sides. <code>sort_uniq</code> at the end makes the result a set, so <code>x (λx. x)</code> gives <code>[x]</code> — the first <code>x</code> is free although the second is bound.</p>
+
+    <h3>W3 — <code>is_closed</code></h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="n">is_closed</span> <span class="n">t</span> <span class="o">=</span> <span class="n">free_vars</span> <span class="n">t</span> <span class="o">=</span> <span class="bp">[]</span></code></pre>
+
+    <h3>W4 — <code>subst</code></h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">subst</span> <span class="n">t</span> <span class="n">x</span> <span class="n">u</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">t</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="nc">Var</span> <span class="n">y</span> <span class="o">-&gt;</span> <span class="k">if</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="k">then</span> <span class="n">u</span> <span class="k">else</span> <span class="n">t</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">App</span> <span class="o">(</span><span class="n">subst</span> <span class="n">f</span> <span class="n">x</span> <span class="n">u</span><span class="o">,</span> <span class="n">subst</span> <span class="n">a</span> <span class="n">x</span> <span class="n">u</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Lam</span> <span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span>
+      <span class="k">if</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="k">then</span> <span class="n">t</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nn">List</span><span class="p">.</span><span class="n">mem</span> <span class="n">y</span> <span class="o">(</span><span class="n">free_vars</span> <span class="n">u</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nn">List</span><span class="p">.</span><span class="n">mem</span> <span class="n">x</span> <span class="o">(</span><span class="n">free_vars</span> <span class="n">b</span><span class="o">)</span> <span class="k">then</span>
+        <span class="k">let</span> <span class="n">y&#39;</span> <span class="o">=</span> <span class="n">fresh</span> <span class="n">y</span> <span class="o">(</span><span class="n">free_vars</span> <span class="n">u</span> <span class="o">@</span> <span class="n">free_vars</span> <span class="n">b</span><span class="o">)</span> <span class="k">in</span>
+        <span class="nc">Lam</span> <span class="o">(</span><span class="n">y&#39;</span><span class="o">,</span> <span class="n">subst</span> <span class="o">(</span><span class="n">subst</span> <span class="n">b</span> <span class="n">y</span> <span class="o">(</span><span class="nc">Var</span> <span class="n">y&#39;</span><span class="o">))</span> <span class="n">x</span> <span class="n">u</span><span class="o">)</span>
+      <span class="k">else</span> <span class="nc">Lam</span> <span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">subst</span> <span class="n">b</span> <span class="n">x</span> <span class="n">u</span><span class="o">)</span></code></pre>
+    <p>The <code>Lam</code> case has three outcomes, and the order of the tests matters.</p>
+    <ul>
+      <li><code>y = x</code>: the <code>λ</code> binds the very variable we are replacing, so nothing inside it is a <em>free</em> <code>x</code>. Return the term unchanged — <code>(λx. x)[x := y]</code> is <code>λx. x</code>.</li>
+      <li><code>y</code> is free in <code>u</code> <em>and</em> <code>x</code> is free in <code>b</code>: putting <code>u</code> into <code>b</code> would place a free <code>y</code> under this <code>λy</code> — capture. Pick a name <code>y'</code> that is free in neither <code>u</code> nor <code>b</code> — <code>fresh y (free_vars u @ free_vars b)</code>, provided just above <code>subst</code>, adds primes to <code>y</code> until the name is in neither list — rename the binder (<code>subst b y (Var y')</code> is safe: <code>y'</code> is fresh, so it cannot itself be captured), then substitute.</li>
+      <li>otherwise: substitute in the body and keep the binder. This includes the case where <code>y</code> is free in <code>u</code> but <code>x</code> does not occur in <code>b</code> at all — then nothing is substituted, so nothing can be captured, and renaming would be needless. That is what the check <code>(λy. x y)[x := λz. z]</code> tests: <code>z</code> is bound in <code>u</code>, not free, so no renaming.</li>
+    </ul>
+    <p>Renaming eagerly (whenever <code>y</code> is free in <code>u</code>) is also correct, only noisier. Renaming never — the "first attempt" of most people — produces <code>λy. y</code> for <code>(λy. x)[x := y]</code>, and the check catches it.</p>
+  </div>
+</section>
+
+<section id="part-a">
+  <div class="col">
+    <p class="kicker">03 — part A</p>
+    <h2>Small-step evaluation: three strategies, one clause apart</h2>
+
+    <h3>A1 — call by name, weak</h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">step_cbn</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">),</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="n">subst</span> <span class="n">b</span> <span class="n">x</span> <span class="n">a</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="k">match</span> <span class="n">step_cbn</span> <span class="n">f</span> <span class="k">with</span> <span class="nc">Some</span> <span class="n">f&#39;</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="nc">App</span> <span class="o">(</span><span class="n">f&#39;</span><span class="o">,</span> <span class="n">a</span><span class="o">))</span> <span class="o">|</span> <span class="nc">None</span> <span class="o">-&gt;</span> <span class="nc">None</span><span class="o">)</span>
+  <span class="o">|</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="nc">None</span></code></pre>
+    <p>Two rules, as on the lecture's <em>Small-step operational semantics: the rules</em>: if the function part is a <code>λ</code>, β — the argument goes in <em>unevaluated</em>; otherwise step in the function part. A <code>Var</code> or a <code>Lam</code> steps nowhere: weak reduction never enters a <code>λ</code>, and never touches the argument of an application.</p>
+
+    <h3>A2 — call by value, weak</h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">step_cbv</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="k">when</span> <span class="n">not</span> <span class="o">(</span><span class="n">is_value</span> <span class="n">f</span><span class="o">)</span> <span class="o">-&gt;</span>
+      <span class="o">(</span><span class="k">match</span> <span class="n">step_cbv</span> <span class="n">f</span> <span class="k">with</span> <span class="nc">Some</span> <span class="n">f&#39;</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="nc">App</span> <span class="o">(</span><span class="n">f&#39;</span><span class="o">,</span> <span class="n">a</span><span class="o">))</span> <span class="o">|</span> <span class="nc">None</span> <span class="o">-&gt;</span> <span class="nc">None</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="k">when</span> <span class="n">not</span> <span class="o">(</span><span class="n">is_value</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span>
+      <span class="o">(</span><span class="k">match</span> <span class="n">step_cbv</span> <span class="n">a</span> <span class="k">with</span> <span class="nc">Some</span> <span class="n">a&#39;</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a&#39;</span><span class="o">))</span> <span class="o">|</span> <span class="nc">None</span> <span class="o">-&gt;</span> <span class="nc">None</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">),</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="n">subst</span> <span class="n">b</span> <span class="n">x</span> <span class="n">a</span><span class="o">)</span>
+  <span class="o">|</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="nc">None</span></code></pre>
+    <p>The two <code>when</code> guards are the premises of the two congruence rules: the function part must be a value before the argument is looked at, and the argument must be a value before β fires. That is the whole difference from A1 — one extra clause, the second one — and it is what makes <code>(λx. λy. y) Ω</code> loop: <code>Ω</code> is the argument, it is not a value, so <code>step_cbv</code> keeps stepping it, and it steps to itself.</p>
+    <p>The two strategies part company on the first step of <code>(λx. x) ((λy. y) z)</code>: call by name reduces the outer redex first, <code>(λy. y) z</code>; call by value the inner one, <code>(λx. x) z</code>. Both reach <code>z</code>.</p>
+
+    <h3>A3 — normal order, full</h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">step_normal</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">),</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="n">subst</span> <span class="n">b</span> <span class="n">x</span> <span class="n">a</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span>
+      <span class="o">(</span><span class="k">match</span> <span class="n">step_normal</span> <span class="n">f</span> <span class="k">with</span>
+       <span class="o">|</span> <span class="nc">Some</span> <span class="n">f&#39;</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="nc">App</span> <span class="o">(</span><span class="n">f&#39;</span><span class="o">,</span> <span class="n">a</span><span class="o">))</span>
+       <span class="o">|</span> <span class="nc">None</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="k">match</span> <span class="n">step_normal</span> <span class="n">a</span> <span class="k">with</span> <span class="nc">Some</span> <span class="n">a&#39;</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a&#39;</span><span class="o">))</span> <span class="o">|</span> <span class="nc">None</span> <span class="o">-&gt;</span> <span class="nc">None</span><span class="o">))</span>
+  <span class="o">|</span> <span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="k">match</span> <span class="n">step_normal</span> <span class="n">b</span> <span class="k">with</span> <span class="nc">Some</span> <span class="n">b&#39;</span> <span class="o">-&gt;</span> <span class="nc">Some</span> <span class="o">(</span><span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b&#39;</span><span class="o">))</span> <span class="o">|</span> <span class="nc">None</span> <span class="o">-&gt;</span> <span class="nc">None</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">Var</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="nc">None</span></code></pre>
+    <p>Call by name plus two clauses: when the function part is stuck, step in the argument; and step inside a <code>λ</code>. This is the strategy of the paper exercises — it reduces everywhere, leftmost-outermost first — and the one that finds a normal form whenever there is one. It is what <code>normalize</code> uses to turn <code>add 2 1</code> into <code>λf x. f (f (f x))</code>, which <code>church_to_int</code> reads as <code>3</code>; <code>Y fact 3</code> reaches <code>6</code> in about two thousand steps, most of them spent inside <code>pred</code>.</p>
+  </div>
+</section>
+
+<section id="part-b">
+  <div class="col">
+    <p class="kicker">04 — part B</p>
+    <h2>Big-step evaluation: environments and closures</h2>
+
+    <h3>B1 — <code>eval</code></h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">eval</span> <span class="n">env</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="nc">Var</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="k">match</span> <span class="nn">List</span><span class="p">.</span><span class="n">assoc_opt</span> <span class="n">x</span> <span class="n">env</span> <span class="k">with</span> <span class="nc">Some</span> <span class="n">v</span> <span class="o">-&gt;</span> <span class="n">v</span> <span class="o">|</span> <span class="nc">None</span> <span class="o">-&gt;</span> <span class="n">failwith</span> <span class="o">(</span><span class="s2">&quot;unbound variable &quot;</span> <span class="o">^</span> <span class="n">x</span><span class="o">))</span>
+  <span class="o">|</span> <span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Closure</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">env</span><span class="o">)</span>
+  <span class="o">|</span> <span class="nc">App</span> <span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">a</span><span class="o">)</span> <span class="o">-&gt;</span>
+      <span class="k">let</span> <span class="nc">Closure</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">env&#39;</span><span class="o">)</span> <span class="o">=</span> <span class="n">eval</span> <span class="n">env</span> <span class="n">f</span> <span class="k">in</span>
+      <span class="k">let</span> <span class="n">v</span> <span class="o">=</span> <span class="n">eval</span> <span class="n">env</span> <span class="n">a</span> <span class="k">in</span>
+      <span class="n">eval</span> <span class="o">((</span><span class="n">x</span><span class="o">,</span> <span class="n">v</span><span class="o">)</span> <span class="o">::</span> <span class="n">env&#39;</span><span class="o">)</span> <span class="n">b</span></code></pre>
+    <p>No substitution anywhere. A variable is looked up; a <code>λ</code> is not run but packaged with the environment <em>it was made in</em>; an application evaluates the function to a closure, the argument to a value (call by value: the argument first, always), and then the closure's body in the closure's own environment <code>env'</code>, extended with the parameter.</p>
+    <p>The third check is the one that tells <code>env'</code> from <code>env</code>: in <code>(λx. (λf. (λx. f x) (λw. w)) (λy. x)) (λz. z)</code> the inner function <code>λy. x</code> is <em>made</em> where <code>x</code> is <code>λz. z</code> but <em>called</em> where <code>x</code> is <code>λw. w</code>. Using the caller's environment gives the wrong answer; that mistake has a name, dynamic scope, and it is what every language before Scheme got wrong.</p>
+    <p>So the answer to the lab's closing question: a closure carries the bindings of the free variables of its body, as they were when the <code>λ</code> was evaluated. Session 5 starts from this: a closure with a mutable binding inside is an object.</p>
+
+    <h3>B2 — <code>readback</code></h3>
+    <pre><code class="hl-code language-ocaml"><span class="k">let</span> <span class="k">rec</span> <span class="n">readback</span> <span class="o">(</span><span class="nc">Closure</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">env</span><span class="o">))</span> <span class="o">=</span>
+  <span class="nc">Lam</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="nn">List</span><span class="p">.</span><span class="n">fold_left</span> <span class="o">(</span><span class="k">fun</span> <span class="n">t</span> <span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">v</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="k">if</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="k">then</span> <span class="n">t</span> <span class="k">else</span> <span class="n">subst</span> <span class="n">t</span> <span class="n">y</span> <span class="o">(</span><span class="n">readback</span> <span class="n">v</span><span class="o">))</span> <span class="n">b</span> <span class="n">env</span><span class="o">)</span></code></pre>
+    <p>The inverse move: put the environment back into the body, one binding at a time, each value read back into a term first. The one subtlety is <code>if y = x then t</code>: a binding of the closure's own parameter in <code>env</code> is shadowed by the <code>λx</code> and must be skipped, or an old <code>x</code> would be substituted into a body where <code>x</code> means the parameter. Because every closure comes from a closed program, the read-back terms are closed, and <code>subst</code> never has to rename.</p>
+    <p>With it, <code>normalize (readback (eval [] (parse "add 2 1")))</code> is the numeral <code>3</code>, and <code>Z factv 3</code> evaluates to <code>6</code> — through closures, without a single substitution during evaluation. <code>Z fact 3</code> does not stop: <code>eval</code> is call by value, and <code>fact</code>'s two branches are both arguments of <code>if</code>.</p>
+  </div>
+</section>
+
+<section id="extensions">
+  <div class="col">
+    <p class="kicker">05 — the extensions</p>
+    <h2>Hints, not solutions</h2>
+    <ul>
+      <li><b>Church arithmetic.</b> <code>exp = λm n. n m</code> (apply "times m" n times); <code>iszero = λn. n (λx. false) true</code>. <code>pred</code> is long because a numeral can only count up: it counts from <code>(0, 0)</code> through pairs <code>(k, k+1)</code> and keeps the first component.</li>
+      <li><b><code>Y</code> and <code>Z</code>.</b> Under call by value <code>Y g</code> steps <code>(λx. g (x x)) (λx. g (x x))</code> to <code>g ((λx. g (x x)) (λx. g (x x)))</code>, whose argument is the same redex again: the trace repeats with one more <code>g</code> each time. <code>Z</code> puts a <code>λv.</code> in front of <code>x x</code>, so it is a value and the trace stops there — but <code>fact</code>'s branches are still both evaluated, hence <code>factv</code>.</li>
+      <li><b>Full normalisation under call by value.</b> Once <code>step_cbv</code> returns <code>None</code> on <code>Lam (x, b)</code>, continue with <code>b</code>. The two normalisers agree whenever both terminate; they differ on terms like <code>(λx. λy. y) Ω</code>, where only the normal-order one does.</li>
+      <li><b>De Bruijn indices.</b> <code>Lam of term</code> with no name and <code>Var of int</code>; substitution becomes shifting of indices and needs no <code>fresh</code>. The conversion from named terms carries a list of the binders in scope.</li>
+      <li><b>A small ML.</b> Add <code>Int</code>, <code>Add</code>, <code>If</code>, <code>Let</code> to <code>term</code> and <code>VInt</code> to <code>value</code>; <code>If</code> must evaluate only one branch — it is the one place where the evaluator decides not to be call by value. This is the program session 10 gives a type checker.</li>
+      <li><b>Meta-circular.</b> <code>VFun of (value -> value)</code>: <code>eval env (Lam (x, b)) = VFun (fun v -> eval ((x, v) :: env) b)</code>. What is lost is <code>readback</code>: an OCaml function cannot be inspected, only called — session 3's Way 2, exactly.</li>
+    </ul>
+  </div>
+
+  <footer class="col">
+    <p><b>Files:</b> <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/lambda.ml">lambda.ml</a> (solution) · <a class="file" href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/main.ml">main.ml</a> · <a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html">the lab</a></p>
+    <p style="margin-top:16px">Programming Paradigms, session 4 — functional programming and control.</p>
+  </footer>
+</section>
+
+</main>
+<script>/* pp26:labrail-spy — size the rail's top block to the masthead,
+   and mark the section the reader is in */
+(function(){var m=document.querySelector("header.masthead");
+if(m)document.documentElement.style.setProperty("--masthead-h",m.offsetHeight+"px");
+var L=[].slice.call(document.querySelectorAll(".lr-toc a"));if(!L.length)return;
+var S=L.map(function(a){return document.getElementById(a.hash.slice(1))});
+function up(){var c=-1;for(var i=0;i<S.length;i++){if(S[i]&&S[i].getBoundingClientRect().top<=140)c=i}
+if(c<0)c=0;for(var j=0;j<L.length;j++)L[j].classList.toggle("on",j===c)}
+addEventListener("scroll",up,{passive:true});
+addEventListener("resize",function(){if(m)document.documentElement.style.setProperty("--masthead-h",m.offsetHeight+"px");up()});
+up()})();
+</script>
+</body>
+</html>

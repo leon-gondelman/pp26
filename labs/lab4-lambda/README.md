@@ -42,8 +42,8 @@ dune exec ./main.exe        # pass / FAIL / todo, one line per check
 ```
 
 Each hole is a `failwith "TODO …"`; `main.ml` reports it as *todo* until it is filled, then
-as *pass* or *FAIL*. `dune utop` (or `ocaml`, then `#use "term.ml";; #use "syntax.ml";;
-#use "lambda.ml";;`) lets us try terms by hand: `trace CBN 20 (Syntax.parse "(λx. λy. y) Ω")`.
+as *pass* or *FAIL*. `dune utop` (or `ocaml`, then `#mod_use "term.ml";; #mod_use "syntax.ml";;
+#use "lambda.ml";;`) lets us try terms by hand, once W4 is done: `trace CBN 20 (Syntax.parse "(λx. λy. y) Ω")`.
 
 ## Warm-up, on paper
 
@@ -93,8 +93,9 @@ sub-cases:
 
 - If `y` is not free in `u` (or `x` is not free in `b`), substitute in the body.
 - Otherwise a free `y` of `u` would be **captured** by the `λy`. Rename the binder first:
-  pick a `y'` that is free in neither `u` nor `b` (`fresh` is provided), replace `y` by `y'`
-  in `b`, then substitute.
+  pick a `y'` that is free in neither `u` nor `b`, replace `y` by `y'` in `b`, then
+  substitute. `fresh y avoid`, provided just above `subst`, returns `y` with primes added
+  until it is not in the list `avoid`: `fresh "y" ["y"; "y'"]` is `"y''"`.
 
 ```ocaml
 subst : term -> string -> term -> term
@@ -120,8 +121,9 @@ step_cbn : term -> term option
 ```
 
 **A2** Call-by-value, weak. The function part first, until it is a value; then the argument,
-until it is a value; then the redex. `is_value`, provided, says that a `λ` (or an unknown
-variable) is a value and an application is not.
+until it is a value; then the redex. `is_value`, provided, says that a `λ` is a value and an
+application is not — and so is a free variable such as `a`: it cannot be reduced, so call by
+value must treat it as done. That is what lets the checks use `a` and `b` as placeholders.
 
 ```ocaml
 step_cbv : term -> term option
@@ -157,7 +159,9 @@ and env = (string * value) list
 `λ` becomes a closure over the *current* environment; an application evaluates the function
 to a closure, evaluates the argument to a value, and evaluates the closure's body in the
 closure's environment extended with the parameter bound to the value — the closure's
-environment, not the caller's.
+environment, not the caller's. Put the new binding at the front of the list: the checks compare
+environments structurally. `eval` is for closed terms; a free variable raises `unbound variable`
+— free variables are Part A's business.
 
 ```ocaml
 eval : env -> term -> value
@@ -168,7 +172,9 @@ The third B1 check is the one that tells the two apart. Once it passes, look at 
 `x`. *What does the closure carry?* is session 5's first question.
 
 **B2** `readback`: a closure back into a term, by substituting every binding of its
-environment into its body (`subst` from W4 does the work). Then `normalize (readback (eval []
+environment into its body (`subst` from W4 does the work). One trap: a binding of the
+closure's own parameter may sit in the environment; it is shadowed by the `λ` and must be
+skipped, or an old `x` is substituted into a body where `x` means the parameter. Then `normalize (readback (eval []
 (Syntax.parse "add 2 1")))` is the numeral 3, and `Z factv 3` — the lecture's call-by-value
 factorial, whose branches are delayed — evaluates to 6. Try `Z fact 3`, whose branches are
 not delayed, and stop it with Ctrl-C.
