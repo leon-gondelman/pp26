@@ -162,10 +162,13 @@ table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
   vertical-align:middle}
 td.date{width:5.2rem;padding-right:1.6rem;white-space:nowrap;color:var(--ink3);
   font:500 .79rem/1 var(--mono);font-variant-numeric:tabular-nums}
-td.ttl a{font-weight:600;text-decoration:none;color:var(--ink);font-size:.945rem}
+/* hanging indents: a wrapped title lines up with its own first word, not with
+   the session number; a wrapped block title with its own text, not the chip */
+td.ttl a{display:block;padding-left:1.5rem;text-indent:-1.5rem;
+  font-weight:600;text-decoration:none;color:var(--ink);font-size:.945rem}
 td.ttl a:hover{color:var(--acc)}
-td.ttl .n{color:var(--ink3);font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums;
-  margin-right:.15rem}
+td.ttl .n{display:inline-block;width:1.5rem;text-indent:0;color:var(--ink3);
+  font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums}
 td.ttl{width:32%;min-width:16rem}
 td.mat{width:auto}
 td.mat .none{color:var(--faint)}
@@ -180,8 +183,8 @@ tr.done td.date{color:var(--ink3)}
 tr.has-blocks td.ttl,tr.has-blocks td.blocks{border-bottom:none;padding-bottom:.2rem}
 tr.block td{border-bottom:none;padding-top:.12rem;padding-bottom:.12rem}
 tr.block.last td{border-bottom:1px solid var(--line-soft);padding-bottom:.75rem}
-tr.block td.ttl{padding-left:2.55rem;font-size:.84rem;color:var(--ink2)}
-.blk{display:inline-block;min-width:3.6rem;font:500 .64rem/1 var(--mono);letter-spacing:.08em;
+tr.block td.ttl{padding-left:calc(2.55rem + 3.9rem);text-indent:-3.9rem;font-size:.84rem;color:var(--ink2)}
+.blk{display:inline-block;width:3.6rem;margin-right:.3rem;text-indent:0;font:500 .64rem/1 var(--mono);letter-spacing:.08em;
   text-transform:uppercase;color:var(--ink3)}
 td.ttl .blk-m{display:none}
 
@@ -329,7 +332,9 @@ footer.site .meta a:hover{text-decoration:underline}
   table.sessions tr.now td.date{box-shadow:none}
   /* blocks: the phone copy inside the title cell shows, the sub-rows hide */
   table.sessions tr.block{display:none}
-  table.sessions td.ttl .blk-m{display:block;margin-top:.45rem;font-size:.9rem;color:var(--ink2)}
+  table.sessions td.ttl .blk-m{display:block;margin-top:.45rem;font-size:.9rem;color:var(--ink2);
+    padding-left:3.9rem;text-indent:-3.9rem}
+  table.sessions td.ttl .blk-m .mat{text-indent:0}
   table.sessions td.ttl .blk-m .mat{padding:.15rem 0 0}
 }
 @media (max-width:980px){
