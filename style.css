@@ -158,11 +158,11 @@ table.sessions th{text-align:left;white-space:nowrap;font:600 .67rem/1 var(--san
   border-bottom:1px solid var(--line);vertical-align:top}
 table.sessions th.lab{padding-bottom:.35rem;border-bottom:none;text-align:center}
 /* the lab's two halves are framed by two very faint rules */
-table.sessions th.lab,table.sessions .col-warmup{border-left:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
-table.sessions th.lab,table.sessions .col-quest{border-right:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
+table.sessions th.lab,table.sessions .col-warmup{border-left:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+table.sessions th.lab,table.sessions .col-quest{border-right:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
 /* homework is the last column, apart from what precedes it by the same faint rule */
-table.sessions .col-homework{border-left:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
-table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:.3rem}
+table.sessions .col-homework{border-left:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.7;padding-top:.3rem}
 table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
   vertical-align:top}
 table.sessions td.date{padding-top:.85rem}
@@ -202,11 +202,11 @@ td.ttl .blk-m{display:none}
   transition:filter .12s ease,border-color .12s ease}
 .dl:hover{filter:brightness(.96);border-color:var(--ink3)}
 /* one chip, several parts, each a link; a plain stage word may lead */
-.dl.grp .lbl{margin-right:.15em;font-weight:500;opacity:.55}
+.dl.grp .lbl{margin-right:.15em;font-weight:500;opacity:.7}
 .dl.c-solutions.grp{display:block;width:max-content}
 .dl.grp a{color:inherit;text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}
 .dl.grp a:hover{text-decoration-thickness:2px}
-.dl.grp .sep{opacity:.55;margin:0 .35em}
+.dl.grp .sep{opacity:.7;margin:0 .35em}
 .dl.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
 .dl.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
 .dl.c-quest{color:var(--lab);background:var(--lab-b);border-color:transparent}
