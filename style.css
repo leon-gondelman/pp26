@@ -164,9 +164,10 @@ td.date{width:5.2rem;padding-right:1.6rem;white-space:nowrap;color:var(--ink3);
   font:500 .79rem/1 var(--mono);font-variant-numeric:tabular-nums}
 /* hanging indents: a wrapped title lines up with its own first word, not with
    the session number; a wrapped block title with its own text, not the chip */
-td.ttl a{display:block;padding-left:1.5rem;text-indent:-1.5rem;
+td.ttl>a{display:block;padding-left:1.5rem;text-indent:-1.5rem;
   font-weight:600;text-decoration:none;color:var(--ink);font-size:.945rem}
-td.ttl a:hover{color:var(--acc)}
+td.ttl>a:hover{color:var(--acc)}
+td.ttl .mat a.dl{font-size:.705rem}
 td.ttl .n{display:inline-block;width:1.5rem;text-indent:0;color:var(--ink3);
   font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums}
 td.ttl{width:32%;min-width:16rem}
