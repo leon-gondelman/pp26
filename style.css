@@ -119,21 +119,18 @@ main{min-width:0;display:flex;flex-direction:column}
 
 /* ---------------------------------------------------------------- hero */
 .hero{margin-bottom:2.2rem}
-/* six paintings around the introduction: three down each side, spread to the
-   text's height; on a narrower screen they become one row under the title */
-.hero .cols{display:grid;grid-template-columns:8.5rem minmax(0,38rem) 8.5rem;gap:2rem;align-items:stretch}
-.hero .art{display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
-.hero .art img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;
-  border-radius:8px;border:1px solid var(--line)}
-@media (max-width:1240px){
-  .hero .cols{display:flex;flex-wrap:wrap;gap:.6rem;max-width:44rem}
-  .hero .art{display:contents}
-  .hero .art img{flex:1 1 calc((100% - 3rem)/6);width:auto;min-width:0}
-  .hero .text{flex-basis:100%;order:1;margin-top:1rem}
-}
-@media (max-width:600px){.hero .art img{flex-basis:calc((100% - 1.2rem)/3)}}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero .art img{filter:brightness(.86) saturate(.95)}}
-:root[data-theme="dark"] .hero .art img{filter:brightness(.86) saturate(.95)}
+/* the index masthead: the painting's middle strip across the full column, above the title */
+figure.masthead{margin:0 0 2.2rem}
+figure.masthead img{display:block;width:100%;height:auto;aspect-ratio:3/1;object-fit:cover;object-position:50% 50%;
+  border-radius:12px;border:1px solid var(--line)}
+@media (max-width:760px){figure.masthead img{aspect-ratio:2/1}}
+/* a session page: its painting beside the title and the lead */
+.hero.with-art{display:grid;grid-template-columns:minmax(0,1fr) 12.5rem;gap:2.4rem;align-items:center}
+.hero figure.art{margin:0}
+.hero figure.art img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+@media (max-width:760px){.hero.with-art{grid-template-columns:1fr}.hero figure.art{max-width:14rem}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) :is(figure.masthead img,.hero figure.art img){filter:brightness(.86) saturate(.95)}}
+:root[data-theme="dark"] :is(figure.masthead img,.hero figure.art img){filter:brightness(.86) saturate(.95)}
 h1{font:500 clamp(2.1rem,4.4vw,2.95rem)/1.08 var(--serif);letter-spacing:-.015em;
   margin:0 0 .55rem}
 .hero .sub{margin:0 0 1.7rem;font-size:.92rem;color:var(--ink3)}
