@@ -119,6 +119,13 @@ main{min-width:0;display:flex;flex-direction:column}
 
 /* ---------------------------------------------------------------- hero */
 .hero{margin-bottom:2.2rem}
+/* the text beside the painting: two columns when there is room, stacked when not */
+.hero .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(15rem,21rem);gap:2.4rem;align-items:start}
+.hero figure.art{margin:.3rem 0 0}
+.hero figure.art img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+@media (max-width:1180px){.hero .cols{grid-template-columns:1fr}.hero figure.art{max-width:30rem}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero figure.art img{filter:brightness(.86) saturate(.95)}}
+:root[data-theme="dark"] .hero figure.art img{filter:brightness(.86) saturate(.95)}
 h1{font:500 clamp(2.1rem,4.4vw,2.95rem)/1.08 var(--serif);letter-spacing:-.015em;
   margin:0 0 .55rem}
 .hero .sub{margin:0 0 1.7rem;font-size:.92rem;color:var(--ink3)}
