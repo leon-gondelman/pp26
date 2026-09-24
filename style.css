@@ -171,7 +171,7 @@ td.date{width:5.2rem;padding-right:1.6rem;white-space:nowrap;color:var(--ink3);
 td.ttl>a{display:block;padding-left:1.5rem;text-indent:-1.5rem;
   font-weight:600;text-decoration:none;color:var(--ink);font-size:.945rem}
 td.ttl>a:hover{color:var(--acc)}
-td.ttl .mat a.dl{font-size:.705rem}
+td.ttl .mat .dl{font-size:.705rem}
 td.ttl .n{display:inline-block;width:1.5rem;text-indent:0;color:var(--ink3);
   font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums}
 td.ttl{width:30%;min-width:16rem}
@@ -194,16 +194,21 @@ tr.block td.ttl{padding-left:calc(2.55rem + 3.9rem);text-indent:-3.9rem;font-siz
 td.ttl .blk-m{display:none}
 
 /* material chips, coloured by what the thing is */
-a.dl{display:inline-block;white-space:nowrap;text-decoration:none;margin:.1rem .2rem .1rem 0;
+.dl{display:inline-block;white-space:nowrap;text-decoration:none;margin:.1rem .2rem .1rem 0;
   font:600 .705rem/1 var(--sans);letter-spacing:.005em;padding:.44em .58em;border-radius:5px;
   background:var(--sunk);color:var(--ink2);border:1px solid var(--line);
   transition:filter .12s ease,border-color .12s ease}
-a.dl:hover{filter:brightness(.96);border-color:var(--ink3)}
-a.dl.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
-a.dl.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
-a.dl.c-quest{color:var(--lab);background:var(--lab-b);border-color:transparent}
-a.dl.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
-a.dl.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
+.dl:hover{filter:brightness(.96);border-color:var(--ink3)}
+/* one chip, two formats: the label is plain, the formats are the links */
+.dl.grp .lbl{margin-right:.35em}
+.dl.grp a{color:inherit;text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}
+.dl.grp a:hover{text-decoration-thickness:2px}
+.dl.grp .sep{opacity:.55;margin:0 .35em}
+.dl.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
+.dl.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
+.dl.c-quest{color:var(--lab);background:var(--lab-b);border-color:transparent}
+.dl.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
+.dl.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 
 /* ---------------------------------------------------------------- session pages */
 /* Materials. Same visual language as the index: a tinted pill per item,
