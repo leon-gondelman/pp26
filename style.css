@@ -50,9 +50,12 @@
 }
 
 *{box-sizing:border-box}
-html{-webkit-font-smoothing:antialiased}
+/* The whole layout is in rem, so the root size scales it with the screen:
+   15.5px on a 13" laptop, ~17px on a 24" display, capped at 19.5px so an
+   ultrawide does not keep growing. Phone rules below start under the range. */
+html{-webkit-font-smoothing:antialiased;font-size:clamp(15.5px,0.55rem + 0.5vw,19.5px)}
 body{margin:0;background:var(--bg);color:var(--ink);
-  font:400 15.5px/1.62 var(--sans);
+  font:400 1rem/1.62 var(--sans);
   display:grid;grid-template-columns:var(--rail) minmax(0,1fr);min-height:100vh}
 a{color:var(--acc)}
 a:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
@@ -106,7 +109,7 @@ main{min-width:0;display:flex;flex-direction:column}
 .topbar .theme[data-mode="auto"] [data-t="auto"],
 .topbar .theme[data-mode="light"] [data-t="light"],
 .topbar .theme[data-mode="dark"] [data-t="dark"]{display:inline}
-.inner{padding:2.6rem 3rem 4.5rem;max-width:64rem;flex:1}
+.inner{padding:2.6rem 3rem 4.5rem;max-width:64rem;flex:1;width:100%;box-sizing:border-box;margin-inline:auto}
 /* The schedule carries four columns of chips and is the one block that wants
    more room than the reading measure; let it use the width the rail leaves. */
 .inner>section#sessions{max-width:none;width:min(78rem,100%)}
@@ -347,6 +350,12 @@ footer.site .meta a:hover{text-decoration:underline}
   footer.site{padding:1.6rem 1.4rem 2.4rem}
   footer.site .meta{margin-left:0;text-align:left}
   .field{grid-template-columns:1fr;gap:.1rem}
+}
+/* wide screens: the column is centred by .inner's margin; here it also gets
+   a little more room and the schedule uses all of it */
+@media (min-width:1600px){
+  .inner{max-width:70rem}
+  .inner>section#sessions{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
