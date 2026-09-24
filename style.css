@@ -202,8 +202,6 @@ td.ttl .blk-m{display:none}
 /* one chip, several parts, each a link; a plain stage word may lead */
 .dl.grp .lbl{margin-right:.15em;font-weight:500;opacity:.55}
 .dl.c-solutions.grp{display:block;width:max-content}
-/* the stage words share one width, so the parts line up down the column */
-.dl.c-solutions.grp .lbl{display:inline-block;width:5.5em;margin-right:0}
 .dl.grp a{color:inherit;text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}
 .dl.grp a:hover{text-decoration-thickness:2px}
 .dl.grp .sep{opacity:.55;margin:0 .35em}
