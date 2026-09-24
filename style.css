@@ -199,8 +199,7 @@ td.ttl .blk-m{display:none}
   background:var(--sunk);color:var(--ink2);border:1px solid var(--line);
   transition:filter .12s ease,border-color .12s ease}
 .dl:hover{filter:brightness(.96);border-color:var(--ink3)}
-/* one chip, two formats: the label is plain, the formats are the links */
-.dl.grp .lbl{margin-right:.35em}
+/* one chip, two formats, each a link */
 .dl.grp a{color:inherit;text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}
 .dl.grp a:hover{text-decoration-thickness:2px}
 .dl.grp .sep{opacity:.55;margin:0 .35em}
