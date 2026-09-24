@@ -135,12 +135,15 @@ a:focus-visible, a.file:focus-visible{outline:2px solid var(--queue); outline-of
 
 code{
   font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.875em;
-  background:var(--surface-2); padding:.12em .34em; border-radius:3px;
+  background:color-mix(in srgb,var(--surface-2) 55%,transparent); padding:.1em .3em; border-radius:3px;
   color:var(--ink);
+  /* a chip never breaks inside an expression: the line breaks before it */
+  white-space:nowrap; -webkit-box-decoration-break:clone; box-decoration-break:clone;
 }
+@media (max-width:600px){ code{white-space:normal} }
 /* a code block on its own: one framed box, not a chip per line */
 pre>code{
-  display:block; padding:14px 16px; overflow-x:auto;
+  display:block; padding:14px 16px; overflow-x:auto; white-space:pre;
   font-size:13.5px; line-height:1.65;
   background:var(--surface); border:1px solid var(--rule); border-radius:6px;
   box-shadow:var(--shadow);
