@@ -200,7 +200,7 @@ td.ttl .blk-m{display:none}
   transition:filter .12s ease,border-color .12s ease}
 .dl:hover{filter:brightness(.96);border-color:var(--ink3)}
 /* one chip, several parts, each a link; a plain stage word may lead */
-.dl.grp .lbl{margin-right:.4em;font-weight:500;opacity:.55}
+.dl.grp .lbl{margin-right:.15em;font-weight:500;opacity:.55}
 .dl.c-solutions.grp{display:block;width:max-content}
 .dl.grp a{color:inherit;text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}
 .dl.grp a:hover{text-decoration-thickness:2px}
