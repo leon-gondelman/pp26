@@ -157,16 +157,16 @@ table.sessions th.lab{padding-bottom:.35rem;border-bottom:none;text-align:center
 /* the lab's two halves are framed by two very faint rules */
 table.sessions th.lab,table.sessions .col-warmup{border-left:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
 table.sessions th.lab,table.sessions .col-quest{border-right:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
-table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:0}
+table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:.3rem}
 table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
   vertical-align:middle}
-td.date{width:5.2rem;white-space:nowrap;color:var(--ink3);
+td.date{width:5.2rem;padding-right:1.6rem;white-space:nowrap;color:var(--ink3);
   font:500 .79rem/1 var(--mono);font-variant-numeric:tabular-nums}
 td.ttl a{font-weight:600;text-decoration:none;color:var(--ink);font-size:.945rem}
 td.ttl a:hover{color:var(--acc)}
 td.ttl .n{color:var(--ink3);font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums;
   margin-right:.15rem}
-td.ttl{width:26%;min-width:13rem}
+td.ttl{width:32%;min-width:16rem}
 td.mat{width:auto}
 td.mat .none{color:var(--faint)}
 tr.partrow td{background:var(--side);padding:.55rem .8rem;
