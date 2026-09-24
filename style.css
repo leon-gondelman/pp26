@@ -160,6 +160,8 @@ table.sessions th.lab{padding-bottom:.35rem;border-bottom:none;text-align:center
 /* the lab's two halves are framed by two very faint rules */
 table.sessions th.lab,table.sessions .col-warmup{border-left:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
 table.sessions th.lab,table.sessions .col-quest{border-right:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
+/* homework is the last column, apart from what precedes it by the same faint rule */
+table.sessions .col-homework{border-left:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
 table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:.3rem}
 table.sessions td{padding:.7rem .8rem;border-bottom:1px solid var(--line-soft);
   vertical-align:top}
