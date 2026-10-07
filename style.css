@@ -15,6 +15,7 @@
   --warm:#5f6b0a; --warm-b:#eef2d3;
   --hw:#a2540a;  --hw-b:#fbeeda;
   --sol:#6d28d9; --sol-b:#f0e9fd;
+  --orng:#c2410c; --orng-b:#fdeee5;
   --serif:"Newsreader",Georgia,"Times New Roman",serif;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -34,6 +35,7 @@
     --warm:#cfd96a; --warm-b:#232a10;
     --hw:#e0a962;  --hw-b:#2c2113;
     --sol:#bfa3fb; --sol-b:#231a3a;
+    --orng:#fb923c; --orng-b:#2c1a10;
     color-scheme:dark;
   }
 }
@@ -49,6 +51,7 @@
   --warm:#cfd96a; --warm-b:#232a10;
   --hw:#e0a962;  --hw-b:#2c2113;
   --sol:#bfa3fb; --sol-b:#231a3a;
+    --orng:#fb923c; --orng-b:#2c1a10;
   color-scheme:dark;
 }
 
@@ -117,7 +120,7 @@ main{min-width:0;display:flex;flex-direction:column}
    more room than the reading measure; let it use the width the rail leaves. */
 /* ... so it breaks out of the column, centred, up to 78rem or the main area
    minus the page margins; the phone rules put it back in the flow. */
-.inner>section#sessions{--sw:min(78rem,calc(100vw - var(--rail) - 6rem));
+.inner>section.sched,.inner>.screen.home>.fit{--sw:min(80rem,calc(100vw - var(--rail) - 1.5rem));
   max-width:none;width:var(--sw);margin-inline:calc((100% - var(--sw)) / 2)}
 
 /* ---------------------------------------------------------------- hero */
@@ -166,12 +169,10 @@ code{font:400 .88em/1.4 var(--mono);background:var(--sunk);border:1px solid var(
   padding:.1em .35em;border-radius:4px}
 
 /* ---------------------------------------------------------------- sessions table */
-/* The schedule is a size too big for the column beside the rail at 100%: it
-   is scaled down as one piece (chips, dates, titles, padding together) and
-   its cells sit a little tighter. The prose keeps its size. */
-.tablewrap{overflow-x:auto;zoom:.88}
-table.sessions{width:100%;border-collapse:collapse;font-size:.9rem;min-width:52rem}
-table.sessions th{text-align:left;white-space:nowrap;font:600 .67rem/1 var(--sans);letter-spacing:.12em;
+/* The schedule at the page's own size. */
+.tablewrap{overflow-x:auto}
+table.sessions{width:100%;border-collapse:collapse;font-size:1rem;min-width:52rem}
+table.sessions th{text-align:left;white-space:nowrap;font:600 .72rem/1 var(--sans);letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink3);padding:0 .8rem .7rem;
   border-bottom:1px solid var(--line);vertical-align:top}
 table.sessions th.lab{padding-bottom:.35rem;border-bottom:none;text-align:center}
@@ -181,32 +182,42 @@ table.sessions th.lab,table.sessions .col-quest{border-right:1px solid color-mix
 /* homework is the last column, apart from what precedes it by the same faint rule */
 table.sessions .col-homework{border-left:1px solid color-mix(in srgb,var(--line) 45%,transparent)}
 table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-top:.3rem}
-table.sessions td{padding:.65rem .65rem;border-bottom:1px solid var(--line-soft);
+table.sessions td{padding:.65rem .55rem;border-bottom:1px solid var(--line-soft);
   vertical-align:top}
 table.sessions td.date{padding-top:.85rem}
-td.date{width:5.2rem;padding-right:1.6rem;white-space:nowrap;color:var(--ink3);
-  font:500 .79rem/1 var(--mono);font-variant-numeric:tabular-nums}
+td.date{width:4.6rem;padding-right:.9rem;white-space:nowrap;color:var(--ink3);
+  font:500 .85rem/1 var(--mono);font-variant-numeric:tabular-nums}
 /* hanging indents: a wrapped title lines up with its own first word, not with
    the session number; a wrapped block title with its own text, not the chip */
-td.ttl>a{display:block;padding-left:1.5rem;text-indent:-1.5rem;
-  font-weight:600;text-decoration:none;color:var(--ink);font-size:.945rem}
+td.ttl>a{display:block;padding-left:1.6rem;text-indent:-1.6rem;
+  font-weight:600;text-decoration:none;color:var(--ink);font-size:1.06rem}
 td.ttl>a:hover{color:var(--acc)}
-td.ttl .mat .dl{font-size:.705rem}
-td.ttl .n{display:inline-block;width:1.5rem;text-indent:0;color:var(--ink3);
-  font:400 .82rem/1 var(--mono);font-variant-numeric:tabular-nums}
-td.ttl{width:30%;min-width:16rem}
+/* a little air between a session's title and its blocks */
+tr.has-blocks td.ttl>a{margin-bottom:.55rem}
+td.ttl .mat .dl{font-size:.8rem}
+td.ttl .n{display:inline-block;width:1.6rem;text-indent:0;color:var(--ink3);
+  font:400 .88rem/1 var(--mono);font-variant-numeric:tabular-nums}
+td.ttl{width:auto;min-width:16rem}
+/* the titles of a session and of its blocks each keep to one line; the lab's chips wrap instead */
+@media (min-width:1400px){td.ttl>a,tr.block td.ttl{white-space:nowrap}}
 td.mat{width:auto}
 td.mat .none{color:var(--faint)}
+/* in the schedule a long chip wraps inside its column rather than widen the table */
+td.mat .dl{white-space:normal;line-height:1.35}
+td.col-homework .dl,td.col-warmup .dl{white-space:nowrap}
+@media (max-width:1360px){td.col-homework .dl{white-space:normal}
+  table.sessions{font-size:.95rem}
+  td.mat .dl.c-solutions.grp{width:auto;white-space:normal}}
 /* a part's row: a tinted band with a rule above, its name in full ink, and
    under it one line that says what the part is about */
 tr.partrow td{background:var(--acc-l);padding:.8rem .8rem .75rem;border-top:2px solid var(--acc-t);
-  font:700 .76rem/1.5 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+  font:700 .82rem/1.5 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
 tr.partrow .pill{background:var(--acc-t);color:var(--bg);padding:.28rem .5rem;border-radius:5px;margin-right:.6rem}
-tr.partrow .dim{font-weight:400;letter-spacing:.02em;text-transform:none;font-size:.8rem;color:var(--ink2);margin-left:.35rem}
-tr.partrow .psub{margin-top:.4rem;font:400 .9rem/1.45 var(--sans);letter-spacing:0;text-transform:none;color:var(--ink2)}
+tr.partrow .dim{font-weight:400;letter-spacing:.02em;text-transform:none;font-size:.88rem;color:var(--ink2);margin-left:.35rem}
+tr.partrow .psub{margin-top:.4rem;font:400 .98rem/1.45 var(--sans);letter-spacing:0;text-transform:none;color:var(--ink2)}
 tr.partrow .psub::first-letter,.stl::first-letter{text-transform:uppercase}
 /* a session's subtitle: under the title, aligned with its first word */
-td.ttl .stl{padding-left:1.5rem;margin-top:.2rem;font-size:.84rem;line-height:1.45;color:var(--ink2)}
+td.ttl .stl{margin-top:.25rem;font-size:.93rem;line-height:1.45;color:var(--ink2)}
 .hero p.stl{margin:.35rem 0 .9rem;font-size:1.02rem;line-height:1.45;color:var(--ink2)}
 tr.now td{background:var(--sunk)}
 tr.now td.date{box-shadow:inset 3px 0 0 var(--wine);color:var(--wine);font-weight:600}
@@ -215,14 +226,14 @@ tr.done td.date{color:var(--ink3)}
 tr.has-blocks td.ttl,tr.has-blocks td.blocks{border-bottom:none;padding-bottom:.2rem}
 tr.block td{border-bottom:none;padding-top:.12rem;padding-bottom:.12rem}
 tr.block.last td{border-bottom:1px solid var(--line-soft);padding-bottom:.75rem}
-tr.block td.ttl{padding-left:calc(2.55rem + 3.9rem);text-indent:-3.9rem;font-size:.84rem;color:var(--ink2)}
-.blk{display:inline-block;width:3.6rem;margin-right:.3rem;text-indent:0;font:600 .64rem/1 var(--mono);letter-spacing:.08em;
+tr.block td.ttl{padding-left:calc(.55rem + 1.6rem + 4.3rem);text-indent:-4.3rem;font-size:.93rem;color:var(--ink2)}
+.blk{display:inline-block;width:4rem;margin-right:.3rem;text-indent:0;font:600 .7rem/1 var(--mono);letter-spacing:.08em;
   text-transform:uppercase;color:color-mix(in srgb,var(--wine) 70%,var(--bg))}
 td.ttl .blk-m{display:none}
 
 /* material chips, coloured by what the thing is */
 .dl{display:inline-block;white-space:nowrap;text-decoration:none;margin:.1rem .2rem .1rem 0;
-  font:600 .705rem/1 var(--sans);letter-spacing:.005em;padding:.44em .58em;border-radius:5px;
+  font:600 .8rem/1 var(--sans);letter-spacing:.005em;padding:.44em .58em;border-radius:5px;
   background:var(--sunk);color:var(--ink2);border:1px solid var(--line);
   transition:filter .12s ease,border-color .12s ease}
 .dl:hover{filter:brightness(.96);border-color:var(--ink3)}
@@ -383,7 +394,8 @@ footer.site .meta a:hover{text-decoration:underline}
     padding-left:.6rem;box-shadow:inset 3px 0 0 var(--wine)}
   table.sessions tr.now td.date{box-shadow:none}
   /* blocks: the phone copy inside the title cell shows, the sub-rows hide */
-  table.sessions tr.block{display:none}
+  table.sessions tr.block,table.sessions tr.morerow{display:none}
+  table.sessions .more-m{display:block;margin-top:.55rem}
   table.sessions td.ttl .blk-m{display:block;margin-top:.45rem;font-size:.9rem;color:var(--ink2);
     padding-left:3.9rem;text-indent:-3.9rem}
   table.sessions td.ttl .blk-m .mat{text-indent:0}
@@ -404,7 +416,7 @@ footer.site .meta a:hover{text-decoration:underline}
   .topbar{padding:.75rem 1.4rem}
   .topbar .where{display:none}
   .inner{padding:1.8rem 1.4rem 3rem}
-  .inner>section#sessions{width:100%;margin-inline:0}
+  .inner>section.sched,.inner>.screen.home>.fit{width:100%;margin-inline:0}
   footer.site{padding:1.6rem 1.4rem 2.4rem}
   footer.site .meta{margin-left:0;text-align:left}
   .field{grid-template-columns:1fr;gap:.1rem}
@@ -414,6 +426,194 @@ footer.site .meta a:hover{text-decoration:underline}
 @media (min-width:1600px){
   .inner{max-width:70rem}
 }
+/* ---------------------------------------------------------------- entry elements */
+/* a test, why the session matters, a story from practice: three icons under
+   the title in the schedule, three tiles on the session's page */
+.ei{display:block;font:400 1.15rem/1 "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.e-test{--e:var(--acc-t);--eb:var(--acc-l)} .e-why{--e:var(--orng);--eb:var(--orng-b)} .e-case{--e:var(--wine);--eb:var(--wine-l)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+td.ttl .ent{display:flex;gap:.4rem;margin-top:.5rem;padding-left:1.6rem}
+/* under the lab: links to the session's lab solutions and homework, on a row of their own */
+tr.has-more td.mat,tr.has-more td.ttl,tr.block td{border-bottom:none}
+tr.morerow td{padding-top:.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--line-soft)}
+.more{--blkc:color-mix(in srgb,var(--wine) 70%,var(--bg));text-indent:0;font-size:.88rem}
+.more a{display:inline-block;color:var(--blkc);text-decoration:none;font-size:.82rem;font-weight:600;line-height:1;
+  padding:.32em .6em;border:1px solid color-mix(in srgb,var(--wine) 22%,var(--bg));border-radius:6px;
+  background:var(--bg);transition:border-color .12s ease}
+.more a:hover{border-color:var(--blkc)}
+.more .sep{color:var(--ink3);margin:0 .35em}
+.more-m{display:none}
+/* a link to a group of a session's materials stops below the sticky bar */
+ul.materials li.group[id]{scroll-margin-top:4.5rem}
+.eic{display:grid;place-items:center;width:2rem;height:2rem;border-radius:7px;color:var(--e);background:var(--eb);
+  border:1px solid transparent;transition:border-color .12s ease}
+a.eic:hover{border-color:var(--e)}
+.eic.soon{opacity:.45}
+.entrysec .ehead{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.entrysec .eside{font-size:.85rem;color:var(--ink3)}
+.entry{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.etile{display:flex;flex-direction:column;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:14px;
+  padding:1.3rem 1.3rem 1.1rem;background:var(--bg);transition:border-color .15s ease,box-shadow .15s ease}
+a.etile:hover{border-color:color-mix(in srgb,var(--e) 45%,var(--line));box-shadow:0 6px 22px -14px color-mix(in srgb,var(--e) 60%,transparent)}
+.etile .ic{width:2.8rem;height:2.8rem;border-radius:11px;display:grid;place-items:center;background:var(--eb);color:var(--e);margin-bottom:1.1rem}
+svg.el{width:1.45rem;height:1.45rem;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.etile b{font-weight:500;font-size:1.15rem;line-height:1.3;color:var(--ink)}
+.etile .tx{margin-top:.45rem;font-size:.95rem;line-height:1.5;color:var(--ink2);flex:1}
+.etile .ft{display:flex;justify-content:space-between;align-items:baseline;margin-top:1.1rem;padding-top:.8rem;
+  border-top:1px solid var(--line-soft);font-size:.88rem;color:var(--ink3)}
+.etile .go{color:var(--ink);font-weight:500}
+a.etile:hover .go{color:var(--e)}
+.etile.soon{border-style:dashed}
+.etile.soon .ic,.etile.soon b,.etile.soon .go{opacity:.55}
+@media (max-width:760px){.entry{grid-template-columns:minmax(0,1fr)}}
+/* ---------------------------------------------------------------- the index as screens */
+/* On a desktop the index moves screen by screen, as a product page does: the
+   course with a gallery and the first session, then one screen per part, then
+   the rest. The script moves a whole screen at a time, eased in and out. */
+.nextscreen{display:none}
+.partband{background:var(--acc-l);border-top:2px solid var(--acc-t);border-radius:0 0 8px 8px;padding:.85rem 1rem .9rem;margin:0 0 1.1rem}
+.partband .ph{margin:0;font:700 .82rem/1.5 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.partband .pill{background:var(--acc-t);color:var(--bg);padding:.28rem .5rem;border-radius:5px;margin-right:.6rem}
+.partband .dim{font-weight:400;letter-spacing:.02em;text-transform:none;font-size:.88rem;color:var(--ink2);margin-left:.35rem}
+.partband .ptext{margin:.45rem 0 0;max-width:46rem;font:400 1rem/1.5 var(--sans);color:var(--ink2)}
+.introrow{margin-top:1.6rem}
+ul.early{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+ul.early li{display:grid;grid-template-columns:4.6rem minmax(0,1fr) auto;align-items:center;gap:.6rem;
+  padding:.7rem .2rem;border-bottom:1px solid var(--line-soft)}
+ul.early .ed{font:500 .85rem/1 var(--mono);color:var(--ink3)}
+ul.early>li>a{font-weight:600;font-size:1.06rem;text-decoration:none;color:var(--ink)}
+ul.early>li>a:hover{color:var(--acc)}
+ul.early .n{font:400 .88rem/1 var(--mono);color:var(--ink3);margin-right:.35rem}
+/* the gallery: a carousel of things built in the labs, a few lines of their code under each */
+.gallery{position:relative;margin:0;min-width:0}
+.gallery .glabel{margin:0 0 .6rem;font:600 .72rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.gview{position:relative;overflow:hidden;border-radius:12px}
+.gtrack{display:flex;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.gslide{flex:0 0 100%;margin:0;min-width:0}
+.gimg{aspect-ratio:4/3;border:1px solid var(--line);border-radius:12px;background:#fbfaf7;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;padding:.5rem}
+.gimg img,.gimg .gsvg{width:100%;height:100%;object-fit:contain;display:block}
+.gslide figcaption{margin-top:.65rem;font:500 .95rem/1.4 var(--sans);color:var(--ink)}
+.gslide figcaption span{color:var(--ink3);font-weight:400}
+.gcode{margin:.55rem 0 0;padding:.7rem .85rem;border-radius:9px;background:var(--sunk);border:1px solid var(--line-soft);
+  font:400 .78rem/1.5 var(--mono);color:var(--ink2);white-space:pre;overflow:hidden}
+.gcode .k{color:var(--acc-t);font-weight:500}
+.gcode .gf{display:block;font:500 .68rem/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:.45rem}
+.garrow{position:absolute;top:calc(37.5% - 1.1rem);width:2.2rem;height:2.2rem;border-radius:50%;border:1px solid var(--line);
+  background:color-mix(in srgb,var(--bg) 88%,transparent);color:var(--ink2);font:400 1.4rem/1 var(--sans);cursor:pointer;
+  display:grid;place-items:center;padding-bottom:.15rem;opacity:0;transition:opacity .2s ease}
+.gallery:hover .garrow,.garrow:focus-visible{opacity:1}
+.garrow.prev{left:.5rem} .garrow.next{right:.5rem}
+.gdots{display:flex;gap:.45rem;margin-top:.7rem}
+.gdots button{width:.55rem;height:.55rem;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
+.gdots button.on{background:var(--acc-t)}
+/* ---------------------------------------------------------------- the opening */
+/* the first visit: the painting fills the window, the course's name across it,
+   then the picture zooms into its place at the head of the first screen */
+.splash{display:none}
+html.splashing{overflow:hidden}
+html.splashing .splash{display:block;position:fixed;inset:0;z-index:50;pointer-events:auto;cursor:pointer}
+html.splashing .splash img{position:fixed;left:0;top:0;width:100vw;height:100vh;object-fit:cover;object-position:50% 50%;display:block}
+/* a soft veil of the paper's colour behind the name, so that it stands out from the drawing */
+html.splashing .veil{position:fixed;left:50%;top:50%;width:min(96vw,86rem);height:13rem;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(250,247,240,.92),rgba(250,247,240,.78) 45%,rgba(250,247,240,0));filter:blur(6px)}
+html.splashing .splash-t{position:fixed;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;pointer-events:none}
+html.splashing .splash-t h1{display:inline-block;margin:0;font:500 clamp(3.4rem,7vw,6.4rem)/1.08 var(--serif);color:#0f1115;
+  letter-spacing:-.015em;text-wrap:nowrap;transform-origin:0 0;text-shadow:0 0 28px rgba(251,248,240,.95),0 0 60px rgba(251,248,240,.8)}
+html.splashing .splash-t p{display:table;margin:1.1rem auto 0;transform-origin:0 0;font:400 1.3rem/1.62 var(--sans);letter-spacing:normal;color:#2a2d35;white-space:nowrap;
+  text-shadow:0 0 18px rgba(251,248,240,.95)}
+html.splashing #top figure.masthead img,html.splashing #top .hero h1,html.splashing #top .hero .sub{visibility:hidden}
+@keyframes nudge{0%,55%,100%{padding-top:0}25%{padding-top:.5rem}}
+@media (prefers-reduced-motion:reduce){.gtrack{transition:none}.nextscreen{animation:none!important}}
+@media (min-width:981px){
+  .screen{min-height:calc(100vh - 3.3rem);box-sizing:border-box;display:flex;flex-direction:column;
+    position:relative;padding-bottom:3.4rem}
+  .screen.home{justify-content:center;padding-top:1rem;margin-top:-2.6rem}
+  .screen.home figure.masthead{margin-bottom:1.4rem}
+  .screen.home figure.masthead img{max-height:11vh;aspect-ratio:auto;height:11vh}
+  .homegrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:2.6rem;align-items:start}
+  .homegrid .hero{margin-bottom:0}
+  .homegrid .hero>p:last-child{margin-bottom:0}
+  .homegrid .homeside{margin-top:2.6rem}
+  .hero .introrow{margin-top:1.6rem;columns:auto}
+  .hero .introrow h2{margin-top:0}
+  .screen.sched{padding-top:1.4rem}
+  .screen.tail{padding-top:1.4rem;padding-bottom:2rem}
+  .nextscreen{display:grid;place-items:center;position:absolute;right:0;bottom:.9rem;
+    width:2.4rem;height:2.4rem;border-radius:50%;border:1px solid color-mix(in srgb,var(--lec) 40%,var(--line));background:var(--lec-b);color:var(--lec);
+    font:400 1.3rem/1 var(--sans);padding-bottom:.35rem;cursor:pointer;transition:color .12s ease,border-color .12s ease}
+  .nextscreen:hover{color:var(--lec);border-color:var(--lec)}
+  /* the arrow drifts down and back, an invitation to scroll */
+  .nextscreen{animation:nudge 2.6s ease-in-out infinite}
+  .nextscreen:hover{animation-play-state:paused}
+  table.sessions{table-layout:fixed}
+  col.c-date{width:5rem} col.c-lecture{width:9rem}
+}
+@media (max-width:980px){.homegrid .homeside{margin-top:1.6rem}}
+/* ---------------------------------------------------------------- the palette: two families */
+/* A session has two halves and the colours say which: the lecture in the
+   course's indigo, the lab in one teal family (the warm-up a light tint, the
+   quest the full one, its solutions and homework as teal outlines). Everything
+   else is neutral; the wine marks only the current session. ?palette=old in the
+   address shows the earlier palette (one colour per column) for comparison. */
+html:not(.pal-old) .dl.c-lecture,html:not(.pal-old) ul.materials li.c-lecture{color:var(--acc-t);background:var(--acc-l)}
+html:not(.pal-old) .dl.c-warmup,html:not(.pal-old) ul.materials li.c-warmup{color:var(--lab);background:color-mix(in srgb,var(--lab-b) 50%,var(--bg))}
+html:not(.pal-old) .dl.c-quest,html:not(.pal-old) ul.materials li.c-quest{color:var(--lab);background:var(--lab-b)}
+html:not(.pal-old) .dl.c-solutions,html:not(.pal-old) ul.materials li.c-solutions,
+html:not(.pal-old) .dl.c-homework,html:not(.pal-old) ul.materials li.c-homework{color:var(--lab);background:var(--bg);
+  border:1px solid color-mix(in srgb,var(--lab) 32%,var(--bg))}
+html:not(.pal-old) .more{--blkc:var(--lab)}
+html:not(.pal-old) .more a{border-color:color-mix(in srgb,var(--lab) 32%,var(--bg))}
+html:not(.pal-old) .blk{color:var(--wine);font-weight:700}
+html:not(.pal-old) .eic{background:var(--sunk);border-color:var(--line)}
+html:not(.pal-old) .etile .ic{background:var(--sunk);color:var(--ink2)}
+html:not(.pal-old) a.etile:hover{border-color:var(--ink3);box-shadow:none}
+html:not(.pal-old) a.etile:hover .go{color:var(--acc-t)}
+/* ---------------------------------------------------------------- the schedule's lines */
+/* A session is its title line, then one line per block: on the left the block,
+   its title and its slides as plain links; on the right, on the same line, the
+   lab's WARM-UP or QUEST, its title, its files, its solutions in orange. */
+.lecl,.labfiles{white-space:nowrap;font-size:.84rem;font-weight:600}
+.lecl{margin-left:.8rem}
+.lecl a{color:var(--acc-t)} .labfiles a{color:var(--lab)}
+.lecl a,.labfiles a{text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
+.lecl a:hover,.labfiles a:hover{text-decoration-color:currentColor}
+.lecl .sep,td.labf .sep{color:var(--ink3);margin:0 .4em;font-weight:400}
+td.labf a.sol{color:var(--orng);font-weight:600;font-size:.84rem;text-decoration:none}
+td.labf a.sol:hover{text-decoration:underline;text-underline-offset:.2em}
+td.labt .blk{width:4.4rem}
+td.labt .lt{color:var(--ink2);font-size:.93rem}
+td.labt,td.labf,td.labhead{white-space:nowrap}
+/* the lab's side: LAB in grey on the session's line, a faint rule on its left, close to it */
+td.labhead,td.labt{padding-left:.8rem!important}
+/* lines only between sessions: none inside a session, none beside the lab */
+table.sessions tr.has-blocks td{border-bottom:none}
+table.sessions tr.has-blocks td.date{border-bottom:1px solid var(--line-soft)}
+/* a little more air between sessions */
+table.sessions tbody tr:not(.block)>td{padding-top:.95rem}
+table.sessions tbody tr.block.last>td{padding-bottom:1.05rem}
+table.sessions tbody tr:not(.block):not(.has-blocks)>td{padding-bottom:.95rem}
+table.sessions tr.block td{border-left:none}
+td.labhead .lw{display:inline-block;padding-top:.3rem;font:600 .72rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.lab-m{display:none}
+table.sessions td.ttl{padding-right:.8rem}
+@media (min-width:981px){col.c-date{width:5rem} col.c-labt{width:21rem} col.c-labf{width:auto}}
+/* wide screens: the session column as wide as its longest line, the lab beside it */
+@media (min-width:1400px){
+  table.sessions{table-layout:auto}
+  col.c-ttl,col.c-labt{width:1%}
+  td.ttl{white-space:nowrap}
+}
+@media (max-width:760px){
+  table.sessions td.labhead{border-left:0;padding-left:0!important}
+  table.sessions td.labhead .lw{display:none}
+  table.sessions .lab-m{display:block;margin-top:.4rem;white-space:normal}
+  table.sessions .lab-m .blk{width:4.4rem}
+  table.sessions .lab-m .lt{margin-right:.5rem}
+  table.sessions .lab-m .sep{margin:0 .35em;color:var(--ink3)}
+  table.sessions .lab-m a.sol{color:var(--orng);font-weight:600;text-decoration:none;font-size:.84rem}
+  table.sessions td.ttl .blk-m .lecl{margin-left:.5rem}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* exam format: long section with subheadings and lists */
@@ -421,23 +621,4 @@ footer.site .meta a:hover{text-decoration:underline}
 #exam li{margin:0 0 .4rem}
 #exam ol,#exam ul{margin:0 0 1rem}
 
-/* The row "Before the session" on a session page: three tiles, one tint each */
-section.entry svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.75;
-  stroke-linecap:round;stroke-linejoin:round;display:block}
-section.entry .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}
-section.entry .tile{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8rem;align-items:start;
-  text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:.85rem .95rem;
-  transition:border-color .15s,background .15s}
-section.entry .tile:hover{border-color:currentColor}
-section.entry .tile:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-section.entry .tile .ic{width:2.4rem;height:2.4rem;border-radius:9px;display:grid;place-items:center}
-section.entry .tile.test .ic{background:var(--t-test-b);color:var(--t-test)}
-section.entry .tile.why .ic{background:var(--t-why-b);color:var(--t-why)}
-section.entry .tile.case .ic{background:var(--t-case-b);color:var(--t-case)}
-section.entry .tile.test:hover{border-color:var(--t-test)}
-section.entry .tile.why:hover{border-color:var(--t-why)}
-section.entry .tile.case:hover{border-color:var(--t-case)}
-section.entry .tile b{display:block;font:600 .95rem/1.3 var(--sans);color:var(--ink)}
-section.entry .tile span span{display:block;font-size:.82rem;line-height:1.4;color:var(--ink2);margin-top:.15rem}
-section.entry .tile small{display:block;font-size:.74rem;color:var(--ink3);margin-top:.35rem}
-@media (max-width:700px){section.entry .tiles{grid-template-columns:minmax(0,1fr)}}
+

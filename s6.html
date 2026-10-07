@@ -15,7 +15,8 @@
 <link rel="stylesheet" href="style.css">
 <script>/* before paint: a stored choice wins, otherwise the system decides */
 (function(){try{var t=localStorage.getItem("pp-theme");
-if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})();</script>
+if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}
+if(/[?&]palette=old/.test(location.search))document.documentElement.classList.add("pal-old")})();</script>
 <body>
 <aside class="rail">
   <a class="brand" href="index.html">
@@ -55,20 +56,40 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
   <figure class="art"><img src="art/flows.jpg" width="640" height="640" alt=""></figure>
 </section>
 
-<section class="entry">
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-test" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 8.5h18"/><path d="M6.5 12l2 1.75-2 1.75"/><path d="M12.6 12.4a1.9 1.9 0 1 1 2.6 1.75c-.55.25-.85.6-.85 1.15v.2"/><circle cx="14.35" cy="17.55" r=".6" fill="currentColor" stroke="none"/></symbol>
-  <symbol id="i-why" viewBox="0 0 24 24"><path d="M18 7.5a7.5 7.5 0 1 0 1.5 6"/><path d="M18.75 3v4.9h-4.9"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/></symbol>
-  <symbol id="i-case" viewBox="0 0 24 24"><path d="M16.5 20H5.5A2.5 2.5 0 0 1 3 17.5V5.5A1.5 1.5 0 0 1 4.5 4h10.5a1.5 1.5 0 0 1 1.5 1.5V20z"/><path d="M16.5 9h3A1.5 1.5 0 0 1 21 10.5v7a2.5 2.5 0 0 1-2.5 2.5h-2"/><path d="M6 7.5h7.5" stroke-width="2.2"/><rect x="6" y="10.5" width="3.5" height="3.5" rx=".6"/><path d="M11.5 11h2M11.5 13.5h2M6 16.8h7.5"/></symbol>
-</svg>
-  <h2>Before the session</h2>
-  <div class="tiles">
-    <a class="tile test" href="https://leon-gondelman.github.io/pp26/entry/s6/test_yourself.html" data-applet><span class="ic"><svg class="i"><use href="#i-test"/></svg></span><span><b>Test yourself</b><span>Five short programs: what do they print?</span><small>5 minutes · opens here</small></span></a>
-    <a class="tile why" href="https://leon-gondelman.github.io/pp26/entry/s6/why_study_this.html"><span class="ic"><svg class="i"><use href="#i-why"/></svg></span><span><b>Why study this</b><span>Where the event loop runs, and what we learn.</span><small>2 minutes</small></span></a>
-    <a class="tile case" href="https://leon-gondelman.github.io/pp26/entry/s6/real_world_case.html"><span class="ic"><svg class="i"><use href="#i-case"/></svg></span><span><b>A real-world case</b><span>Cloudflare, 2019: one regular expression held every event loop.</span><small>10 minutes</small></span></a>
+<section class="entrysec">
+  <div class="ehead"><h2>Before the session</h2><span class="eside">Three ways in &middot; about 17 minutes</span></div>
+  <div class="entry"><a class="etile e-test" href="https://leon-gondelman.github.io/pp26/entry/s6/test_yourself.html" data-applet title="Test yourself"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6.5" r="2.2"/><path d="M10.5 6.5H20"/><circle cx="6" cy="12" r="2.2"/><circle cx="6" cy="12" r=".9" fill="currentColor" stroke="none"/><path d="M10.5 12H20"/><circle cx="6" cy="17.5" r="2.2"/><path d="M10.5 17.5H17"/></svg></span><b>Test yourself</b><span class="tx">Five short programs. Can we predict what they print?</span><span class="ft"><span>5 min</span><span class="go">Try it &rarr;</span></span></a><a class="etile e-why" href="https://leon-gondelman.github.io/pp26/entry/s6/why_study_this.html" title="Why study this?"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 17.2h5.6M10 20.5h4"/><path d="M12 3.2a6 6 0 0 0-3.7 10.7c.6.5.9 1.1.9 1.9v1.4h5.6v-1.4c0-.8.3-1.4.9-1.9A6 6 0 0 0 12 3.2z"/><path d="M12 7.2a2.6 2.6 0 0 1 2.6 2.6"/></svg></span><b>Why study this?</b><span class="tx">Where the event loop runs, and what we learn in this session.</span><span class="ft"><span>2 min</span><span class="go">Read &rarr;</span></span></a><a class="etile e-case" href="https://leon-gondelman.github.io/pp26/entry/s6/real_world_case.html" title="A real-world case"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 20H5.5A2.5 2.5 0 0 1 3 17.5V5.5A1.5 1.5 0 0 1 4.5 4h10.5a1.5 1.5 0 0 1 1.5 1.5V20z"/><path d="M16.5 9h3A1.5 1.5 0 0 1 21 10.5v7a2.5 2.5 0 0 1-2.5 2.5h-2"/><path d="M6 7.5h7.5" stroke-width="2.2"/><rect x="6" y="10.5" width="3.5" height="3.5" rx=".6"/><path d="M11.5 11h2M11.5 13.5h2M6 16.8h7.5"/></svg></span><b>A real-world case</b><span class="tx">Cloudflare, 2019: one regular expression held every event loop.</span><span class="ft"><span>10 min</span><span class="go">Read the story &rarr;</span></span></a></div>
+</section>
+
+<section>
+  <h2>Materials</h2>
+  <ul class="materials"><li class="blockhead"><span class="blk">Block 1</span> Coordination &amp; communication: the introduction to Part 2</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-1.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-1.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> Asynchronous programming: concurrency on one thread</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-2.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-2.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s6-warmup.pdf">Warm-up — the two blocks of the lecture, in JavaScript with Python beside it</a></span></li><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab6-one-thread/index.html">Lab — the warm-up, and the optional quest on continuations</a></span></li><li class="m-code c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab6-one-thread">The lab folder — the warm-up&#x27;s programs, the quest&#x27;s files and checks</a></span></li></ul>
+</section>
+
+<section>
+  <h2>Lecture</h2>
+  <dl><div class="field"><dt>Main topics</dt><dd>The introduction to Part 2: Dijkstra&#x27;s bounded buffer, safety and liveness, the four sessions on one system. Then asynchronous programming: suspension points, waiting is not running, run-to-completion, atomicity between suspension points, the race on one thread.</dd></div><div class="field"><dt>You write</dt><dd>JS, Python</dd></div><div class="field"><dt>You only read</dt><dd>(OCaml absent by design)</dd></div></dl>
+</section>
+
   </div>
-  <script>
-// Opens a link marked data-applet in a box over the page instead of navigating to it:
+  <footer class="site">
+    <div class="colophon">
+      <span class="aaulogo"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aalborg University" focusable="false"><path d="M56.913 45.79c-1.532-.698-3.072-.989-5.688-2.844-6.654-4.72-9.649-10.186-5.388-21.751 2.459-6.671 3.464-11.579 3.319-18.053-.082-.064-.406-.277-.483-.341-1.326 8.045-3.543 12.011-8.535 20.115-11.296 18.345-.675 29.574 4.344 33.605 4.99-2.878 9.253-7.061 12.431-12.222a29.9 29.9 0 0 1-.0-.0Z"/><path d="M44.807 3.108a44 44 0 0 0-.586-.312c-2.86 7.061-6.717 10.696-13.34 16.028-14.096 11.348-12.242 24.428-6.037 34.673a29.9 29.9 0 0 0 9.219.219c-5.916-9.028-8.436-19.409 1.243-31.63 5.75-7.262 8.16-11.708 9.501-18.978Z"/><path d="M42.83 2.093A30 30 0 0 0 30.001 0C13.432 0 0 13.432 0 30c0 7.61 2.834 14.558 7.503 19.845.363-14.55 4.184-21.62 17.203-28.462 8.876-4.665 14.2-8.256 18.124-19.29Z"/></svg></span>
+      <span class="who"><b>Aalborg University Copenhagen</b>A.&nbsp;C. Meyers V&aelig;nge 15, 2450 Copenhagen SV<br>Room 2.2.120</span>
+    </div>
+    <p class="meta">Programming Paradigms (PP), SW7, autumn 2026. Course material: <a href="https://github.com/leon-gondelman/pp26">GitHub</a>.</p>
+  </footer>
+</main>
+<script>/* Auto follows the phone or laptop; Light and Dark override it. */
+(function(){var r=document.documentElement,b=document.querySelector(".theme");
+function show(){var t=r.dataset.theme||"auto";b.dataset.mode=t;}
+b.addEventListener("click",function(){
+  var next={auto:"light",light:"dark",dark:"auto"}[r.dataset.theme||"auto"];
+  if(next==="auto"){delete r.dataset.theme;try{localStorage.removeItem("pp-theme")}catch(e){}}
+  else{r.dataset.theme=next;try{localStorage.setItem("pp-theme",next)}catch(e){}}
+  show();});
+show();})();</script>
+<script>// Opens a link marked data-applet in a box over the page instead of navigating to it:
 //   <a href="test_yourself.html" data-applet>Test yourself</a>
 // The page is loaded in an iframe with ?embed; it closes the box by posting {applet: "close"}.
 // Escape and a click on the backdrop close it too. Without JavaScript the link still opens the page.
@@ -103,35 +124,330 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
   window.addEventListener("message", e => { if (e.data && e.data.applet === "close") close(); });
 })();
 </script>
-</section>
+<script>/* The opening's wave. Two thin arcs of the painting, the outer one with its dark
+   dot and its gold dot, the inner one with its small dot and its blue dot, come
+   alive: they lift off the picture and unspiral like a spring, or a dried flower
+   opening in water, while they drift down above the gallery; then each line breaks
+   from its leading end, and every piece that leaves it is a drop that flows down
+   onto one note of the melody, the outer arc onto the upper voice, the inner arc
+   onto the lower one. There is one object throughout: the line is only what has
+   not broken yet. The dots ride on their arcs and fall as the drops nearest them.
+   ppWave(scale, offsetX, offsetY) is called by the opening with the painting's
+   cover fit (picture pixel p is at offset + scale * p on the screen) and returns
+   how long it lasts, in milliseconds. */
+(function () {
+  // the two arcs, in pixels of the 1400 by 1050 painting, traced on a grid at three times the size
+  var OUTER = [[520.7,307.7],[525,300],[536.7,276.7],[553.3,256.7],[573.3,240],[593.3,228.3],[612.7,221.7],[633.3,215],
+               [656.7,212.3],[680,212.7],[700,214.3],[726.7,221.7],[746.7,231.7],[766.7,243.3],[780,251.7]];
+  var INNER = [[570.7,355],[576.7,341.7],[583.3,328.3],[592.3,314.7],[600,303.3],[613.3,288.3],[633.3,270],[653.3,258.3],
+               [673.3,251.7],[700,249.3],[726.7,250.7],[746.7,255],[766.7,261.7],[780,268.3]];
+  // their dots: where they sit on the picture, their radius, their colour
+  var OUTER_DOTS = [{ at: [520.7,307.7], r: 9, c: "#3b3532" }, { at: [612.7,221.7], r: 5.3, c: "#c69240" }];
+  var INNER_DOTS = [{ at: [576.7,341.7], r: 2.7, c: "#48433f" }, { at: [592.3,314.7], r: 4, c: "#5f7489" }];
+  var NS = "http://www.w3.org/2000/svg";
 
-<section>
-  <h2>Materials</h2>
-  <ul class="materials"><li class="blockhead"><span class="blk">Block 1</span> Coordination &amp; communication: the introduction to Part 2</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-1.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-1.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> Asynchronous programming: concurrency on one thread</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-2.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-2.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s6-warmup.pdf">Warm-up — the two blocks of the lecture, in JavaScript with Python beside it</a></span></li><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab6-one-thread/index.html">Lab — the warm-up, and the optional quest on continuations</a></span></li><li class="m-code c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab6-one-thread">The lab folder — the warm-up&#x27;s programs, the quest&#x27;s files and checks</a></span></li></ul>
-</section>
+  function resample(p, n) {
+    var d = [0];
+    for (var i = 1; i < p.length; i++) d.push(d[i - 1] + Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]));
+    var L = d[d.length - 1], out = [], j = 0;
+    for (var k = 0; k < n; k++) {
+      var s = L * k / (n - 1);
+      while (j < p.length - 2 && d[j + 1] < s) j++;
+      var t = (s - d[j]) / ((d[j + 1] - d[j]) || 1);
+      out.push([p[j][0] + (p[j + 1][0] - p[j][0]) * t, p[j][1] + (p[j + 1][1] - p[j][1]) * t]);
+    }
+    return { pts: out, len: L };
+  }
+  // the direction of each segment of a polyline, unwrapped so that it varies continuously
+  function polar(pts) {
+    var a = [], prev = null;
+    for (var i = 1; i < pts.length; i++) {
+      var t = Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0]);
+      if (prev !== null) { while (t - prev > Math.PI) t -= 2 * Math.PI; while (t - prev < -Math.PI) t += 2 * Math.PI; }
+      a.push(t); prev = t;
+    }
+    return a;
+  }
+  function build(start, step, angles) {
+    var out = [start.slice()], x = start[0], y = start[1];
+    for (var i = 0; i < angles.length; i++) { x += step * Math.cos(angles[i]); y += step * Math.sin(angles[i]); out.push([x, y]); }
+    return out;
+  }
+  function path(pts, a, b) {
+    if (b - a < 1) return "";
+    var s = "M" + pts[a][0].toFixed(1) + "," + pts[a][1].toFixed(1);
+    for (var i = a + 1; i <= b; i++) s += "L" + pts[i][0].toFixed(1) + "," + pts[i][1].toFixed(1);
+    return s;
+  }
+  function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function spring(t) { var c1 = 1.25, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); }
+  function clamp(t) { return Math.max(0, Math.min(1, t)); }
+  function hex(c) { return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
+  function mix(a, b, t) { var A = hex(a), B = hex(b); return "rgb(" + A.map(function (x, i) { return Math.round(x + (B[i] - x) * t); }).join(",") + ")"; }
 
-<section>
-  <h2>Lecture</h2>
-  <dl><div class="field"><dt>Main topics</dt><dd>The introduction to Part 2: Dijkstra&#x27;s bounded buffer, safety and liveness, the four sessions on one system. Then asynchronous programming: suspension points, waiting is not running, run-to-completion, atomicity between suspension points, the race on one thread.</dd></div><div class="field"><dt>You write</dt><dd>JS, Python</dd></div><div class="field"><dt>You only read</dt><dd>(OCaml absent by design)</dd></div></dl>
-</section>
+  window.ppWave = function (cs, ox, oy) {
+    var sheet = document.querySelector(".gallery .gslide:first-child svg");
+    if (!sheet) return 0;
+    var frame = sheet.closest(".gimg").getBoundingClientRect();
+    if (frame.bottom < 0 || frame.top > innerHeight) return 0;   // the gallery is not on screen: no wave
+    var notes = [].slice.call(sheet.querySelectorAll("rect[rx]"));
+    function voice(c) {
+      return notes.filter(function (n) { return n.getAttribute("fill") === c; })
+                  .sort(function (a, b) { return a.getBoundingClientRect().left - b.getBoundingClientRect().left; });
+    }
+    var V1 = voice("#1f4e8c"), V2 = voice("#a2540a");
+    if (!V1.length) return 0;
+    notes.forEach(function (n) { n.style.opacity = 0; });
 
-  </div>
-  <footer class="site">
-    <div class="colophon">
-      <span class="aaulogo"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aalborg University" focusable="false"><path d="M56.913 45.79c-1.532-.698-3.072-.989-5.688-2.844-6.654-4.72-9.649-10.186-5.388-21.751 2.459-6.671 3.464-11.579 3.319-18.053-.082-.064-.406-.277-.483-.341-1.326 8.045-3.543 12.011-8.535 20.115-11.296 18.345-.675 29.574 4.344 33.605 4.99-2.878 9.253-7.061 12.431-12.222a29.9 29.9 0 0 1-.0-.0Z"/><path d="M44.807 3.108a44 44 0 0 0-.586-.312c-2.86 7.061-6.717 10.696-13.34 16.028-14.096 11.348-12.242 24.428-6.037 34.673a29.9 29.9 0 0 0 9.219.219c-5.916-9.028-8.436-19.409 1.243-31.63 5.75-7.262 8.16-11.708 9.501-18.978Z"/><path d="M42.83 2.093A30 30 0 0 0 30.001 0C13.432 0 0 13.432 0 30c0 7.61 2.834 14.558 7.503 19.845.363-14.55 4.184-21.62 17.203-28.462 8.876-4.665 14.2-8.256 18.124-19.29Z"/></svg></span>
-      <span class="who"><b>Aalborg University Copenhagen</b>A.&nbsp;C. Meyers V&aelig;nge 15, 2450 Copenhagen SV<br>Room 2.2.120</span>
-    </div>
-    <p class="meta">Programming Paradigms (PP), SW7, autumn 2026. Course material: <a href="https://github.com/leon-gondelman/pp26">GitHub</a>.</p>
-  </footer>
-</main>
-<script>/* Auto follows the phone or laptop; Light and Dark override it. */
-(function(){var r=document.documentElement,b=document.querySelector(".theme");
-function show(){var t=r.dataset.theme||"auto";b.dataset.mode=t;}
-b.addEventListener("click",function(){
-  var next={auto:"light",light:"dark",dark:"auto"}[r.dataset.theme||"auto"];
-  if(next==="auto"){delete r.dataset.theme;try{localStorage.removeItem("pp-theme")}catch(e){}}
-  else{r.dataset.theme=next;try{localStorage.setItem("pp-theme",next)}catch(e){}}
-  show();});
-show();})();</script>
+    // the timeline: lift, unspiral while drifting (UNF), break from the leading end (from TB, over SPREAD), flow down (FLY)
+    var N = 160, LIFT = 200, UNF = 1350, TB = 180, SPREAD = 900, FLY = 640, END = TB + SPREAD + FLY + 80;
+    var ov = document.createElementNS(NS, "svg");
+    ov.setAttribute("class", "waves");
+    ov.setAttribute("width", innerWidth); ov.setAttribute("height", innerHeight);
+    ov.style.cssText = "position:fixed;left:0;top:0;z-index:52;pointer-events:none;overflow:visible";
+    document.body.appendChild(ov);
+
+    function screen(p) { return [ox + p[0] * cs, oy + p[1] * cs]; }
+    var x0 = frame.left - frame.width * .5, x1 = frame.right - frame.width * .04;
+    // where each arc has opened to when it breaks: a long gentle arch above the frame
+    var strokes = [
+      { src: OUTER, dots: OUTER_DOTS, color: "#5a4c42", w: 1.35 * cs, notes: V1, land: "#1f4e8c",
+        start: [x0, frame.top - 44], span: x1 - x0, arch: .17, delay: 0 },
+      { src: INNER, dots: INNER_DOTS, color: "#7f8186", w: 1.1 * cs, notes: V2, land: "#a2540a",
+        start: [x0 + 50, frame.top - 16], span: x1 - x0 - 70, arch: .13, delay: 90 }
+    ];
+    strokes.forEach(function (s) {
+      var r = resample(s.src.map(screen), N);
+      s.from = r.pts;
+      s.ang = polar(s.from);
+      s.step0 = r.len / (N - 1); s.step1 = s.span / (N - 1);
+      var mean = s.ang.reduce(function (a, b) { return a + b; }, 0) / s.ang.length;
+      s.goal = s.ang.map(function (_, i) {
+        var g = -s.arch + 2 * s.arch * i / (s.ang.length - 1);
+        return g + 2 * Math.PI * Math.round((mean - g) / (2 * Math.PI));   // unwind the short way
+      });
+      s.mid = Math.floor(N / 2);
+      s.a0 = s.from[s.mid];
+      s.a1 = build(s.start, s.step1, s.goal)[s.mid];
+      s.line = document.createElementNS(NS, "path");    // the part not yet broken
+      s.bead = document.createElementNS(NS, "path");    // the short stretch at the front, breaking
+      [s.line, s.bead].forEach(function (el) {
+        el.setAttribute("fill", "none"); el.setAttribute("stroke", s.color); el.setAttribute("stroke-width", s.w);
+        el.setAttribute("stroke-linecap", "round"); el.setAttribute("stroke-linejoin", "round");
+        ov.appendChild(el);
+      });
+      s.bead.setAttribute("stroke-dasharray", (1.2 * s.w).toFixed(1) + " " + (2.6 * s.w).toFixed(1));
+      // the dots, placed on the arc where they sit in the picture
+      s.dotEls = s.dots.map(function (d) {
+        var p = screen(d.at), best = 0, bd = 1e9;
+        s.from.forEach(function (q, i) { var dd = Math.hypot(q[0] - p[0], q[1] - p[1]); if (dd < bd) { bd = dd; best = i; } });
+        var c = document.createElementNS(NS, "circle");
+        c.setAttribute("r", d.r * cs); c.setAttribute("fill", d.c);
+        ov.appendChild(c);
+        return { el: c, i: best, r: d.r * cs, color: d.c };
+      });
+      // one drop per note; drop k is the piece of line at k/(count-1) of its length
+      s.drops = s.notes.map(function (n, k) {
+        var u = s.notes.length > 1 ? k / (s.notes.length - 1) : 0, rr = n.getBoundingClientRect();
+        return { note: n, u: u, i: Math.round(u * (N - 1)), to: [rr.left + rr.width / 2, rr.top + rr.height / 2] };
+      });
+      s.dotEls.forEach(function (d) {
+        var best = null, bd = 1e9;
+        s.drops.forEach(function (q) { var dd = Math.abs(q.i - d.i); if (!q.dot && dd < bd) { bd = dd; best = q; } });
+        if (best) { best.dot = d; best.i = d.i; }
+      });
+      s.drops.forEach(function (q) {
+        if (q.dot) { q.el = q.dot.el; q.r0 = q.dot.r; q.c0 = q.dot.color; }
+        else {
+          q.el = document.createElementNS(NS, "circle"); q.el.style.display = "none";
+          q.r0 = Math.max(1.8, s.w * 1.3); q.c0 = s.color; q.el.setAttribute("r", q.r0);
+          ov.appendChild(q.el);
+        }
+      });
+    });
+
+    var dropR = 2.6, t0 = null, live = true;
+    function step(now) {
+      if (t0 === null) t0 = now;
+      var t = now - t0;
+      // lift: a soft shadow comes up under the arcs, as if they rose off the paper
+      var lift = clamp(t / LIFT);
+      ov.style.filter = "drop-shadow(0 " + (5 * lift).toFixed(1) + "px " + (7 * lift).toFixed(1) + "px rgba(15,17,21," + (.2 * lift).toFixed(2) + "))";
+      strokes.forEach(function (s) {
+        var tt = t - s.delay, p = clamp((tt - LIFT * .5) / UNF);
+        // unspiral: the bends relax one after another, from the tip back to the root, with a spring's overshoot
+        var M = s.ang.length;
+        var ang = s.ang.map(function (a, i) {
+          var d = (1 - i / (M - 1)) * .42, r = clamp((p - d) / .58);
+          return a + (s.goal[i] - a) * (r > 0 ? spring(r) : 0);
+        });
+        var shape = build([0, 0], s.step0 + (s.step1 - s.step0) * ease(p), ang);
+        // drift: the middle of the arc floats down along a sagging path to its place above the frame
+        var e = ease(p), sag = 26 * Math.sin(Math.PI * e);
+        var cx = s.a0[0] + (s.a1[0] - s.a0[0]) * e, cy = s.a0[1] + (s.a1[1] - s.a0[1]) * e + sag;
+        var dx = cx - shape[s.mid][0], dy = cy - shape[s.mid][1];
+        var pts = shape.map(function (q) { return [q[0] + dx, q[1] + dy]; });
+        // break: a front runs along the line; behind it the line is gone, just ahead of it it beads
+        var f = clamp((tt - TB) / SPREAD), front = Math.round(f * (N - 1)), beadTo = Math.min(N - 1, front + 10);
+        if (f > 0) {
+          s.bead.setAttribute("d", path(pts, front, beadTo));
+          s.line.setAttribute("d", path(pts, beadTo, N - 1));
+        } else {
+          s.bead.setAttribute("d", "");
+          s.line.setAttribute("d", path(pts, 0, N - 1));
+        }
+        // the dots ride on the line until they leave it
+        s.dotEls.forEach(function (d) {
+          if (d.gone) return;
+          d.el.setAttribute("cx", pts[d.i][0].toFixed(1)); d.el.setAttribute("cy", pts[d.i][1].toFixed(1));
+        });
+        // each drop leaves the line when the front reaches it, then flows down onto its note
+        s.drops.forEach(function (q) {
+          if (q.landed) return;
+          if (!q.from) {
+            if (f * (N - 1) < q.i || f === 0) return;
+            q.from = pts[q.i].slice(); q.t0 = tt; q.el.style.display = "";
+            if (q.dot) q.dot.gone = true;
+          }
+          var k = (tt - q.t0) / FLY;
+          if (k >= 1) {
+            q.landed = true; q.el.remove();
+            q.note.style.transformBox = "fill-box"; q.note.style.transformOrigin = "center";
+            q.note.animate([{ opacity: 0, transform: "scaleY(.2)" }, { opacity: 1, transform: "none" }],
+                           { duration: 240, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
+            return;
+          }
+          var sx = 1 - Math.pow(1 - k, 2), sy = k * k, rise = 10 * 4 * k * (1 - k);
+          q.el.setAttribute("cx", (q.from[0] + (q.to[0] - q.from[0]) * sx).toFixed(1));
+          q.el.setAttribute("cy", (q.from[1] + (q.to[1] - q.from[1]) * sy - rise).toFixed(1));
+          q.el.setAttribute("r", (q.r0 + (dropR - q.r0) * Math.min(1, k * 1.8)).toFixed(2));
+          q.el.setAttribute("fill", mix(q.c0, s.land, Math.min(1, k * 1.5)));
+        });
+      });
+      if (!live) return;
+      if (t < END) requestAnimationFrame(step);
+      else finish();
+    }
+    function finish() {
+      if (!ov.parentNode) return;
+      notes.forEach(function (n) { n.style.opacity = 1; });
+      ov.remove();
+    }
+    // ?wavet=<ms> in the address freezes the wave at that moment, for checking it by eye
+    var frozen = /[?&]wavet=(\d+)/.exec(location.search);
+    if (frozen) {
+      live = false;
+      var target = +frozen[1];
+      for (var tt = 0; tt <= target; tt += 16) step(tt === 0 ? 0 : tt);   // walk up to the moment, so drops leave in order
+      return END;
+    }
+    requestAnimationFrame(step);
+    setTimeout(finish, END + 400);   // a page in the background never stays half drawn
+    return END;
+  };
+})();
+
+// with ?wavet=<ms>, draw the wave at that moment over the page as it is, for checking
+(function () {
+  if (!/[?&]wavet=\d+/.test(location.search)) return;
+  addEventListener("load", function () {
+    scrollTo(0, 0);
+    var W0 = 1400, H0 = 1050, cs = Math.max(innerWidth / W0, innerHeight / H0);
+    window.ppWave(cs, (innerWidth - W0 * cs) / 2, (innerHeight - H0 * cs) / 2);
+  });
+})();
+</script>
+<script>/* The index's screens, on a desktop: the wheel, the arrows, Page Up and Down, the
+   space bar and the round button move a whole screen, eased in and out; a screen
+   taller than the window is scaled to fit it; the page opens at the last screen seen.
+   The gallery turns every six seconds. */
+(function(){var s=[].slice.call(document.querySelectorAll(".screen"));if(!s.length)return;
+var K="pp-screen",bar=document.querySelector(".topbar"),busy=false,lock=0;
+function desk(){return innerWidth>980;}
+function barH(){return bar?bar.offsetHeight:0;}
+function topOf(x){return x.getBoundingClientRect().top+scrollY-barH();}
+function idx(){var i=0;s.forEach(function(x,k){if(x.getBoundingClientRect().top-barH()<=innerHeight*.35)i=k;});return i;}
+function fit(){var room=innerHeight-barH();s.forEach(function(x){var f=x.querySelector(".fit");if(!f)return;f.style.zoom=1;
+  if(!desk())return;var cs=getComputedStyle(x),h=f.scrollHeight,r=room-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  if(h>r)f.style.zoom=Math.max(.72,r/h);});}
+var still=matchMedia("(prefers-reduced-motion: reduce)");
+function ease(t){return 1-Math.pow(1-t,3.2);}
+function go(k){k=Math.max(0,Math.min(s.length-1,k));var from=scrollY,to=Math.round(topOf(s[k]));
+  if(Math.abs(to-from)<2)return;busy=true;
+  if(still.matches){scrollTo(0,to);busy=false;remember();return;}
+  var d=Math.min(720,Math.max(430,Math.abs(to-from)*.5)),t0=null;
+  function step(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/d);scrollTo(0,from+(to-from)*ease(p));
+    if(p<1)requestAnimationFrame(step);else{busy=false;lock=Date.now()+140;remember();}}
+  requestAnimationFrame(step);}
+function remember(){try{localStorage.setItem(K,s[idx()].id)}catch(e){}}
+/* inside the last screen, longer than the window, the page scrolls as usual */
+function free(dir){var i=idx(),last=s.length-1;if(i<last)return false;var t=topOf(s[last]);
+  return dir>0||scrollY>t+2;}
+var lastW=0;   /* one gesture moves one screen: a gesture ends after 220 ms without wheel events */
+addEventListener("wheel",function(e){if(!desk()||e.ctrlKey||R.classList.contains("splashing"))return;var dir=e.deltaY>0?1:-1;
+  var now=Date.now(),fresh=now-lastW>220;lastW=now;
+  if(free(dir)&&!busy)return;e.preventDefault();if(busy||!fresh||now<lock||Math.abs(e.deltaY)<4)return;
+  go(idx()+dir);},{passive:false});
+addEventListener("keydown",function(e){if(!desk()||e.altKey||e.ctrlKey||e.metaKey||R.classList.contains("splashing"))return;
+  var tg=e.target;if(tg&&(tg.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName)))return;
+  var k=e.key,dir=0;if(k==="ArrowDown"||k==="PageDown"||(k===" "&&!e.shiftKey))dir=1;
+  else if(k==="ArrowUp"||k==="PageUp"||(k===" "&&e.shiftKey))dir=-1;
+  else if(k==="Home"){e.preventDefault();go(0);return;}else if(k==="End"){e.preventDefault();go(s.length-1);return;}
+  if(!dir)return;if(free(dir)&&k!=="PageUp"&&k!=="PageDown")return;e.preventDefault();if(!busy)go(idx()+dir);});
+document.querySelectorAll(".nextscreen").forEach(function(b){b.addEventListener("click",function(){
+  go(s.indexOf(b.closest(".screen"))+1);});});
+var t;addEventListener("scroll",function(){if(busy)return;clearTimeout(t);t=setTimeout(remember,250);},{passive:true});
+function back(){if(location.hash||document.documentElement.classList.contains("splashing"))return;try{var id=localStorage.getItem(K),el=id&&document.getElementById(id);
+  if(el&&el!==s[0])scrollTo(0,Math.round(topOf(el)));}catch(e){}}
+function align(){var h=s[0],b=h.querySelector(".nextscreen"),row=h.querySelector("ul.early li");if(!b)return;
+  if(!row||!desk()){b.style.top="";b.style.bottom="";return;}
+  var r=row.getBoundingClientRect(),z=h.getBoundingClientRect();b.style.bottom="auto";
+  b.style.top=Math.round(r.top+r.height/2-z.top-b.offsetHeight/2)+"px";}
+var fit0=fit;fit=function(){fit0();align();};
+/* the opening: the painting, then the zoom into the first screen */
+var R=document.documentElement,sp=document.querySelector(".splash");
+function opening(){if(!R.classList.contains("splashing")||!sp)return;
+  var img=sp.querySelector("img"),tt=sp.querySelector(".splash-t"),
+      mh=document.querySelector("#top figure.masthead img"),h1=document.querySelector("#top .hero h1"),gone=false;
+  scrollTo(0,0);
+  function go(){if(gone)return;gone=true;removeEventListener("wheel",stop,{passive:false});removeEventListener("keydown",go);
+    scrollTo(0,0);   /* measured from the top, whatever the browser restored */
+    /* each text travels from where its letters are to where the page's letters are:
+       measured on the text itself, scaled by the ratio of the two widths */
+    function txt(el){var r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect();}
+    function fly(from,to,E,D){var s0=from.getBoundingClientRect(),a0=txt(from),b0=txt(to),k=b0.width/a0.width,
+        tx=b0.left-s0.left-k*(a0.left-s0.left),ty=b0.top-s0.top-k*(a0.top-s0.top);
+      from.animate([{transform:"none"},{transform:"translate("+tx+"px,"+ty+"px) scale("+k+")",
+        color:getComputedStyle(to).color,textShadow:"0 0 0 transparent"}],{duration:D,easing:E,fill:"forwards"});}
+    var a=mh.getBoundingClientRect(),E="cubic-bezier(.65,0,.25,1)",D=1300,sub=document.querySelector("#top .hero .sub");
+    img.animate([{left:"0px",top:"0px",width:innerWidth+"px",height:innerHeight+"px",borderRadius:"0px"},
+                 {left:a.left+"px",top:a.top+"px",width:a.width+"px",height:a.height+"px",borderRadius:"12px"}],
+                {duration:D,easing:E,fill:"forwards"});
+    var vl=sp.querySelector(".veil");if(vl)vl.animate([{opacity:1},{opacity:0}],{duration:D*.45,fill:"forwards"});
+    fly(tt.querySelector("h1"),h1,E,D);
+    /* the wave: the spiral's two blue strokes unroll and break into the melody's notes (waves.js) */
+    if(window.ppWave){var W0=1400,H0=1050,cs=Math.max(innerWidth/W0,innerHeight/H0);
+      ppWave(cs,(innerWidth-W0*cs)/2,(innerHeight-H0*cs)/2);
+      /* while the painting is there the strokes lie in it, under the veil and the name */
+      var wv=document.querySelector("svg.waves");if(wv){wv.style.zIndex="auto";sp.insertBefore(wv,sp.querySelector(".veil"));}}
+
+    if(sub)fly(tt.querySelector("p"),sub,E,D);
+    function done(){if(!sp.parentNode)return;var wv=sp.querySelector("svg.waves");
+      if(wv){wv.style.zIndex="52";document.body.appendChild(wv);}R.classList.remove("splashing");sp.remove();}
+    setTimeout(done,D+80);
+    try{localStorage.setItem("pp-intro","1")}catch(e){}}
+  function stop(e){e.preventDefault();go();}
+  addEventListener("wheel",stop,{passive:false});addEventListener("keydown",go);sp.addEventListener("click",go);
+  setTimeout(go,900);}
+fit();back();opening();addEventListener("resize",fit);addEventListener("load",function(){fit();back();});
+/* the gallery: a carousel that slides; arrows, dots, every seven seconds */
+var g=document.querySelector(".gallery");if(g){var tr=g.querySelector(".gtrack"),n=tr.children.length,dt=g.querySelectorAll(".gdots button"),c=0,timer;
+  function show(k){c=(k+n)%n;tr.style.transform="translateX("+(-100*c)+"%)";dt.forEach(function(x,i){x.classList.toggle("on",i===c);});}
+  function run(){clearInterval(timer);if(!still.matches)timer=setInterval(function(){show(c+1);},7000);}
+  dt.forEach(function(b,i){b.addEventListener("click",function(){show(i);run();});});
+  g.querySelector(".prev").addEventListener("click",function(){show(c-1);run();});
+  g.querySelector(".next").addEventListener("click",function(){show(c+1);run();});
+  g.addEventListener("mouseenter",function(){clearInterval(timer);});g.addEventListener("mouseleave",run);run();}
+})();</script>
 </body>
 </html>
