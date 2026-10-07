@@ -1408,7 +1408,7 @@ html.print-pdf .reveal #callbacks .cbswap > .current-visible, html.reveal-print 
       <p style="font-size: 29px">A browser appends the function that answers user input, a timer that is due, a network reply, a message.<br>What resumes after an <code>await</code> goes to a second queue, the <em>microtask queue</em>; we will see both.</p>
     </div>
     <div class="asm fragment" data-fragment-index="5">
-      <p class="lead">Two assumptions hold for the whole block.</p>
+      <p class="lead">A model of what the language guarantees, not of how an engine is built. Two assumptions hold for the whole block.</p>
       <div class="defs2">
         <p><b>One thread</b>: all our code runs on it; no other thread runs code of ours.</p>
         <p><b>An uncontrolled environment</b>: the order of the host&rsquo;s events is not the program&rsquo;s to fix.</p>
@@ -1416,7 +1416,7 @@ html.print-pdf .reveal #callbacks .cbswap > .current-visible, html.reveal-print 
     </div>
   </div>
   <aside class="notes">
-    <p>The runtime of the model has four parts.<br>
+    <p>The runtime of the model has four parts. It is a model of what the language guarantees, not a description of an engine: V8 or SpiderMonkey keep a suspended function in their own form; what matters is that enough state is kept to resume it, and where it waits.<br>
       A call stack holds one frame per call that has not returned: its arguments, its local variables and where to return; only the frame on top executes.<br>
       A heap holds every value that must survive after the frame that created it is popped: objects, closures, and, as we will see, the saved state of a suspended function, its local variables and where to resume.<br>
       A queue holds functions that are ready to run and have not run yet.<br>
@@ -1780,7 +1780,7 @@ Error: no user
     <p class="fragment" data-fragment-index="2"><b>Interleaving points</b> are exactly the <b>suspension points</b>. Between two of them, nobody else runs.</p>
     </div>
   </div>
-  <p class="core fragment" data-fragment-index="3"><b>Property 4 · Atomicity between suspension points.</b> A stretch of a function&rsquo;s text with no <code>await</code> in it is <b>atomic</b> with respect to all other code of ours: nobody observes it half done, except the functions it calls, which run inside it. Others see all of it or none of it, and they can run between two stretches.</p>
+  <p class="core fragment" data-fragment-index="3"><b>Property 4 · Atomicity between suspension points.</b> A stretch of a function&rsquo;s text with no <code>await</code> in it is <b>atomic</b> with respect to all other code of ours: nobody observes it half done, except the functions it calls, which run inside it; others run only between stretches. Atomic: isolated, not all-or-nothing.</p>
   <aside class="notes">
     <p>From the previous slide: running code is never interrupted. So the only places where another computation can slip in are the points where ours gives the thread back: the awaits. What that means for two computations side by side.</p>
     <p>Two computations, P and Q, each suspended at an await, each resumed when its value arrives.<br>
@@ -1959,7 +1959,7 @@ deposit(20);   // required: 130</code></pre>
   <span class="fragment step-note" data-fragment-index="11" data-notes="An await is this round trip: off the stack, into the heap, through the queue, back on the stack."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">load prints A, awaits a user that arrives after 300 ms, and prints C with the name. The script prints B.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="11">Property 1: suspended only at the <code>await</code>; the caller continues. A, B, C Ada.</p></div>
-    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=roundtrip&amp;embed=1" title="The run of load, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. Drag to move, scroll to zoom, double-click to reset.">i</span></div>
+    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=roundtrip&amp;embed=1" title="The run of load, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
   <p class="stage-cap" data-note0="Our code in front; behind it, the runtime: the stack, the heap, the queues, the loop; at the back, the host.">Our code in front; behind it, the runtime: the stack, the heap, the queues, the loop; at the back, the host.</p>
   <aside class="notes">
@@ -2043,7 +2043,7 @@ deposit(20);   // required: 130</code></pre>
   <span class="fragment step-note" data-fragment-index="17" data-notes="The script prints 300 ms. The difference is where the calls stand relative to the await: start the work first, await afterwards."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">Two values, a and b, each 300 ms away. inTurn awaits a, then asks for b; together asks for both first.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="17">Property 2: the waits overlap, the running stretches never do. 600 against 300 ms.</p></div>
-    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=overlap&amp;embed=1" title="Two requests, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. Drag to move, scroll to zoom, double-click to reset.">i</span></div>
+    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=overlap&amp;embed=1" title="Two requests, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
   <p class="stage-cap" data-note0="Two values, a and b, each 300 ms away in the host. First inTurn.">Two values, a and b, each 300 ms away in the host. First inTurn.</p>
   <aside class="notes">
@@ -2102,7 +2102,7 @@ tick at 504 ms"></pre></div>
   <span class="fragment step-note" data-fragment-index="8" data-notes="Cooperative: the loop runs the next function only where our code gives the thread back. Long work is split up, or moved to another thread."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">A timer of 100 ms, then a loop that computes for 500 ms without an await.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="8">Property 3: running code keeps the thread until it returns. <code>done</code> at 500 ms, then <code>tick</code>.</p></div>
-    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=blocked&amp;embed=1" title="A timer and a computation, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. Drag to move, scroll to zoom, double-click to reset.">i</span></div>
+    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=blocked&amp;embed=1" title="A timer and a computation, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
   <p class="stage-cap" data-note0="The loop takes the next function only when the stack is empty; this script empties it only by returning.">The loop takes the next function only when the stack is empty; this script empties it only by returning.</p>
   <aside class="notes">
@@ -2173,7 +2173,7 @@ tick at 504 ms"></pre></div>
   <span class="fragment step-note" data-fragment-index="8" data-notes="120, where 130 was required: each call was suspended between its read and its write, and the other ran there. First approval slower: 110."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">Two deposits on one balance, 10 and 20, each suspended at its approval. Required: 130.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="8">Property 4 ends at the <code>await</code>: the read and the write are two stretches, and the other call runs between them. 120.</p></div>
-    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=deposits&amp;embed=1" title="Two deposits, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. Drag to move, scroll to zoom, double-click to reset.">i</span></div>
+    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=deposits&amp;embed=1" title="Two deposits, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
   <p class="stage-cap" data-note0="One thread runs our code. The balance is 100. We call deposit(10), then deposit(20)." style="font-size: 0.85em">One thread runs our code. The balance is 100. We call deposit(10), then deposit(20).</p>
   <aside class="notes">
@@ -2653,7 +2653,7 @@ queue     : after resolve | k 1"></pre></div>
       <div class="stage-ask" hidden></div>
       <p class="core fragment" data-fragment-index="3">A, B, C Ada on our promise, our queue, our loop and our driver: what the language did.</p>
     </div>
-    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=ours&amp;embed=1" title="the run of load on our own promise, queue, loop and driver"></iframe><span class="stage-info" data-tip="Our objects in the boxes: p, a P; g, a generator; step, the continuation. Drag to move, scroll to zoom, double-click to reset.">i</span></div>
+    <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=ours&amp;embed=1" title="the run of load on our own promise, queue, loop and driver"></iframe><span class="stage-info" data-tip="Our objects in the boxes: p, a P; g, a generator; step, the continuation. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
   <p class="stage-cap" data-note0="drive makes g and calls step, which calls g.next(): load runs on the stack and prints A.">drive makes g and calls step, which calls g.next(): load runs on the stack and prints A.</p>
   <a class="apx back" href="#/closing">back</a>
