@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concurrency on One Thread</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{--ground:#f5f4f0;--surface:#fff;--sunken:#f0eeea;--ink:#15171c;--ink-2:#3b4250;--rule:#d8d5cd;
+--accent:#0a5f96;--accent-soft:#e2edf6;--ans:#1b7a45;--ans-soft:#e6f3ea;--kw:#2a6f97;--st:#14803d;
+--cm:#5f6774;--nu:#9a4b06}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#111318;--surface:#181b22;
+--sunken:#14171d;--ink:#e8eaef;--ink-2:#b6bdc9;--rule:#2a2f39;--accent:#62b8ee;--accent-soft:#14283a;
+--ans:#52c283;--ans-soft:#13281b;--kw:#7cc4f0;--st:#6fd394;--cm:#97a0ad;--nu:#e3ab55}}
+:root[data-theme="dark"]{--ground:#111318;--surface:#181b22;--sunken:#14171d;--ink:#e8eaef;--ink-2:#b6bdc9;
+--rule:#2a2f39;--accent:#62b8ee;--accent-soft:#14283a;--ans:#52c283;--ans-soft:#13281b;--kw:#7cc4f0;
+--st:#6fd394;--cm:#97a0ad;--nu:#e3ab55}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.62 "IBM Plex Sans",-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+main.wrap{padding-bottom:96px}
+.masthead{background:var(--surface);border-bottom:1px solid var(--rule);padding:28px 0 22px;margin-bottom:28px}
+.kicker{margin:0;color:var(--ink-2);font-size:15px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;margin:6px 0 0}
+h2{font-family:"IBM Plex Serif",Georgia,serif;font-size:27px;margin:56px 0 12px;padding-top:12px;border-top:2px solid var(--ink)}
+h3{font-size:20px;margin:40px 0 10px}
+h3 .where,h2 .opt{font-weight:400;font-size:15px;color:var(--ink-2);margin-left:12px}
+h4{margin:0 0 6px;font-size:17px}
+.num{color:var(--accent)}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;background:var(--sunken);padding:1px 4px;border-radius:3px}
+a{color:var(--accent)}
+.toc{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:10px 18px;margin:20px 0}
+.toc ol{margin:0;padding-left:20px}
+.recall{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 16px;margin:16px 0 22px;border-radius:0 6px 6px 0}
+.recall p{margin:6px 0}
+.recall-h,.answer-h{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.item{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;margin:18px 0}
+.item p{margin:8px 0}
+figure.code{margin:12px 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+figure.code figcaption{display:flex;gap:12px;font-size:13px;padding:4px 12px;background:var(--sunken);border-bottom:1px solid var(--rule);color:var(--ink-2)}
+figure.code .file{font-family:"IBM Plex Mono",monospace}
+figure.code pre{margin:0;padding:10px 12px;overflow-x:auto;background:var(--surface)}
+figure.code pre code{background:none;padding:0;font-size:14.5px;line-height:1.5}
+.kw{color:var(--kw);font-weight:500}.st{color:var(--st)}.cm{color:var(--cm);font-style:italic}.nu{color:var(--nu)}
+ol.options,ol.alpha{list-style:none;counter-reset:o;padding-left:4px;margin:10px 0}
+ol.options li,ol.alpha li{counter-increment:o;margin:4px 0;padding-left:34px;position:relative}
+ol.options li::before,ol.alpha li::before{content:"(" counter(o, lower-alpha) ")";position:absolute;left:0;color:var(--ink-2);font-weight:600}
+ol.options li{background:var(--sunken);border-radius:5px;padding:4px 10px 4px 40px}
+ol.options li::before{left:10px;top:4px}
+.check span{font-weight:600;color:var(--ink-2);margin-right:4px}
+.note{color:var(--ink-2);font-size:15px}
+.answer{background:var(--ans-soft);border-left:4px solid var(--ans);padding:8px 14px;margin-top:14px;border-radius:0 6px 6px 0}
+.answer .answer-h{color:var(--ans)}
+.banner{background:var(--ans-soft);border:1px solid var(--ans);border-radius:6px;padding:8px 14px}
+.tablewrap{overflow-x:auto}
+table.trace{border-collapse:collapse;font-size:15px;margin:12px 0;width:100%}
+table.trace th,table.trace td{border:1px solid var(--rule);padding:5px 8px;text-align:left;vertical-align:top}
+table.trace th{background:var(--sunken)}
+h3.end{margin-top:36px}
+@media (max-width:560px){h1{font-size:27px}body{font-size:16px}.item{padding:12px}figure.code pre code{font-size:12px}}
+</style>
+</head>
+<body>
+<header class="masthead"><div class="wrap">
+<p class="kicker">Programming Paradigms · Lab 6 · session 6: asynchronous programming</p>
+<h1>Concurrency on One Thread</h1>
+</div></header>
+<main class="wrap">
+
+<p>The lab follows the two blocks of the lecture: block 1, the introduction to Part 2, and block 2, asynchronous programming (concurrency on one thread).</p><p>The <strong>warm-up</strong> is the main part of the lab, and we finish it during the lab session. It has three questions on paper on the introduction; six programs in JavaScript, five to predict and one to repair; and three questions in Python, on two programs, to predict. We write each prediction down before we run the program. The <strong>quest</strong> is optional: five short exercises on continuations. They go with the appendix of block 2, <em>The suspended computation as a value</em>, which we read first. Nothing is handed in.</p><p>We need <code>node</code> and <code>python3</code>. The programs are in <code>warmup/js/</code>, <code>warmup/py/</code> and <code>quest/</code>. The sheet <code>warmup/warmup.pdf</code> has the same questions as the warm-up on this page.</p>
+<nav class="toc"><ol><li><a href="#intro">Part 1: Correctness and coordination</a></li><li><a href="#js">Part 2: Asynchronous functions in JavaScript</a></li><li><a href="#py">Part 3: Asynchronous functions in Python</a></li><li><a href="#quest">Quest (optional): continuations</a></li></ol></nav>
+<section id="warmup"><h2>Warm-up</h2><section class="part" id="intro"><h3>Part 1: Correctness and coordination<span class="where">on paper</span></h3><p>Three questions on the introduction. We write the answers on a page of our own.</p><aside class="recall"><div class="recall-h">From the lecture</div><p><em>Safety</em>: nothing bad ever happens; a violation happens at one definite moment. <em>Liveness</em>: something good eventually happens; no finite beginning of an execution violates it: however long the execution has run, the good thing can still happen later.</p><p><em>Coordination</em>: when a process may act depends on what the others have done or are doing. It has two forms: <em>not before</em> (P waits until Q has acted) and <em>not at the same time</em> (P and Q are never both inside the part that changes the shared data).</p><p><em>Linearizability</em>: in every execution, the calls can be put in one sequence such that each call answers as it would if the calls were made alone, one after the other, in that order; and a call that returned before another was made comes first in the sequence.</p></aside><article class="item" id="q1">
+<h4><span class="num">Question 1</span></h4>
+<p>Given the five requirements of the bank account below, say of each whether it is a safety property or a liveness property.</p>
+<ol class="alpha"><li>no deposit answered <em>ok</em> is lost;</li><li>no request changes the balance twice;</li><li>the balance is never negative;</li><li>every request gets a definitive answer in the end;</li><li>the two copies of the account, kept on two machines, agree in the end.</li></ol>
+</article><article class="item" id="q2">
+<h4><span class="num">Question 2</span></h4>
+<p>A semaphore is a counter with two operations: <code>acquire</code> waits until the counter is above zero, then takes one off; <code>release</code> adds one. Given Dijkstra's bounded buffer in Java, as in the introduction, say for each of the three semaphores whether it expresses <em>not before</em> or <em>not at the same time</em>, and which action waits for which other action.</p>
+<figure class="code"><figcaption><span class="lang">Java</span></figcaption><pre><code>Semaphore numberOfQueuingPortions = <span class="kw">new</span> Semaphore(<span class="nu">0</span>);
+Semaphore numberOfEmptyPositions  = <span class="kw">new</span> Semaphore(N);  <span class="cm">// N places</span>
+Semaphore bufferManipulation      = <span class="kw">new</span> Semaphore(<span class="nu">1</span>);
+
+<span class="cm">// producer</span>
+<span class="kw">for</span> (<span class="kw">int</span> k = <span class="nu">1</span>; k &lt;= <span class="nu">8</span>; k++) {
+  <span class="kw">String</span> portion = produceNextPortion(k);
+  numberOfEmptyPositions.acquire();
+  bufferManipulation.acquire();
+  buffer.addLast(portion);
+  bufferManipulation.release();
+  numberOfQueuingPortions.release();
+}
+<span class="cm">// consumer</span>
+<span class="kw">for</span> (<span class="kw">int</span> k = <span class="nu">1</span>; k &lt;= <span class="nu">8</span>; k++) {
+  numberOfQueuingPortions.acquire();
+  bufferManipulation.acquire();
+  <span class="kw">String</span> portion = buffer.removeFirst();
+  bufferManipulation.release();
+  numberOfEmptyPositions.release();
+  processPortionTaken(portion);
+}</code></pre></figure>
+</article><article class="item" id="q3">
+<h4><span class="num">Question 3</span></h4>
+<p>Given the bank account with a balance of 100, where <code>withdraw(n)</code> answers <em>refused</em> when the balance would become negative, and two clients, A and B, that each call <code>withdraw(80)</code> at the same moment, so that the two calls overlap: for each of the two executions below, say whether its calls can be put in such a sequence, and if they can, give the sequence.</p>
+<ol class="alpha"><li>both calls answer <em>ok</em>;</li><li>A's call answers <em>ok</em>, B's call answers <em>refused</em>.</li></ol>
+</article></section><section class="part" id="js"><h3>Part 2: Asynchronous functions in JavaScript<span class="where">predict on paper, then run</span></h3><p>We read each program, choose one of the three answers, and write it down. Then we run the program in <code>warmup/js/</code>, for example <code>node q4_two_loads.mjs</code>. Where the run differs from our answer, we find the property that explains it. In question 9 we write a function, then run it.</p><aside class="recall"><div class="recall-h">From the lecture</div><p><strong>Property 1 · Suspension.</strong> An asynchronous function is suspended only at an <code>await</code> written in it. A caller that does not await the call goes on.</p><p><strong>Property 2 · Waiting is not running.</strong> Waits overlap. On one thread, our own code does not: at any moment at most one computation is running.</p><p><strong>Property 3 · Run-to-completion.</strong> The loop takes the next function from the queue only when the stack is empty: the running code has returned, and so has everything it called. Nobody takes the thread away from running code.</p><p><strong>Property 4 · Atomicity between suspension points.</strong> A stretch of a function's text with no <code>await</code> in it is atomic with respect to all other code of ours: nobody observes it half done.</p><p>In JavaScript, in addition, a call runs the function up to its first <code>await</code> and then returns a promise; and every <code>await</code> is a suspension point, even <code>await null</code>.</p></aside><article class="item" id="q4">
+<h4><span class="num">Question 4</span></h4>
+<p>Given the program below, what does it print, in which order?</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">warmup/js/q4_two_loads.mjs</span></figcaption><pre><code><span class="cm">// Question 4. Run: node q4_two_loads.mjs</span>
+<span class="cm">// fetchUser answers &quot;Ada&quot; after 300 ms: a request, imitated by a timer</span>
+<span class="kw">const</span> fetchUser = () =&gt; <span class="kw">new</span> Promise(res =&gt; setTimeout(() =&gt; res(<span class="st">&quot;Ada&quot;</span>), <span class="nu">300</span>));
+
+<span class="kw">async</span> <span class="kw">function</span> load(who) {
+  console.log(<span class="st">&quot;A&quot;</span>, who);
+  <span class="kw">const</span> user = <span class="kw">await</span> fetchUser();
+  console.log(<span class="st">&quot;C&quot;</span>, who, user);
+}
+load(<span class="nu">1</span>);
+load(<span class="nu">2</span>);
+console.log(<span class="st">&quot;B&quot;</span>);</code></pre></figure>
+<ol class="options"><li><code>A 1</code>, <code>C 1 Ada</code>, <code>A 2</code>, <code>C 2 Ada</code>, <code>B</code></li><li><code>A 1</code>, <code>A 2</code>, <code>B</code>, <code>C 1 Ada</code>, <code>C 2 Ada</code></li><li><code>B</code>, <code>A 1</code>, <code>A 2</code>, <code>C 1 Ada</code>, <code>C 2 Ada</code></li></ol>
+</article><article class="item" id="q5">
+<h4><span class="num">Question 5</span></h4>
+<p>Given the program below, in which the <code>await</code> is forgotten, what does it print, in which order?</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">warmup/js/q5_forgotten.mjs</span></figcaption><pre><code><span class="cm">// Question 5. Run: node q5_forgotten.mjs</span>
+<span class="cm">// fetchUser answers &quot;Ada&quot; after 300 ms: a request, imitated by a timer</span>
+<span class="kw">const</span> fetchUser = () =&gt; <span class="kw">new</span> Promise(res =&gt; setTimeout(() =&gt; res(<span class="st">&quot;Ada&quot;</span>), <span class="nu">300</span>));
+
+<span class="kw">async</span> <span class="kw">function</span> load() {
+  console.log(<span class="st">&quot;A&quot;</span>);
+  <span class="kw">const</span> user = fetchUser();          <span class="cm">// the await is forgotten</span>
+  console.log(<span class="st">&quot;C&quot;</span>, user);
+}
+load();
+console.log(<span class="st">&quot;B&quot;</span>);</code></pre></figure>
+<ol class="options"><li><code>A</code>, <code>B</code>, <code>C Ada</code></li><li><code>A</code>, <code>C Ada</code>, <code>B</code></li><li><code>A</code>, <code>C Promise { &lt;pending&gt; }</code>, <code>B</code></li></ol>
+</article><article class="item" id="q6">
+<h4><span class="num">Question 6</span></h4>
+<p>Given the program below, what does it print, and at which times?</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">warmup/js/q6_two_requests.mjs</span></figcaption><pre><code><span class="cm">// Question 6. Run: node q6_two_requests.mjs</span>
+<span class="cm">// get(name, ms) answers name after ms milliseconds: a request, imitated by</span>
+<span class="cm">// a timer</span>
+<span class="kw">const</span> get = (name, ms) =&gt; <span class="kw">new</span> Promise(res =&gt; setTimeout(() =&gt; res(name), ms));
+<span class="kw">const</span> t0 = Date.now();
+<span class="cm">// now(): the time since the start, to the nearest 100 ms</span>
+<span class="kw">const</span> now = () =&gt; Math.round((Date.now() - t0) / <span class="nu">100</span>) * <span class="nu">100</span> + <span class="st">&quot; ms&quot;</span>;
+
+<span class="kw">async</span> <span class="kw">function</span> main() {
+  <span class="kw">const</span> pa = get(<span class="st">&quot;a&quot;</span>, <span class="nu">300</span>);
+  <span class="kw">const</span> pb = get(<span class="st">&quot;b&quot;</span>, <span class="nu">100</span>);          <span class="cm">// both requests have left</span>
+  console.log(<span class="kw">await</span> pa, <span class="st">&quot;at&quot;</span>, now());
+  console.log(<span class="kw">await</span> pb, <span class="st">&quot;at&quot;</span>, now());
+}
+main();</code></pre></figure>
+<ol class="options"><li><code>b at 100 ms</code>, then <code>a at 300 ms</code></li><li><code>a at 300 ms</code>, then <code>b at 300 ms</code></li><li><code>a at 300 ms</code>, then <code>b at 400 ms</code></li></ol>
+</article><article class="item" id="q7">
+<h4><span class="num">Question 7</span></h4>
+<p>Given the program below, in which <code>f</code> awaits a value that is already there, what does it print, in which order?</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">warmup/js/q7_await_null.mjs</span></figcaption><pre><code><span class="cm">// Question 7. Run: node q7_await_null.mjs</span>
+<span class="kw">async</span> <span class="kw">function</span> f(name) {
+  console.log(name, <span class="nu">1</span>);
+  <span class="kw">await</span> <span class="kw">null</span>;                        <span class="cm">// nothing to wait for</span>
+  console.log(name, <span class="nu">2</span>);
+}
+f(<span class="st">&quot;x&quot;</span>);
+f(<span class="st">&quot;y&quot;</span>);
+console.log(<span class="st">&quot;main&quot;</span>);</code></pre></figure>
+<ol class="options"><li><code>x 1</code>, <code>x 2</code>, <code>y 1</code>, <code>y 2</code>, <code>main</code></li><li><code>x 1</code>, <code>y 1</code>, <code>main</code>, <code>x 2</code>, <code>y 2</code></li><li><code>main</code>, <code>x 1</code>, <code>y 1</code>, <code>x 2</code>, <code>y 2</code></li></ol>
+</article><article class="item" id="q8">
+<h4><span class="num">Question 8</span></h4>
+<p>Given the program below, in which each deposit is one line, <code>balance += await amount(n)</code>, what does it print? In JavaScript, <code>balance += e</code> reads <code>balance</code> first, then evaluates <code>e</code>, then writes the sum.</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">warmup/js/q8_plus_await.mjs</span></figcaption><pre><code><span class="cm">// Question 8. Run: node q8_plus_await.mjs</span>
+<span class="cm">// amount(n) answers n after 100 ms: a request, imitated by a timer</span>
+<span class="kw">const</span> amount = n =&gt; <span class="kw">new</span> Promise(res =&gt; setTimeout(() =&gt; res(n), <span class="nu">100</span>));
+<span class="kw">let</span> balance = <span class="nu">100</span>;
+
+<span class="kw">async</span> <span class="kw">function</span> deposit(n) {
+  balance += <span class="kw">await</span> amount(n);
+}
+<span class="cm">// wait until both calls have finished, then print the balance</span>
+<span class="kw">await</span> Promise.all([deposit(<span class="nu">10</span>), deposit(<span class="nu">20</span>)]);
+console.log(balance);</code></pre></figure>
+<ol class="options"><li><code>130</code></li><li><code>120</code></li><li><code>110</code></li></ol>
+</article><article class="item" id="q9">
+<h4><span class="num">Question 9</span></h4>
+<p>Given the deposit of the lecture, which reads the balance, waits for an approval, and writes the new balance, write <code>depositRepaired</code> in <code>warmup/js/q9_deposits.mjs</code>, in place of <code>todo(9)</code>. The repaired deposit still waits for the approval before it changes the balance. Two deposits, of 10 and 20, give 130, whatever the order of their approvals. Then we run <code>node q9_deposits.mjs</code>. It prints the balance after the two deposits, in both orders: first for the deposit of the lecture, then for the repaired one.</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">warmup/js/q9_deposits.mjs</span></figcaption><pre><code><span class="cm">// the deposit of the lecture: read, wait, write</span>
+<span class="kw">async</span> <span class="kw">function</span> deposit(account, n, ms) {
+  <span class="kw">const</span> b = account.balance;
+  <span class="kw">await</span> approve(n, ms);
+  account.balance = b + n;
+}
+
+<span class="cm">// the same deposit, repaired: it must give 130 in both orders</span>
+<span class="kw">async</span> <span class="kw">function</span> depositRepaired(account, n, ms) {
+  todo(<span class="nu">9</span>);
+}</code></pre></figure>
+<p class="check"><span>The check:</span> the last two lines, <code>repaired, equal approvals</code> and <code>repaired, first approval slower</code>, each end in <code>130</code>.</p>
+</article></section><section class="part" id="py"><h3>Part 3: Asynchronous functions in Python<span class="where">predict on paper, then run</span></h3><p>The lecture asked three questions of every language. Here we ask Python the first two: does a call start the work, and is every <code>await</code> a suspension point? In JavaScript the answers are yes and yes (questions 4 and 7). The third question, which thread resumes a suspended computation, has the same answer in both languages: the loop's one thread. The programs are in <code>warmup/py/</code>.</p><article class="item" id="q10">
+<h4><span class="num">Question 10</span></h4>
+<p>Given the program below, what does <code>python3 q10_load.py bare</code> print?</p>
+<figure class="code"><figcaption><span class="lang">Python</span><span class="file">warmup/py/q10_load.py</span></figcaption><pre><code><span class="cm"># Questions 10 and 11. Run: python3 q10_load.py bare</span>
+<span class="cm">#                     then: python3 q10_load.py task</span>
+<span class="kw">import</span> asyncio, sys
+
+<span class="kw">async</span> <span class="kw">def</span> fetch_user():
+    <span class="kw">await</span> asyncio.sleep(<span class="nu">0</span>.<span class="nu">3</span>)
+    <span class="kw">return</span> <span class="st">&quot;Ada&quot;</span>
+
+<span class="kw">async</span> <span class="kw">def</span> load():
+    <span class="kw">print</span>(<span class="st">&quot;A&quot;</span>)
+    user = <span class="kw">await</span> fetch_user()
+    <span class="kw">print</span>(<span class="st">&quot;C&quot;</span>, user)
+
+<span class="kw">async</span> <span class="kw">def</span> bare():
+    load()
+    <span class="kw">print</span>(<span class="st">&quot;B&quot;</span>)
+    <span class="kw">await</span> asyncio.sleep(<span class="nu">0</span>.<span class="nu">5</span>)
+
+<span class="kw">async</span> <span class="kw">def</span> task():
+    asyncio.create_task(load())
+    <span class="kw">print</span>(<span class="st">&quot;B&quot;</span>)
+    <span class="kw">await</span> asyncio.sleep(<span class="nu">0</span>.<span class="nu">5</span>)
+
+asyncio.run({<span class="st">&quot;bare&quot;</span>: bare, <span class="st">&quot;task&quot;</span>: task}[sys.argv[<span class="nu">1</span>]]())</code></pre></figure>
+<ol class="options"><li><code>A</code>, <code>B</code>, <code>C Ada</code></li><li>a warning that the coroutine <code>load</code> was never awaited, then <code>B</code></li><li><code>A</code>, <code>C Ada</code>, <code>B</code></li></ol>
+</article><article class="item" id="q11">
+<h4><span class="num">Question 11</span></h4>
+<p>Given the same program, what does <code>python3 q10_load.py task</code> print?</p>
+<ol class="options"><li><code>A</code>, <code>B</code>, <code>C Ada</code></li><li><code>B</code>, <code>A</code>, <code>C Ada</code></li><li><code>B</code> only</li></ol>
+</article><article class="item" id="q12">
+<h4><span class="num">Question 12</span></h4>
+<p>Given the deposit of the lecture in Python, and a program that runs the two deposits twice, first with an <code>approve()</code> that has nothing to wait for, then with one that waits for 0 seconds, what does <code>python3 q12_deposits.py</code> print?</p>
+<figure class="code"><figcaption><span class="lang">Python</span><span class="file">warmup/py/q12_deposits.py</span></figcaption><pre><code><span class="cm"># Question 12. Run: python3 q12_deposits.py</span>
+<span class="kw">import</span> asyncio
+
+<span class="kw">async</span> <span class="kw">def</span> nothing_to_wait_for():
+    <span class="kw">pass</span>
+
+<span class="kw">async</span> <span class="kw">def</span> really_waits():
+    <span class="kw">await</span> asyncio.sleep(<span class="nu">0</span>)
+
+<span class="kw">async</span> <span class="kw">def</span> trial(name, approve):
+    account = {<span class="st">&quot;balance&quot;</span>: <span class="nu">100</span>}
+    <span class="kw">async</span> <span class="kw">def</span> deposit(n):
+        b = account[<span class="st">&quot;balance&quot;</span>]
+        <span class="kw">await</span> approve()
+        account[<span class="st">&quot;balance&quot;</span>] = b + n
+    <span class="kw">await</span> asyncio.gather(deposit(<span class="nu">10</span>), deposit(<span class="nu">20</span>))
+    <span class="kw">print</span>(f<span class="st">&quot;{name:36}&quot;</span>, account[<span class="st">&quot;balance&quot;</span>])
+
+asyncio.run(trial(<span class="st">&quot;approve() has nothing to wait for&quot;</span>, nothing_to_wait_for))
+asyncio.run(trial(<span class="st">&quot;approve() waits, for 0 seconds&quot;</span>, really_waits))</code></pre></figure>
+<ol class="options"><li><code>120</code>, then <code>120</code></li><li><code>130</code>, then <code>120</code></li><li><code>130</code>, then <code>130</code></li></ol>
+</article></section></section><section id="quest"><h2>Quest <span class="opt">optional</span></h2><p>The quest is optional. It goes with the appendix of block 2, <em>The suspended computation as a value</em>, which we read first: continuations, continuation-passing style, a promise by hand, the queue and the loop, a value sent into a generator, an async function as a generator and a driver.</p><p>We do each exercise on paper first, then write it in its file in <code>quest/</code>, and check it with <code>node checks.mjs</code>. The checks print one line each: <em>pass</em>, <em>FAIL</em>, or <em>todo</em> for an exercise not written yet. A hole is marked <code>todo(n)</code>: it throws an error, <code>TODO n</code>, until we write the code in its place. Exercise 2 uses <code>gK</code> of exercise 1; exercises 4 and 5 use <code>resolve</code> of exercise 3. Until exercise 3 is written, <code>node trace.mjs</code> prints <code>A</code>, <code>B</code>, <code>D</code> and then stops with <code>Error: TODO 3</code>. <code>node load.mjs</code> stops with <code>Error: TODO 5</code> until exercise 5 is written, and with <code>Error: TODO 3</code> until exercise 3 is.</p><aside class="recall"><div class="recall-h">From the appendix</div><p><em>Continuation</em>: the continuation of a point in a computation is the rest of the computation from that point, as a function of the value expected there. In <code>double(x) + 1</code>, while <code>double(x)</code> is computed, the rest is <code>v =&gt; v + 1</code>.</p><p><em>Continuation-passing style</em>: a function whose result is not there when it is called takes its continuation <code>k</code> as an argument, and calls <code>k</code> when the result exists.</p><p><em>Generator</em>: <code>g = gen()</code> makes a generator and runs nothing. <code>g.next(v)</code> runs it up to its next <code>yield</code>, or to its end; <code>v</code> becomes the value of the <code>yield</code> at which <code>g</code> was suspended (on the first call there is none, and <code>v</code> is dropped). It returns an object <code>{ value, done }</code>: the value yielded, and whether the generator has finished.</p></aside><article class="item" id="e1">
+<h4><span class="num">Exercise 1</span></h4>
+<p>Given <code>tripleK</code>, which asks a server for <code>3 * x</code> and calls <code>k</code> with the answer 100 ms later, and the function <code>g = x =&gt; triple(x) - 1</code>, where <code>triple(x)</code> stands for the server's answer: write <code>gK</code>, the form of <code>g</code> in continuation-passing style, in <code>cps.mjs</code>.</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">quest/cps.mjs</span></figcaption><pre><code><span class="cm">// tripleK(x, k): asks a server for 3 * x; the answer goes to k, 100 ms later</span>
+<span class="kw">export</span> <span class="kw">const</span> tripleK = (x, k) =&gt; setTimeout(() =&gt; k(<span class="nu">3</span> * x), <span class="nu">100</span>);
+
+<span class="cm">// gK(x, k): gives k the value of g(x), where g = x =&gt; triple(x) - 1</span>
+<span class="cm">// and triple(x) is 3 * x, the answer of the server</span>
+<span class="kw">export</span> <span class="kw">const</span> gK = (x, k) =&gt; todo(<span class="nu">1</span>);</code></pre></figure>
+<p class="check"><span>The check:</span> <code>gK(2, k)</code> gives <code>k</code> the value 5, 100 ms later.</p>
+</article><article class="item" id="e2">
+<h4><span class="num">Exercise 2</span></h4>
+<p>Given <code>gK</code>, and the function <code>h = x =&gt; g(g(x))</code>, write <code>hK</code> in <code>cps.mjs</code>.</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">quest/cps.mjs</span></figcaption><pre><code><span class="cm">// hK(x, k): gives k the value of h(x), where h = x =&gt; g(g(x))</span>
+<span class="kw">export</span> <span class="kw">const</span> hK = (x, k) =&gt; todo(<span class="nu">2</span>);</code></pre></figure>
+<p class="check"><span>The check:</span> <code>hK(2, k)</code> gives <code>k</code> the value 14, about 200 ms later: two replies, one after the other.</p>
+</article><article class="item" id="e3">
+<h4><span class="num">Exercise 3</span></h4>
+<p>Given the class <code>P</code>, a promise, with <code>then</code> written, and <code>later(k)</code>, which puts <code>k</code> in the queue, write <code>resolve(v)</code> in <code>ours.mjs</code>. If the promise is still pending, <code>resolve(v)</code> sets its <code>state</code> to <code>&quot;fulfilled&quot;</code> and its <code>value</code> to <code>v</code>, and puts each continuation of <code>waiters</code> in the queue, to be called with <code>v</code>. If the promise already has a value, <code>resolve</code> does nothing. We write it from this description, then compare it with the appendix's slide <em>A promise by hand</em>.</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">quest/ours.mjs</span></figcaption><pre><code><span class="cm">// a promise: a value not there yet, and the continuations that wait for it</span>
+<span class="kw">export</span> <span class="kw">class</span> P {
+  state = <span class="st">&quot;pending&quot;</span>; value; waiters = [];
+
+  <span class="cm">// then(k): registers k, the continuation that waits for the value</span>
+  then(k) {
+    <span class="kw">if</span> (<span class="kw">this</span>.state === <span class="st">&quot;pending&quot;</span>) <span class="kw">this</span>.waiters.push(k);
+    <span class="kw">else</span> later(() =&gt; k(<span class="kw">this</span>.value));
+  }
+
+  <span class="cm">// resolve(v): if pending, stores v; puts each waiter in the queue, with v</span>
+  resolve(v) {
+    todo(<span class="nu">3</span>);
+  }
+}</code></pre></figure>
+<p class="check"><span>The check:</span> <code>const p = new P(); p.then(v =&gt; console.log(&quot;k &quot; + v)); p.resolve(1); console.log(&quot;after resolve&quot;)</code> prints <code>after resolve</code>, then <code>k 1</code>, as in the appendix's slide <em>The queue and the loop</em>.</p>
+</article><article class="item" id="e4">
+<h4><span class="num">Exercise 4</span></h4>
+<p>Given <code>later</code>, <code>run</code> and <code>P</code> of <code>ours.mjs</code>, with <code>resolve</code> written, and the program <code>trace.mjs</code> below, we fill in, on paper, a table with one row for each step. A step is one line of the script, one function that our loop takes from <code>ready</code>, or the host's timer function that resolves <code>p</code>; one more row is for the moment the script has returned. We call <code>k</code> the function <code>user =&gt; console.log(&quot;C&quot;, user)</code> and <code>d</code> the function <code>() =&gt; console.log(&quot;D&quot;)</code>. The columns say what is running, what is in our queue <code>ready</code> (the host's timers are not in it), which continuations wait on <code>p</code>, and what has been printed so far. The table has nine rows. Then we run <code>node trace.mjs</code>.</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">quest/trace.mjs</span></figcaption><pre><code><span class="cm">// The quest, exercise 4: fill in the table on paper first, then run:</span>
+<span class="cm">// node trace.mjs</span>
+<span class="kw">import</span> { later, fetchUser } <span class="kw">from</span> <span class="st">&quot;./ours.mjs&quot;</span>;
+
+<span class="kw">const</span> p = fetchUser();
+console.log(<span class="st">&quot;A&quot;</span>);
+p.then(user =&gt; console.log(<span class="st">&quot;C&quot;</span>, user));
+later(() =&gt; console.log(<span class="st">&quot;D&quot;</span>));
+console.log(<span class="st">&quot;B&quot;</span>);</code></pre></figure>
+<div class="tablewrap"><table class="trace"><thead><tr><th>step</th><th>running</th><th>our queue <code>ready</code></th><th>waiting on <code>p</code></th><th>printed so far</th></tr></thead><tbody><tr><td>1</td><td>the script: <code>fetchUser()</code> makes <code>p</code>; the host will resolve it in 300 ms</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div>
+<p class="note">The first row is filled in. We add one row for each step, until the program has printed everything.</p>
+<p class="check"><span>The check:</span> the last column of the last row is what <code>node trace.mjs</code> prints.</p>
+</article><article class="item" id="e5">
+<h4><span class="num">Exercise 5</span></h4>
+<p>Given <code>load</code> written as a generator that yields the promises it waits for, write <code>drive(gen)</code> in <code>ours.mjs</code>. <code>drive</code> calls <code>gen()</code> to make the generator <code>g</code>, and runs it at once, up to its first <code>yield</code>. To each promise that <code>g</code> yields, <code>drive</code> gives, with <code>then</code>, the continuation that resumes <code>g</code> with the value. It stops when <code>g</code> is done. We write it from this description, then compare it with the appendix's slide <em>An async function as a generator and a driver</em>.</p>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">quest/load.mjs</span></figcaption><pre><code><span class="kw">function</span>* load() {
+  console.log(<span class="st">&quot;A&quot;</span>);
+  <span class="kw">const</span> user = <span class="kw">yield</span> fetchUser();    <span class="cm">// await became yield</span>
+  console.log(<span class="st">&quot;C&quot;</span>, user);
+}
+drive(load);
+console.log(<span class="st">&quot;B&quot;</span>);</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">JavaScript</span><span class="file">quest/ours.mjs</span></figcaption><pre><code><span class="cm">// drive(gen): runs the generator made by gen; each promise it yields is</span>
+<span class="cm">// given the continuation &quot;resume the generator with the value&quot;</span>
+<span class="kw">export</span> <span class="kw">function</span> drive(gen) {
+  todo(<span class="nu">5</span>);
+}</code></pre></figure>
+<p class="check"><span>The check:</span> <code>node checks.mjs</code> runs a copy of <code>load</code> with <code>drive</code>, and <code>node load.mjs</code> prints <code>A</code>, <code>B</code>, <code>C Ada</code>, as the <code>async</code> function did.</p>
+</article><h3 class="end">Limits and further reading</h3><p>What <code>ours.mjs</code> leaves out: <code>then</code> returns nothing, so continuations cannot be chained; there is no second continuation, for failure, as JavaScript's <code>then(onFulfilled, onRejected)</code> has; and the loop is started with a timer of the host, so it runs on top of JavaScript's own loop.</p><p>Lab 5's Part C is the same idea in OCaml: a continuation kept and called later, and two continuations, <code>k</code> and <code>h</code>. Reading: Leroy, <em>Control structures in programming languages</em> (2026), chapters <a href="https://xavierleroy.org/control-structures/book/main009.html">6</a> and <a href="https://xavierleroy.org/control-structures/book/main010.html">7</a>.</p></section>
+</main>
+</body>
+</html>

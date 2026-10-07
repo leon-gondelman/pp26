@@ -708,7 +708,7 @@ table.parts td.k{font-family:"IBM Plex Mono",monospace; white-space:nowrap; colo
   <div class="col">
     <p class="kicker">00 — description</p>
     <h2>What this lab is for</h2>
-    <p>The lecture passed a function as a value twice: as one step of a traversal (block 1), and as a computation not yet run (block 2). Session 6 shows a third way: as the rest of the computation. The lecture did it on lists, which OCaml gives us. Here the collection is our own. Parts A and B of the quest go with the two blocks: Part A hands the rope one step of a traversal, Part B postpones the next element of a sequence. Part C goes with session 6: it keeps the rest of a traversal as a function and calls it later, or twice, or not at all.</p>
+    <p>The lecture passed a function as a value twice: as one step of a traversal (block 1), and as a computation not yet run (block 2). A third way, as the rest of the computation, is the appendix of session 6&rsquo;s second block, as reading; Part C is optional and rests on it.</p>
     <p>The lab has two halves. The <strong>warm-up</strong> is a sheet of questions on paper and exercises at the keyboard, on lists and on a triangle of numbers; it is meant to be finished in the lab. The <strong>quest</strong> (Parts A, B and C) is started in the lab; Parts A and B are finished during the week, Part C after session 6. Nothing is handed in.</p>
     <pre><code class="hl-code language-bash">dune<span class="w"> </span>build
 dune<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>./main.exe<span class="w">                         </span><span class="c1"># pass / FAIL / todo, one line per check</span>
@@ -886,7 +886,7 @@ dune<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>
 <section id="quest">
   <div class="col">
     <p class="kicker">04 — the quest</p>
-    <h2>Three parts, the third with session 6<span class="badge">assignment</span></h2>
+    <h2>Three parts, the third optional<span class="badge">assignment</span></h2>
 
     <h3 id="part-a">Part A — one step of a traversal (<code>rope.ml</code>)</h3>
     <table class="parts">
@@ -930,7 +930,7 @@ dune<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>
     </table>
 
     <h3 id="part-c">Part C — the rest of the computation (<code>next.ml</code>)</h3>
-    <p>Part C goes with session 6, on continuations: we do it after that lecture.</p>
+    <p>Part C is optional. Its reading is the appendix of session 6&rsquo;s second block, on continuations; C1 to C3 need only a continuation kept and called later. C4 is not set this year.</p>
     <table class="parts">
       <tr><td class="k">C1</td><td>Given <code>iter</code>, write <code>iter_k</code>. The function we hand over receives a leaf and <code>k</code>, the function that goes on with the traversal; the last argument of <code>iter_k</code> says what to do after the last leaf. Every call is a tail call.<pre><code class="hl-code language-ocaml"><span class="n">iter_k</span> <span class="o">:</span> <span class="o">(</span><span class="k">&#39;</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="kt">unit</span> <span class="o">-&gt;</span> <span class="k">&#39;</span><span class="n">r</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="k">&#39;</span><span class="n">r</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">rope</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="kt">unit</span> <span class="o">-&gt;</span> <span class="k">&#39;</span><span class="n">r</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="k">&#39;</span><span class="n">r</span></code></pre><p><em>The editor wakes up:</em> the panel <em>Trace</em>. The function that the editor hands over does not call <code>k</code>: it returns it, and the traversal stops after one leaf. The button <em>Call k</em> goes on with it, one leaf at a time.</p></td></tr>
       <tr><td class="k">C2</td><td>Given <code>iter_k</code>, write <code>to_seq</code> again, in one line.<pre><code class="hl-code language-ocaml"><span class="n">to_seq</span> <span class="o">:</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">rope</span> <span class="o">-&gt;</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">seq</span></code></pre><p><em>The editor wakes up:</em> the panel <em>The screen is drawn from</em> offers the sequence of <code>next.ml</code>. The screen is the same, the mark <em>modified</em> and the jump to the first change work on it unchanged: <code>same</code> and <code>first_difference</code> know a sequence by its type only.</p></td></tr>

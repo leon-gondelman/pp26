@@ -13,7 +13,7 @@ The lab has two halves. The **warm-up** (the sheet `warmup/warmup.pdf`, and `war
 a triangle of numbers; it is meant to be finished in the lab. The sheet ends on a homework,
 lab 2's queue, with `warmup/queue.ml`. The **quest** (Parts A, B and C) is started
 in the lab. Parts A and B go with the two blocks of the lecture and are finished during the
-week; Part C goes with session 6, on continuations, and is done after it.
+week; Part C is optional: its reading is the appendix of session 6's second block, on continuations.
 Nothing is handed in.
 
 ## The types
@@ -318,7 +318,7 @@ status line says how many lines were asked for, and the lines after the match we
 
 ## Part C — the rest of the computation (`next.ml`)
 
-Part C goes with session 6, on continuations: we do it after that lecture.
+Part C is optional. Its reading is the appendix of session 6's second block (continuations, continuation-passing style, a promise, a loop, a generator and a driver); C1 to C3 need only a continuation kept and called later, as that appendix shows with `then` and `drive`. C4 is not set this year.
 
 **C1.** Given `iter`, write `iter_k`. The function we hand over receives a leaf and `k`, the
 function that goes on with the traversal; the last argument of `iter_k` says what to do after
@@ -397,5 +397,5 @@ at one position and, in its failure continuation, at the next one. The status li
   repeats it for ever, and play sixteen events of it through lab 3's `wav.ml`.
 
 Reading: Leroy, *Control structures in programming languages* (2026), [chapter 4](https://xavierleroy.org/control-structures/book/main007.html),
-sections 4.1 and 4.2 (chapters 6 and 7, on continuations, go with Part C and session 6);
+sections 4.1 and 4.2 (chapters 6 and 7, on continuations, go with Part C and with the appendix of session 6's second block);
 CS3110, chapter 9, section 9.4, sequences.
