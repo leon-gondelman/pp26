@@ -8,7 +8,7 @@
   --ink:#0f1115; --ink2:#434a59; --ink3:#69717f; --faint:#c9cfd9;
   --line:#e6e9ef; --line-soft:#eef0f4;
   --acc:#211a52; --acc-l:#eeecf7; --acc-t:#3d3383;
-  --wine:#7a1f2e; --wine-l:#f4e7ea;
+  --wine:#7a1f2e; --wine-l:#f4e7ea; --lbl:#b25a2e; --file:#1f68a8;
   --lec:#1d4ed8; --lec-b:#e6edfd;
   --t-test:#6d28d9; --t-test-b:#f0e9fd; --t-why:#c2410c; --t-why-b:#fdeee5; --t-case:#7a1f2e; --t-case-b:#f4e7ea;
   --lab:#0d6b63; --lab-b:#d9f2ef;
@@ -28,7 +28,7 @@
     --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d; --faint:#3a4049;
     --line:#23272e; --line-soft:#1b1f25;
     --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
-    --wine:#e39aa7; --wine-l:#2f191e;
+    --wine:#e39aa7; --wine-l:#2f191e; --lbl:#e6a07a; --file:#7fbcf0;
     --lec:#8fb0ff; --lec-b:#15203a;
     --t-test:#bfa3fb; --t-test-b:#231a3a; --t-why:#fb923c; --t-why-b:#2c1a10; --t-case:#e39aa7; --t-case-b:#2f191e;
     --lab:#6fd3c4; --lab-b:#0f2b29;
@@ -44,7 +44,7 @@
   --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d; --faint:#3a4049;
   --line:#23272e; --line-soft:#1b1f25;
   --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
-  --wine:#e39aa7; --wine-l:#2f191e;
+  --wine:#e39aa7; --wine-l:#2f191e; --lbl:#e6a07a; --file:#7fbcf0;
   --lec:#8fb0ff; --lec-b:#15203a;
   --t-test:#bfa3fb; --t-test-b:#231a3a; --t-why:#fb923c; --t-why-b:#2c1a10; --t-case:#e39aa7; --t-case-b:#2f191e;
   --lab:#6fd3c4; --lab-b:#0f2b29;
@@ -564,7 +564,7 @@ html:not(.pal-old) .dl.c-homework,html:not(.pal-old) ul.materials li.c-homework{
   border:1px solid color-mix(in srgb,var(--lab) 32%,var(--bg))}
 html:not(.pal-old) .more{--blkc:var(--lab)}
 html:not(.pal-old) .more a{border-color:color-mix(in srgb,var(--lab) 32%,var(--bg))}
-html:not(.pal-old) .blk{color:var(--wine);font-weight:700}
+html:not(.pal-old) .blk{color:var(--lbl);font-weight:700;font-size:.74rem}
 html:not(.pal-old) .eic{background:var(--sunk);border-color:var(--line)}
 html:not(.pal-old) .etile .ic{background:var(--sunk);color:var(--ink2)}
 html:not(.pal-old) a.etile:hover{border-color:var(--ink3);box-shadow:none}
@@ -575,12 +575,13 @@ html:not(.pal-old) a.etile:hover .go{color:var(--acc-t)}
    lab's WARM-UP or QUEST, its title, its files, its solutions in orange. */
 .lecl,.labfiles{white-space:nowrap;font-size:.84rem;font-weight:600}
 .lecl{margin-left:.8rem}
-.lecl a{color:var(--acc-t)} .labfiles a{color:var(--lab)}
+.lecl a,.labfiles a{color:var(--file)}
 .lecl a,.labfiles a{text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
 .lecl a:hover,.labfiles a:hover{text-decoration-color:currentColor}
 .lecl .sep,td.labf .sep{color:var(--ink3);margin:0 .4em;font-weight:400}
-td.labf a.sol{color:var(--orng);font-weight:600;font-size:.84rem;text-decoration:none}
-td.labf a.sol:hover{text-decoration:underline;text-underline-offset:.2em}
+td.labf a.sol{color:var(--file);font-weight:600;font-size:.84rem;text-decoration:underline;
+  text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
+td.labf a.sol:hover{text-decoration-color:currentColor}
 td.labt .blk{width:4.4rem}
 td.labt .lt{color:var(--ink2);font-size:.93rem}
 td.labt,td.labf,td.labhead{white-space:nowrap}
@@ -611,7 +612,7 @@ table.sessions td.ttl{padding-right:.8rem}
   table.sessions .lab-m .blk{width:4.4rem}
   table.sessions .lab-m .lt{margin-right:.5rem}
   table.sessions .lab-m .sep{margin:0 .35em;color:var(--ink3)}
-  table.sessions .lab-m a.sol{color:var(--orng);font-weight:600;text-decoration:none;font-size:.84rem}
+  table.sessions .lab-m a.sol{color:var(--file);font-weight:600;text-decoration:none;font-size:.84rem}
   table.sessions td.ttl .blk-m .lecl{margin-left:.5rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -622,3 +623,99 @@ table.sessions td.ttl{padding-right:.8rem}
 #exam ol,#exam ul{margin:0 0 1rem}
 
 
+
+/* ---------------------------------------------------------------- the phone */
+/* Under 980 px the rail is a drawer: a square with three lines at the left of the
+   top bar opens it under the bar, over a dimmed page. Under 760 px the index is a
+   series of stops the page snaps to: the painting with the course's name; the
+   course and its first session; then each part's heading and each session, so
+   that the screen always holds two of them, and a swipe moves on by one. */
+.topbar .menu,.topbar .tbbrand,.scrim,.mcover{display:none}
+@media (max-width:980px){
+  :root{--tbh:3.4rem}
+  .topbar{height:var(--tbh);box-sizing:border-box;padding:0 1rem;gap:.85rem;z-index:62}
+  .topbar .menu{display:grid;align-content:center;justify-items:center;gap:4px;flex:none;
+    width:2.3rem;height:2.3rem;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer}
+  .topbar .menu span{display:block;width:1.05rem;height:1.6px;border-radius:1px;background:var(--ink2);
+    transition:transform .25s ease,opacity .2s ease}
+  html.navopen .topbar .menu{border-color:var(--ink3)}
+  html.navopen .topbar .menu span:nth-child(1){transform:translateY(5.6px) rotate(45deg)}
+  html.navopen .topbar .menu span:nth-child(2){opacity:0}
+  html.navopen .topbar .menu span:nth-child(3){transform:translateY(-5.6px) rotate(-45deg)}
+  .topbar .tbbrand{display:block;font:600 1rem/1.2 var(--sans);letter-spacing:-.01em;color:var(--ink);
+    text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .topbar nav a{display:none}
+  aside.rail{position:fixed;left:0;top:var(--tbh);bottom:0;width:min(19rem,84vw);height:auto;z-index:61;
+    display:block;padding:1.2rem 1.1rem 1.6rem;border-right:1px solid var(--line);border-bottom:0;
+    overflow-y:auto;overscroll-behavior:contain;visibility:hidden;transform:translateX(-102%);
+    transition:transform .34s cubic-bezier(.2,.8,.2,1),visibility 0s linear .34s}
+  html.navopen aside.rail{transform:none;visibility:visible;transition-delay:0s;box-shadow:0 0 40px rgba(15,17,21,.18)}
+  aside.rail .brand{display:none}
+  aside.rail .brand-sub{margin:0 0 1rem .6rem}
+  aside.rail nav,aside.rail .railhead,aside.rail .railfoot{display:block}
+  .scrim{display:block;position:fixed;inset:var(--tbh) 0 0 0;z-index:60;background:rgba(15,17,21,.3);
+    opacity:0;pointer-events:none;transition:opacity .3s ease}
+  html.navopen .scrim{opacity:1;pointer-events:auto}
+  html.navopen body{overflow:hidden}
+}
+@media (max-width:760px){
+  html:has(#cover){scroll-snap-type:y proximity;scroll-padding-top:var(--tbh)}
+  .inner:has(#cover){padding-top:0}
+  /* the painting, still, the course's name across it */
+  .mcover{display:block;position:relative;height:calc(100svh - var(--tbh));margin:0 -1.4rem;overflow:hidden;scroll-snap-align:start}
+  .mcover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+  .mcover::after{content:"";position:absolute;left:-10%;right:-10%;top:calc(46% - 8.5rem);height:17rem;pointer-events:none;
+    background:radial-gradient(closest-side,rgba(250,247,240,.9),rgba(250,247,240,.72) 50%,rgba(250,247,240,0));filter:blur(6px)}
+  .mc-t{position:absolute;left:0;right:0;top:46%;transform:translateY(-50%);z-index:1;text-align:center;padding:0 1.2rem}
+  .mc-t h1{margin:0;font:500 3.35rem/1.04 var(--serif);letter-spacing:-.015em;color:#0f1115;
+    text-shadow:0 0 22px rgba(251,248,240,.95),0 0 48px rgba(251,248,240,.85)}
+  .mc-t p{margin:1.1rem 0 0;font:400 1rem/1.55 var(--sans);color:#2a2d35;text-shadow:0 0 14px rgba(251,248,240,.95)}
+  .mc-down{position:absolute;left:50%;bottom:1.6rem;z-index:1;transform:translateX(-50%);box-sizing:border-box;
+    width:2.7rem;height:2.7rem;border-radius:50%;display:grid;place-items:center;padding-bottom:.35rem;
+    border:1px solid color-mix(in srgb,var(--lec) 40%,var(--line));background:color-mix(in srgb,var(--lec-b) 90%,transparent);
+    color:var(--lec);font:400 1.4rem/1 var(--sans);text-decoration:none}
+  /* the course and its first session: the name is on the painting, the gallery waits for a wider screen */
+  .screen.home{scroll-snap-align:start;min-height:calc(100svh - var(--tbh));box-sizing:border-box;padding-top:1rem}
+  .screen.home figure.masthead,.screen.home .hero h1,.screen.home .hero .sub,.homeside,.nextscreen{display:none}
+  .screen.home .hero p{font-size:.93rem;line-height:1.52;margin-bottom:.8rem}
+  .screen.home .hero p.lead{font-size:1.02rem;line-height:1.48}
+  .hero .introrow{margin-top:.9rem}
+  .screen.home .hero,.screen.home .introrow,.screen.home ul.early{margin-bottom:0}
+  .hero .introrow h2{margin:0 0 .5rem}
+  ul.early li{grid-template-columns:3.6rem minmax(0,1fr) auto}
+  /* a part: its heading and its sessions, each a stop */
+  .screen.sched{padding-top:0}
+  /* the screen holds two stops: each is half of it, or more when its lines need more */
+  .partband{scroll-snap-align:start;margin:0;border-radius:0 0 10px 10px;box-sizing:border-box;
+    min-height:calc((100svh - var(--tbh)) / 2);display:flex;flex-direction:column;justify-content:center;padding:1.2rem 1.1rem}
+  .partband .ph{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .6rem}
+  .partband .pname{flex:1 0 100%;order:-1;margin:0 0 .35rem;font:500 1.85rem/1.12 var(--serif);
+    letter-spacing:-.01em;text-transform:none;color:var(--ink)}
+  .partband .pill{margin-right:0}
+  .partband .dim{margin-left:0}
+  .partband .ptext{margin-top:.9rem;font-size:.98rem}
+  table.sessions tbody tr:not(.block){scroll-snap-align:start;grid-template-columns:minmax(0,1fr);align-content:start;
+    gap:.1rem;padding:.9rem .1rem .8rem;box-sizing:border-box;min-height:calc((100svh - var(--tbh)) / 2)}
+  table.sessions tr.has-blocks td.date{border-bottom:0}
+  /* the current session: one wine line down its left, the card's own ground behind it */
+  table.sessions tr.now td{background:none}
+  table.sessions tbody tr.now{padding-left:1rem;padding-right:.8rem;border-bottom-color:transparent}
+  /* a label, then its line, wrapped under the line and not under the label */
+  table.sessions td.ttl .blk-m,table.sessions .lab-m{padding-left:4.7rem;text-indent:-4.7rem}
+  table.sessions td.ttl .blk-m .blk,table.sessions .lab-m .blk{display:inline-block;width:4.7rem;margin-right:0;text-indent:0}
+  table.sessions .lab-m .lt{font-size:.9rem}
+  table.sessions td.date,table.sessions td.ttl,table.sessions td.mat{grid-column:1;grid-row:auto}
+  table.sessions td.date{font-size:.8rem;padding-top:0}
+  table.sessions td.ttl>a{font-size:1.12rem}
+  table.sessions td.labhead .lw{display:block;margin-top:.5rem;padding-top:0}
+  .screen.tail>section{scroll-snap-align:start}
+  footer.site{scroll-snap-align:end}
+}
+@media (max-width:760px) and (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mcover img{filter:brightness(.86) saturate(.95)}}
+@media (max-width:760px){:root[data-theme="dark"] .mcover img{filter:brightness(.86) saturate(.95)}}
+/* on a touch screen the page always rests on a stop, and one swipe moves one stop;
+   with a mouse or a trackpad in a narrow window it only settles near one */
+@media (max-width:760px) and (pointer:coarse){
+  html:has(#cover){scroll-snap-type:y mandatory}
+  .partband,table.sessions tbody tr:not(.block){scroll-snap-stop:always}
+}

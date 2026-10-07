@@ -18,7 +18,7 @@
 if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}
 if(/[?&]palette=old/.test(location.search))document.documentElement.classList.add("pal-old")})();</script>
 <body>
-<aside class="rail">
+<aside class="rail" id="rail">
   <a class="brand" href="index.html">
     <span class="monogram" aria-hidden="true">PP</span>
     <b>Programming<br>Paradigms</b>
@@ -36,6 +36,8 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 </aside>
 <main>
   <div class="topbar">
+    <button class="menu" type="button" aria-label="Menu" aria-controls="rail" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a class="tbbrand" href="index.html">Programming Paradigms</a>
     <span class="where"><b>Session 2</b> &middot; Wed 9 September 2026</span>
     <nav><a href="https://github.com/leon-gondelman/pp26">Repository</a><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle</a>
       <button class="theme" type="button" aria-label="Colour theme">
@@ -357,6 +359,17 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
     <p class="meta">Programming Paradigms (PP), SW7, autumn 2026. Course material: <a href="https://github.com/leon-gondelman/pp26">GitHub</a>.</p>
   </footer>
 </main>
+<div class="scrim" aria-hidden="true"></div>
+<script>/* On a phone the rail is a drawer: the square with three lines opens it under the
+   top bar, and the same square, a tap beside it, a link or Escape closes it. */
+(function(){var r=document.documentElement,m=document.querySelector(".topbar .menu"),
+  sc=document.querySelector(".scrim"),rl=document.getElementById("rail");if(!m)return;
+function set(o){r.classList.toggle("navopen",o);m.setAttribute("aria-expanded",o?"true":"false");}
+m.addEventListener("click",function(){set(!r.classList.contains("navopen"));});
+sc.addEventListener("click",function(){set(false);});
+rl.addEventListener("click",function(e){if(e.target.closest("a"))set(false);});
+addEventListener("keydown",function(e){if(e.key==="Escape")set(false);});
+addEventListener("resize",function(){if(innerWidth>980)set(false);});})();</script>
 <script>/* Auto follows the phone or laptop; Light and Dark override it. */
 (function(){var r=document.documentElement,b=document.querySelector(".theme");
 function show(){var t=r.dataset.theme||"auto";b.dataset.mode=t;}
@@ -674,7 +687,7 @@ addEventListener("keydown",function(e){if(!desk()||e.altKey||e.ctrlKey||e.metaKe
 document.querySelectorAll(".nextscreen").forEach(function(b){b.addEventListener("click",function(){
   go(s.indexOf(b.closest(".screen"))+1);});});
 var t;addEventListener("scroll",function(){if(busy)return;clearTimeout(t);t=setTimeout(remember,250);},{passive:true});
-function back(){if(location.hash||document.documentElement.classList.contains("splashing"))return;try{var id=localStorage.getItem(K),el=id&&document.getElementById(id);
+function back(){if(!desk()||location.hash||document.documentElement.classList.contains("splashing"))return;try{var id=localStorage.getItem(K),el=id&&document.getElementById(id);
   if(el&&el!==s[0])scrollTo(0,Math.round(topOf(el)));}catch(e){}}
 function align(){var h=s[0],b=h.querySelector(".nextscreen"),row=h.querySelector("ul.early li");if(!b)return;
   if(!row||!desk()){b.style.top="";b.style.bottom="";return;}

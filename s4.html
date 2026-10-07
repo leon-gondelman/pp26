@@ -18,7 +18,7 @@
 if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}
 if(/[?&]palette=old/.test(location.search))document.documentElement.classList.add("pal-old")})();</script>
 <body>
-<aside class="rail">
+<aside class="rail" id="rail">
   <a class="brand" href="index.html">
     <span class="monogram" aria-hidden="true">PP</span>
     <b>Programming<br>Paradigms</b>
@@ -36,6 +36,8 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 </aside>
 <main>
   <div class="topbar">
+    <button class="menu" type="button" aria-label="Menu" aria-controls="rail" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a class="tbbrand" href="index.html">Programming Paradigms</a>
     <span class="where"><b>Session 4</b> &middot; Wed 23 September 2026</span>
     <nav><a href="https://github.com/leon-gondelman/pp26">Repository</a><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle</a>
       <button class="theme" type="button" aria-label="Colour theme">
@@ -57,7 +59,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="group" id="lecture"><span class="glabel">Lecture</span><ul><li class="blockhead"><span class="blk">Block 1</span> Control patterns: recursion, fold, evaluation</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> The formalism: the λ-calculus</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li></ul></li><li class="group" id="warmup"><span class="glabel">Warm-up</span><ul><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s4-lambda-on-paper.pdf">Warm-up — the λ-calculus on paper: five reductions, then four functions</a></span></li></ul></li><li class="group" id="quest"><span class="glabel">Quest</span><ul><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html">Quest — an evaluator for the λ-calculus</a></span></li><li class="m-lab c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab4-lambda/README.md">Lab README — what to do, part by part</a></span></li><li class="m-code c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab4-lambda">The lab folder — lambda.ml, term.ml, syntax.ml, main.ml</a></span></li></ul></li><li class="group" id="solutions"><span class="glabel">Solutions</span><ul><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s4/index.html">Lab 4, every part explained — as a page</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/lambda.ml">lambda.ml — every hole filled, commented</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/main.ml">main.ml — the 31 checks</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s4/s4-warmup-solutions.pdf">Warm-up — the sheet, worked</a></span></li></ul></li><li class="group" id="homework"><span class="glabel">Homework</span><ul><li class="m-reading c-homework"><span class="mi"><a href="https://cs3110.github.io/textbook/chapters/interp/intro.html">CS3110, chapter 10 — sections 10.1 to 10.4</a></span></li><li class="m-homework c-homework"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html#homework">What to finish at home — on the lab page</a></span></li></ul></li></ul>
+  <ul class="materials"><li class="group" id="lecture"><span class="glabel">Lecture</span><ul><li class="blockhead"><span class="blk">Block 1</span> Control patterns</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-1.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> The λ-calculus</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s4-control-block-2.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li></ul></li><li class="group" id="warmup"><span class="glabel">Warm-up</span><ul><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s4-lambda-on-paper.pdf">Warm-up — the λ-calculus on paper: five reductions, then four functions</a></span></li></ul></li><li class="group" id="quest"><span class="glabel">Quest</span><ul><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html">Quest — an evaluator for the λ-calculus</a></span></li><li class="m-lab c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab4-lambda/README.md">Lab README — what to do, part by part</a></span></li><li class="m-code c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab4-lambda">The lab folder — lambda.ml, term.ml, syntax.ml, main.ml</a></span></li></ul></li><li class="group" id="solutions"><span class="glabel">Solutions</span><ul><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s4/index.html">Lab 4, every part explained — as a page</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/lambda.ml">lambda.ml — every hole filled, commented</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s4/ocaml/main.ml">main.ml — the 31 checks</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s4/s4-warmup-solutions.pdf">Warm-up — the sheet, worked</a></span></li></ul></li><li class="group" id="homework"><span class="glabel">Homework</span><ul><li class="m-reading c-homework"><span class="mi"><a href="https://cs3110.github.io/textbook/chapters/interp/intro.html">CS3110, chapter 10 — sections 10.1 to 10.4</a></span></li><li class="m-homework c-homework"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab4-lambda/index.html#homework">What to finish at home — on the lab page</a></span></li></ul></li></ul>
 </section>
 <section class="story">
   <h2>This session</h2>
@@ -323,6 +325,17 @@ Z = &lambda;f. (&lambda;x. f (&lambda;v. x x v)) (&lambda;x. f (&lambda;v. x x v
     <p class="meta">Programming Paradigms (PP), SW7, autumn 2026. Course material: <a href="https://github.com/leon-gondelman/pp26">GitHub</a>.</p>
   </footer>
 </main>
+<div class="scrim" aria-hidden="true"></div>
+<script>/* On a phone the rail is a drawer: the square with three lines opens it under the
+   top bar, and the same square, a tap beside it, a link or Escape closes it. */
+(function(){var r=document.documentElement,m=document.querySelector(".topbar .menu"),
+  sc=document.querySelector(".scrim"),rl=document.getElementById("rail");if(!m)return;
+function set(o){r.classList.toggle("navopen",o);m.setAttribute("aria-expanded",o?"true":"false");}
+m.addEventListener("click",function(){set(!r.classList.contains("navopen"));});
+sc.addEventListener("click",function(){set(false);});
+rl.addEventListener("click",function(e){if(e.target.closest("a"))set(false);});
+addEventListener("keydown",function(e){if(e.key==="Escape")set(false);});
+addEventListener("resize",function(){if(innerWidth>980)set(false);});})();</script>
 <script>/* Auto follows the phone or laptop; Light and Dark override it. */
 (function(){var r=document.documentElement,b=document.querySelector(".theme");
 function show(){var t=r.dataset.theme||"auto";b.dataset.mode=t;}
@@ -640,7 +653,7 @@ addEventListener("keydown",function(e){if(!desk()||e.altKey||e.ctrlKey||e.metaKe
 document.querySelectorAll(".nextscreen").forEach(function(b){b.addEventListener("click",function(){
   go(s.indexOf(b.closest(".screen"))+1);});});
 var t;addEventListener("scroll",function(){if(busy)return;clearTimeout(t);t=setTimeout(remember,250);},{passive:true});
-function back(){if(location.hash||document.documentElement.classList.contains("splashing"))return;try{var id=localStorage.getItem(K),el=id&&document.getElementById(id);
+function back(){if(!desk()||location.hash||document.documentElement.classList.contains("splashing"))return;try{var id=localStorage.getItem(K),el=id&&document.getElementById(id);
   if(el&&el!==s[0])scrollTo(0,Math.round(topOf(el)));}catch(e){}}
 function align(){var h=s[0],b=h.querySelector(".nextscreen"),row=h.querySelector("ul.early li");if(!b)return;
   if(!row||!desk()){b.style.top="";b.style.bottom="";return;}
