@@ -1283,6 +1283,21 @@ html.print-pdf .reveal #race .rstk > .current-visible, html.reveal-print .reveal
 .reveal #race .rstk pre.apr { font-size: 22px; margin: 0; width: 100%; }
 .reveal #race .rstk pre.apr code { padding: 12px 18px; }
 .reveal #race .rstk > div.cap > p.ctor { margin: 12px 0 0 0; font-size: 26px; line-height: 1.3; }
+/* the callbacks slide: four problems on the left, lit in turn; one program at a time on the right */
+.reveal #callbacks .cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 44px; }
+.reveal #callbacks p.lead { font-size: 29px; line-height: 1.38; margin: 0 0 14px 0; }
+.reveal #callbacks ol.steps { margin: 0; padding-left: 1.3em; }
+.reveal #callbacks ol.steps li { font-size: 27px; line-height: 1.36; margin-bottom: 10px; }
+.reveal #callbacks ol.steps li::marker { color: var(--accent); font-weight: 500; }
+.reveal #callbacks ol.steps li.fragment.plit { opacity: 1; visibility: inherit; transform: none; transition: background .3s; border-radius: 4px; }
+.reveal #callbacks ol.steps li.fragment.plit.visible:not(:has(~ li.plit.visible)) { background: var(--box); box-shadow: 0 0 0 6px var(--box); }
+.reveal #callbacks .cbswap p { font-size: 27px; line-height: 1.36; }
+.reveal #callbacks .cbswap pre { margin: 0 0 14px 0; }
+html.print-pdf .reveal #callbacks .cbswap > .current-visible, html.reveal-print .reveal #callbacks .cbswap > .current-visible { display: none; }
+.reveal #a-ioc table.ioc { width: 100%; margin: 0 0 28px 0; }
+.reveal #a-ioc table.ioc td, .reveal #a-ioc table.ioc th { font-size: 25px; }
+.reveal #a-ioc .box { margin-top: 24px; }
+.reveal #a-ioc .cols p { font-size: 27px; line-height: 1.36; }
 </style>
 </head>
 <body>
@@ -1323,8 +1338,8 @@ html.print-pdf .reveal #race .rstk > .current-visible, html.reveal-print .reveal
   <div class="sub">one thread, four properties</div>
   <aside class="notes">
     <p>The model and what it guarantees, stated as four properties, in the terms of the field.</p>
-    <p>No program is run in this part.</p>
-    <p>About twenty minutes: the model and the three questions on languages are brief; the properties take the time.</p>
+    <p>One slide runs programs, the callbacks slide; the others state the model and its properties.</p>
+    <p>About twenty minutes: the model and the callbacks slide are brief; the properties take the time. Other languages are part 3.</p>
   </aside>
 </section>
 
@@ -1538,7 +1553,7 @@ console.log("B");</code></pre>
       </div>
     </div>
   </div>
-  <p class="fn"><sup>&dagger;</sup> Python, C# and Rust have the same pair; what differs around it: slides 9 to 11, and the appendix.<br><span class="fragment" data-fragment-index="2"><sup>*</sup> <code>p.then(f)</code> registers <code>f</code>, to be called with the value of <code>p</code> once <code>p</code> is fulfilled.</span></p>
+  <p class="fn"><sup>&dagger;</sup> Python, C# and Rust have the same pair; what differs around it: part 3, and the appendix.<br><span class="fragment" data-fragment-index="2"><sup>*</sup> <code>p.then(f)</code> registers <code>f</code>, to be called with the value of <code>p</code> once <code>p</code> is fulfilled.</span></p>
   <a class="apx" href="#/a-langs" data-tip="languages against the model: the full comparison">appendix</a>
   <aside class="notes">
     <p>The two ends of one promise. new Promise makes a promise and hands us the function that settles it; await waits on a promise. The promise in the heap connects them.<br>
@@ -1546,8 +1561,112 @@ console.log("B");</code></pre>
     <p>If asked: what about the second argument of the executor? It is rej: rej(e) rejects the promise with the error e, and an await on a rejected promise throws e at the await. Failure is not treated in this session.<br>
       If asked: does res(v) always fulfill? When v is a plain value, yes. Strictly res resolves: if v is itself a promise, ours follows it, and is fulfilled only when v is.<br>
       If asked: where is new Promise in load? Nowhere in our text: calling an async function creates its own promise, and its return settles it. In await fetchUser() the promise is fetchUser&#39;s; the caller of load gets load&#39;s.<br>
-      The dagger: the pair is not JavaScript&#39;s; every language with async and await has a result that starts pending, is settled from outside by whoever holds the setter, and is awaited. What differs is around it: whether the call starts the work, whether await suspends on a value already there, which thread resumes; slides 9 to 11, and the appendix table. Python: fut = loop.create_future(), fut.set_result(v), await fut. C#: var tcs = new TaskCompletionSource&lt;T&gt;(), tcs.SetResult(v), await tcs.Task. Rust (tokio): let (tx, rx) = oneshot::channel(), tx.send(v), rx.await; there the future runs only when polled, as slide 9 shows.<br>
+      The dagger: the pair is not JavaScript&#39;s; every language with async and await has a result that starts pending, is settled from outside by whoever holds the setter, and is awaited. What differs is around it: whether the call starts the work, whether await suspends on a value already there, which thread resumes; part 3, and the appendix table. Python: fut = loop.create_future(), fut.set_result(v), await fut. C#: var tcs = new TaskCompletionSource&lt;T&gt;(), tcs.SetResult(v), await tcs.Task. Rust (tokio): let (tx, rx) = oneshot::channel(), tx.send(v), rx.await; there the future runs only when polled, as part 3 shows.<br>
       If asked: can we wait without await? Yes, with then; the appendix builds then and a loop by hand, and await as a generator with a driver.</p>
+  </aside>
+</section>
+
+<!-- callbacks -->
+<section id="callbacks">
+  <h2>Callbacks<span class="h2sub">the rest of a computation, passed by hand</span></h2>
+  <span class="fragment step-note" data-fragment-index="0" data-notes="Nesting. Three requests in turn: the request for b is made in a's callback, the one for c in b's. Each step adds a level; a loop over a list of keys cannot be written this way without a recursive helper.&#10;With await the same three steps are three lines, in order. Both print A B C after 900 ms."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-notes="No composition. Both requests leave at once, as in Example 2's together; to go on when both have arrived, each callback stores its value and counts, and the one that finds the count at 2 goes on.&#10;With promises, pa and pb are values: we hold them, and await each. A promise can be stored, passed on, awaited by several computations, and combined, Promise.all for instance."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-notes="Inversion of control. We hand our rest to code that is not ours, and that code decides when to run it, and how many times. userK answers from a cache: on a miss later, from a timer; on a hit at once, inside the call. The same show prints B first on a miss and last on a hit. Schlueter, 2013, calls an interface that is sometimes synchronous and sometimes not 'releasing Zalgo'.&#10;A promise rules out two of these: it is settled at most once, and what waits on it always goes to the queue, Promises/A+ 2.2.4. It does not rule out never: a promise that nobody settles waits for ever. The appendix has the three cases."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-notes="Errors. The try ends when setTimeout returns; the callback runs 100 ms later, from the queue, with the try's frame gone. Nothing catches the exception: node prints it and stops.&#10;Node's convention gives every callback its error first, (err, value) =&gt; ..., and every callback checks it. A promise has a third state, rejected; await on a rejected promise throws at the await, where an ordinary try catches it. Failure is session 9's."></span>
+  <script class="src" type="text/plain" id="src-cb-pre">
+    const getK = (k, cb) => setTimeout(
+      () => cb(k.toUpperCase()), 300);
+    const get = k =>
+      new Promise(res => getK(k, res));
+  </script>
+  <script class="src" type="text/plain" id="src-cb-nest">
+    getK("a", a =>
+      getK("b", b =>
+        getK("c", c =>
+          console.log(a, b, c))));
+  </script>
+  <script class="src" type="text/plain" id="src-cb-nest-aw">
+    const a = await get("a");
+    const b = await get("b");
+    const c = await get("c");
+    console.log(a, b, c);
+  </script>
+  <script class="src" type="text/plain" id="src-cb-comp">
+    let a, b, n = 0;
+    const done = () => {
+      if (++n === 2) console.log(a, b);
+    };
+    getK("a", v => { a = v; done(); });
+    getK("b", v => { b = v; done(); });
+  </script>
+  <script class="src" type="text/plain" id="src-cb-comp-aw">
+    const pa = get("a"), pb = get("b");
+    console.log(await pa, await pb);
+  </script>
+  <script class="src" type="text/plain" id="src-cb-ctl">
+    const cache = {};
+    const userK = (id, cb) => {
+      if (id in cache) cb(cache[id]);
+      else setTimeout(() => {
+        cache[id] = "Ada"; cb("Ada");
+      }, 100);
+    };
+    const show = () => {
+      userK(1, u => console.log("C", u));
+      console.log("B");
+    };
+    show();
+    setTimeout(show, 200);
+  </script>
+  <script class="src" type="text/plain" id="src-cb-err">
+    try {
+      setTimeout(() => {
+        throw new Error("no user");
+      }, 100);
+    } catch (e) {
+      console.log("caught", e.message);
+    }
+    console.log("B");
+  </script>
+  <div class="cols">
+    <div>
+      <p class="lead">Before promises, a function whose result comes later took a <b>callback</b>: the rest of the computation, as a function, which it calls with the result.</p>
+      <ol class="steps">
+        <li class="fragment plit" data-fragment-index="0"><b>Nesting</b>: each step is written inside the callback of the step before. With <code>await</code>, the steps follow one another.</li>
+        <li class="fragment plit" data-fragment-index="1"><b>No composition</b>: a result not yet arrived is not a value; waiting for two takes a counter. A promise is a value: stored, passed on, awaited by several.</li>
+        <li class="fragment plit" data-fragment-index="2"><b>Inversion of control</b>: the function we call decides when our callback runs, and how many times. A promise is settled once, and what waits on it always goes to the queue.</li>
+        <li class="fragment plit" data-fragment-index="3"><b>Errors</b>: an exception thrown in a callback does not reach the caller&rsquo;s <code>try</code>. Failure: session 9.</li>
+      </ol>
+    </div>
+    <div class="swap cbswap">
+      <div class="fragment fade-out" data-fragment-index="0">
+        <pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos6/js/callbacks.mjs#L3" data-file="demos6/js/callbacks.mjs" data-at="const getK" target="_blank" rel="noopener">JavaScript</a><code class="language-javascript" data-src="src-cb-pre"></code></pre>
+        <p><code>getK(k, cb)</code> asks for <code>k</code>; <code>cb</code> gets the answer 300 ms later. <code>get</code> is the same request as a promise.</p>
+      </div>
+      <div class="fragment current-visible" data-fragment-index="0">
+        <div class="prog under"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos6/js/callbacks.mjs#L7" data-file="demos6/js/callbacks.mjs" data-at="nesting()" target="_blank" rel="noopener">JavaScript</a><code class="language-javascript" data-src="src-cb-nest"></code></pre><div class="go"><button class="run" onclick="runJSLive(this, 'out-cb-nest', 'src-cb-pre,src-cb-nest')">Run</button></div><pre class="out strip" id="out-cb-nest"></pre></div>
+        <pre><code class="language-javascript" data-src="src-cb-nest-aw"></code></pre>
+      </div>
+      <div class="fragment current-visible" data-fragment-index="1">
+        <div class="prog under"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos6/js/callbacks.mjs#L13" data-file="demos6/js/callbacks.mjs" data-at="composition()" target="_blank" rel="noopener">JavaScript</a><code class="language-javascript" data-src="src-cb-comp"></code></pre><div class="go"><button class="run" onclick="runJSLive(this, 'out-cb-comp', 'src-cb-pre,src-cb-comp')">Run</button></div><pre class="out strip" id="out-cb-comp"></pre></div>
+        <pre><code class="language-javascript" data-src="src-cb-comp-aw"></code></pre>
+      </div>
+      <div class="fragment current-visible" data-fragment-index="2">
+        <div class="prog under"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos6/js/callbacks.mjs#L21" data-file="demos6/js/callbacks.mjs" data-at="control()" target="_blank" rel="noopener">JavaScript</a><code class="language-javascript" data-src="src-cb-ctl"></code></pre><div class="go"><button class="run" onclick="runJSLive(this, 'out-cb-ctl', 'src-cb-ctl')">Run</button></div><pre class="out strip" id="out-cb-ctl"></pre></div>
+      </div>
+      <div class="fragment" data-fragment-index="3">
+        <div class="prog under"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos6/js/callbacks.mjs#L36" data-file="demos6/js/callbacks.mjs" data-at="errors()" target="_blank" rel="noopener">JavaScript</a><code class="language-javascript" data-src="src-cb-err"></code></pre><div class="go"><button class="run" onclick="runRec(this, 'out-cb-err')">Run</button></div><pre class="out strip rec" id="out-cb-err" data-by="recorded · node 25" data-recorded="B
+Error: no user
+    at Timeout._onTimeout (callbacks.mjs:39:15)"></pre></div>
+      </div>
+    </div>
+  </div>
+  <a class="apx" href="#/a-ioc" data-tip="inversion of control: three cases, and what a promise rules out">appendix</a>
+  <aside class="notes">
+    <p>Why a promise at all? Before promises, from the first browsers to Node, an asynchronous function took a callback: the rest of the computation, written as a function, which the function calls with the result when it has it. setTimeout still works this way, and new Promise, on the previous slide, is how such an interface becomes a promise: get is getK wrapped.<br>
+      A callback is a continuation passed by hand; the appendix calls this continuation-passing style. Four problems came with it, and each one is what the promise and then were made for.</p>
+    <p>The order is the history: callbacks; promise libraries from about 2005, from Python's Twisted to Dojo, CommonJS and jQuery; Promises/A+ in 2012; the promise in the language, ES2015; await, ES2017.<br>
+      If asked: is callback hell the nesting? That is its name in the folklore; the other three problems are the serious ones.</p>
   </aside>
 </section>
 
@@ -1738,93 +1857,6 @@ deposit(20);   // required: 130</code></pre>
     <p>The figure is one execution: both approvals take the same time.<br>
       Blue is running, hatched is waiting for the approval.</p>
     <p>If asked: would a lock fix it? A thread's lock cannot: there is one thread, and holding a lock across the wait while the other call takes it would block that thread. An asynchronous lock, whose acquire is itself an await, works, and so does the repair on the slide, which needs no lock: the read moves after the wait, so that the read and the write are one stretch.</p>
-  </aside>
-</section>
-
-<!-- 6 -->
-<section id="languages">
-  <h2>Starting the work<span class="h2sub">at the call, or later</span></h2>
-  <div class="cols">
-    <div>
-      <p>Properties 1 to 4 describe JavaScript. Three questions, each decided by a small run, locate any other language with respect to them.</p>
-      <p>First: when does an asynchronous function start to run? At the call, or only when a scheduler takes it? The run: <code>load()</code>, then <code>console.log("B")</code>.</p>
-    </div>
-    <div>
-      <table class="lang">
-        <tr><th>language</th><th>a call</th></tr>
-        <tr><td>JavaScript, C#</td><td>runs it up to its first <code>await</code>: A, B, C Ada</td></tr>
-        <tr><td>Python</td><td>a coroutine object, nothing runs: a warning, then B; <code>create_task</code>: B, A, C Ada</td></tr>
-        <tr><td>Rust</td><td>builds a future, which runs when polled</td></tr>
-        <tr><td>Kotlin</td><td>a <code>suspend</code> call waits: A, C Ada, B; <code>launch</code> queues it</td></tr>
-        <tr><td>Go, Java</td><td>a plain call waits: A, C Ada, B; with <code>go</code> or a virtual thread: B, A, C Ada in these runs, A and B in no fixed order</td></tr>
-      </table>
-    </div>
-  </div>
-  <div class="box fragment">Two realizations of one model. In JavaScript and C# the call runs the function to its first <code>await</code>. In Python and Rust the call builds an object and runs nothing, session 5&rsquo;s thunk usable once: <code>await</code> runs it in place, <code>create_task</code> or <code>spawn</code> queues it.</div>
-  <aside class="notes">
-    <p>Properties 1 to 4 describe JavaScript.<br>
-      Three questions locate any other language with respect to the four properties: when the work starts, what an await does when the value is already there, and which thread resumes.<br>
-      Each is a design decision of the language, and a small run shows it: load and the two deposits, written in each language and run on this machine. The appendix ends with the full table.</p>
-    <p>Does a call start the work?<br>
-      In JavaScript and C#, yes: the call runs the function to its first await, and then returns. A, B, C Ada.<br>
-      In Python, no: the call builds a coroutine object and runs nothing; the program prints B and a warning. With create_task the work is put in the queue: B, A, C Ada. In Rust a future runs when it is polled. In Go and Java the work runs on a goroutine or a virtual thread of its own; the order is not fixed: these runs printed B first, and A first is allowed.<br>
-      Each row is the default of its language. Python 3.12 added an eager task factory: with it, create_task runs the task at once up to its first wait, A, B, C Ada. Kotlin's launch queues the coroutine with the default start, CoroutineStart.DEFAULT, on a dispatcher that queues; with CoroutineStart.UNDISPATCHED it runs at once up to its first suspension. The runs: node 25, Python 3.14, .NET 10, Kotlin 2.4 with kotlinx.coroutines 1.10, Go 1.27, Java 26.<br>
-      The Python coroutine object is close to session 5's thunk, with the difference that it can be run once only.</p>
-  </aside>
-</section>
-
-<!-- 6b -->
-<section id="languages-2">
-  <h2>The suspension point<span class="h2sub">at every <code>await</code>, or only when the value is missing</span></h2>
-  <div class="cols">
-    <div>
-      <p>Second: what does an <code>await</code> do when the value is already there? Suspend anyway, so that every <code>await</code> is an interleaving point; or go straight on, so that the stretch stays atomic.</p>
-      <p>The run: the two deposits, with an <code>approve</code> that has nothing to wait for. In JavaScript, <code>await null</code> awaits a value already there; in Python, <code>asyncio.sleep(0)</code> asks for a wait of zero seconds.</p>
-    </div>
-    <div>
-      <table class="lang">
-        <tr><th>language</th><th>an <code>await</code> on a finished result</th></tr>
-        <tr><td>JavaScript</td><td>suspends, even <code>await null</code>: 120</td></tr>
-        <tr><td>Python</td><td>goes straight on: 130; <code>await sleep(0)</code> suspends: 120</td></tr>
-        <tr><td>C#, Rust, Kotlin</td><td>goes straight on</td></tr>
-        <tr><td>Go, Java</td><td>there is no <code>await</code></td></tr>
-      </table>
-    </div>
-  </div>
-  <div class="box fragment">Of these languages only JavaScript suspends at every <code>await</code>. Elsewhere an <code>await</code> on a value already there is not a suspension point: on one thread, the stretch around it stays atomic.</div>
-  <aside class="notes">
-    <p>Is every await a suspension point?<br>
-      In JavaScript yes: the deposits give 120 even with await null.<br>
-      In Python no: 130 when the awaited result is already available, 120 with await asyncio.sleep(0). C#, Rust and Kotlin: an await on a completed result goes straight on.<br>
-      So elsewhere an await is a suspension point only when its value is not yet available.</p>
-  </aside>
-</section>
-
-<!-- 6c -->
-<section id="languages-3">
-  <h2>The resuming thread<span class="h2sub">one thread, or a pool</span></h2>
-  <div class="cols">
-    <div>
-      <p>Third: which thread resumes a suspended computation? The one thread of the loop, as the model assumes; or any thread of a pool.</p>
-      <p>The run: the two deposits, with a real wait, on the runtime each language gives by default.</p>
-    </div>
-    <div>
-      <table class="lang">
-        <tr><th>language</th><th>the thread that resumes</th></tr>
-        <tr><td>JavaScript</td><td>the one thread: always 120</td></tr>
-        <tr><td>Python</td><td>the loop&rsquo;s one thread: always 120</td></tr>
-        <tr><td>C#</td><td>in a console program, a thread of a pool: 110 or 120 in these runs</td></tr>
-        <tr><td>Rust, Kotlin</td><td>the executor&rsquo;s or the dispatcher&rsquo;s choice</td></tr>
-        <tr><td>Go, Java</td><td>several threads: 110 or 120 in these runs; 130 possible</td></tr>
-      </table>
-    </div>
-  </div>
-  <div class="box fragment">Where a pool resumes the computations, two of them run at the same time: the model&rsquo;s first assumption is gone, and Property 4 with it, although every suspension point is written. Session 7.</div>
-  <aside class="notes">
-    <p>Which thread resumes?<br>
-      This row is session 7's. In JavaScript and in Python's loop, the one thread: always 120.<br>
-      In C# the thread is chosen by the synchronization context in force at the await. A console program has none, so a thread of the pool resumes: 110 or 120 in these runs, .NET 10. The thread of a window has one, and it brings every rest back to that thread, as in the model. A context made by hand, pumped by one thread, did so in our runs; a real window was not run. In Rust the executor decides; in Kotlin the dispatcher. In Go and Java, several threads: 110 or 120 in these runs, and 130 is possible.<br>
-      Wherever a pool of threads resumes suspended computations, two of them can run at the same time, and property 4 is gone although every suspension point is still written in the text.</p>
   </aside>
 </section>
 
@@ -2150,6 +2182,16 @@ tick at 504 ms"></pre></div>
   </aside>
 </section>
 
+<!-- part 3 -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">PART 3</div>
+  <h1>Other languages</h1>
+  <div class="sub">the same programs, against the model</div>
+  <aside class="notes">
+    <p>Properties 1 to 4 describe JavaScript. This part locates other languages with respect to them: first the two programs in Python, run in the page; then four questions, each with a table for Python, C#, Rust, Kotlin, Go and Java. About ten minutes.</p>
+  </aside>
+</section>
+
 <!-- 16 -->
 <section id="elsewhere">
   <h2>The same programs in Python<span class="h2sub">a bare call; an <code>await</code> on a finished result</span></h2>
@@ -2219,7 +2261,7 @@ waits 0 seconds: 120"></pre></div>
       Cards: what is printed?<br>
       The bare call prints a warning, then B: in Python a call builds a coroutine object and runs nothing, and Python warns that the coroutine was never awaited.<br>
       create_task puts the work in the queue: B, A, C Ada. Even A comes after B.<br>
-      Two languages, two answers to the first question: in JavaScript the call starts the work, in Python it only describes it.</p>
+      Two languages, two answers to the question of the next slide, does a call start the work: in JavaScript the call starts the work, in Python it only describes it.</p>
     <p>On the right, the two deposits, with an approve that has nothing to wait for, then one that waits for zero seconds.<br>
       Cards: the two balances?<br>
       130, then 120. In Python an await on a result that is already there goes straight on, and the deposit is one stretch; sleep(0) really suspends.<br>
@@ -2229,9 +2271,129 @@ waits 0 seconds: 120"></pre></div>
   </aside>
 </section>
 
-<!-- part 3 -->
+<!-- 6 -->
+<section id="languages">
+  <h2>Starting the work<span class="h2sub">at the call, or later</span></h2>
+  <div class="cols">
+    <div>
+      <p>Properties 1 to 4 describe JavaScript. Four questions, each decided by a small run or by the language&rsquo;s interface, locate any other language with respect to them.</p>
+      <p>First: when does an asynchronous function start to run? At the call, or only when a scheduler takes it? The run: <code>load()</code>, then <code>console.log("B")</code>.</p>
+    </div>
+    <div>
+      <table class="lang">
+        <tr><th>language</th><th>a call</th></tr>
+        <tr><td>JavaScript, C#</td><td>runs it up to its first <code>await</code>: A, B, C Ada</td></tr>
+        <tr><td>Python</td><td>a coroutine object, nothing runs: a warning, then B; <code>create_task</code>: B, A, C Ada</td></tr>
+        <tr><td>Rust</td><td>builds a future, which runs when polled</td></tr>
+        <tr><td>Kotlin</td><td>a <code>suspend</code> call waits: A, C Ada, B; <code>launch</code> queues it</td></tr>
+        <tr><td>Go, Java</td><td>a plain call waits: A, C Ada, B; with <code>go</code> or a virtual thread: B, A, C Ada in these runs, A and B in no fixed order</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box fragment">Two realizations of one model. In JavaScript and C# the call runs the function to its first <code>await</code>. In Python and Rust the call builds an object and runs nothing, session 5&rsquo;s thunk usable once: <code>await</code> runs it in place, <code>create_task</code> or <code>spawn</code> queues it.</div>
+  <aside class="notes">
+    <p>Properties 1 to 4 describe JavaScript.<br>
+      Four questions locate any other language with respect to the four properties: when the work starts, what an await does when the value is already there, which thread resumes, and how the rest is handed to the result it waits for.<br>
+      Each is a design decision of the language, and a small run shows it: load and the two deposits, written in each language and run on this machine. The appendix ends with the full table.</p>
+    <p>Does a call start the work?<br>
+      In JavaScript and C#, yes: the call runs the function to its first await, and then returns. A, B, C Ada.<br>
+      In Python, no: the call builds a coroutine object and runs nothing; the program prints B and a warning. With create_task the work is put in the queue: B, A, C Ada. In Rust a future runs when it is polled. In Go and Java the work runs on a goroutine or a virtual thread of its own; the order is not fixed: these runs printed B first, and A first is allowed.<br>
+      Each row is the default of its language. Python 3.12 added an eager task factory: with it, create_task runs the task at once up to its first wait, A, B, C Ada. Kotlin's launch queues the coroutine with the default start, CoroutineStart.DEFAULT, on a dispatcher that queues; with CoroutineStart.UNDISPATCHED it runs at once up to its first suspension. The runs: node 25, Python 3.14, .NET 10, Kotlin 2.4 with kotlinx.coroutines 1.10, Go 1.27, Java 26.<br>
+      The Python coroutine object is close to session 5's thunk, with the difference that it can be run once only.</p>
+  </aside>
+</section>
+
+<!-- 6b -->
+<section id="languages-2">
+  <h2>The suspension point<span class="h2sub">at every <code>await</code>, or only when the value is missing</span></h2>
+  <div class="cols">
+    <div>
+      <p>Second: what does an <code>await</code> do when the value is already there? Suspend anyway, so that every <code>await</code> is an interleaving point; or go straight on, so that the stretch stays atomic.</p>
+      <p>The run: the two deposits, with an <code>approve</code> that has nothing to wait for. In JavaScript, <code>await null</code> awaits a value already there; in Python, <code>asyncio.sleep(0)</code> asks for a wait of zero seconds.</p>
+    </div>
+    <div>
+      <table class="lang">
+        <tr><th>language</th><th>an <code>await</code> on a finished result</th></tr>
+        <tr><td>JavaScript</td><td>suspends, even <code>await null</code>: 120</td></tr>
+        <tr><td>Python</td><td>goes straight on: 130; <code>await sleep(0)</code> suspends: 120</td></tr>
+        <tr><td>C#, Rust, Kotlin</td><td>goes straight on</td></tr>
+        <tr><td>Go, Java</td><td>there is no <code>await</code></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box fragment">Of these languages only JavaScript suspends at every <code>await</code>. Elsewhere an <code>await</code> on a value already there is not a suspension point: on one thread, the stretch around it stays atomic.</div>
+  <aside class="notes">
+    <p>Is every await a suspension point?<br>
+      In JavaScript yes: the deposits give 120 even with await null.<br>
+      In Python no: 130 when the awaited result is already available, 120 with await asyncio.sleep(0). C#, Rust and Kotlin: an await on a completed result goes straight on.<br>
+      So elsewhere an await is a suspension point only when its value is not yet available.</p>
+  </aside>
+</section>
+
+<!-- 6c -->
+<section id="languages-3">
+  <h2>The resuming thread<span class="h2sub">one thread, or a pool</span></h2>
+  <div class="cols">
+    <div>
+      <p>Third: which thread resumes a suspended computation? The one thread of the loop, as the model assumes; or any thread of a pool.</p>
+      <p>The run: the two deposits, with a real wait, on the runtime each language gives by default.</p>
+    </div>
+    <div>
+      <table class="lang">
+        <tr><th>language</th><th>the thread that resumes</th></tr>
+        <tr><td>JavaScript</td><td>the one thread: always 120</td></tr>
+        <tr><td>Python</td><td>the loop&rsquo;s one thread: always 120</td></tr>
+        <tr><td>C#</td><td>in a console program, a thread of a pool: 110 or 120 in these runs</td></tr>
+        <tr><td>Rust, Kotlin</td><td>the executor&rsquo;s or the dispatcher&rsquo;s choice</td></tr>
+        <tr><td>Go, Java</td><td>several threads: 110 or 120 in these runs; 130 possible</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box fragment">Where a pool resumes the computations, two of them run at the same time: the model&rsquo;s first assumption is gone, and Property 4 with it, although every suspension point is written. Session 7.</div>
+  <aside class="notes">
+    <p>Which thread resumes?<br>
+      This row is session 7's. In JavaScript and in Python's loop, the one thread: always 120.<br>
+      In C# the thread is chosen by the synchronization context in force at the await. A console program has none, so a thread of the pool resumes: 110 or 120 in these runs, .NET 10. The thread of a window has one, and it brings every rest back to that thread, as in the model. A context made by hand, pumped by one thread, did so in our runs; a real window was not run. In Rust the executor decides; in Kotlin the dispatcher. In Go and Java, several threads: 110 or 120 in these runs, and 130 is possible.<br>
+      Wherever a pool of threads resumes suspended computations, two of them can run at the same time, and property 4 is gone although every suspension point is still written in the text.</p>
+  </aside>
+</section>
+
+<!-- 6d -->
+<section id="languages-4">
+  <h2>Registering the rest<span class="h2sub"><code>then</code>, and what other languages have</span></h2>
+  <div class="cols">
+    <div>
+      <p>Fourth: how is the rest of a function handed to the result it waits for? A call registers it on the result, as <code>p.then(k)</code> does; or a scheduler asks the result whether it is ready.</p>
+      <p>Before <code>await</code>, this was all we had. Each language reached it from a different start.</p>
+    </div>
+    <div>
+      <table class="lang">
+        <tr><th>language</th><th>the rest, handed over</th></tr>
+        <tr><td>JavaScript</td><td data-widow="1"><code>then</code>; before 2015, a callback</td></tr>
+        <tr><td>C#</td><td data-widow="1"><code>ContinueWith</code>; <code>Wait</code> blocks</td></tr>
+        <tr><td>Java</td><td data-widow="1"><code>thenApply</code>; <code>get</code> blocks</td></tr>
+        <tr><td>Python</td><td data-widow="1"><code>add_done_callback</code></td></tr>
+        <tr><td>Kotlin</td><td data-widow="1">a <code>Continuation</code>, from the compiler</td></tr>
+        <tr><td>Rust</td><td data-widow="1">none: the executor polls the future</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box fragment">JavaScript could not block its one thread: passing the rest was the only way to wait. Languages with threads could block first, and added this later. With <code>await</code>, the compiler writes the registration for us.</div>
+  <aside class="notes">
+    <p>The fourth question is not decided by a run but by the interface each language gives: how the rest of a waiting function is attached to the result it waits for.<br>
+      In JavaScript, p.then(k) registers k on the promise p; before the promise entered the language in 2015, an asynchronous function took a callback, as on the callbacks slide. await is defined through the same step: await p registers the rest of the function on p, with two continuations, one for the value and one that throws the error.</p>
+    <p>C# and Java had threads, and their first futures could block: Java 5's Future.get, 2004, and C#'s Task.Wait park one thread while the others run. The registration came later: C#'s Task.ContinueWith with .NET 4, 2010; Java's CompletableFuture with Java 8, 2014, where thenApply and thenCompose split what JavaScript's then does in one, since then flattens a promise returned by k.<br>
+      Python's asyncio has add_done_callback on a future; code rarely calls it, and a task uses it to resume itself.<br>
+      Kotlin's compiler gives every suspend function one more parameter, a Continuation, and the library resumes it with resumeWith; the appendix shows the generated class.<br>
+      Rust has no registration: the executor polls a future, and the future, when it cannot finish, keeps the Waker it was given and calls it when it can make progress, so that the executor polls it again.<br>
+      Go and Java's virtual threads have none either: the waiting code blocks, and the runtime parks the goroutine or virtual thread with its whole stack.</p>
+    <p>Why then is so visible in JavaScript: the language had one thread and could not block, so from 1995 to 2017, when await arrived, every program that waited passed its rest by hand, by callback and then by then. Elsewhere await hides a mechanism that most programmers never meet.</p>
+  </aside>
+</section>
+
+<!-- part 4 -->
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 3</div>
+  <div class="eyebrow">PART 4</div>
   <h1>Conclusion</h1>
   <div class="sub">the four properties; what is left open; the lab, and session 7</div>
   <aside class="notes">
@@ -2522,7 +2684,7 @@ queue     : after resolve | k 1"></pre></div>
   <div class="box fragment"><b>Task management</b>: who may run between two of our lines. <b>Stack management</b>: who keeps the suspended state. Two independent questions (<a class="ref" href="https://www.usenix.org/legacy/publications/library/proceedings/usenix02/full_papers/adyahowell/adyahowell.pdf" target="_blank" rel="noopener">Adya et al., 2002</a>).</div>
   <a class="apx back" href="#/closing">back</a>
   <aside class="notes">
-    <p>The full table, for reference: the three decisions of part 1, and a fourth that the appendix explains, who keeps the suspended state.<br>
+    <p>The full table, for reference: the first three decisions of part 3, and one that the appendix explains, who keeps the suspended state.<br>
       The first three columns are the runs for JavaScript, Python, C#, Go and Java; the Rust and Kotlin cells are the recorded checks of S6_language_checks.md; OCaml's third cell is the design, not a run. The last column is what each compiler or runtime does, from the languages' own documentation and the recorded runs; C#'s compiler, for instance, turns each async method into a state machine.<br>
       Adya and colleagues separate task management, who may run between two of our lines, from stack management, who keeps the suspended state; the two questions are independent, and every language here is a point in that plane.<br>
       The split of the automatic row into the compiler's and the runtime's is this course's, and it is the stackless against stackful distinction of de Moura and Ierusalimschy.</p>
@@ -2617,6 +2779,51 @@ fib(40) at 563 ms"></pre></div>
     <p>Why it works: the read and the write now lie in one stretch with no await, and by Property 4 no other computation runs inside it. Each deposit takes effect in that stretch, and any instant of it serves as its linearization point.<br>
       The rule is general for cooperative code, as Adya and colleagues put it: after a yield point, re-read whatever may have changed.<br>
       Next week the stretch is no longer atomic: on two threads the repaired deposit loses money again.</p>
+  </aside>
+</section>
+
+<section id="a-ioc">
+  <h2>Inversion of control<span class="h2sub">what a promise rules out</span></h2>
+  <script class="src" type="text/plain" id="src-ioc">
+    const user = id =>
+      new Promise(res => userK(id, res));
+    const show = () => {
+      user(1).then(u => console.log("C", u));
+      console.log("B");
+    };
+    show();
+    setTimeout(show, 200);
+  </script>
+  <script class="src" type="text/plain" id="src-ioc-pre">
+    const cache = {};
+    const userK = (id, cb) => {
+      if (id in cache) cb(cache[id]);
+      else setTimeout(() => {
+        cache[id] = "Ada"; cb("Ada");
+      }, 100);
+    };
+  </script>
+  <table class="lang ioc">
+        <tr><th>the callee calls it</th><th>with a callback</th><th>with a promise</th></tr>
+        <tr><td>twice</td><td>the rest runs twice</td><td>settled once: a second <code>res</code> does nothing</td></tr>
+        <tr><td>now or later</td><td>the order of our lines depends on it</td><td>what waits always goes to the queue</td></tr>
+        <tr><td>never</td><td>it waits for ever, silently</td><td>the same</td></tr>
+      </table>
+  <div class="cols">
+    <div>
+      <div class="prog under"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos6/js/callbacks.mjs#L50" data-file="demos6/js/callbacks.mjs" data-at="export function wrapped" target="_blank" rel="noopener">JavaScript</a><code class="language-javascript" data-src="src-ioc"></code></pre><div class="go"><button class="run" onclick="runJSLive(this, 'out-ioc', 'src-ioc-pre,src-ioc')">Run</button></div><pre class="out strip" id="out-ioc"></pre></div>
+    </div>
+    <div>
+      <p>The cached <code>userK</code> of the callbacks slide, wrapped in a promise: B first, on a miss and on a hit.</p>
+      <div class="box">The first two are ruled out by the promise&rsquo;s two rules. The third is a liveness failure: no finite run shows it.</div>
+    </div>
+  </div>
+  <a class="apx back" href="#/callbacks">back</a>
+  <aside class="notes">
+    <p>When we pass a callback, we give our rest to code that is not ours, and it decides: whether to call it, when, and how many times. Three ways that goes wrong.<br>
+      Twice: a faulty library calls the callback twice, and our rest, a deposit for instance, runs twice. A promise is a write-once cell: the first res settles it, and a later res does nothing. new Promise(res =&gt; { res(1); res(2); }) is fulfilled with 1. In the appendix's promise by hand it is the line that returns when the state is no longer pending.<br>
+      Now or later: the cached userK calls back inside the call on a hit and from a timer on a miss, so show prints B last on a hit and first on a miss. Wrapped in a promise, the callback is the promise's res, and what then registers always goes to the queue, Promises/A+ 2.2.4: B comes first both times. The run prints B, C Ada, B, C Ada.<br>
+      Never: the rest waits for ever and nothing reports it, with a callback or with a promise. A promise does not fix this; a timer raced against it, Promise.race, ends the wait. It is a liveness property, as on the slide of the promise by hand: no finite execution shows the violation.</p>
   </aside>
 </section>
 
