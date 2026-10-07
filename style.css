@@ -625,6 +625,7 @@ table.sessions td.ttl{padding-right:.8rem}
 
 
 /* ---------------------------------------------------------------- the phone */
+.nw{white-space:nowrap}
 /* Under 980 px the rail is a drawer: a square with three lines at the left of the
    top bar opens it under the bar, over a dimmed page. Under 760 px the index is a
    series of stops the page snaps to: the painting with the course's name; the
@@ -703,11 +704,15 @@ table.sessions td.ttl{padding-right:.8rem}
   /* a label, then its line, wrapped under the line and not under the label */
   table.sessions td.ttl .blk-m,table.sessions .lab-m{padding-left:4.7rem;text-indent:-4.7rem}
   table.sessions td.ttl .blk-m .blk,table.sessions .lab-m .blk{display:inline-block;width:4.7rem;margin-right:0;text-indent:0}
-  table.sessions .lab-m .lt{font-size:.9rem}
+  table.sessions .lab-m .lt{font-size:.9rem;margin-right:0}
+  table.sessions td.ttl .blk-m .lecl{margin-left:.3rem}
+  table.sessions .lab-m .labfiles{margin-left:0}
   table.sessions td.date,table.sessions td.ttl,table.sessions td.mat{grid-column:1;grid-row:auto}
   table.sessions td.date{font-size:.8rem;padding-top:0}
   table.sessions td.ttl>a{font-size:1.12rem}
   table.sessions td.labhead .lw{display:block;margin-top:.5rem;padding-top:0}
+  /* a session not out yet shows its lab's two lines, without files */
+  table.sessions td.mat.labhead:has(.lab-m){display:block}
   .screen.tail>section{scroll-snap-align:start}
   footer.site{scroll-snap-align:end}
 }
