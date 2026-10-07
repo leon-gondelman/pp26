@@ -1614,7 +1614,7 @@ console.log("B");</code></pre>
   <span class="fragment step-note" data-fragment-index="0" data-notes="The same program, the other arrival order: Q's value arrives first, and Q resumes first. Another execution.&#10;An execution of a program is one sequence of resumptions. One program with one input has as many executions as the environment can produce. The program itself is deterministic: given the arrival order, the loop's choices follow from the queue. The nondeterminism is observable all the same, Van Roy and Haridi's term, and it is the only kind this model has."></span>
   <span class="fragment step-note" data-fragment-index="1" data-notes="Resumption is not well bracketed. In the first execution P was suspended first and resumes first, while Q is still suspended: P begins before Q and also ends before Q, and the two lifetimes cross instead of nesting. A stack would require the last suspended to resume first.&#10;Who resumes first is decided by the arrival of the values, the environment: neither last-in-first-out nor first-in-first-out in general.&#10;So no single stack can hold the suspended computations: each saved state lives in the heap, one frame each in JavaScript, Python or C#, or a whole stack each for goroutines and virtual threads."></span>
   <span class="fragment step-note" data-fragment-index="2" data-notes="Where can one computation observe another in the middle of its work? Only at a suspension point of the latter. The set of interleaving points is exactly the set of suspension points: the dots."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Property 4, atomicity between suspension points.&#10;A suspended computation resumes only when the stack is empty. A stretch of a function's text that contains no await is therefore atomic with respect to all other code of the program: no other computation observes it half done. Others see all of it or none of it, and they can run between two stretches. A function called inside the stretch runs at once, inside its caller, and is part of the stretch; an async function, up to its first await.&#10;In JavaScript every await is a suspension point, even await null.&#10;&#10;Atomic here has the introduction's sense: the stretch takes effect, for every other computation, as if at one instant. The word has other senses in the field; all or nothing under failure, session 9's sense, is not meant. MIT's course 6.102 states the same two facts for TypeScript: an atomic action effectively happens all at once, and at await control is always lost."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-notes="Property 4, atomicity between suspension points.&#10;A suspended computation resumes only when the stack is empty. A stretch of a function's text that contains no await is therefore atomic with respect to all other code of the program: no other computation observes it half done. Others see all of it or none of it, and they can run between two stretches. A function called inside the stretch runs at once, inside its caller, and is part of the stretch; an async function, up to its first await. So is every function it calls in turn, even one we did not call by name: dispatchEvent calls the listeners of an event before it returns, and a listener of ours runs inside the stretch and can see it half done. The property protects a stretch from the computations the loop runs, not from the functions the stretch itself calls.&#10;In JavaScript every await is a suspension point, even await null.&#10;&#10;Atomic here has the introduction's sense: the stretch takes effect, for every other computation, as if at one instant. The word has other senses in the field; all or nothing under failure, session 9's sense, is not meant. MIT's course 6.102 states the same two facts for TypeScript: an atomic action effectively happens all at once, and at await control is always lost."></span>
   <svg class="fig" viewBox="0 0 1420 400">
     <text class="h" x="0" y="26">P&rsquo;s value arrives first</text>
     <g>
@@ -1661,7 +1661,7 @@ console.log("B");</code></pre>
     <p class="fragment" data-fragment-index="2"><b>Interleaving points</b> are exactly the <b>suspension points</b>. Between two of them, nobody else runs.</p>
     </div>
   </div>
-  <p class="core fragment" data-fragment-index="3"><b>Property 4 · Atomicity between suspension points.</b> A stretch of a function&rsquo;s text with no <code>await</code> in it is <b>atomic</b> with respect to all other code of ours: nobody observes it half done. Others see all of it or none of it, and they can run between two stretches.</p>
+  <p class="core fragment" data-fragment-index="3"><b>Property 4 · Atomicity between suspension points.</b> A stretch of a function&rsquo;s text with no <code>await</code> in it is <b>atomic</b> with respect to all other code of ours: nobody observes it half done, except the functions it calls, which run inside it. Others see all of it or none of it, and they can run between two stretches.</p>
   <aside class="notes">
     <p>From the previous slide: running code is never interrupted. So the only places where another computation can slip in are the points where ours gives the thread back: the awaits. What that means for two computations side by side.</p>
     <p>Two computations, P and Q, each suspended at an await, each resumed when its value arrives.<br>
@@ -1730,6 +1730,7 @@ deposit(20);   // required: 130</code></pre>
       </div>
     </div>
   </div>
+  <a class="apx" href="#/a-repair" data-tip="the repair, written and run">appendix</a>
   <aside class="notes">
     <p>The guarantee ends at the suspension point, and this is where the model's characteristic error occurs.<br>
       A deposit on an account whose balance is shared by all computations of the program: it reads the balance, waits for an approval from another service, and writes.<br>
@@ -1755,7 +1756,7 @@ deposit(20);   // required: 130</code></pre>
         <tr><td>Python</td><td>a coroutine object, nothing runs: a warning, then B; <code>create_task</code>: B, A, C Ada</td></tr>
         <tr><td>Rust</td><td>builds a future, which runs when polled</td></tr>
         <tr><td>Kotlin</td><td>a <code>suspend</code> call waits: A, C Ada, B; <code>launch</code> queues it</td></tr>
-        <tr><td>Go, Java</td><td>a plain call waits: A, C Ada, B; with <code>go</code> or a virtual thread: B, A, C Ada</td></tr>
+        <tr><td>Go, Java</td><td>a plain call waits: A, C Ada, B; with <code>go</code> or a virtual thread: B, A, C Ada in these runs, A and B in no fixed order</td></tr>
       </table>
     </div>
   </div>
@@ -1766,7 +1767,8 @@ deposit(20);   // required: 130</code></pre>
       Each is a design decision of the language, and a small run shows it: load and the two deposits, written in each language and run on this machine. The appendix ends with the full table.</p>
     <p>Does a call start the work?<br>
       In JavaScript and C#, yes: the call runs the function to its first await, and then returns. A, B, C Ada.<br>
-      In Python, no: the call builds a coroutine object and runs nothing; the program prints B and a warning. With create_task the work is put in the queue: B, A, C Ada. In Rust a future runs when it is polled. In Go and Java the work runs on a goroutine or a virtual thread of its own; the order is not fixed.<br>
+      In Python, no: the call builds a coroutine object and runs nothing; the program prints B and a warning. With create_task the work is put in the queue: B, A, C Ada. In Rust a future runs when it is polled. In Go and Java the work runs on a goroutine or a virtual thread of its own; the order is not fixed: these runs printed B first, and A first is allowed.<br>
+      Each row is the default of its language. Python 3.12 added an eager task factory: with it, create_task runs the task at once up to its first wait, A, B, C Ada. Kotlin's launch queues the coroutine with the default start, CoroutineStart.DEFAULT, on a dispatcher that queues; with CoroutineStart.UNDISPATCHED it runs at once up to its first suspension. The runs: node 25, Python 3.14, .NET 10, Kotlin 2.4 with kotlinx.coroutines 1.10, Go 1.27, Java 26.<br>
       The Python coroutine object is close to session 5's thunk, with the difference that it can be run once only.</p>
   </aside>
 </section>
@@ -1811,7 +1813,7 @@ deposit(20);   // required: 130</code></pre>
         <tr><th>language</th><th>the thread that resumes</th></tr>
         <tr><td>JavaScript</td><td>the one thread: always 120</td></tr>
         <tr><td>Python</td><td>the loop&rsquo;s one thread: always 120</td></tr>
-        <tr><td>C#</td><td>a thread of a pool: 110 or 120 in these runs</td></tr>
+        <tr><td>C#</td><td>in a console program, a thread of a pool: 110 or 120 in these runs</td></tr>
         <tr><td>Rust, Kotlin</td><td>the executor&rsquo;s or the dispatcher&rsquo;s choice</td></tr>
         <tr><td>Go, Java</td><td>several threads: 110 or 120 in these runs; 130 possible</td></tr>
       </table>
@@ -1821,7 +1823,7 @@ deposit(20);   // required: 130</code></pre>
   <aside class="notes">
     <p>Which thread resumes?<br>
       This row is session 7's. In JavaScript and in Python's loop, the one thread: always 120.<br>
-      In C# on a pool: 110 or 120 in these runs. In Rust the executor decides; in Kotlin the dispatcher. In Go and Java, several threads: 110 or 120 in these runs, and 130 is possible.<br>
+      In C# the thread is chosen by the synchronization context in force at the await. A console program has none, so a thread of the pool resumes: 110 or 120 in these runs, .NET 10. The thread of a window has one, and it brings every rest back to that thread, as in the model. A context made by hand, pumped by one thread, did so in our runs; a real window was not run. In Rust the executor decides; in Kotlin the dispatcher. In Go and Java, several threads: 110 or 120 in these runs, and 130 is possible.<br>
       Wherever a pool of threads resumes suspended computations, two of them can run at the same time, and property 4 is gone although every suspension point is still written in the text.</p>
   </aside>
 </section>
@@ -2050,7 +2052,7 @@ tick at 504 ms"></pre></div>
       The timer's function was in the queue from 100 ms on; the loop takes it only when the running code has returned.<br>
       Property 3: running code is never interrupted; it keeps the thread until it returns.<br>
       This is the starvation-freedom row of the introduction's table: keeping the thread free is ours to do.</p>
-    <p>If asked: would an await inside the loop help? Only an await that gives the thread back for long enough: an await on a promise resolved by a timer lets the queue drain; await null gives one turn of the queue and the computation continues.</p>
+    <p>If asked: would an await inside the loop help? Only an await that gives the thread back for long enough: an await on a promise resolved by a timer lets the queue drain. await null does not: it puts the rest of the computation in the microtask queue, which the loop empties before it takes the next function from the host's queue, so the timer's function still waits. In a browser, a loop of await null likewise keeps the page from being redrawn.</p>
   </aside>
 </section>
 
@@ -2510,7 +2512,7 @@ queue     : after resolve | k 1"></pre></div>
     <colgroup><col style="width: 16%"><col style="width: 24%"><col style="width: 16%"><col style="width: 23%"><col style="width: 21%"></colgroup>
     <tr><th>language</th><th>a call</th><th>an <code>await</code> on a finished result</th><th>the thread that resumes</th><th>who keeps the suspended state</th></tr>
     <tr><td><b>JavaScript</b></td><td rowspan="2">runs to the first <code>await</code></td><td>suspends</td><td>the one thread</td><td rowspan="5" class="end">the compiler (stackless)</td></tr>
-    <tr><td><b>C#</b></td><td rowspan="4" class="end">goes straight on</td><td>a thread of a pool</td></tr>
+    <tr><td><b>C#</b></td><td rowspan="4" class="end">goes straight on</td><td>a thread of a pool (console)</td></tr>
     <tr><td><b>Python</b> (asyncio)</td><td>builds a coroutine object</td><td>the loop&rsquo;s one thread</td></tr>
     <tr><td><b>Rust</b></td><td>builds a future</td><td>the executor&rsquo;s choice</td></tr>
     <tr class="end"><td><b>Kotlin</b></td><td>a <code>suspend</code> call waits; <code>launch</code> queues</td><td>the dispatcher&rsquo;s choice</td></tr>
@@ -2567,6 +2569,54 @@ fib(40) at 563 ms"></pre></div>
       The tick comes at about 104 ms, the result at about 570 ms: the computation does not hold the main thread. On the slide of the timer and the computation, the same kind of computation on the main thread delayed the tick to about 504 ms.<br>
       Recorded with node 25, five runs: the tick at 103 to 105 ms, the result at 563 to 617 ms.</p>
     <p>On each thread Properties 1 to 4 hold, since no other thread touches its objects. The exception is a SharedArrayBuffer: memory that both threads read and write, with Atomics for its operations. With it two threads can access the same location at the same time, and data races return: session 7. Messages between threads are session 8.</p>
+  </aside>
+</section>
+
+<section id="a-repair">
+  <h2>The repair<span class="h2sub">the read after the wait</span></h2>
+  <script class="src" type="text/plain" id="src-rep-pre">
+    let balance = 100, first = 100;
+    const approve = n => new Promise(res =>
+      setTimeout(res, n === 10 ? first : 100));
+  </script>
+  <script class="src" type="text/plain" id="src-rep">
+    async function deposit(n) {
+      const b = balance;
+      await approve(n);
+      balance = b + n;
+    }
+    async function repaired(n) {
+      await approve(n);
+      const b = balance;
+      balance = b + n;
+    }
+  </script>
+  <script class="src" type="text/plain" id="src-rep-run">
+    for (const f of [deposit, repaired])
+      for (const ms of [100, 200]) {
+        balance = 100; first = ms;
+        await Promise.all([f(10), f(20)]);
+        console.log(f.name.padEnd(8), "first approval", ms, "ms:", balance);
+      }
+  </script>
+  <div class="two">
+    <div>
+      <div class="prog under"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos6/js/deposits.mjs#L16" data-file="demos6/js/deposits.mjs" data-at="async function depositRepaired" target="_blank" rel="noopener">JavaScript</a><code class="language-javascript" data-src="src-rep"></code></pre><div class="go"><button class="run" onclick="runJSLive(this, 'out-rep', 'src-rep-pre,src-rep,src-async-open,src-rep-run,src-async-close')">Run</button></div><pre class="out strip" id="out-rep"></pre></div>
+    </div>
+    <div>
+      <p>The read moves after the <code>await</code>. The read and the write are then one stretch with no <code>await</code>: atomic, by Property 4.</p>
+      <p>Each deposit takes effect in that stretch. 130, whichever approval arrives first.</p>
+      <div class="box">What was assumed before an <code>await</code> is re-established after it.</div>
+    </div>
+  </div>
+  <a class="apx back" href="#/race">back</a>
+  <aside class="notes">
+    <p>The program of the race, and beside it the repair: the same two lines in the other order.<br>
+      The run calls each version in both arrival orders: equal approvals, then the approval of 10 slower.<br>
+      deposit gives 120 and 110; repaired gives 130 both times.</p>
+    <p>Why it works: the read and the write now lie in one stretch with no await, and by Property 4 no other computation runs inside it. Each deposit takes effect in that stretch, and any instant of it serves as its linearization point.<br>
+      The rule is general for cooperative code, as Adya and colleagues put it: after a yield point, re-read whatever may have changed.<br>
+      Next week the stretch is no longer atomic: on two threads the repaired deposit loses money again.</p>
   </aside>
 </section>
 
