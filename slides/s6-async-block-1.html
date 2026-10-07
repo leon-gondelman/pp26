@@ -1035,16 +1035,18 @@ html.print-pdf .reveal a.apx { display: none; }
 #refurl { position: fixed; z-index: 60; max-width: 80vw; padding: 6px 14px 7px 14px; border-radius: 6px; background: rgba(29, 59, 90, 0.42); color: #fff; font: 400 15px/1.3 "Fira Mono", monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; opacity: 0; transition: opacity .3s; }
 #refurl.on { opacity: 1; }
 /* the timeline: smaller type; orange is for the languages lane only, the other lanes light in bold */
-.reveal .fig.tl text { font-size: 24px; }
-.reveal .fig.tl text.m { font-size: 22px; }
+.reveal .fig.tl text { font-size: 22px; }
+.reveal .fig.tl text.m { font-size: 20px; }
 .reveal .fig.tl text.h { font-size: 27px; }
 .reveal .fig.tl .ev.lit tspan.m { fill: var(--accent); font-weight: 500; }
 /* an entry's year shows when the mouse is on its label, and goes by itself */
 .reveal .fig.tl text.yr { opacity: 0; transition: opacity .2s; pointer-events: none; }
 .reveal .fig.tl g.dated.show text.yr { opacity: 1; }
 .reveal .fig.tl g.dated text { cursor: default; }
-.reveal .fig.tl text.cap { font-size: 27px; }
-.reveal .fig.tl text.cap tspan.m { font-size: 25px; }
+.reveal .fig.tl .cap text.lead { font-size: 27px; }
+.reveal .fig.tl .cap text.more { font-size: 23px; }
+html.print-pdf .reveal .fig.tl .cap.last, html.reveal-print .reveal .fig.tl .cap.last { opacity: 1 !important; visibility: visible !important; }
+.reveal .fig.tl .cap text.lead tspan.m { font-size: 25px; }
 .reveal .fig .tlbox { font-family: "Fira Sans", sans-serif; font-size: 22px; line-height: 1.15; color: var(--ink); background: var(--box); border: 2px solid var(--accent); border-radius: 4px; padding: 6px 12px; box-sizing: border-box; height: 100%; overflow: hidden; }
 .reveal .fig text.sm { font-size: 24px; }
 </style>
@@ -1339,18 +1341,12 @@ for (int k = 1; k &lt;= 8; k++) {
     <g class="dated"><circle class="dot" cx="960" cy="505" r="8"/><text class="m yr " x="952" y="453">1996</text><text x="952" y="481">Java, threads</text></g>
     <g class="ev" data-lit="4"><rect class="dot" x="1147" y="497" width="106" height="16" rx="8"/><text class="e" x="1410" y="541">Go, async/await, Rust <tspan class="m">(2009–15)</tspan></text></g>
     <g class="ev" data-lit="5"><circle class="dot" cx="1365" cy="505" r="8"/><a class="ref" href="https://openjdk.org/jeps/444" target="_blank" rel="noopener"><text class="e" x="1410" y="481">virtual threads <tspan class="m">(2023)</tspan></text></a></g>
-<foreignObject class="fragment current-visibleNone" data-fragment-index="0" x="275" y="426" width="335" height="176"><div xmlns="http://www.w3.org/1999/xhtml" class="tlbox">Programs taking turns failed in ways that did not repeat. Dijkstra named the difficulty and gave the semaphore: for years a system call, used by discipline.</div></foreignObject>
-<foreignObject class="fragment current-visibleNone" data-fragment-index="1" x="275" y="426" width="335" height="176"><div xmlns="http://www.w3.org/1999/xhtml" class="tlbox">The discipline becomes a construct: a monitor lets one process in at a time. 1978: processes that share nothing, only messages (session 8). 1996: Java.</div></foreignObject>
-<foreignObject class="fragment current-visibleNone" data-fragment-index="2" x="275" y="426" width="335" height="176"><div xmlns="http://www.w3.org/1999/xhtml" class="tlbox">No common clock, yet an order of events to agree on, and copies that apply the same operations in order. 1988–89: Paxos; 2002: CAP; 2011: CRDTs.</div></foreignObject>
-<foreignObject class="fragment current-visibleNone" data-fragment-index="3" x="275" y="426" width="335" height="176"><div xmlns="http://www.w3.org/1999/xhtml" class="tlbox">Processors stop getting faster alone: two cores, then GPUs. Speed now comes from doing several things at once. 1995 threads; 2000 ten thousand connections.</div></foreignObject>
-<foreignObject class="fragment current-visibleNone" data-fragment-index="4" x="275" y="426" width="335" height="176"><div xmlns="http://www.w3.org/1999/xhtml" class="tlbox">More cores and more waiting. Go: cheap processes and channels. async/await: a wait without holding a thread. Rust: unprotected sharing rejected.</div></foreignObject>
-<foreignObject class="fragment current-visible last" data-fragment-index="5" x="275" y="426" width="335" height="176"><div xmlns="http://www.w3.org/1999/xhtml" class="tlbox">Threads cheap again: a thread for each request, argued against in the 1990s, is back. What a system did by discipline, languages took over as constructs.</div></foreignObject>
-    <text class="fragment current-visible cap" data-fragment-index="0" x="0" y="648"><tspan class="m a">1965</tspan>  the semaphore (EWD 123), a construct for waiting and mutual exclusion, built into Dijkstra&rsquo;s THE operating system</text>
-    <text class="fragment current-visible cap" data-fragment-index="1" x="0" y="648"><tspan class="m a">1974–78</tspan>  the monitor (Concurrent Pascal) and communicating processes: constructs of a language</text>
-    <text class="fragment current-visible cap" data-fragment-index="2" x="0" y="648"><tspan class="m a">1978</tspan>  no shared clock: Lamport gives machines an order of events to agree on, the basis of replication (session 9)</text>
-    <text class="fragment current-visible cap" data-fragment-index="3" x="0" y="648"><tspan class="m a">2005</tspan>  processors stop getting faster: to use several cores, every programmer must now write concurrent programs</text>
-    <text class="fragment current-visible cap" data-fragment-index="4" x="0" y="648"><tspan class="m a">2009–15</tspan>  Go's channels, async and await, and Rust's <tspan class="m">Send</tspan> and <tspan class="m">Sync</tspan>, types that reject a data race</text>
-    <text class="fragment current-visible cap" data-fragment-index="5" x="0" y="648"><tspan class="m a">2023</tspan>  virtual threads: a thread for each request, made cheap</text>
+    <g class="fragment current-visible cap" data-fragment-index="0"><text class="lead" x="0" y="584"><tspan class="m a">1965</tspan>  the semaphore (EWD 123), for waiting and mutual exclusion, in Dijkstra&rsquo;s THE operating system</text><text class="more" x="0" y="620">Programs taking turns failed in ways that did not repeat from one run to the next.</text><text class="more" x="0" y="652">For years the semaphore was a system call, used by discipline: nothing checked that each acquire had its release.</text></g>
+    <g class="fragment current-visible cap" data-fragment-index="1"><text class="lead" x="0" y="584"><tspan class="m a">1974–78</tspan>  the monitor (Concurrent Pascal) and communicating processes: constructs of a language</text><text class="more" x="0" y="620">The discipline becomes a construct: the language lets one process at a time into a monitor.</text><text class="more" x="0" y="652">1978: processes that share nothing and only send messages (session 8). 1996: Java brings threads to everyone.</text></g>
+    <g class="fragment current-visible cap" data-fragment-index="2"><text class="lead" x="0" y="584"><tspan class="m a">1978</tspan>  no shared clock: Lamport gives machines an order of events to agree on, the basis of replication (session 9)</text><text class="more" x="0" y="620">Copies of a service agree by applying the same operations in the same order: Viewstamped Replication, Paxos.</text><text class="more" x="0" y="652">2002: the CAP theorem. 2011: CRDTs, copies that may differ for a while and agree in the end.</text></g>
+    <g class="fragment current-visible cap" data-fragment-index="3"><text class="lead" x="0" y="584"><tspan class="m a">2005</tspan>  processors stop getting faster: to use several cores, every programmer must now write concurrent programs</text><text class="more" x="0" y="620">Speed now comes from doing several things at once; from 2007, GPUs too are opened to general computing.</text><text class="more" x="0" y="652">Operating systems meanwhile: POSIX threads (1995); one thread watching ten thousand connections (around 2000).</text></g>
+    <g class="fragment current-visible cap" data-fragment-index="4"><text class="lead" x="0" y="584"><tspan class="m a">2009–15</tspan>  Go's channels, async and await, and Rust's <tspan class="m">Send</tspan> and <tspan class="m">Sync</tspan>, types that reject a data race</text><text class="more" x="0" y="620">Two pressures, more cores and more waiting. Go: cheap processes, and channels between them.</text><text class="more" x="0" y="652">async/await: a wait that does not hold a thread (session 6). Rust: mutual exclusion checked, not trusted.</text></g>
+    <g class="fragment current-visible cap last" data-fragment-index="5"><text class="lead" x="0" y="584"><tspan class="m a">2023</tspan>  virtual threads: a thread for each request, made cheap</text><text class="more" x="0" y="620">A thread for each request, argued against in the 1990s, is back: the runtime keeps thousands for the price of a few.</text><text class="more" x="0" y="652">What an operating system did by discipline, languages took over as constructs: our subject.</text></g>
   </svg>
   <aside class="notes">
     <p>Where does this program stand in history?<br>
