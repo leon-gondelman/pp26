@@ -55,6 +55,56 @@ if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})
   <figure class="art"><img src="art/flows.jpg" width="640" height="640" alt=""></figure>
 </section>
 
+<section class="entry">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-test" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 8.5h18"/><path d="M6.5 12l2 1.75-2 1.75"/><path d="M12.6 12.4a1.9 1.9 0 1 1 2.6 1.75c-.55.25-.85.6-.85 1.15v.2"/><circle cx="14.35" cy="17.55" r=".6" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-why" viewBox="0 0 24 24"><path d="M18 7.5a7.5 7.5 0 1 0 1.5 6"/><path d="M18.75 3v4.9h-4.9"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-case" viewBox="0 0 24 24"><path d="M16.5 20H5.5A2.5 2.5 0 0 1 3 17.5V5.5A1.5 1.5 0 0 1 4.5 4h10.5a1.5 1.5 0 0 1 1.5 1.5V20z"/><path d="M16.5 9h3A1.5 1.5 0 0 1 21 10.5v7a2.5 2.5 0 0 1-2.5 2.5h-2"/><path d="M6 7.5h7.5" stroke-width="2.2"/><rect x="6" y="10.5" width="3.5" height="3.5" rx=".6"/><path d="M11.5 11h2M11.5 13.5h2M6 16.8h7.5"/></symbol>
+</svg>
+  <h2>Before the session</h2>
+  <div class="tiles">
+    <a class="tile test" href="https://leon-gondelman.github.io/pp26/entry/s6/test_yourself.html" data-applet><span class="ic"><svg class="i"><use href="#i-test"/></svg></span><span><b>Test yourself</b><span>Five short programs: what do they print?</span><small>5 minutes · opens here</small></span></a>
+    <a class="tile why" href="https://leon-gondelman.github.io/pp26/entry/s6/why_study_this.html"><span class="ic"><svg class="i"><use href="#i-why"/></svg></span><span><b>Why study this</b><span>Where the event loop runs, and what we learn.</span><small>2 minutes</small></span></a>
+    <a class="tile case" href="https://leon-gondelman.github.io/pp26/entry/s6/real_world_case.html"><span class="ic"><svg class="i"><use href="#i-case"/></svg></span><span><b>A real-world case</b><span>Cloudflare, 2019: one regular expression held every event loop.</span><small>10 minutes</small></span></a>
+  </div>
+  <script>
+// Opens a link marked data-applet in a box over the page instead of navigating to it:
+//   <a href="test_yourself.html" data-applet>Test yourself</a>
+// The page is loaded in an iframe with ?embed; it closes the box by posting {applet: "close"}.
+// Escape and a click on the backdrop close it too. Without JavaScript the link still opens the page.
+(() => {
+  const css = `
+  dialog.applet{padding:0;border:0;background:transparent;width:min(980px,100vw);height:min(690px,100vh);max-width:100vw;max-height:100vh;overflow:visible}
+  dialog.applet::backdrop{background:rgba(15,17,21,.45);backdrop-filter:blur(2px)}
+  dialog.applet iframe{width:100%;height:100%;border:0;border-radius:16px;background:#fff;box-shadow:0 20px 60px rgba(15,17,21,.3)}
+  dialog.applet[open]{animation:applet-in .25s ease-out}
+  @keyframes applet-in{from{transform:translateY(12px);opacity:0}}
+  @media (max-width:760px){dialog.applet{width:100vw;height:100vh}dialog.applet iframe{border-radius:0}}`;
+  const style = document.createElement("style"); style.textContent = css; document.head.appendChild(style);
+
+  let dlg = null;
+  function close() { if (dlg) { dlg.close(); dlg.remove(); dlg = null; } }
+  function open(href) {
+    close();
+    dlg = document.createElement("dialog"); dlg.className = "applet";
+    const f = document.createElement("iframe");
+    f.src = href + (href.includes("?") ? "&" : "?") + "embed";
+    f.title = "Applet";
+    dlg.appendChild(f); document.body.appendChild(dlg);
+    dlg.addEventListener("click", e => { if (e.target === dlg) close(); });
+    dlg.addEventListener("cancel", e => { e.preventDefault(); close(); });
+    dlg.showModal(); f.focus();
+  }
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a[data-applet]");
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault(); open(a.getAttribute("href"));
+  });
+  window.addEventListener("message", e => { if (e.data && e.data.applet === "close") close(); });
+})();
+</script>
+</section>
+
 <section>
   <h2>Materials</h2>
   <ul class="materials"><li class="blockhead"><span class="blk">Block 1</span> Coordination &amp; communication: the introduction to Part 2</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-1.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-1.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> Asynchronous programming: concurrency on one thread</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-2.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s6-async-block-2.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s6-warmup.pdf">Warm-up — the two blocks of the lecture, in JavaScript with Python beside it</a></span></li><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab6-one-thread/index.html">Lab — the warm-up, and the optional quest on continuations</a></span></li><li class="m-code c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab6-one-thread">The lab folder — the warm-up&#x27;s programs, the quest&#x27;s files and checks</a></span></li></ul>

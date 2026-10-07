@@ -10,6 +10,7 @@
   --acc:#211a52; --acc-l:#eeecf7; --acc-t:#3d3383;
   --wine:#7a1f2e; --wine-l:#f4e7ea;
   --lec:#1d4ed8; --lec-b:#e6edfd;
+  --t-test:#6d28d9; --t-test-b:#f0e9fd; --t-why:#c2410c; --t-why-b:#fdeee5; --t-case:#7a1f2e; --t-case-b:#f4e7ea;
   --lab:#0d6b63; --lab-b:#d9f2ef;
   --warm:#5f6b0a; --warm-b:#eef2d3;
   --hw:#a2540a;  --hw-b:#fbeeda;
@@ -28,6 +29,7 @@
     --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
     --wine:#e39aa7; --wine-l:#2f191e;
     --lec:#8fb0ff; --lec-b:#15203a;
+    --t-test:#bfa3fb; --t-test-b:#231a3a; --t-why:#fb923c; --t-why-b:#2c1a10; --t-case:#e39aa7; --t-case-b:#2f191e;
     --lab:#6fd3c4; --lab-b:#0f2b29;
     --warm:#cfd96a; --warm-b:#232a10;
     --hw:#e0a962;  --hw-b:#2c2113;
@@ -42,6 +44,7 @@
   --acc:#a79cf5; --acc-l:#1b1930; --acc-t:#bdb4ff;
   --wine:#e39aa7; --wine-l:#2f191e;
   --lec:#8fb0ff; --lec-b:#15203a;
+  --t-test:#bfa3fb; --t-test-b:#231a3a; --t-why:#fb923c; --t-why-b:#2c1a10; --t-case:#e39aa7; --t-case-b:#2f191e;
   --lab:#6fd3c4; --lab-b:#0f2b29;
   --warm:#cfd96a; --warm-b:#232a10;
   --hw:#e0a962;  --hw-b:#2c2113;
@@ -417,3 +420,24 @@ footer.site .meta a:hover{text-decoration:underline}
 #exam h3{margin-top:1.5rem}
 #exam li{margin:0 0 .4rem}
 #exam ol,#exam ul{margin:0 0 1rem}
+
+/* The row "Before the session" on a session page: three tiles, one tint each */
+section.entry svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.75;
+  stroke-linecap:round;stroke-linejoin:round;display:block}
+section.entry .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}
+section.entry .tile{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8rem;align-items:start;
+  text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:.85rem .95rem;
+  transition:border-color .15s,background .15s}
+section.entry .tile:hover{border-color:currentColor}
+section.entry .tile:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+section.entry .tile .ic{width:2.4rem;height:2.4rem;border-radius:9px;display:grid;place-items:center}
+section.entry .tile.test .ic{background:var(--t-test-b);color:var(--t-test)}
+section.entry .tile.why .ic{background:var(--t-why-b);color:var(--t-why)}
+section.entry .tile.case .ic{background:var(--t-case-b);color:var(--t-case)}
+section.entry .tile.test:hover{border-color:var(--t-test)}
+section.entry .tile.why:hover{border-color:var(--t-why)}
+section.entry .tile.case:hover{border-color:var(--t-case)}
+section.entry .tile b{display:block;font:600 .95rem/1.3 var(--sans);color:var(--ink)}
+section.entry .tile span span{display:block;font-size:.82rem;line-height:1.4;color:var(--ink2);margin-top:.15rem}
+section.entry .tile small{display:block;font-size:.74rem;color:var(--ink3);margin-top:.35rem}
+@media (max-width:700px){section.entry .tiles{grid-template-columns:minmax(0,1fr)}}

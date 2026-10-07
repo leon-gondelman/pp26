@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test yourself — Session 6</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --page:#e9ebf0;
+  --bg:#ffffff; --sunk:#f7f8fa;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
+  --line:#e6e9ef;
+  --acc:#211a52; --acc-t:#3d3383; --acc-l:#eeecf7;
+  --ok:#2f6f55; --ok-l:#e9f3ee;
+  --no:#9b3a3a; --no-l:#f7eaea;
+  --c-kw:#3d3383; --c-str:#2f6f55; --c-num:#8a5a12; --c-com:#8a909c;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#07090c;
+    --bg:#0e1014; --sunk:#14171c;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+    --line:#23272e;
+    --acc:#a79cf5; --acc-t:#bdb4ff; --acc-l:#1b1930;
+    --ok:#7cc4a3; --ok-l:#13261e;
+    --no:#e09a9a; --no-l:#2a1618;
+    --c-kw:#bdb4ff; --c-str:#7cc4a3; --c-num:#e0a962; --c-com:#79808d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#07090c;
+  --bg:#0e1014; --sunk:#14171c;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+  --line:#23272e;
+  --acc:#a79cf5; --acc-t:#bdb4ff; --acc-l:#1b1930;
+  --ok:#7cc4a3; --ok-l:#13261e;
+  --no:#e09a9a; --no-l:#2a1618;
+  --c-kw:#bdb4ff; --c-str:#7cc4a3; --c-num:#e0a962; --c-com:#79808d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{margin:0;font:500 17px/1.5 var(--sans);color:var(--ink);background:var(--page);
+  display:grid;place-items:center;padding:0;-webkit-font-smoothing:antialiased}
+code{font-family:var(--mono);font-size:.88em;background:var(--sunk);border:1px solid var(--line);border-radius:4px;padding:0 .3em}
+button{font-family:var(--sans)}
+
+/* The window */
+/* The window is designed at one size, 980 by 690 (430 by 900 upright), and zoomed as a whole to fit. */
+.app{width:980px;height:690px;zoom:var(--z,1);background:var(--bg);border-radius:16px;
+  box-shadow:0 20px 60px rgba(15,17,21,.18),0 0 0 1px var(--line);display:flex;flex-direction:column;overflow:hidden}
+body.embed{padding:0;background:var(--bg)}
+body.embed .app,body.portrait .app{border-radius:0;box-shadow:none}
+
+.top{flex:none;display:flex;align-items:center;gap:16px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.x{flex:none;width:28px;height:28px;border:0;background:none;color:var(--ink3);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
+.x:hover{background:var(--sunk);color:var(--ink)}
+.name{flex:none;font-weight:700;font-size:16px}
+.name span{color:var(--ink3);font-weight:400}
+.track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--acc);transition:width .35s ease}
+.stat{flex:none;font-size:20px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:2.6em;text-align:right}
+
+.main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 330px}
+.main.single{grid-template-columns:minmax(0,1fr)}
+.left{overflow-y:auto;padding:20px 26px}
+.side{border-left:1px solid var(--line);background:var(--sunk);display:flex;flex-direction:column;min-height:0}
+.main.single .side{display:none}
+.sidebody{flex:1;overflow-y:auto;padding:20px 20px 12px}
+.sidefoot{flex:none;padding:12px 20px 20px}
+.screen{display:none}.screen.on{display:block}
+
+/* Start and end */
+.intro{max-width:34rem;margin:14vh auto 0}
+.kicker{font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 10px}
+.intro h1,.end h1{font:700 2.4rem/1.15 var(--sans);letter-spacing:-.01em;margin:0 0 12px}
+.intro h1{margin-bottom:28px}
+.intro p,.end p{color:var(--ink2);margin:0 0 14px}
+.end{max-width:34rem;margin:5vh auto 0}
+.recap{list-style:none;padding:0;margin:18px 0 22px;border-top:1px solid var(--line)}
+.recap li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);color:var(--ink);font-weight:600;font-size:16.5px}
+.recap .m{width:1.2em;font-weight:700}
+.recap .m.ok{color:var(--ok)} .recap .m.no{color:var(--no)}
+.row{display:flex;gap:10px}
+
+/* Question */
+.qno{font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 4px}
+.qtitle{font:700 2rem/1.2 var(--sans);letter-spacing:-.01em;margin:0 0 6px}
+.qprompt{color:var(--ink2);font-weight:500;margin:0 0 16px;font-size:18px}
+pre{background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;margin:0 0 18px;
+  font:500 17px/1.55 var(--mono);color:var(--ink)}
+.kw{color:var(--c-kw)} .str{color:var(--c-str)} .num{color:var(--c-num)} .com{color:var(--c-com)}
+.ask{font-weight:700;font-size:20px;margin:0 0 12px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;background:var(--bg);color:var(--ink);
+  border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-size:17px}
+.opt:hover:not(:disabled){border-color:var(--acc-t)}
+.opt .k{flex:none;width:26px;height:26px;border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;font-size:14px;font-weight:700;color:var(--ink3)}
+.opt .t{font-family:var(--mono);font-weight:600;font-size:18px}
+.opt.sel{border-color:var(--acc-t);background:var(--acc-l)}
+.opt.sel .k{border-color:var(--acc-t);color:var(--acc-t)}
+.opt.ok{border-color:var(--ok);background:var(--ok-l)}
+.opt.ok .k{border-color:var(--ok);color:var(--ok)}
+.opt.no{border-color:var(--no);background:var(--no-l)}
+.opt.no .k{border-color:var(--no);color:var(--no)}
+.opt:disabled{cursor:default}
+
+/* Side panel */
+.hint{color:var(--ink2);font-size:16px;font-weight:600}
+.verdict{font-weight:700;font-size:20px;margin:0 0 6px}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--no)}
+.right{font-size:16px;font-weight:600;color:var(--ink);margin:0 0 12px}
+.right span{font-family:var(--mono);font-weight:600}
+.why{font-size:17px;line-height:1.5;font-weight:500;color:var(--ink)}
+.why p{margin:0 0 10px}
+.btn{display:block;width:100%;border:0;border-radius:8px;padding:11px 16px;cursor:pointer;font-weight:700;font-size:17px;
+  background:var(--acc);color:var(--bg)}
+.btn:hover{opacity:.9}
+.btn:disabled{background:var(--line);color:var(--ink3);cursor:default;opacity:1}
+.btn.plain{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.row .btn{width:auto}
+.hidden{display:none!important}
+
+/* Upright screens: one column, the reason in a panel at the bottom */
+body.portrait .app{width:430px;height:900px}
+body.portrait .main{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto}
+body.portrait .app.answered .main{grid-template-rows:minmax(0,max-content) minmax(0,1fr)}
+body.portrait .sidebody{display:none}
+body.portrait .app.answered .sidebody{display:block}
+body.portrait .app.answered #qprompt,body.portrait .app.answered #qcode{display:none}
+body.portrait .app.answered.showcode #qprompt,body.portrait .app.answered.showcode #qcode{display:block}
+body.portrait .app.answered.showcode .sidebody{display:none}
+.ctoggle{display:none;background:none;border:0;padding:0;margin-top:14px;cursor:pointer;color:var(--acc-t);font-weight:700;font-size:16px;text-decoration:underline;text-underline-offset:3px}
+body.portrait .app.answered .ctoggle{display:inline-block}
+body.portrait .main.single{grid-template-rows:minmax(0,1fr)}
+body.portrait .left{padding:16px 18px}
+body.portrait .side{border-left:0;border-top:1px solid var(--line)}
+body.portrait .sidebody{padding:14px 18px 6px}
+body.portrait .sidefoot{padding:8px 18px 14px}
+body.portrait pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;padding:12px 14px}
+body.portrait .opts{grid-template-columns:1fr}
+body.portrait .opt{padding:11px 14px}
+body.portrait .name{display:none}
+body.portrait .intro,body.portrait .end{margin-top:6vh}
+body.portrait .intro h1,body.portrait .end h1{font-size:2rem}
+body.portrait .row{flex-direction:column}
+pre,code,.opt .t,.right span{font-variant-ligatures:none}
+</style>
+</head>
+<body>
+<div class="app" role="dialog" aria-label="Test yourself, session 6">
+  <div class="top">
+    <button class="x" id="close" aria-label="Close">✕</button>
+    <div class="name">Test yourself <span>· Session 6</span></div>
+    <div class="track"><i id="prog"></i></div>
+    <div class="stat" id="stat"></div>
+  </div>
+
+  <div class="main single" id="main">
+    <div class="left" id="scroll">
+      <section class="screen on" id="start">
+        <div class="intro">
+          <p class="kicker">Session 6 · Asynchronous programming</p>
+          <h1>Test yourself, before or after this session</h1>
+          <button class="btn" id="go" style="width:auto;padding:11px 28px">Start</button>
+        </div>
+      </section>
+
+      <section class="screen" id="quiz">
+        <p class="qno" id="qno"></p>
+        <h2 class="qtitle" id="qtitle"></h2>
+        <p class="qprompt" id="qprompt"></p>
+        <pre id="qcode"></pre>
+        <p class="ask" id="qask"></p>
+        <div class="opts" id="opts"></div>
+        <button class="ctoggle" id="ctoggle">Show the program</button>
+      </section>
+
+      <section class="screen" id="end">
+        <div class="end">
+          <p class="kicker">Session 6 · Test yourself</p>
+          <h1 id="endtitle"></h1>
+          <p id="endmsg"></p>
+          <ul class="recap" id="recap"></ul>
+          <div class="row">
+            <button class="btn" id="again">Try again, with new numbers</button>
+            <button class="btn plain hidden" id="closeEnd">Close</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="side">
+      <div class="sidebody" id="sidebody"><div id="sideinner"></div></div>
+      <div class="sidefoot"><button class="btn" id="act" disabled>Next question</button></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+// BEGIN GEN — question generators; each returns a fresh variant of its question.
+// A variant: title, prompt, code, ask, options [{text, ok}], explain (HTML), and, for the test
+// harness, tail (code appended to run it) and expect (its stdout).
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = xs => xs[Math.floor(Math.random() * xs.length)];
+const pickN = (xs, n) => shuffle(xs.slice()).slice(0, n);
+function shuffle(xs) { for (let i = xs.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [xs[i], xs[j]] = [xs[j], xs[i]]; } return xs; }
+const LETTERS = "ABCDEFGHKLMNPRSTWXYZ".split("");
+const SLEEP = "const sleep = ms => new Promise(res => setTimeout(res, ms));";
+
+function depositParams() {
+  const b0 = pick([50, 100, 200, 500, 1000]);
+  const [n1, n2] = pickN([5, 10, 20, 25, 30, 40, 50, 75], 2);
+  const mode = pick(["equal", "first", "second"]);
+  const base = pick([100, 200, 300]);
+  const d1 = mode === "first" ? base + pick([100, 200]) : base;
+  const d2 = mode === "second" ? base + pick([100, 200]) : base;
+  const last = d1 > d2 ? n1 : n2;                 // equal delays: timers fire in the order set
+  return { b0, n1, n2, d1, d2, mode, last };
+}
+function depositOptions(p) {
+  const { b0, n1, n2, last } = p;
+  return [b0 + n1 + n2, b0 + n1, b0 + n2, b0].map(v => ({ text: String(v), ok: v === b0 + last }));
+}
+function whoLast(p) {
+  const { n1, n2, d1, d2, mode } = p;
+  return mode === "equal"
+    ? `The two waits are equal, so the two timers fire in the order they were set: <code>deposit(${n2}, …)</code> resumes last.`
+    : `<code>deposit(${d1 > d2 ? n1 : n2}, …)</code> waits longer (${Math.max(d1, d2)} ms against ${Math.min(d1, d2)} ms), so it resumes last.`;
+}
+
+const GENS = [
+
+  // 1. One await (to work out)
+  () => {
+    const [x, y, z] = pickN(LETTERS, 3);
+    const name = pick(["Ada", "Alan", "Grace", "Edsger", "Barbara", "Tony", "Robin"]);
+    const d = pick([100, 200, 300, 500]);
+    const code =
+`const fetchUser = () => sleep(${d}).then(() => "${name}");
+
+async function load() {
+  console.log("${x}");
+  const user = await fetchUser();
+  console.log("${z}", user);
+}
+load();
+console.log("${y}");`;
+    const right = [x, y, `${z} ${name}`];
+    const opts = [right, [x, `${z} ${name}`, y], [y, x, `${z} ${name}`], [x, y]];
+    return {
+      title: "One await", code, ask: "What is printed, in order?",
+      prompt: `<code>fetchUser</code> answers <code>"${name}"</code> after ${d} ms.`,
+      options: opts.map((o, i) => ({ text: o.join(", "), ok: i === 0 })),
+      explain: `<p>The call runs <code>load</code> at once, up to its first <code>await</code>, and prints ${x}. There <code>load</code> is suspended and its caller goes on: ${y}. After ${d} ms the user arrives, and the rest of <code>load</code> prints ${z} ${name}.</p>
+<p>With <code>await load();</code> the script would be suspended too, and ${y} would come last.</p>`,
+      tail: "", expect: right.join("\n"),
+    };
+  },
+
+  // 2. Two deposits (to work out)
+  () => {
+    const p = depositParams(), { b0, n1, n2, d1, d2, last } = p;
+    const code =
+`let balance = ${b0};
+
+async function deposit(n, ms) {
+  const b = balance;
+  await sleep(ms);          // waits ms for an approval
+  balance = b + n;
+}
+deposit(${n1}, ${d1});
+deposit(${n2}, ${d2});`;
+    return {
+      title: "Two deposits", code, ask: "What is the balance once both deposits have finished?",
+      prompt: `Each deposit reads the balance, waits for an approval, and writes.`,
+      options: depositOptions(p),
+      explain: `<p>Both calls read ${b0} before either writes: each is suspended at its <code>await</code> with <code>b = ${b0}</code>. ${whoLast(p)} Its write overwrites the other: ${b0} + ${last} = ${b0 + last}.</p>
+<p>In every order one deposit is lost, on one thread, with no other thread anywhere. The repair: read the balance after the wait.</p>`,
+      tail: `\nawait sleep(${Math.max(d1, d2) + 50});\nconsole.log(balance);`, expect: String(b0 + last),
+    };
+  },
+
+  // 3. A deposit in one line (subtle)
+  () => {
+    const p = depositParams(), { b0, n1, n2, d1, d2, last } = p;
+    const code =
+`let balance = ${b0};
+const amount = (n, ms) => sleep(ms).then(() => n);
+
+async function deposit(n, ms) {
+  balance += await amount(n, ms);
+}
+deposit(${n1}, ${d1});
+deposit(${n2}, ${d2});`;
+    return {
+      title: "A deposit in one line", code, ask: "What is the balance once both deposits have finished?",
+      prompt: `This time the update is a single statement.`,
+      options: depositOptions(p),
+      explain: `<p><code>balance += e</code> is <code>balance = balance + e</code>, and the left operand is read <em>before</em> <code>e</code> is evaluated. Each deposit reads ${b0}, then is suspended at the <code>await</code> inside the expression. ${whoLast(p)} It writes ${b0} + ${last} = ${b0 + last}.</p>
+<p>One line is not one atomic step: the suspension point is in the middle of it.</p>`,
+      tail: `\nawait sleep(${Math.max(d1, d2) + 50});\nconsole.log(balance);`, expect: String(b0 + last),
+    };
+  },
+
+  // 4. A zero-millisecond timer and a promise (subtle)
+  () => {
+    const [t, m, s] = pickN(LETTERS, 3);
+    const lines = shuffle([
+      { k: "t", src: `setTimeout(() => console.log("${t}"), 0);` },
+      { k: "m", src: `Promise.resolve().then(() => console.log("${m}"));` },
+      { k: "s", src: `console.log("${s}");` },
+    ]);
+    const code = lines.map(l => l.src).join("\n");
+    const right = [s, m, t];
+    const perms = [[s, m, t], [s, t, m], [t, m, s], [m, s, t], [t, s, m], [m, t, s]];
+    const srcOrder = lines.map(l => ({ t, m, s })[l.k]);
+    // distractors: the order of the source, if different, then the others
+    const others = perms.slice(1).sort((a, b) => (b.join() === srcOrder.join()) - (a.join() === srcOrder.join()));
+    const opts = [right, ...others.slice(0, 3)];
+    return {
+      title: "A zero-millisecond timer and a promise", code, ask: "What is printed, in order?",
+      prompt: `Three lines, in this order.`,
+      options: opts.map((o, i) => ({ text: o.join(", "), ok: i === 0 })),
+      explain: `<p>The running script finishes first: ${s}. Then JavaScript empties the queue of promise continuations, the microtask queue, entirely, before it takes the next function from the host's queue, where the timer is: ${m}, then ${t}. The order of the lines does not matter, nor does the 0.</p>
+<p>The promise we build by hand in block 2's appendix has a single queue, and on it the timer would come before.</p>`,
+      tail: "", expect: right.join("\n"),
+    };
+  },
+
+  // 5. forEach with an asynchronous callback (subtle)
+  () => {
+    const xs = pickN([1, 2, 3, 4, 5, 6, 7, 8, 9], 3);
+    const d = pick([10, 20, 50, 100]);
+    const sum = xs[0] + xs[1] + xs[2];
+    const code =
+`let total = 0;
+[${xs.join(", ")}].forEach(async x => {
+  await sleep(${d});
+  total += x;
+});
+console.log(total);`;
+    return {
+      title: "forEach with an asynchronous callback", code, ask: "What is printed?",
+      prompt: `Each callback waits ${d} ms, then adds its element.`,
+      options: [{ text: "0", ok: true }, { text: String(sum), ok: false }, { text: String(xs[0]), ok: false },
+                { text: "a different number on each run", ok: false }],
+      explain: `<p><code>forEach</code> calls each callback and drops what it returns: three promises. Each callback runs up to its <code>await</code> and is suspended; <code>forEach</code> returns, and <code>total</code> is printed before any callback resumes: 0.</p>
+<p>${d} ms later <code>total</code> is ${sum}, and nothing waits for that. <code>for (const x of xs) await …</code> inside an <code>async</code> function, or <code>await Promise.all(xs.map(…))</code>, waits.</p>`,
+      tail: "", expect: "0",
+    };
+  },
+];
+// END GEN
+
+// The applet.
+const $ = id => document.getElementById(id);
+const embedded = new URLSearchParams(location.search).has("embed") || window.self !== window.top;
+if (embedded) document.body.classList.add("embed");
+let qs = [], i = 0, score = 0, results = [], sel = -1, state = "start";   // start | ask | shown | end
+
+function hl(src) {
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return src.split("\n").map(line => {
+    const c = line.indexOf("//");
+    const body = c >= 0 ? line.slice(0, c) : line, com = c >= 0 ? line.slice(c) : "";
+    const out = esc(body).replace(/("[^"]*")|\b(const|let|async|function|await|return|new)\b|\b(\d+)\b/g,
+      (m, str, kw, num) => str ? `<span class="str">${str}</span>` : kw ? `<span class="kw">${kw}</span>` : `<span class="num">${num}</span>`);
+    return out + (com ? `<span class="com">${esc(com)}</span>` : "");
+  }).join("\n");
+}
+// Fitting: zoom the whole window to the browser; if a panel still overflows, shrink only its text.
+function fit() {
+  const portrait = innerWidth < 760 || innerWidth / innerHeight < 0.8;
+  document.body.classList.toggle("portrait", portrait);
+  const W = portrait ? 430 : 980, H = portrait ? 900 : 690, pad = (embedded || portrait) ? 0 : 32;
+  let z = Math.min((innerWidth - pad) / W, (innerHeight - pad) / H);
+  if (!portrait) z = Math.min(z, 1.2);
+  document.documentElement.style.setProperty("--z", z);
+  fitPanels();
+}
+function shrink(box, inner) {
+  if (!inner) return;
+  let k = 1; inner.style.zoom = 1;
+  while (box.scrollHeight > box.clientHeight + 1 && k > 0.6) { k -= 0.03; inner.style.zoom = k; }
+}
+function fitPanels() {
+  shrink($("scroll"), document.querySelector(".screen.on"));
+  shrink($("sidebody"), $("sideinner"));
+}
+addEventListener("resize", fit);
+
+const APP = document.querySelector(".app");
+$("ctoggle").onclick = () => {
+  const on = APP.classList.toggle("showcode");
+  $("ctoggle").textContent = on ? "Show the reason" : "Show the program";
+  fitPanels();
+};
+function screen(id) {
+  for (const s of ["start", "quiz", "end"]) $(s).classList.toggle("on", s === id);
+  $("main").classList.toggle("single", id !== "quiz");
+  $("scroll").scrollTop = 0;
+}
+function status() {
+  $("prog").style.width = `${100 * results.length / GENS.length}%`;
+  $("stat").textContent = `${score}/${GENS.length}`;
+}
+
+function begin() {
+  qs = GENS.map(g => { const q = g(); q.options = shuffle(q.options); return q; });
+  i = 0; score = 0; results = [];
+  screen("quiz"); show();
+}
+function show() {
+  const q = qs[i]; sel = -1; state = "ask";
+  APP.classList.remove("answered", "showcode"); $("ctoggle").textContent = "Show the program";
+  $("qno").textContent = `Question ${i + 1} of ${qs.length}`;
+  $("qtitle").textContent = q.title;
+  $("qprompt").innerHTML = q.prompt + ` <code>sleep(ms)</code> is a promise fulfilled after <code>ms</code> milliseconds.`;
+  $("qcode").innerHTML = hl(q.code);
+  $("qask").textContent = q.ask;
+  $("opts").innerHTML = "";
+  q.options.forEach((o, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = `<span class="k">${k + 1}</span><span class="t">${o.text}</span>`;
+    b.onclick = () => choose(k);
+    $("opts").appendChild(b);
+  });
+  $("sideinner").innerHTML = `<p class="hint">Choose an answer: the reason appears here.</p><p class="hint">Keys 1 to 4; Enter for the next question.</p>`;
+  $("act").textContent = i + 1 < qs.length ? "Next question" : "See the result"; $("act").disabled = true;
+  status(); fitPanels();
+}
+function choose(k) {
+  if (state !== "ask") return;
+  sel = k;
+  check();
+}
+function check() {
+  const q = qs[i], right = q.options[sel].ok;
+  state = "shown";
+  APP.classList.add("answered");
+  if (right) score++;
+  results.push(right);
+  [...$("opts").children].forEach((b, j) => {
+    b.disabled = true; b.classList.remove("sel");
+    if (q.options[j].ok) b.classList.add("ok"); else if (j === sel) b.classList.add("no");
+  });
+  $("sideinner").innerHTML =
+    `<p class="verdict ${right ? "ok" : "no"}">${right ? "✓ Correct" : "✗ Not this one"}</p>` +
+    (right ? "" : `<p class="right">The answer: <span>${q.options.find(o => o.ok).text}</span></p>`) +
+    `<div class="why">${q.explain}</div>`;
+  $("sidebody").scrollTop = 0;
+  $("act").disabled = false;
+  status(); fitPanels();
+}
+function finish() {
+  state = "end"; APP.classList.remove("answered", "showcode"); screen("end");
+  const n = qs.length;
+  $("endtitle").textContent = `${score}/${n} questions right`;
+  $("endmsg").innerHTML =
+    score === n ? "The model of the session holds for us. Where the session is new for us: its appendix, writing <code>await</code> ourselves."
+    : score >= n - 2 ? "Most of it holds. The session's four properties say where the rest goes wrong."
+    : "The session's four properties explain each of these programs, and its demos run them step by step.";
+  $("recap").innerHTML = qs.map((q, k) =>
+    `<li><span class="m ${results[k] ? "ok" : "no"}">${results[k] ? "✓" : "✗"}</span>${k + 1}. ${q.title}</li>`).join("");
+  $("closeEnd").classList.toggle("hidden", !embedded);
+  status(); fitPanels();
+}
+function close() {
+  if (embedded) parent.postMessage({ applet: "close" }, "*");
+  else { state = "start"; results = []; score = 0; screen("start"); status(); }
+}
+function act() {
+  if (state === "shown") { i++; i < qs.length ? show() : finish(); }
+}
+$("go").onclick = begin;
+$("again").onclick = begin;
+$("act").onclick = act;
+$("close").onclick = close;
+$("closeEnd").onclick = close;
+document.addEventListener("keydown", e => {
+  if (state === "ask" && /^[1-4]$/.test(e.key)) choose(+e.key - 1);
+  else if (e.key === "Enter") {
+    if (state === "start" || state === "end") { e.preventDefault(); begin(); }
+    else if (!$("act").disabled) { e.preventDefault(); act(); }
+  }
+  else if (e.key === "Escape" && embedded) close();
+});
+status();
+fit();
+</script>
+</body>
+</html>

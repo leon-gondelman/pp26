@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare's outage of 2 July 2019 — Session 6</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --bg:#ffffff; --sunk:#f7f8fa;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
+  --line:#e6e9ef;
+  --acc:#211a52; --acc-l:#eeecf7;
+  --code:#fbfbfd;
+  --sx-str:#0d6b63; --sx-num:#a2540a; --sx-re:#9b2c5a; --sx-fn:#1d5a96; --sx-pun:#6b5fb8;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1014; --sunk:#14171c;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+    --line:#23272e;
+    --acc:#a79cf5; --acc-l:#1b1930;
+    --code:#111419;
+    --sx-str:#6fd3c4; --sx-num:#e0a962; --sx-re:#f09ac0; --sx-fn:#8ec2f2; --sx-pun:#b9b0f7;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1014; --sunk:#14171c;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+  --line:#23272e;
+  --acc:#a79cf5; --acc-l:#1b1930;
+  --code:#111419;
+  --sx-str:#6fd3c4; --sx-num:#e0a962; --sx-re:#f09ac0; --sx-fn:#8ec2f2; --sx-pun:#b9b0f7;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{font-size:clamp(15.5px,0.55rem + 0.5vw,19px);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 var(--sans)}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 16px 4rem}
+.kicker{font:500 .78rem/1
+var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .8rem}
+h1{font:400 2.3rem/1.15 var(--serif);margin:0 0 .8rem}
+h2{font:400 1.4rem/1.25 var(--serif);margin:2.4rem 0 1rem}
+p,li{color:var(--ink2)}
+p{margin:0 0 1rem}
+.lede{font:400 1.2rem/1.5 var(--serif);color:var(--ink)}
+code{font-family:var(--mono);font-size:.88em}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+b{color:var(--ink);font-weight:600}
+ul{margin:0 0 1rem;padding-left:1.2rem}
+li{margin:0 0 .6rem}
+li::marker{color:var(--ink3)}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:.8rem
+1rem;overflow-x:auto;
+  font:400 .82rem/1.5 var(--mono);margin:.6rem 0 1rem;color:var(--ink)}
+pre code{font-size:1em}
+pre.out{background:var(--sunk);border-color:transparent;color:var(--ink2)}
+pre.wrap{white-space:pre-wrap;overflow-wrap:anywhere}
+.kw{color:var(--acc);font-weight:500} .com{color:var(--ink3);font-style:italic}
+.str{color:var(--sx-str)} .num{color:var(--sx-num)} .re{color:var(--sx-re)} .fn{color:var(--sx-fn)}
+.pun,.alt{color:var(--sx-pun)} .esc{color:var(--sx-num)} .q{color:var(--sx-re);font-weight:600}
+.cls{color:var(--sx-fn)}
+figure{margin:1.6rem 0;padding:1.2rem;border:1px solid
+var(--line);border-radius:10px;background:var(--sunk)}
+figcaption{font-size:.85rem;color:var(--ink3);margin-top:.9rem}
+.note{font-size:.8rem;color:var(--ink3);margin-top:2.4rem;border-top:1px solid
+var(--line);padding-top:1rem}
+
+/* The timeline of 2 July 2019: proportional on a wide screen, a list on a narrow one. */
+.tl{position:relative;height:7.2rem;margin:0 .2rem}
+.tl .axis{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--ink3)}
+.tl .span{position:absolute;top:calc(50% - 2px);height:5px;border-radius:2px;background:var(--acc)}
+.tl .ev{position:absolute;top:0;bottom:0;width:0}
+.tl .ev::before{content:"";position:absolute;left:0;width:1px;height:.6rem;background:var(--ink3)}
+.tl .ev.up::before{bottom:50%}
+.tl .ev.down::before{top:50%}
+.tl .ev div{position:absolute;white-space:nowrap;font-size:.8rem;line-height:1.35;color:var(--ink2)}
+.tl .ev time{display:block;font:500 .8rem/1.35 var(--mono);color:var(--ink)}
+.tl .ev.up div{bottom:calc(50% + .85rem)}
+.tl .ev.down div{top:calc(50% + .85rem)}
+.tl .ev.mid div{transform:translateX(-50%);text-align:center}
+.tl .ev.start div{left:-.1rem}
+.tl .ev.end div{right:-.1rem;text-align:right}
+@media (max-width:560px){
+  .tl{height:auto;margin:0;padding-left:1.1rem;border-left:1px solid var(--ink3)}
+  .tl .axis,.tl .span{display:none}
+  .tl .ev{position:relative;left:0!important;width:auto;padding:.25rem 0}
+  .tl .ev::before{display:none}
+  main .tl .ev.ev
+  div{position:static;transform:none;white-space:normal;text-align:left;display:grid;grid-template-columns:3.6rem
+  1fr;gap:.6rem}
+  .tl .ev time{display:inline}
+  .tl .ev.hot::after{content:"";position:absolute;left:calc(-1.1rem -
+  3px);top:0;bottom:0;width:5px;background:var(--acc)}
+  .tl .ev.hot.last::after{bottom:50%}
+  .tl .ev.hot.first::after{top:50%}
+}
+
+/* The run of one_loop.mjs: marks in SVG, words in HTML at the page's size. */
+.run .lane{position:relative;padding-top:1.4rem;margin-bottom:.9rem}
+.run .lane span{position:absolute;top:0;font-size:.8rem;color:var(--ink2);white-space:nowrap}
+.run svg{display:block;width:100%;height:1.4rem;overflow:visible}
+.run .axis{position:relative;height:1.3rem;border-top:1px solid var(--ink3);margin-top:.2rem}
+.run .axis span{position:absolute;top:.25rem;transform:translateX(-50%);font:400 .75rem/1
+var(--mono);color:var(--ink3);white-space:nowrap}
+.run .axis
+span::before{content:"";position:absolute;left:50%;top:-.35rem;width:1px;height:.25rem;background:var(--ink3)}
+.run .lane span.gap{top:1.4rem;line-height:1.4rem;transform:translateX(-50%);color:var(--ink3)}
+.run .axis span.first{transform:none}
+.run .axis span.first::before{left:0}
+</style>
+</head>
+<body>
+<main>
+
+<p class="kicker">Session 6 · A real-world case</p>
+<h1>Cloudflare's outage of 2 July 2019</h1>
+<p class="lede">On Tuesday, 2 July 2019, at 13:42 UTC, a large part of the web stopped answering.
+Sites of every kind returned the same error page, <i>502 Bad Gateway</i>.</p>
+
+<p>What they had in common was Cloudflare, a company that sits between millions of websites and
+their visitors: requests go to Cloudflare's servers first, which filter them, cache what they can,
+and pass the rest on. On every one of those servers, in every city where Cloudflare has them, the
+processors that handle web traffic were nearly 100% busy. During the incident a leader of
+Cloudflare's Solutions Engineering group reported that the company had “lost 80% of our
+traffic”.</p>
+
+<p>There was no attack, and nothing had crashed. The cause was one regular expression and a
+property of the event loop that we study in session 6: running code keeps the thread until it returns.</p>
+
+<h2>The firewall rule</h2>
+
+<p>A <i>regular expression</i> is a pattern that describes a set of strings; a program called a
+regex engine tests whether a given string contains a part that the pattern matches. Before passing
+a request on, Cloudflare's servers check it against a web application firewall, the <i>WAF</i>: a
+list of rules, each a regular
+expression that recognizes some kind of attack. At 13:31 an engineer merged a new rule against
+cross-site scripting (XSS), an attack that places a script of the attacker's in a web page, where
+the browsers of the page's visitors run it. The rule was tested, built, and at 13:42 deployed.</p>
+
+<p>WAF rules are deployed differently from the rest of Cloudflare's software. An ordinary
+change goes out in stages, over hours or days: first to a data center whose traffic comes only from
+Cloudflare's employees, then to one that carries a small share of customer traffic, then to three
+<i>canary</i> data centers, a small group in which a fault shows before it spreads, and only then
+to the world. A rule goes everywhere at once, within seconds, through a system called Quicksilver,
+because when a new attack appears, a rule that arrives tomorrow is useless.</p>
+
+<p>The new rule reached every server in the world, and on every server the processors that handle
+web traffic went to full load.</p>
+
+<h2>Backtracking</h2>
+
+<p>The rule was this regular expression:</p>
+
+<pre class="wrap"><code><span class="pun">(?:</span><span class="pun">(?:</span><span class="esc">\"</span><span class="alt">|</span>'<span class="alt">|</span><span class="esc">\]</span><span class="alt">|</span><span class="esc">\}</span><span class="alt">|</span><span class="esc">\\</span><span class="alt">|</span><span class="esc">\d</span><span class="alt">|</span><span class="pun">(?:</span><span class="str">nan</span><span class="alt">|</span><span class="str">infinity</span><span class="alt">|</span><span class="str">true</span><span class="alt">|</span><span class="str">false</span><span class="alt">|</span><span class="str">null</span><span class="alt">|</span><span class="str">undefined</span><span class="alt">|</span><span class="str">symbol</span><span class="alt">|</span><span class="str">math</span><span class="pun">)</span><span class="alt">|</span><span class="esc">\`</span><span class="alt">|</span><span class="esc">\-</span><span class="alt">|</span><span class="esc">\+</span><span class="pun">)</span><span class="q">+</span><span class="cls">[)]</span><span class="q">*</span>;<span class="q">?</span><span class="pun">(</span><span class="pun">(?:</span><span class="esc">\s</span><span class="alt">|</span>-<span class="alt">|</span>~<span class="alt">|</span>!<span class="alt">|</span>{}<span class="alt">|</span><span class="esc">\|</span><span class="esc">\|</span><span class="alt">|</span><span class="esc">\+</span><span class="pun">)</span><span class="q">*</span><span class="q">.</span><span class="q">*</span><span class="pun">(?:</span><span class="q">.</span><span class="q">*</span>=<span class="q">.</span><span class="q">*</span><span class="pun">)</span><span class="pun">)</span><span class="pun">)</span></code></pre>
+
+<p>The trouble is at its end, which amounts to <code>.*.*=.*</code>: any characters, then any
+characters, then <code>=</code>, then any characters (<code>.</code> matches one character, and
+<code>*</code> repeats it any number of times, zero included). The engine that ran it, the library
+PCRE (Perl Compatible Regular Expressions), works by <i>backtracking</i>: it tries one way of
+matching, and when the rest of the pattern fails, it goes back and tries another. With two
+<code>.*</code> in a row, the number of ways to split a string between them grows with the length
+of the string, and the engine tries each way in full before it gives up. The pattern is also not
+anchored to the start of the string: when every way fails from the first character, the engine
+starts again from the second, then from the third, and so on to the end. Cloudflare's report counts
+the steps: 23 for the input <code>x=x</code>, 555 for <code>x=</code> followed by twenty
+<code>x</code>.</p>
+
+<p>JavaScript's regex engine also backtracks, so the growth can be measured in Node. The program
+<a href="cloudflare/backtracking.mjs"><code>cloudflare/backtracking.mjs</code></a> tests the same
+tail, <code>.*.*=.*</code>, followed by a <code>;</code> that the input never contains, so that the
+engine must try every way before it reports that there is no match:</p>
+
+<pre><code><span class="kw">for</span> (<span class="kw">const</span> re <span class="kw">of</span> [<span class="re">/.*.*=.*;/</span>, <span class="re">/^.*.*=.*;/</span>]) {
+  <span class="kw">for</span> (<span class="kw">const</span> n <span class="kw">of</span> [<span class="num">1000</span>, <span class="num">2000</span>, <span class="num">4000</span>]) {
+    <span class="kw">const</span> s = <span class="str">"x="</span> + <span class="str">"x"</span>.<span class="fn">repeat</span>(n);
+    <span class="kw">const</span> t = performance.<span class="fn">now</span>();
+    re.<span class="fn">test</span>(s);
+    console.<span class="fn">log</span>(<span class="str">`<span class="pun">${</span></span>re<span class="str"><span class="pun">}</span> on <span class="pun">${</span></span>n<span class="str"><span class="pun">}</span> characters: <span class="pun">${</span></span>(performance.<span class="fn">now</span>() - t).<span class="fn">toFixed</span>(<span class="num">1</span>)<span class="str"><span class="pun">}</span> ms`</span>);
+  }
+}</code></pre>
+
+<pre class="out"><code>/.*.*=.*;/ on 1000 characters: 161.3 ms
+/.*.*=.*;/ on 2000 characters: 1244.6 ms
+/.*.*=.*;/ on 4000 characters: 9922.1 ms
+/^.*.*=.*;/ on 1000 characters: 0.8 ms
+/^.*.*=.*;/ on 2000 characters: 3.3 ms
+/^.*.*=.*;/ on 4000 characters: 9.2 ms</code></pre>
+
+<p>Each time the input doubles, the time is multiplied by about eight. Both causes are needed for
+that: the splits between the two <code>.*</code> make one attempt long, and the attempts from every
+starting position multiply that by the length of the string once more. Anchored with <code>^</code>,
+the pattern <code>/^.*.*=.*;/</code> is tried from the first character only, and the program
+measures it too: about 9&nbsp;ms on the same 4,000 characters, against 10 seconds. These
+measurements are consistent with growth as the cube of the length, for this pattern and these
+inputs; the exact times and ratios depend on the engine and the machine. An input of a few thousand
+characters keeps a processor busy for seconds.</p>
+
+<h2>The event loop</h2>
+
+<p>A slow test does not by itself stop a server from serving its other requests. In a server that
+gives each request its own thread, the operating system shares the processors among the threads: a
+request stuck in the regular expression slows the others down but does not stop them, as long as
+processors and threads remain; enough such requests exhaust those too. On an event loop, one such
+request stops every other request that shares its loop. Cloudflare's servers run nginx, a web server
+built around
+event loops: on each machine it runs several <i>worker processes</i>, and each worker runs one loop
+on one thread, with hundreds of requests in flight at once. While a request waits for the network,
+the loop serves the others; that is how a few processes serve so many requests. This is the model
+of session 6.</p>
+
+<p>Property 3 of the session, run-to-completion, states that the loop takes the next function from the queue only when the stack is empty: the running code has returned, and so has everything it called. Until then no other computation runs on that thread; the functions the running code calls run inside it.
+The operating system may pause the thread to run another program, but when the thread runs again it
+goes on with the same computation. A
+regular expression under test is running code. While one request's test ran, every other request
+on that worker waited, whatever it asked for, however small. The program
+<a href="cloudflare/one_loop.mjs"><code>cloudflare/one_loop.mjs</code></a> reproduces this on one
+loop: a timer every 10&nbsp;ms stands for a cheap request, and at 100&nbsp;ms one request runs the
+regular expression on 2,000 characters. At 3,000&nbsp;ms the program prints the count once more and
+stops the timer.</p>
+
+<pre><code><span class="com">// One loop serves a cheap request every 10 ms. At 100 ms, one request runs the regular expression.</span>
+<span class="kw">const</span> t0 = performance.<span class="fn">now</span>();
+<span class="kw">const</span> at = () =&gt; Math.<span class="fn">round</span>(performance.<span class="fn">now</span>() - t0);
+<span class="kw">let</span> served = <span class="num">0</span>;
+<span class="kw">const</span> cheap = <span class="fn">setInterval</span>(() =&gt; { served++; }, <span class="num">10</span>);
+<span class="fn">setTimeout</span>(() =&gt; {
+  console.<span class="fn">log</span>(<span class="str">`regex starts at <span class="pun">${</span></span><span class="fn">at</span>()<span class="str"><span class="pun">}</span> ms; cheap requests served: <span class="pun">${</span></span>served<span class="str"><span class="pun">}</span>`</span>);
+  <span class="re">/.*.*=.*;/</span>.<span class="fn">test</span>(<span class="str">"x="</span> + <span class="str">"x"</span>.<span class="fn">repeat</span>(<span class="num">2000</span>));
+  console.<span class="fn">log</span>(<span class="str">`regex ends at <span class="pun">${</span></span><span class="fn">at</span>()<span class="str"><span class="pun">}</span> ms; cheap requests served: <span class="pun">${</span></span>served<span class="str"><span class="pun">}</span>`</span>);
+}, <span class="num">100</span>);
+<span class="fn">setTimeout</span>(() =&gt; {
+  console.<span class="fn">log</span>(<span class="str">`at <span class="pun">${</span></span><span class="fn">at</span>()<span class="str"><span class="pun">}</span> ms; cheap requests served: <span class="pun">${</span></span>served<span class="str"><span class="pun">}</span>`</span>);
+  <span class="fn">clearInterval</span>(cheap);
+}, <span class="num">3000</span>);</code></pre>
+
+<pre class="out"><code>regex starts at 101 ms; cheap requests served: 9
+regex ends at 1440 ms; cheap requests served: 9
+at 3002 ms; cheap requests served: 152</code></pre>
+
+<figure>
+  <div class="run" role="img" aria-label="From 0 to 1600 ms: a timer tick every 10 ms up to 90 ms, none from 101 to 1440 ms while the regular expression is tested, then a tick every 10 ms again.">
+    <div class="lane">
+      <span style="left:0">cheap requests, one every 10&nbsp;ms</span>
+      <span class="gap" style="left:48.2%">nothing served for 1.3&nbsp;s</span>
+      <svg viewBox="0 0 1600 10" preserveAspectRatio="none" aria-hidden="true">
+        <path id="comb" fill="none" stroke="var(--ink3)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </svg>
+    </div>
+    <div class="lane">
+      <span style="left:6.3%">the test of the regular expression</span>
+      <svg viewBox="0 0 1600 10" preserveAspectRatio="none" aria-hidden="true">
+        <rect x="101" y="2" width="1339" height="6" rx="1.5" fill="var(--acc)"/>
+      </svg>
+    </div>
+    <div class="axis" aria-hidden="true">
+      <span class="first" style="left:0">0 ms</span><span style="left:31.25%">500</span><span style="left:62.5%">1000</span><span style="left:93.75%">1500</span>
+    </div>
+  </div>
+  <figcaption>The first 1,600 ms of the run above. The test runs from 101 to 1440 ms; the timer's
+  ticks are schematic: drawn every 10 ms, as scheduled, before and after it.</figcaption>
+</figure>
+
+<p>For 1.3 seconds the loop served nothing else. (The count at 3,000&nbsp;ms is about 150, not 300,
+because <code>setInterval</code> does not make up the ticks it missed. The timer shows only that no
+callback runs during the test; it is not a model of a server's queue, where requests may wait, time
+out, or be refused under overload.) On 2 July, according to Cloudflare's report, the processors
+that serve HTTP and HTTPS traffic were exhausted on every server worldwide; the front-line servers
+still had processor cores free, but could not reach the processes that serve that traffic, and
+answered with the 502 error.</p>
+
+<p>Writing the handler in the program above as an <code>async</code> function would not have
+helped. An <code>async</code> function runs on the same thread, and between two
+<code>await</code>s it runs to completion like any other code; the test of the regular expression
+contains no <code>await</code>. On one loop, other requests cannot run during an uninterrupted
+synchronous computation. A long computation can be split into pieces that hand the loop back between
+them, or run on another thread. An <code>await</code> alone is not enough: in JavaScript,
+<code>await Promise.resolve()</code> lets queued promise continuations run, but timers and network
+events can still wait behind them; handing the loop back means letting the host's queue run, for
+instance with a timer of 0&nbsp;ms between pieces.</p>
+
+<h2>Failures and recovery</h2>
+
+<p>Cloudflare's report lists eleven failures that came together. Two of them are described above:
+the rule's regular expression, and an engine without guarantees on running time. Three others bear
+on this story.</p>
+
+<ul>
+  <li><b>The guard was gone.</b> The WAF used to have a protection against a regular
+  expression taking too much processor time. Weeks earlier that protection had been removed by
+  mistake, in a refactoring whose purpose was to make the WAF use <i>less</i> processor time.</li>
+  <li><b>The rollout was global.</b> By design, the rule skipped the stages that ordinary changes go
+  through.</li>
+  <li><b>The repair tools depended on the service that was down.</b> Cloudflare protects its own
+  internal systems with its own services. With its access service down, engineers could not log in
+  to the internal control panel they needed for the fix, and had to go through a seldom-used
+  bypass; some found that a security feature had disabled their credentials because they rarely
+  used the panel.</li>
+</ul>
+
+<p>At 14:07 the team used a global switch that turned the WAF off everywhere. At 14:09 traffic and
+processor load were back to normal, twenty-seven minutes after the deploy. The WAF was turned back
+on, with the rule's change rolled back, at 14:52.</p>
+
+<figure>
+  <div class="tl" role="img" aria-label="2 July 2019, UTC: 13:31 rule merged; 13:42 rule deployed; 14:07 WAF turned off; 14:09 load back to normal; 14:52 WAF back on.">
+    <div class="axis"></div>
+    <div class="span" style="left:13.33%;width:30%"></div>
+    <div class="ev down start" style="left:1.11%"><div><time>13:31</time>rule merged</div></div>
+    <div class="ev up mid hot first" style="left:13.33%"><div><time>13:42</time>rule deployed</div></div>
+    <div class="ev up mid hot" style="left:41.11%"><div><time>14:07</time>WAF turned off</div></div>
+    <div class="ev down mid hot last" style="left:43.33%"><div><time>14:09</time>load back to normal</div></div>
+    <div class="ev up end" style="left:91.11%"><div><time>14:52</time>WAF back on</div></div>
+  </div>
+  <figcaption>2 July 2019, from 13:30 to 15:00 UTC, times from Cloudflare's report. The accent marks
+  the twenty-seven minutes from the deploy to the return to normal load.</figcaption>
+</figure>
+
+<h2>Repairs</h2>
+
+<p>According to the report, the protection against runaway processor use was put back, and each of
+the 3,868 WAF rules was inspected by hand for backtracking. Rules were to go through
+performance tests and, outside emergencies, staged rollouts. The WAF was also to move to a
+regex engine with guarantees on running time, RE2 or Rust's: these engines do not backtrack, and
+their time grows linearly with the input.</p>
+
+<p>In March 2020 Cloudflare described a change to its nginx servers that addresses the same
+weakness, although the article is about the time requests take and does not mention the outage.
+The WAF's work, the most notable place where a request may need more processor time, was
+moved off the event loop to a pool of threads that nginx already had. While a rule runs on a thread
+of the pool, the loop goes on serving the other connections. Cloudflare measured, for each request,
+the longest time it blocked the loop; for requests that go through the WAF, the 99th
+percentile of that time (the value that 99 requests in 100 stay under) fell by 30 to 40%. Session 6
+gives two remedies for its own example, a timer due at 100&nbsp;ms whose function runs only at
+500&nbsp;ms, after a loop that computes for 500&nbsp;ms: split the computation, or move it to
+another thread. This is the second.</p>
+
+<h2>Lessons</h2>
+
+<ul>
+  <li>An event loop serves many requests on one thread only as long as each piece of work is short.
+  Property 3, which protects a stretch of code from interference, also makes every other request on
+  the loop wait until that stretch ends.</li>
+  <li>An <code>await</code> lets the loop serve others while a function waits; it does not interrupt
+    a computation, inside an <code>async</code> function or outside one. A long computation must be
+    split into pieces that hand the loop back to the host's queue, or moved to another thread.</li>
+  <li>With a backtracking engine, the time to test a string can grow much faster than the string:
+  for <code>.*.*=.*;</code> on our inputs, as the cube of its length, because the engine retries
+  from every starting position.</li>
+  <li>Cloudflare's own measures were of two kinds: bounding the work, after the outage (the limit on processor time put back, a linear-time engine planned), and moving it off the loop, in the change described in 2020 (a pool of threads). Splitting a long computation into pieces that hand the loop back is a third remedy, which session 6 gives; neither of Cloudflare's articles says that Cloudflare used it.</li>
+</ul>
+
+<h2>Sources</h2>
+
+<ul>
+  <li>John Graham-Cumming,
+  <a href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/"><i>Details
+  of the Cloudflare outage on July 2, 2019</i></a>,
+  Cloudflare blog, 12 July 2019. The timeline, the regular expression, the step counts, the failures
+  and the list of repairs are from this report.</li>
+  <li>Julien Desgats,
+  <a href="https://blog.cloudflare.com/the-problem-with-event-loops/"><i>The problem with thread^W
+  event loops</i></a>,
+  Cloudflare blog, 18 March 2020: nginx's event loops at Cloudflare, and the WAF's work moved to a
+  thread pool.</li>
+  <li>The two programs in <code>cloudflare/</code>,
+  <a href="cloudflare/backtracking.mjs"><code>backtracking.mjs</code></a> and
+  <a href="cloudflare/one_loop.mjs"><code>one_loop.mjs</code></a>, run with Node 25 on a laptop; the
+  exact times and ratios depend on the engine and the machine.</li>
+</ul>
+
+<p class="note">Draft, 7 October 2026.</p>
+
+</main>
+<script>
+// The timer's ticks of the figure: every 10 ms up to 90 ms, and from 1441 ms on, as scheduled.
+(() => {
+  const xs = [];
+  for (let x = 10; x <= 90; x += 10) xs.push(x);
+  for (let x = 1441; x <= 1600; x += 10) xs.push(x);
+  document.getElementById("comb").setAttribute("d", xs.map(x => `M${x},1V9`).join(""));
+})();
+</script>
+</body>
+</html>

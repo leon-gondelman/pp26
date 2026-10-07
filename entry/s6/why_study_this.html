@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why study this — Session 6</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --bg:#ffffff; --sunk:#f7f8fa;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
+  --line:#e6e9ef;
+  --acc:#211a52; --acc-l:#eeecf7;
+  --lab:#0d6b63; --lab-b:#d9f2ef;
+  --hw:#a2540a; --hw-b:#fbeeda; --orange:#c2410c;
+  --code:#fbfbfd;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1014; --sunk:#14171c;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+    --line:#23272e;
+    --acc:#a79cf5; --acc-l:#1b1930;
+    --lab:#6fd3c4; --lab-b:#0f2b29;
+    --hw:#e0a962; --hw-b:#2c2113; --orange:#fb923c;
+    --code:#111419;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1014; --sunk:#14171c;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+  --line:#23272e;
+  --acc:#a79cf5; --acc-l:#1b1930;
+  --lab:#6fd3c4; --lab-b:#0f2b29;
+  --hw:#e0a962; --hw-b:#2c2113; --orange:#fb923c;
+  --code:#111419;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{font-size:clamp(15.5px,0.55rem + 0.5vw,19px);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 var(--sans)}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 16px 4rem}
+.kicker{font:500 .78rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .8rem}
+h1{font:400 2.3rem/1.15 var(--serif);margin:0 0 .8rem}
+h2{font:400 1.4rem/1.25 var(--serif);margin:2.4rem 0 1rem}
+p{margin:0 0 1rem;color:var(--ink2)}
+.lede{font:400 1.2rem/1.5 var(--serif);color:var(--ink)}
+code{font-family:var(--mono);font-size:.88em}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+figure{margin:1.6rem 0;padding:1.2rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk)}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:.85rem;color:var(--ink3);margin-top:.7rem}
+svg text{font-family:var(--sans);fill:var(--ink)}
+svg .soft{fill:var(--ink3)}
+.cards{display:grid;gap:.8rem}
+.card{display:grid;grid-template-columns:2.6rem 1fr;gap:.9rem;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:10px}
+.card img{width:2.6rem;height:2.6rem;border-radius:8px;background:var(--sunk)}
+.card h3{font:600 1rem/1.3 var(--sans);margin:.1rem 0 .3rem}
+.card p{margin:0 0 .4rem;font-size:.93rem}
+.card .links{font-size:.82rem;color:var(--ink3)}
+.card .links a{margin-right:.8rem}
+.prop{display:inline-block;font:500 .72rem/1 var(--sans);padding:.25rem .45rem;border-radius:4px;background:var(--acc-l);color:var(--acc);margin-left:.3rem;vertical-align:.1rem}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;overflow-x:auto;
+  font:400 .82rem/1.5 var(--mono);margin:.6rem 0 .4rem;color:var(--ink)}
+.kw{color:var(--acc)} .com{color:var(--ink3)}
+ul.gets{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}
+ul.gets li{padding-left:1.6rem;position:relative;color:var(--ink2)}
+ul.gets li::before{content:"→";position:absolute;left:0;color:var(--acc)}
+ul.gets b{color:var(--ink);font-weight:600}
+.note{font-size:.8rem;color:var(--ink3);margin-top:2.4rem;border-top:1px solid var(--line);padding-top:1rem}
+
+/* the five places: a row of logos, the chosen one's text below */
+.box{border:1px solid var(--acc);border-radius:10px;overflow:hidden;margin:2.4rem 0 0;background:var(--bg)}
+.boxhead{font:500 1.3rem/1.25 var(--serif);margin:0;padding:.8rem 1.3rem;background:var(--acc);color:var(--bg)}
+.ptabs{display:grid;grid-template-columns:repeat(5,1fr);background:var(--sunk);border-bottom:1px solid var(--line)}
+.pv{position:relative;display:flex;flex-direction:column;align-items:center;gap:.4rem;background:none;border:0;border-left:1px solid transparent;border-right:1px solid transparent;margin-bottom:-1px;
+  padding:.9rem .3rem .7rem;cursor:pointer;font:500 .8rem/1.2 var(--sans);color:var(--ink3);text-align:center}
+.pv img{width:2.6rem;height:2.6rem;border-radius:10px;background:var(--bg);border:1px solid var(--line);padding:2px;opacity:.75;transition:opacity .15s}
+.pv:hover img,.pv.on img{opacity:1}
+.pv:hover span{color:var(--ink2)}
+.pv.on{background:var(--bg);border-left-color:var(--line);border-right-color:var(--line);box-shadow:inset 0 3px 0 var(--acc)}
+.pv.on::after{content:"";position:absolute;left:50%;bottom:-7px;width:12px;height:12px;background:var(--bg);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateX(-50%) rotate(45deg);display:none}
+.pv.on span{color:var(--ink);font-weight:600}
+.pbody{padding:1.1rem 1.3rem 1rem;min-height:11rem}
+.pt{display:none}.pt.on{display:block}
+.pt h3{font:400 1.3rem/1.25 var(--serif);margin:0 0 .5rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.pt h3 img{width:1.8rem;height:1.8rem;border-radius:7px;border:1px solid var(--line);padding:1px;background:var(--bg)}
+.pt p{font-size:.93rem;margin:0 0 .6rem}
+.pt .links{font-size:.82rem}
+.pt .links a{margin-right:.8rem;white-space:nowrap}
+@media (max-width:560px){.pv{font-size:.68rem}.pv img{width:2.1rem;height:2.1rem}}
+/* the learning objectives */
+.goals-in{padding:.2rem 1.3rem 1.2rem}
+ol.goals + .glabel{margin-top:1.6rem;padding-top:1.3rem;border-top:1px solid var(--line)}
+.glabel{font:700 .9rem/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--orange);margin:1.1rem 0 1rem}
+ol.goals{list-style:none;counter-reset:g;padding:0;margin:0;display:grid;gap:.7rem}
+ol.goals[start="4"]{counter-reset:g 3}
+ol.goals li{counter-increment:g;position:relative;padding-left:2.4rem;color:var(--ink2)}
+ol.goals li::before{content:counter(g);position:absolute;left:0;top:.05rem;width:1.6rem;height:1.6rem;border-radius:50%;
+  background:var(--acc);color:var(--bg);font:600 .8rem/1.6rem var(--sans);text-align:center}
+ol.goals b{color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+
+<p class="kicker">Programming Paradigms · Session 6 · Asynchronous programming</p>
+<h1>Why study this</h1>
+<p class="lede">One thread, a queue, and a loop that runs one function at a time: the plan behind
+most of the software we touch every day. Session 6 is about how to program on it: the
+properties it guarantees, and the patterns that recur from one language to the next.</p>
+
+<figure>
+<svg viewBox="0 30 660 145" role="img" aria-label="The host appends functions to a queue; the loop moves one at a time to the thread, which runs it to its end; an await hands the rest back.">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink3)"/></marker></defs>
+  <rect x="10" y="40" width="130" height="80" rx="8" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+  <text x="75" y="72" text-anchor="middle" font-size="14" font-weight="600">the host</text>
+  <text x="75" y="92" text-anchor="middle" font-size="11" class="soft">network · clock · clicks</text>
+  <line x1="140" y1="80" x2="205" y2="80" stroke="var(--ink3)" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="172" y="70" text-anchor="middle" font-size="10" class="soft">appends</text>
+  <g>
+    <rect x="210" y="62" width="150" height="36" rx="6" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+    <rect x="216" y="68" width="40" height="24" rx="4" fill="var(--acc-l)"/>
+    <rect x="262" y="68" width="40" height="24" rx="4" fill="var(--acc-l)"/>
+    <rect x="308" y="68" width="40" height="24" rx="4" fill="var(--acc-l)"/>
+    <text x="285" y="52" text-anchor="middle" font-size="14" font-weight="600">the queue</text>
+  </g>
+  <line x1="360" y1="80" x2="460" y2="80" stroke="var(--ink3)" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="410" y="70" text-anchor="middle" font-size="10" class="soft">the loop</text><text x="410" y="96" text-anchor="middle" font-size="10" class="soft">takes one</text>
+  <rect x="465" y="40" width="185" height="80" rx="8" fill="var(--acc-l)" stroke="var(--acc)" stroke-width="1.5"/>
+  <text x="557" y="72" text-anchor="middle" font-size="14" font-weight="600">one thread</text>
+  <text x="557" y="92" text-anchor="middle" font-size="11" class="soft">runs it to its end</text>
+  <path d="M557,120 C557,160 285,160 285,104" fill="none" stroke="var(--acc)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ah)"/>
+  <text x="421" y="164" text-anchor="middle" font-size="11" fill="var(--acc)" style="fill:var(--acc)">at an await, the rest of the function waits for its value, then rejoins the queue</text>
+</svg>
+<figcaption>The model of the session. Everything below runs on it.</figcaption>
+</figure>
+
+<div class="places box" id="places">
+ <h2 class="boxhead">Five places it runs</h2>
+ <div class="ptabs" role="tablist">
+  <button class="pv on" data-k="web" aria-controls="pc-web">
+    <img src="https://github.com/whatwg.png?size=96" alt=""><span>Every web page</span></button>
+  <button class="pv" data-k="node" aria-controls="pc-node">
+    <img src="https://github.com/nodejs.png?size=96" alt=""><span>Node.js</span></button>
+  <button class="pv" data-k="srv" aria-controls="pc-srv">
+    <img src="https://github.com/redis.png?size=96" alt=""><span>nginx and Redis</span></button>
+  <button class="pv" data-k="app" aria-controls="pc-app">
+    <img src="https://github.com/microsoft.png?size=96" alt=""><span>Every app with a window</span></button>
+  <button class="pv" data-k="ai" aria-controls="pc-ai">
+    <img src="https://github.com/anthropics.png?size=96" alt=""><span>AI agents</span></button>
+ </div>
+ <div class="pbody">
+    <div class="pt on" id="pc-web">
+      <h3><img src="https://github.com/whatwg.png?size=96" alt="">Every web page<span class="prop">Property 3</span></h3>
+      <p>A page's JavaScript runs on one thread; the HTML standard defines the event loop that feeds it clicks, timers and network replies. A long computation on it freezes the page.</p>
+      <div class="links"><a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loops">HTML standard, event loops</a><a href="https://github.com/whatwg/html">whatwg/html</a></div>
+    </div>
+    <div class="pt" id="pc-node">
+      <h3><img src="https://github.com/nodejs.png?size=96" alt="">Node.js<span class="prop">Property 2</span></h3>
+      <p>In 2009 Ryan Dahl put that loop on the server: one thread serving many connections, waiting on all of them at once. Today it runs servers, build tools and command-line programs; its loop is the C library libuv.</p>
+      <div class="links"><a href="https://github.com/nodejs/node">nodejs/node</a><a href="https://github.com/libuv/libuv">libuv/libuv</a></div>
+    </div>
+    <div class="pt" id="pc-srv">
+      <h3><img src="https://github.com/redis.png?size=96" alt="">nginx and Redis<span class="prop">Property 4</span></h3>
+      <p>nginx serves a large part of the web with one event loop per worker. Redis executes every command on one thread, and that is why each command is atomic with no lock at all.</p>
+      <div class="links"><a href="https://github.com/nginx/nginx">nginx/nginx</a><a href="https://github.com/redis/redis">redis/redis</a></div>
+    </div>
+    <div class="pt" id="pc-app">
+      <h3><img src="https://github.com/microsoft.png?size=96" alt="">Every app with a window<span class="prop">Property 3</span></h3>
+      <p>Android's <code>Looper</code>, Apple's <code>RunLoop</code>, the main thread of VS Code (Electron): a user interface is one loop handling one event at a time. “The app is not responding” is a function that did not return.</p>
+      <div class="links"><a href="https://developer.android.com/reference/android/os/Looper">Android Looper</a><a href="https://developer.apple.com/documentation/foundation/runloop">Apple RunLoop</a><a href="https://github.com/microsoft/vscode">microsoft/vscode</a></div>
+    </div>
+    <div class="pt" id="pc-ai">
+      <h3><img src="https://github.com/anthropics.png?size=96" alt="">AI agents<span class="prop">Properties 2 and 4</span></h3>
+      <p>A call to a language model takes seconds. An agent mostly waits: it awaits the model, runs the tools it asked for together (<code>asyncio.gather</code>), and awaits the model again. The model providers' Python libraries have asynchronous clients, and so do the Model Context Protocol's SDKs.</p>
+      <div class="links"><a href="https://github.com/anthropics/anthropic-sdk-python">anthropic-sdk-python</a><a href="https://github.com/openai/openai-python">openai-python</a><a href="https://github.com/modelcontextprotocol/python-sdk">MCP python-sdk</a></div>
+    </div>
+  </div>
+</div>
+
+<section class="goals-box box">
+  <h2 class="boxhead">Learning objectives</h2>
+  <div class="goals-in">
+  <p class="glabel">In the session</p>
+  <ol class="goals">
+    <li><b>Predict</b> what a short program with <code>async</code> functions prints, and justify it:
+    where each function is suspended, and what is waiting in the queue.</li>
+    <li><b>Find and repair</b> a lost update: mark, in the text of a function, the stretches during
+    which no other code of ours runs; find a read, a wait and a write that lose an update; repair it.</li>
+    <li><b>Find out</b>, for a language with <code>await</code> we have not seen, by three small runs:
+    whether a call starts the work, whether every <code>await</code> suspends, which thread resumes.</li>
+  </ol>
+  <p class="glabel">In the lab's optional quest</p>
+  <ol class="goals" start="4">
+    <li><b>Write</b> the rest of a computation as a function, its continuation, and rewrite a small
+    function to take one.</li>
+    <li><b>Trace</b> one wait from end to end through a promise, a queue and a loop, and say what each
+    of them holds.</li>
+  </ol>
+  </div>
+</section>
+
+<p class="note">Draft, 7 October 2026. To check before publishing: the sentence on nginx's share of the
+web (W3Techs), and that the async clients and the MCP SDK are as described in the current versions
+of the repositories linked. Logos are each organization's GitHub avatar.</p>
+
+</main>
+<script>
+// The five places: pointing at a logo, focusing it or tapping it shows its text below.
+(() => {
+  const vs = document.querySelectorAll(".pv");
+  const show = k => {
+    vs.forEach(v => v.classList.toggle("on", v.dataset.k === k));
+    document.querySelectorAll(".pt").forEach(p => p.classList.toggle("on", p.id === "pc-" + k));
+  };
+  vs.forEach(v => ["mouseenter", "focus", "click"].forEach(e => v.addEventListener(e, () => show(v.dataset.k))));
+})();
+</script>
+</body>
+</html>
