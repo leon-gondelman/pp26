@@ -2566,8 +2566,10 @@ merge a a = a: true"></pre></div>
       else if (stack && s.tagName === 'SECTION') stack.appendChild(s);
     });
   })();
+  // A part begins at a slide of class part or at a divider (this deck has dividers only): the
+  // list of parts (T), Shift+Right / Shift+Left and the digits go by them.
   const parts = [...document.querySelectorAll('.reveal .slides > section')].map((s, h) => {
-    const d = s.querySelector('section.part') || (s.classList.contains('part') ? s : null);
+    const d = s.querySelector('section.part') || (s.matches('.part, .divider') ? s : null);
     return d ? { h, name: d.querySelector('h1').textContent, sub: (d.querySelector('.sub') || {}).textContent || '' } : null;
   }).filter(Boolean);
   const tocList = document.getElementById('toc-list');

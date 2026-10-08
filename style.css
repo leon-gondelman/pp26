@@ -57,9 +57,11 @@
 
 *{box-sizing:border-box}
 /* The whole layout is in rem, so the root size scales it with the screen:
-   15.5px on a 13" laptop, ~17px on a 24" display, capped at 19.5px so an
-   ultrawide does not keep growing. Phone rules below start under the range. */
-html{-webkit-font-smoothing:antialiased;font-size:clamp(15.5px,0.55rem + 0.5vw,19.5px)}
+   15.5px on a 13" laptop, ~18.4px on a 24" display, ~21.6px on a 27" one at
+   2560 px, capped at 24px. It follows the height too, the smaller of the two,
+   so a short window (a 1366x768 laptop, a 21:9 ultrawide at 1080) is not given
+   letters its screens cannot hold. Phone rules below start under the range. */
+html{-webkit-font-smoothing:antialiased;font-size:clamp(15.5px,min(0.55rem + 0.5vw,0.4rem + 1.3vh),24px)}
 body{margin:0;background:var(--bg);color:var(--ink);
   font:400 1rem/1.62 var(--sans);
   display:grid;grid-template-columns:var(--rail) minmax(0,1fr);min-height:100vh}
@@ -199,7 +201,7 @@ td.ttl .n{display:inline-block;width:1.6rem;text-indent:0;color:var(--ink3);
   font:400 .88rem/1 var(--mono);font-variant-numeric:tabular-nums}
 td.ttl{width:auto;min-width:16rem}
 /* the titles of a session and of its blocks each keep to one line; the lab's chips wrap instead */
-@media (min-width:1400px){td.ttl>a,tr.block td.ttl{white-space:nowrap}}
+@media (min-width:1240px){td.ttl>a,tr.block td.ttl{white-space:nowrap}}
 td.mat{width:auto}
 td.mat .none{color:var(--faint)}
 /* in the schedule a long chip wraps inside its column rather than widen the table */
@@ -599,11 +601,36 @@ td.labhead .lw{display:inline-block;padding-top:.3rem;font:600 .72rem/1 var(--sa
 .lab-m{display:none}
 table.sessions td.ttl{padding-right:.8rem}
 @media (min-width:981px){col.c-date{width:5rem} col.c-labt{width:21rem} col.c-labf{width:auto}}
-/* wide screens: the session column as wide as its longest line, the lab beside it */
-@media (min-width:1400px){
+/* from 1240 px (a 1280 laptop at 150 %, a 1366x768 one): the session column as wide as its
+   longest line, the lab beside it; at 15.5px the table needs about 940 px */
+@media (min-width:1240px){
   table.sessions{table-layout:auto}
   col.c-ttl,col.c-labt{width:1%}
   td.ttl{white-space:nowrap}
+}
+/* from 761 to 1239 px (a window not maximised, a 1920 laptop at 150 % with a sidebar, a
+   tablet) a session's lines do not fit side by side: each session is one row of two
+   columns, the lecture (its title, then its blocks) and the lab (its two lines, the files
+   wrapping under the line), from the copies the phone uses; the block rows are collapsed */
+@media (min-width:761px) and (max-width:1239px){
+  table.sessions{table-layout:auto;min-width:0}
+  table.sessions col.c-date{width:4.6rem} table.sessions col.c-ttl,table.sessions col.c-labt,table.sessions col.c-labf{width:auto}
+  table.sessions td.ttl{width:56%;min-width:0} table.sessions td.labhead{width:44%}
+  /* collapsed, not removed: the date's cell spans them */
+  table.sessions tr.block{visibility:collapse}
+  table.sessions tr.block>td{font-size:0;padding:0;white-space:normal}
+  table.sessions tr.block>td>*{display:none}
+  table.sessions tr.has-blocks>td{border-bottom:1px solid var(--line-soft);padding-bottom:1.05rem}
+  table.sessions td.ttl{white-space:normal}
+  table.sessions td.ttl .blk-m,table.sessions .lab-m{display:block;margin-top:.45rem;padding-left:4.4rem;text-indent:-4.4rem;
+    font-size:.93rem;color:var(--ink2);white-space:normal}
+  table.sessions td.ttl .blk-m .blk,table.sessions .lab-m .blk{width:4.4rem;margin-right:0}
+  table.sessions td.ttl .blk-m .lecl{margin-left:.5rem}
+  table.sessions td.labhead{white-space:normal}
+  table.sessions .lab-m .lt{margin-right:.5rem}
+  table.sessions .lab-m .sep{margin:0 .35em;color:var(--ink3);font-weight:400}
+  table.sessions .lab-m a.sol{color:var(--file);font-weight:600;font-size:.84rem;text-decoration:underline;
+    text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
 }
 @media (max-width:760px){
   table.sessions td.labhead{border-left:0;padding-left:0!important}
