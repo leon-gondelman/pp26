@@ -568,8 +568,12 @@ function free(dir){var i=idx(),last=s.length-1;if(i<last)return false;var t=topO
    slows down: a step half as large again as the one before is a new swipe); one that has
    scrolled inside a tall screen up to its edge stops there and does not move on */
 var lastW=0,acc=0,done=false,stepped=false,stepAt=0,lastD=0;
+/* a box that scrolls by itself (the rail of sessions in a short window, a long code box) keeps
+   the wheel while the pointer is over it */
+function scroller(el){for(;el&&el!==document.body&&el.nodeType===1;el=el.parentElement){var cs=getComputedStyle(el);
+  if(/auto|scroll/.test(cs.overflowY)&&el.scrollHeight>el.clientHeight+1)return el;}return null;}
 addEventListener("wheel",function(e){if(!desk()||e.ctrlKey||R.classList.contains("splashing"))return;
-  if(Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)||scroller(e.target))return;
   var dir=e.deltaY>0?1:-1,d=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?room():1),now=Date.now(),a=Math.abs(d);
   if(now-lastW>200||(done||stepped)&&now-stepAt>300&&a>=10&&a>lastD*1.5){acc=0;done=stepped=false;}lastW=now;lastD=a;
   if(stepped||busy){e.preventDefault();return;}   /* the screen has moved: the rest of the gesture is spent */
