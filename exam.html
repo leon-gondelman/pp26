@@ -456,12 +456,23 @@ function remember(){try{localStorage.setItem(K,s[idx()].id)}catch(e){}}
 /* inside the last screen, longer than the window, the page scrolls as usual */
 function free(dir){var i=idx(),last=s.length-1;if(i<last)return false;var t=topOf(s[last]);
   return dir>0||scrollY>t+2;}
-var lastW=0;   /* one gesture moves one screen: a gesture ends after 220 ms without wheel events */
-addEventListener("wheel",function(e){if(!desk()||e.ctrlKey||R.classList.contains("splashing"))return;var dir=e.deltaY>0?1:-1;
-  var now=Date.now(),fresh=now-lastW>220;lastW=now;
-  if(free(dir)&&!busy)return;e.preventDefault();
-  if(inside(dir)&&!busy){within(e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?room():1));return;}if(busy||!fresh||now<lock||Math.abs(e.deltaY)<4)return;
-  go(idx()+dir,dir);},{passive:false});
+/* one gesture moves one screen. A trackpad or a Magic Mouse starts with steps of a pixel or two
+   and goes on sending events for a second after the fingers leave (inertia): the gesture's
+   movement is added up and the screen moves once it passes 40 px, a wheel's click at once.
+   A gesture ends after 200 ms without events, or when the fingers push again (inertia only
+   slows down: a step half as large again as the one before is a new swipe); one that has
+   scrolled inside a tall screen up to its edge stops there and does not move on */
+var lastW=0,acc=0,done=false,stepped=false,stepAt=0,lastD=0;
+addEventListener("wheel",function(e){if(!desk()||e.ctrlKey||R.classList.contains("splashing"))return;
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
+  var dir=e.deltaY>0?1:-1,d=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?room():1),now=Date.now(),a=Math.abs(d);
+  if(now-lastW>200||(done||stepped)&&now-stepAt>300&&a>=10&&a>lastD*1.5){acc=0;done=stepped=false;}lastW=now;lastD=a;
+  if(stepped||busy){e.preventDefault();return;}   /* the screen has moved: the rest of the gesture is spent */
+  if(free(dir))return;e.preventDefault();
+  if(inside(dir)){within(d);done=true;stepAt=now;return;}
+  if(done||now<lock)return;
+  if(acc*dir<0)acc=0;acc+=d;if(Math.abs(acc)<40)return;
+  stepped=true;stepAt=now;acc=0;go(idx()+dir,dir);},{passive:false});
 addEventListener("keydown",function(e){if(!desk()||e.altKey||e.ctrlKey||e.metaKey||R.classList.contains("splashing"))return;
   var tg=e.target;if(tg&&(tg.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName)))return;
   var k=e.key,dir=0;if(k==="ArrowDown"||k==="PageDown"||(k===" "&&!e.shiftKey))dir=1;
