@@ -551,6 +551,16 @@ html.splashing #top figure.masthead img,html.splashing #top .hero h1,html.splash
   table.sessions{table-layout:fixed}
   col.c-date{width:5rem} col.c-lecture{width:9rem}
 }
+/* a window up to 1000 px tall (a 13-16" laptop, a 1080p monitor): the first screen tightens so
+   that it fits without scaling or scrolling - the round button's room at the bottom (it stands
+   beside the first session's line), the painting's strip, three margins */
+@media (min-width:981px) and (max-height:1000px){
+  .screen.home{padding-bottom:1rem}
+  .screen.home figure.masthead{margin-bottom:1rem}
+  .screen.home figure.masthead img{height:8vh;max-height:8vh}
+  .screen.home .hero .sub{margin-bottom:1.2rem}
+  .screen.home .hero .introrow{margin-top:1.1rem}
+}
 @media (max-width:980px){.homegrid .homeside{margin-top:1.6rem}}
 /* ---------------------------------------------------------------- the palette: two families */
 /* A session has two halves and the colours say which: the lecture in the

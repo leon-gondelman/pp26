@@ -372,9 +372,9 @@ function topOf(x){return x.getBoundingClientRect().top+scrollY-barH();}
 function idx(){var i=0;s.forEach(function(x,k){if(x.getBoundingClientRect().top-barH()<=innerHeight*.35)i=k;});return i;}
 function fit(){var room=innerHeight-barH();s.forEach(function(x){var f=x.querySelector(".fit");if(!f)return;f.style.zoom=1;
   if(!desk())return;var cs=getComputedStyle(x),h=f.scrollHeight,r=room-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
-  /* scaled down only as far as letters of 15 px; past that the screen keeps its size */
+  /* scaled down only as far as letters of 14.5 px; past that the screen keeps its size */
   var px=parseFloat(getComputedStyle(document.documentElement).fontSize);
-  if(h>r)f.style.zoom=r/h*px>=15?r/h:1;});}
+  if(h>r)f.style.zoom=r/h*px>=14.5?r/h:1;});}
 /* a screen still taller than the window scrolls inside, up to its edge and no further;
    the next gesture or key then moves to the next screen */
 function room(){return innerHeight-barH();}
