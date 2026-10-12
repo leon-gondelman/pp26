@@ -783,7 +783,7 @@ html.liveedit .reveal .slides section .stack > .fragment.out.visible { opacity: 
   <div class="sub"><b>Block 1</b> — Iterators: who drives the traversal?</div>
   <div class="rule"></div>
   <div class="meta">SW7 · Aalborg University Copenhagen · Autumn 2026</div>
-  <aside class="notes">Session 4 asked who decides when a step is taken. Today the program decides, and it does so in one way, in both blocks: it passes the next step as a function. In this block the function passed is one step of a traversal.</aside>
+  
 </section>
 
 <!-- 2 -->
@@ -819,7 +819,7 @@ let rec fact n =
     </div>
   </div>
   <div class="box fragment" data-fragment-index="4" style="font-size: 0.719em; width: 1408px; position: relative; left: 0px; top: -30px">For answers 2 and 3 we passed a <span class="hl">function as a value</span>. In session 6 we do the same for answer 1, with <b>continuations</b>.</div>
-  <aside class="notes">One minute. Three of session 4's questions, with its answers, on the slide from the start; they are the subtitles of its parts 2, 3 and 4. Five clicks. The first question keeps the light for two of them: count written as a recursion, where the machine keeps the work still to do in its frames, then count with a loop and a stack, where the program keeps it; both are on session 4's slide "Can a loop replace every recursion?". Then fold, then my_if. The last click shows the box. What the explicit stack holds is subtrees, not frames: it is the work still to do of this one traversal, written as data. Session 6 opens on this count and asks what a function adds. Part 2 also went the other way, from a loop to a tail recursion with an accumulator; say it, it is not on the slide.</aside>
+  
 </section>
 
 <!-- 2b -->
@@ -833,7 +833,7 @@ let rec fact n =
   </table>
   <p class="today-line" style="position: relative; left: -2px; top: 46px"><b>Warm-up.</b> Questions on paper, then exercises in OCaml, on blocks 1 and 2.</p>
   <p class="today-line" style="position: relative; left: -2px; top: 46px"><b>Lab.</b> Making a mini text editor, on a library that we write in three parts; the third goes with session 6.</p>
-  <aside class="notes">Thirty seconds. The two questions are the titles of the two decks, and the titles announced on the course site. The two rows continue two of the three questions of the previous slide: the body of a loop was what fold received, the computation not yet run was a branch of my_if. The third, the work still to do that the stack held, is for session 6, with continuations.</aside>
+  
 </section>
 
 <!-- 2c: roadmap of block 1 -->
@@ -846,7 +846,7 @@ let rec fact n =
     <tr class="fragment" data-fragment-index="2"><td class="s">4</td><td><b>Iterators</b></td><td>Second, we traverse by asking for one element at a time (we pull the elements: external iteration). Using closures, the iterator remembers where it is in the list between two calls.</td></tr>
     <tr class="fragment" data-fragment-index="3"><td class="s">5</td><td><b>Generators</b></td><td>We let the language write the iterator: we write a function with <code>yield</code>, and the language makes the object that remembers where the function stopped.</td></tr>
   </table>
-  <aside class="notes">One minute, four clicks. Part 1 is what we need before the block's question can be asked: the function that we pass or keep. Parts 2 to 5 are the question, who drives the traversal: the list (2), what that costs (3), we (4), and the language writing the iterator for us (5). The whole block is on lists. The rope, a collection that we define ourselves, is met in the lab. If asked whether part 3's problem is the same in a lazy language: no. In Haskell a right fold whose function does not use the result of the rest stops by itself. Block 2 does this in OCaml with thunks.</aside>
+  
 </section>
 
 <!-- part 1 -->
@@ -880,7 +880,7 @@ add3 10          (* 13 *)</code></pre>
   </div>
   <div class="box fragment" data-fragment-index="2">A function value of this kind is a <span class="hl">closure</span>.<sup>*</sup> <code>add</code> is <b>curried</b>: it takes <code>n</code> and returns a function. <code>add 3</code> is a <b>partial application</b>.</div>
   <p class="fn fragment" data-fragment-index="2"><sup>*</sup> The name and the construction are Landin's (1964): the function is closed by its environment.</p>
-  <aside class="notes">Session 4, block 2, ended on "what does the closure carry?", and its slide "Three forms" named currying in one line. The two names are given here, on the example; the comparison with a function on a pair is an exercise of the warm-up. Ask where n lives once add 3 has returned; then the first click shows the value. Closure of string * term * env is the parameter, the body and the environment at the point of definition. The next slide is this one with add written let add n = fun x -> x + n: the function that add 3 returns is then in the text.</aside>
+  
 </section>
 
 <!-- 5b: the same, with let add n = fun x -->
@@ -907,7 +907,7 @@ add3 10          (* 13 *)</code></pre>
   </div>
   <div class="box">A function value of this kind is a <span class="hl">closure</span>.<sup>*</sup> <code>add</code> is <b>curried</b>: it takes <code>n</code> and returns a function. <code>add 3</code> is a <b>partial application</b>.</div>
   <p class="fn"><sup>*</sup> The name and the construction are Landin's (1964): the function is closed by its environment.</p>
-  <aside class="notes">The slide before, with one line changed: let add n = fun x -> x + n. Go back and forth between the two: the value add3 is the same, and its code, fun x -> x + n, is now written in the definition. OCaml reads let add n x = e as let add = fun n -> fun x -> e; session 4, slide "Three forms". Nothing appears on a click. The next slide shows that what is kept is the variable and not the value it had.</aside>
+  
 </section>
 
 <!-- 6: Q2, var -->
@@ -958,7 +958,7 @@ List.rev_map (fun f -> f ()) !fs</code></pre>
     <li class="fragment" data-fragment-index="2">We call the functions after the loop. The loop has ended on <code>i = 3</code>, and each function reads 3.</li>
   </ul>
   <div class="box fragment" data-fragment-index="3">A closure keeps the <span class="hl">variable</span>, not the value it held when the closure was made.</div>
-  <aside class="notes">Question 2, first half. Let the room answer; most say 0 1 2. Then Run: [3, 3, 3]. Click: the picture, one variable, three arrows. Two clicks for the two sentences: how many variables there are, then when the functions are called. Then the box. Last click: the same program in OCaml takes the place of the question and the picture; the variable that changes is a ref, made once before the loop, and the function reads it with !i (demos/capture.ml: [3; 3; 3]). With add3 the variable n never changed, so we could not tell the value from the variable; here it changes after the closures are made. The same program exists in Python (lambda: i in a loop gives the last value) and in Go before 1.22.</aside>
+  
 </section>
 
 <!-- 6b: Q2, let -->
@@ -1011,7 +1011,7 @@ List.rev_map (fun f -> f ()) !fs</code></pre>
   </ul>
   <div class="box fragment" data-fragment-index="3">The rule has not changed: a closure keeps its <span class="hl">variable</span>. With <code>let</code> there are three variables, and none of them changes.</div>
   <p class="ask fragment" data-fragment-index="5">Here the closures read their variable. What if a closure changes it?</p>
-  <aside class="notes">Question 2, second half. Ask first, then Run: [0, 1, 2]. Click: the picture, three variables. Then the two sentences, then the box. Then the program in OCaml, where for binds a new i at each round, as let does here (demos/capture.ml: [0; 1; 2]). Last click: the question that the next slide answers, with the counter.</aside>
+  
 </section>
 
 <!-- 7: the counter. Slide 10 of the deck; the iterator written by hand names it by that number -->
@@ -1046,7 +1046,7 @@ let b = counter ()
   <p class="fragment" data-fragment-index="0">Every call of <code>counter</code> makes a new variable <code>n</code>: <code>a</code> and <code>b</code> do not share it.</p>
   <div class="box fragment" data-fragment-index="1">The closure changes <code>n</code> itself, and no other code can read it or change it: a <span class="hl">state of its own</span>.</div>
   <div class="box fragment" data-fragment-index="2">This is <b>encapsulation</b>. In this way an iterator remembers where it is in a list.</div>
-  <aside class="notes">Recorded from demos/rope.ml: 1 2 1. A state that is private and lives as long as the function does: this is what a class with a private field gives. The next slide says so. Last click: where the block uses it. Encapsulation is the word the students have from Java: a private field. The iterator written by hand, later in this block, is this counter with a list in the place of the number.</aside>
+  
 </section>
 
 <!-- 8 -->
@@ -1082,7 +1082,7 @@ System.out.println(c.tick());</code></pre>
   </div>
   <div class="box fragment" data-fragment-index="1">A closure is an object with <b>one method</b>. An object is <b>several closures</b> over the same fields.</div>
   <p class="fn fragment" data-fragment-index="1">Sources: Leroy 2026, §3.3. Objects add to this the choice of the method at run time and inheritance: Cook 2009.</p>
-  <aside class="notes">Recorded from demos/Counter.java: 1. Left, first: two functions closed over the same n, returned in a record; Run. Click: the same thing with the language's own syntax, a class. Session 3's Way 2 was this already: a set was a function, and insert returned one. What objects add is dynamic dispatch and extension by inheritance (Cook 2009, On understanding data abstraction, revisited); one sentence, not a slide.</aside>
+  
 </section>
 
 <!-- part 2 -->
@@ -1111,7 +1111,7 @@ while (it.hasNext()) {
       <pre class="out tr rec">to be or not</pre>
     </div>
   </div>
-  <aside class="notes">An easy slide: two pieces of code that everybody has written. Both visit every word, in order; say it. The next slide shows the same two in OCaml. No names yet, neither internal and external nor push and pull; they come in parts 2 and 4 and on the slide on pull and push. Recorded from demos/Traversals.java. If somebody proposes for (String w : words): it is the right-hand loop, written by the compiler, and part 4 says so. The left one is the method forEach, which takes a function.</aside>
+  
 </section>
 
 <!-- 3b -->
@@ -1135,7 +1135,7 @@ while (it.hasNext()) {
     </div>
   </div>
   <p class="ask fragment" data-fragment-index="1">Does the list push each element into our function, or do we pull each element out of the list?</p>
-  <aside class="notes">The same two traversals. Left, List.iter receives a function. Right, there is no iterator object: we take the list apart ourselves, one element and the rest, and that is how OCaml asks for the next element. Recorded from demos/traversals.ml. The question at the bottom is the question of the block: left, the list pushes (parts 2 and 3); right, we pull (parts 4 and 5). The next slides take the left one.</aside>
+  
 </section>
 
 <!-- folds -->
@@ -1157,7 +1157,7 @@ while (it.hasNext()) {
     </div>
   </div>
   <div class="box fragment">Both call <code>f</code> <span class="hl">once per element</span>. The recursion is written once, in the fold; we pass <code>f</code> and write no recursion.</div>
-  <aside class="notes">A recall, thirty seconds: session 4, block 1, "The body as a parameter: fold" and "Two folds: the order in which f is applied". Session 4 said that map and filter are folds and did not write them; the next slide does. demos/lists.ml.</aside>
+  
 </section>
 
 <!-- three folds -->
@@ -1182,7 +1182,7 @@ length text</code></pre>
   </div>
   <div class="box fragment" data-fragment-index="1">Each of the three uses <span class="hl">every element</span> of the list. None has a reason to stop before the last one.</div>
   <p class="fn fragment" data-fragment-index="0">With <code>fold_left</code>, <code>f x :: r</code> puts each element in front of those met before it: the list is reversed.</p>
-  <aside class="notes">Recorded from demos/lists.ml. Read map aloud: x is the element, r the result for the rest of the list. Why the right fold: it gives our function the result for the rest, and x goes in front of it; the left fold gives what was built from the elements before x, and with :: the list comes out reversed (run: [40; 30; 20; 10] for [1; 2; 3; 4]), unless we reverse it at the end. length could use either. fold_right calls our function from the last element to the first; with no effect in it the result is the same. iter, on the next slide, is called for its effect, in the order of the list: it uses the left fold. The box prepares part 3: these three are the good case of internal iteration. iter, on the next slide, is set apart: it builds nothing, it calls our function for what the function does.</aside>
+  
 </section>
 
 <!-- 14 -->
@@ -1216,7 +1216,7 @@ length text</code></pre>
   </div>
   <div class="box fragment" data-fragment-index="1">This style is <span class="hl">internal iteration</span>: the loop is inside the list's own function. The library calls our code; the general name is <b>inversion of control</b>.<sup>*</sup></div>
   <p class="fn fragment" data-fragment-index="1"><sup>*</sup> Johnson &amp; Foote 1988; the name is discussed in Fowler 2005. The pattern: Gamma et al. 1994, <em>Iterator</em>.</p>
-  <aside class="notes">Internal and external iteration are two styles of iteration, not two paradigms. Gamma et al. name both in the Iterator pattern: who controls the iteration, the client (external) or the iterator (internal). Johnson and Foote call it the Hollywood principle, "don't call us, we'll call you"; say it, it is not on the slide. iter is a fold whose function returns nothing: demos/lists.ml.</aside>
+  
 </section>
 
 <!-- part 3 -->
@@ -1250,7 +1250,7 @@ exists (fun c -> c = '\n') text</code></pre>
     </div>
   </div>
   <div class="box fragment" data-fragment-index="2">The function knew the answer at the third element and had no way to say so. Ignoring an element is <span class="hl">not stopping</span>.</div>
-  <aside class="notes">Question 1. Let the room commit to a number; most say 3. Click: the recorded run, demos/lists.ml: found=true visited=5. Once found is true the function does nothing more, since || does not evaluate p x, and it is still called on y and o. Click: the contrast with filter. Click: the box. List.exists of the standard library stops at the first element that satisfies p; it is not written with a fold.</aside>
+  
 </section>
 
 <!-- fold_until -->
@@ -1281,7 +1281,7 @@ let exists p l =
   <div class="box fragment" data-fragment-index="1">Our function's answer now carries a <span class="hl">decision</span>, <code>Stop</code> or <code>Continue</code>, and the loop reads it.<sup>*</sup></div>
   <div class="box fragment" data-fragment-index="2">Our function can stop, but it runs only when <code>fold_until</code> calls it, and we do not choose when. In part 4 <span class="hl">we</span> call <code>next</code>, which settles both: we ask when we want, and we stop by not asking.</div>
   <p class="fn fragment" data-fragment-index="1"><sup>*</sup> After <code>fold_until</code> in OCaml's Base library. An exception also leaves a traversal: session 6.</p>
-  <aside class="notes">Recorded from demos/lists.ml. The first line on the right sets visited back to 0: typed after the slide before without it, the program prints visited=8. Two clicks after the code. The first box is what changed in principle: the interface. A fold decides everything, and our function's return value is only the next accumulator; fold_until reads a decision in that value, so one choice, whether to go on, has passed to our function. The type 'b go is that choice written as data; session 6 writes the whole rest of a traversal as a function. The second box is the limit, and the question of part 4: our function is called once per element, at the moment the list chooses; it cannot wait between two elements or ask for one. Stated about this interface, not about folds in general: an exception can leave fold, and a lazy right fold stops by itself; both come later and both change what is passed. The lab writes fold_until on the rope and uses it for End-of-line; there it returns a value of type 'b go, because a traversal of the left subtree must say to the right one that it stopped.</aside>
+  
 </section>
 
 <!-- part 4 -->
@@ -1320,7 +1320,7 @@ let exists p l =
   </div>
   <div class="box fragment" data-fragment-index="0">This style is <span class="hl">external iteration</span>: the collection gives us an <b>iterator</b>, and the consumer calls it.</div>
   <p class="fn fragment" data-fragment-index="0">Source: Gamma et al. 1994, <em>Iterator</em>. Java: <code>java.util.Iterator</code>, <code>java.lang.Iterable</code>.</p>
-  <aside class="notes">The same drawing as for internal iteration, the other way round. There the loop was inside iter, and iter called our function once per element. Here the loop is in our code: we call iterator() once, and next() each time we want an element. iterator() returns a new iterator at every call, which starts at the first element; hasNext is not drawn. Gamma et al.: who controls the iteration, the client (external) or the iterator (internal). Click: the name. The next slide is the loop, in Java.</aside>
+  
 </section>
 
 <section>
@@ -1342,7 +1342,7 @@ while (it.hasNext() &amp;&amp; !found) {
       </div>
     </div>
   </div>
-  <aside class="notes">Recorded from demos/ListIter.java; text is the list of the five characters. Ask for visited before the click. The newline question of part 3 is answered with no new interface: three elements visited. Waiting is new: fold never waits between two elements. The next slide shows what the iterator keeps in order to wait.</aside>
+  
 </section>
 
 <!-- list iterator by hand -->
@@ -1381,7 +1381,7 @@ or not None</pre>
     </div>
   </div>
   <div class="box fragment" data-fragment-index="1">Between two calls the iterator remembers where it is in the list, in a variable of its own, <code>here</code>. It is the <span class="hl">counter</span> of slide 10: a closure with a state.</div>
-  <aside class="notes">demos/ListIter.java and demos/lists.ml, run. Left, the class: one field, the cell where we are. Click: the same iterator as a closure, the counter with a list in the place of the number; five calls on the four words give to be, or not, then None. At the end of the list the OCaml answers None; the Java has no such value to give, and next throws NoSuchElementException, as the interface asks. On a list the place is one pointer, the rest of the list. On a tree it is a stack of subtrees: the lab writes that iterator on the rope, and session 6 derives it.</aside>
+  
 </section>
 
 <!-- part 5 -->
@@ -1416,7 +1416,7 @@ or not None</pre>
   </div>
   <pre class="out tr" id="out-two"> </pre>
   <div class="box fragment" data-fragment-index="2">A generator is an <span class="hl">iterator</span> that we write as a function: the language remembers where it stopped.</div>
-  <aside class="notes">Two slides on generators. Say that Python and C# have generators of the same kind, written with yield; it is not on the slide. function* makes a generator; calling two() runs nothing and returns an object with next. Ask for the three answers, then Run. The first call runs the function up to the first yield, the second from there to the second yield, the third to the end of the function: there is no element, value is undefined and done is true. A for … of loop calls next until done is true. From outside, a generator is an iterator; the next slide shows the inside.</aside>
+  
 </section>
 
 <section>
@@ -1453,7 +1453,7 @@ or not None</pre>
   </div>
   <pre class="out tr" id="out-twohand"> </pre>
   <div class="box fragment" data-fragment-index="2">From inside, a generator is an <span class="hl">object</span>: its local variables, and a position in its code.</div>
-  <aside class="notes">The same function two, written by hand as the object that a compiler makes of it; the last two lines are those of the slide before, and Run prints the same three answers. Read the three cases against the generator on the left: a yield is a case that writes in pc the number of the case to resume at, and returns the element with done false; the end of the function is the default case, done true. next() starts with switch (pc): the function goes on where it stopped. pc is the program counter of session 4's machine, kept in a variable of the closure; a local variable of the generator would be one more variable beside pc. This is what compilers of generators to older JavaScript produce (regenerator), and what C# does for iterator blocks. The question left open for session 6: is that object something we have seen before? It is the rest of the computation.</aside>
+  
 </section>
 
 <!-- 24 -->
@@ -1467,7 +1467,7 @@ or not None</pre>
   <p class="fragment" data-fragment-index="0">In pull, the collection gives us an iterator and we call it. In push, we give the collection a function and it calls it.</p>
   <div class="box fragment" data-fragment-index="1">External iteration is pull, internal iteration is push. With pull, <span class="hl">we</span> choose when to ask for the next element, and we stop by not asking.</div>
   <p class="fn">Source: Meijer 2010, <em>Subject/Observer is dual to Iterator</em>; the table follows the Rx design notes.</p>
-  <aside class="notes">Two minutes. Meijer's table has one or many values against synchronous pull or asynchronous push: T and Task&lt;T>, IEnumerable&lt;T> and IObservable&lt;T>. We fill the row of many values today. The cell "one value, pulled" is block 2's thunk; the cell "one value, pushed" is a promise and stays empty until session 6. Do not name either now.</aside>
+  
 </section>
 
 <!-- 25 -->
@@ -1483,7 +1483,7 @@ or not None</pre>
   </table>
   <div class="box fragment" data-fragment-index="0">In this block a function carries out <span class="hl">one step of a traversal</span>; we asked who calls it: the collection, or us.</div>
   <div class="box fragment" data-fragment-index="1">In the next block a function holds <span class="hl">a computation not yet run</span>, and we ask when to run it.</div>
-  <aside class="notes">One line per part; the questions are the dividers' subtitles. Promises paid in this block: what the closure carries and closures as objects (session 4 block 2; session 3's note on Smalltalk blocks), map and filter as folds (session 4, slides on fold), currying and partial application, named on the closure slide and treated in the warm-up of lab 5 (session 4, Three forms). Not paid here, since the block is on lists: the first type with a parameter seen written, which the lab gives in full ('a rope, 'a node, 'a seq), and fold over the melody's tree, which opens the lab's quest (a melody without Par as a rope of events, count_notes as a fold). Short break or straight on; the long break is after block 2.</aside>
+  
 </section>
 
 </div>
@@ -1500,7 +1500,6 @@ or not None</pre>
   window.__anims = [];
 </script>
 <script src="vendor/reveal/reveal.min.js"></script>
-<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
 <script src="vendor/hljs/highlight.min.js"></script>
 <script src="vendor/hljs/languages/ocaml.min.js"></script>
 <script src="vendor/hljs/languages/c.min.js"></script>
@@ -1575,7 +1574,7 @@ or not None</pre>
     slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
     scrollActivationWidth: null,                  // never switch to reveal's scroll view in a narrow window
     keyboard: { 84: () => toggleToc() },          // T: list of parts
-    plugins: [ RevealNotes ]
+    plugins: [ ]
   });
 
 

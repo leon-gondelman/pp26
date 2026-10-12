@@ -440,7 +440,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
   <div class="sub"><b>Block 1</b> — control patterns: recursion, the stack, fold, evaluation</div>
   <div class="rule"></div>
   <div class="meta">SW7 · Aalborg University Copenhagen · Autumn 2026</div>
-  <aside class="notes">One question for six weeks: who decides the next step. Today the first answer: the language, through its evaluation strategy.</aside>
+  
 </section>
 
 <!-- 2 -->
@@ -461,7 +461,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
     <li>when several computations run <b>at once</b>: threads, processes, a parallel fold</li>
   </ol>
   </div>
-  <aside class="notes">The bridge only; do not re-explain persistence or ADTs. The course description lists state, control flow, process communication, data types and modularity; S2 and S3 were data types and state, S4 to S9 are control flow and process communication. Session 1 did not number them, so the slide does not either. Kowalski 1979, "Algorithm = Logic + Control", is a pointer for session 13, not for today: Prolog keeps the logic and fixes one control.</aside>
+  
 </section>
 
 
@@ -486,7 +486,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
       <p>An evaluator for the calculus, in OCaml: terms as a type, substitution, two strategies, closures. The same program grows a type checker in session 10.</p>
     </div>
   </div>
-  <aside class="notes">Thirty seconds. The four questions are the four dividers of block 1, in order; the slide is for the students' notes.</aside>
+  
 </section>
 
 
@@ -513,7 +513,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
     <tr class="fragment ours" data-fragment-index="3"><td><b>      explicit/</b><b>implicit</b>               control</td><td>the order of the steps is written: <code>";</code>", loops, the program counter</td><td>the order is not written: a <b>strategy</b> chooses — this session</td></tr>
   </table>
   </div>
-  <aside class="notes">Collect answers from the room first; they fall into the two rows. The universal machine (a program as data on the tape) and "a recipe: mechanical steps" are common to both definitions and are said on slides 5 and 7, not here. The first two contrasts are the textbook ones; the third is this session's, stated with the machine on the left like the others — explicit control on the imperative side, implicit on the functional side. The next two slides give it its mathematical form: a transition function versus a reduction relation.</aside>
+  
 </section>
 
 <!-- 5 -->
@@ -541,7 +541,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
   </div>
   <div id="tm"></div>
   <div class="box fragment">Control is a <span class="hl">position</span>: the state and the head. The next step is a <b>function</b> of them: exactly one move.</div>
-  <aside class="notes">On computable numbers, 1936, published 1937. The machine is the imperative paradigm before any imperative language: a global state, one step at a time, the next step fixed by where we are. Turing's own distinction in the paper: automatic machines, whose motion is completely determined by the configuration — these define computing — and choice machines, where an external operator decides at some points. The universal machine, which reads another machine's table from its tape, is the program as data: the stored-program computer nine years early.</aside>
+  
 </section>
 
 <!-- 6 -->
@@ -570,7 +570,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
     </div>
   </div>
   <div class="box fragment">Control is a <span class="hl">choice</span>: a step is allowed at any application; nothing in the term picks one. The next step is a <b>relation</b> — a <b>strategy</b> makes it a function (block 2).</div>
-  <aside class="notes">An unsolvable problem of elementary number theory, 1936. No state, no tape, no order written down: the term does not say which of its two applications goes first. Left: the argument first — three steps, one multiplication (block 2: applicative order, call-by-value). Right: the function first, the argument substituted unevaluated — four steps, the multiplication twice (normal order, call-by-name). Same answer either way; block 2 shows the term where only one way reaches an answer. That silence is the whole of this session. Function versus relation is the literal mathematical difference between the two definitions, and it is standard in PL theory in these words: a reduction strategy turns → into a function (Plotkin 1975; Barendregt 1984, ch. 13). Church–Rosser: the choice can cost steps or the answer's arrival, never the answer. If asked how this relates to functional programming and to "no loops, only recursion": block 2, the slide "Control as syntax, control as a value" — no control syntax, so control lives in values, and the values are functions.</aside>
+  
 </section>
 
 <!-- 7 -->
@@ -582,7 +582,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
     <li>Every model of effective computation proposed since has turned out to compute the same functions. This is the <b>Church–Turing thesis</b>.</li>
   </ul>
   <div class="box fragment">Equal in what they can compute. Differerent in one design decision: <span class="hl">who decides the next step</span>.</div>
-  <aside class="notes">The thesis is not a theorem: it says that the informal notion of "effectively computable" is captured by these definitions. Every language we use is equivalent to both, so the choice between the two paradigms is never about power.</aside>
+  
 </section>
 
 <!-- 8 -->
@@ -596,7 +596,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
     <tr><td class="s">the default in</td><td>C, Java, Python, JavaScript</td><td>Haskell, OCaml, Scheme, Erlang</td></tr>
   </table>
   <p class="fragment" style="position: relative; left: -2px; top: 152px">Paradigm ≠ language: Java has lambdas, OCaml has <code>for</code>. A language makes one of the two the default.</p>
-  <aside class="notes">Backus 1978 called the left column the von Neumann bottleneck: one word at a time through the program counter. The right column is what "functional" means before any feature list: a program is an expression, running it is reducing it.</aside>
+  
 </section>
 
 <!-- part 2 -->
@@ -627,7 +627,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
     </div>
   </div>
   <div class="box fragment">The machine does not substitute. It <span class="hl">stores</span>: the argument in the frame, and what remains to be done on the stack.</div>
-  <aside class="notes">Session 2's stack, used by every compiled language since Algol 60 (Dijkstra's proposal). The frame is the machine's environment; the pending "3 + _" is the machine's context. Both words return in the lab.</aside>
+  
 </section>
 
 <!-- 13 -->
@@ -635,7 +635,7 @@ html, body { background: var(--bg); color: var(--fg); margin: 0; }
   <h2>The same call, in the calculus</h2>
   <div id="ct"></div>
   <div class="box">The stack holds what the calculus keeps <em>in the term</em>: the surrounding computation. Same information, two places.</div>
-  <aside class="notes">Step it. Left: a frame per call, each with its pending addition. Right: the term grows one "3 + (" per call and collapses from the inside at each return. The two columns move in lock-step; that is the slide.</aside>
+  
 </section>
 
 <!-- 14 -->
@@ -669,7 +669,7 @@ RecursionError: maximum recursion depth exceeded</pre>
     </div>
   </div>
   <div class="box fragment" style="font-size: 0.76em">A recursion that is correct in the calculus can fail on the machine: the stack is finite, the term is not.</div>
-  <aside class="notes">Recorded, on purpose: a browser's stack is a different machine's, and a live overflow here would show a convincing wrong number. Python's limit is a counter, not memory: Guido van Rossum keeps it low so a runaway recursion gives a readable traceback. OCaml 5: OCAMLRUNPARAM=l, 128 M words on 64-bit.</aside>
+  
 </section>
 
 <!-- 15 -->
@@ -709,7 +709,7 @@ RecursionError: maximum recursion depth exceeded</pre>
     </div>
   </div>
   <p class="fn">A tree 100 000 notes deep. Right: session 2's stack in a new job — Lab 2's maze visit was this loop.</p>
-  <aside class="notes">Both run here, in Python (Pyodide): the left one fails at Python's own limit, the right one counts 100 001 notes. The explicit stack is the recursion's stack made visible; the order we push the children is the order they are counted — depth first, as the recursion.</aside>
+  
 </section>
 
 <!-- 16 -->
@@ -724,7 +724,7 @@ RecursionError: maximum recursion depth exceeded</pre>
 <span data-line="7">    return n</span></code></pre>
   <div id="ts"></div>
   <div class="box fragment">Each entry is <em>what to do next</em> once the current subtree is counted — the rest of the computation. Session 5 names it: a <span class="hl">continuation</span>. Sessions 6 and 7 hand it to a scheduler: a thread is a stack the operating system saves; a coroutine is a suspended computation the program saves itself.</div>
-  <aside class="notes">Reynolds 1972, definitional interpreters: making the stack explicit is the first step from a recursive evaluator to a machine. Said, not proved; three sessions pay it back.</aside>
+  
 </section>
 
 <!-- 17 -->
@@ -750,7 +750,7 @@ sum 0 [3; 1; 4]      (* 8 *)</code></pre>
     </div>
   </div>
   <p class="fn"><sup>*</sup> A <b>tail call</b> is a call in the position where its result is returned unchanged.</p>
-  <aside class="notes">Steele 1977: a procedure call is a goto that passes arguments; the "expensive procedure call" is a myth of bad compilers. The accumulator is the loop variable; the arguments of the tail-recursive function are the state of the loop.</aside>
+  
 </section>
 
 <!-- 18 -->
@@ -763,7 +763,7 @@ sum 0 [3; 1; 4]      (* 8 *)</code></pre>
     <tr><td>Lua, Elixir</td><td>C — an optimisation the compiler may or may not apply</td></tr>
   </table>
   <div class="box fragment">Whether a tail call needs a frame is decided by the language, not by the program. Same program, two behaviours.</div>
-  <aside class="notes">Clinger 1998 gives the definition as a space guarantee: a tail-recursive loop runs in constant stack. JavaScript: ES2015 requires it, only Safari implements it. C: gcc -O2 does it for the simple cases; -O0 does not.</aside>
+  
 </section>
 
 <!-- 19 -->
@@ -775,7 +775,7 @@ sum 0 [3; 1; 4]      (* 8 *)</code></pre>
   </table>
   <div class="box fragment">Equal power; the difference is what the program writes down and what the language keeps hidden. Compilers perform both translations: a tail call becomes a jump, a recursion becomes a loop over an explicit stack — a stack of <b>continuations</b>, session 5.</div>
   <p class="fn">Sources: recursion elimination — Bird 1977; the construction — Reynolds 1972; a tail call as a jump — Steele 1977.</p>
-  <aside class="notes">Not a theorem with one name. Böhm–Jacopini 1966 is the neighbouring result and says something else: sequence, selection and iteration suffice to replace jumps. The first line is what a functional language does with every loop; the second is what a compiler does with every recursion. Neither paradigm can do something the other cannot; each makes one of the two directions invisible.</aside>
+  
 </section>
 
 
@@ -802,7 +802,7 @@ sum 0 [3; 1; 4]      (* 8 *)</code></pre>
   </div>
   <p>Three functions, one recursion. What differs: the value for <code>[]</code>, and how <code>x</code> is combined with the result for the rest.</p>
   <p class="fragment">If the two differences were <em>arguments</em>, one function would do for all three.</p>
-  <aside class="notes">Session 3's count_notes is the same recursion on a tree. Read the accented parts aloud: a starting value and a combining step; everything else is the walk over the list.</aside>
+  
 </section>
 
 <!-- 22 -->
@@ -823,7 +823,7 @@ let evens_squared = compose (List.map square) (List.filter even)</code></pre></d
     <div class="car-panel fragment current-visible"><p>Session 5: who drives a loop — the collection (<code>fold</code>) or the caller (iterators, generators) — and control as a value the program passes: closures, thunks, continuations.</p></div>
     <div class="car-panel fragment current-visible"><p>Next: how <code>fold</code> runs, step by step.</p></div>
   </div>
-  <aside class="notes">fold is the tail-recursive sum of slide 17 with the body abstracted. Nothing new was added to the language: functions were values since session 3's JavaScript sets. Session 5 writes fold, map and filter from scratch; today we use them.</aside>
+  
 </section>
 
 <!-- 23 -->
@@ -846,7 +846,7 @@ let evens_squared = compose (List.map square) (List.filter even)</code></pre></d
     </div>
   </div>
   <div class="box fragment">Two orders of applying the same <code>f</code>: left to right with a carried value, or right to left with pending work.</div>
-  <aside class="notes">Read the two definitions aloud and point at the position of the recursive call: outside f on the left (tail), inside f on the right (pending). That is the whole difference, and it is the loop-versus-stack difference of part 2 again.</aside>
+  
 </section>
 
 <!-- 23a -->
@@ -868,7 +868,7 @@ fold_right:  3 − (1 − (4 − 0))  =  6</code></pre>
   </div>
   <div class="box fragment">The order of applying <code>f</code> is part of the meaning — unless <code>f</code> is <b>associative</b> and the seed is its <b>identity</b>: then only the parenthesisation changes. Session 9 makes that the condition for running a fold in parallel.</div>
   <p class="fragment"><b>Algorithm = Logic + Control</b> (Kowalski, 1979), read off the code: <code>f</code> and <code>z</code> are the logic, <code>fold_left</code> or <code>fold_right</code> the control. With <code>+</code> the control changes only the cost; with <code>−</code> it changes the answer.</p>
-  <aside class="notes">Kowalski's claim that control "only affects efficiency" holds exactly when the logic is order-independent — associative here. The next slide shows both orders as one picture.</aside>
+  
 </section>
 
 <!-- 24 -->
@@ -876,7 +876,7 @@ fold_right:  3 − (1 − (4 − 0))  =  6</code></pre>
   <h2><code>fold</code> as a rewriting of the list’s tree</h2>
   <p class="tight">A list is a tree of <code>(:)</code> nodes ending in <code>[]</code>. <code>fold_right f xs z</code> replaces every <code>(:)</code> by a call to <code>f</code> and <code>[]</code> by <code>z</code> — same shape; <code>fold_left f z xs</code> builds the mirrored tree from <code>z</code> upwards.</p>
   <div id="fv"></div>
-  <aside class="notes">Run fold_left: the accumulator travels left to right, one value carried, every f runs as soon as its element is met — the loop of slide 17. Switch to fold_right: every f must wait for the rest of the list — the "?" nodes are the pending frames of slide 13; then the values come back from the right. Switch to (−): same picture, different answers, −8 and 6.</aside>
+  
 </section>
 
 <!-- 24 -->
@@ -891,7 +891,7 @@ fold_right:  3 − (1 − (4 − 0))  =  6</code></pre>
   </table>
   <p class="fragment"><code>map</code> applies a function to every element; <code>filter</code> keeps the elements a function accepts. Both are folds.</p>
   <p class="fn">Session 5: who drives this loop — the collection or the caller — and what else a loop can be.</p>
-  <aside class="notes">Every language in the room has the loop as a value; the names differ, the idea is one. Python's reduce was moved into functools by Guido, who prefers the explicit loop; that is a taste, not a paradigm.</aside>
+  
 </section>
 
 <!-- part 4 -->
@@ -926,7 +926,7 @@ f (print_string "first "; 10)
     </div>
   </div>
   <div class="box fragment">Never the program. Fixed by the language definition (Java, C#, JavaScript, Python: left to right), left unspecified (C, Scheme, OCaml — right to left in practice), or no order at all (Haskell: an argument is evaluated when used).</div>
-  <aside class="notes">The visible symptom of the whole session: with effects, the strategy shows. OCaml's right-to-left is an implementation accident (arguments are pushed right to left); a program that depends on it is wrong by the manual.</aside>
+  
 </section>
 
 <!-- 25b -->
@@ -940,7 +940,7 @@ f (print_string "first "; 10)
     <tr><td>call by need</td><td>at first use, once; never if unused</td><td>Haskell (everywhere); R (every argument is a promise); Scala <code>lazy val</code></td></tr>
   </table>
   <div class="box fragment">Both questions — in which order, and when — are answered by the language, not by the program. Block 2 derives the three modes from the calculus.</div>
-  <aside class="notes">The course table calls these parameter-passing modes. R is the example most students have used without knowing: an argument is a promise, forced on first use, which is why missing() and substitute() exist. Algol 60's by-name is Jensen's device. Scala has both by-name parameters and by-need values. Block 2 slide "The language names" gives the same three rows as reduction orders.</aside>
+  
 </section>
 
 <!-- 26 -->
@@ -969,7 +969,7 @@ let rec fact n =
   </div>
   <p class="fragment">Under call-by-value the arguments are evaluated <em>before</em> the call — <code>fact (n - 1)</code> too, even when <code>n = 0</code>, which recurses forever. In such a language <code>if</code> cannot be an ordinary function: it must not evaluate its branches before choosing. So <code>if</code> is a <span class="hl">keyword</span>.</p>
   <div class="box fragment">Unless the caller keeps the branches from being evaluated — next slide. Or the language decides otherwise — block 2.</div>
-  <aside class="notes">JavaScript's RangeError is the same stack overflow. This is the block's open question; do not answer it. Block 2: under call-by-name, if is a function; under call-by-value, it is a function of two thunks — the S4 / S5 split.</aside>
+  
 </section>
 
 <!-- 26b -->
@@ -999,7 +999,7 @@ let rec fact n =
   </div>
   <p class="fragment">A function's body is not evaluated until the function is <em>called</em>. Each branch is now a function of no argument; <code>my_if</code> calls only the one it chose, and the other is never run.</p>
   <div class="box fragment">So <code>if</code> can be a function — if the caller delays the branches by hand. Block 2 gives this a name, and shows the language doing it instead.</div>
-  <aside class="notes">Recorded: demos/my_if2.ml prints 120. Do not say "thunk" or "lazy" yet: the only fact used is that a function body runs when the function is called. Block 2, slide "if as a function under call-by-value", names the wrapping a thunk and puts it on the S5 row of the table; slide 42 shows Haskell doing it in the language.</aside>
+  
 </section>
 
 <!-- 27 -->
@@ -1013,7 +1013,7 @@ let rec fact n =
     <tr><td class="s">4</td><td>In which order, and when, are arguments evaluated?</td><td>The language decides both: the order (fixed or unspecified) and the mode — by value, by name, by need. Under call by value <code>if</code> cannot be a function unless the caller delays the branches.</td></tr>
   </table>
   <div class="box fragment">Each time, <span class="hl">functional programming</span> expressed the control through recursion and function values: recursion rather than an explicit stack, <code>fold</code> rather than a loop, a function that delays rather than an argument evaluated first. Block 2 formalises these choices in a minimal setting of the functional paradigm: the <span class="hl">λ-calculus</span>.</div>
-  <aside class="notes">One line per part; the questions are the dividers' subtitles. If asked whether "machine vs calculus" and "explicit vs implicit control" are the same distinction: they are not — the tail-recursive sum is functional syntax with fully explicit control, and Algol's call-by-name is implicit control in an imperative language. Say it as an answer, not as a slide; it is not a standard presentation. The box does not say that implicit control is functional: an imperative program also has a call stack and an evaluation order that its language fixes. Break. Block 2 starts from the three forms of slide 6 and never uses a number it has not defined.</aside>
+  
 </section>
 
 </div>
@@ -1040,7 +1040,6 @@ let rec fact n =
   window.__anims.push(TreeStack.mount(document.getElementById('ts'), { codeEl: document.getElementById('ts-code') }));
 </script>
 <script src="vendor/reveal/reveal.min.js"></script>
-<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
 <script src="vendor/hljs/highlight.min.js"></script>
 <script src="vendor/hljs/languages/ocaml.min.js"></script>
 <script src="vendor/hljs/languages/c.min.js"></script>
@@ -1086,7 +1085,7 @@ let rec fact n =
     slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
     scrollActivationWidth: null,                  // never switch to reveal's scroll view in a narrow window
     keyboard: { 84: () => toggleToc() },          // T: list of parts
-    plugins: [ RevealNotes ]
+    plugins: [ ]
   });
 
 

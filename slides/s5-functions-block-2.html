@@ -783,7 +783,7 @@ html.liveedit .reveal .slides section .stack > .fragment.out.visible { opacity: 
   <div class="sub"><b>Block 2</b> — Thunks and streams: when is a value computed?</div>
   <div class="rule"></div>
   <div class="meta">SW7 · Aalborg University Copenhagen · Autumn 2026</div>
-  <aside class="notes">Block 1 handed over one step of a traversal. This block hands over a computation not yet run. Session 4 showed the language deciding when an argument is evaluated; here the program decides, with a function.</aside>
+  
 </section>
 
 <!-- roadmap -->
@@ -795,7 +795,7 @@ html.liveedit .reveal .slides section .stack > .fragment.out.visible { opacity: 
     <tr class="fragment" data-fragment-index="1"><td class="s">2</td><td><b>Sequences</b><br>how far?</td><td>We put the function inside a data structure. We choose how far a sequence is computed, and it can be without end.</td></tr>
     <tr class="fragment" data-fragment-index="2"><td class="s">3</td><td><b>Memoisation</b><br>how many times?</td><td>We keep the result of the function. We choose that the value is computed at most once.</td></tr>
   </table>
-  <aside class="notes">One minute. The sentence at the top is the message of the block; the three parts are three choices that the function gives us. In each part we first make the choice ourselves, in OCaml, and then look at Haskell, where the language has made it for every value. Session 4's table of strategies comes back twice: call-by-name in part 1, call-by-need in part 3.</aside>
+  
 </section>
 
 <!-- part 1 -->
@@ -826,7 +826,7 @@ let rec fact n =
     </div>
   </div>
   <div class="box fragment" data-fragment-index="1">A function that holds a computation and waits for its call is a <span class="hl">thunk</span>. In OCaml we write it <code>fun () -> e</code>.</div>
-  <aside class="notes">Session 4, block 2, "if under call-by-value": demos my_if.ml and my_if2.ml of session 4. The right-hand code is on slide 2 of block 1, as the third of session 4's questions. A thunk is a closure: fun () -> n * fact (n - 1) carries n. Nothing new is needed from the language. The word comes from the compilers of Algol 60, which passed every argument in this way.</aside>
+  
 </section>
 
 <!-- a thunk called twice -->
@@ -872,7 +872,7 @@ let b = t ()</code></pre>
     </div>
   </div>
   <div class="box fragment" data-fragment-index="2">A thunk computes <span class="hl">at every call</span>. It is session 4's <b>call-by-name</b>, written by the program.</div>
-  <aside class="notes">Let the room answer, then Run: the thunk is made, computing, computing, 42 42 (demos/thunk.js; the OCaml program is in demos/stream.ml and prints the same). Two clicks for the two facts, one for the box, and the last click shows the OCaml in the place of the question. That the work is done again at every call is the subject of part 3. Session 4's table: call-by-name, the argument evaluated at each use.</aside>
+  
 </section>
 
 <!-- two folds -->
@@ -896,7 +896,7 @@ let b = t ()</code></pre>
   </div>
   <div class="box fragment" data-fragment-index="1">Only with a <span class="hl">right fold</span> is our function given the rest, and can decide what becomes of it.</div>
   <p class="fn fragment" data-fragment-index="1"><code>fold_right</code> keeps one frame waiting per element; <code>fold_left</code> keeps none: its recursive call is a tail call.</p>
-  <aside class="notes">Session 4's two folds, read for one thing: what our function is given. In the left fold the recursive call is the last thing the fold does, with the rest of the list as its own argument; f sees acc and x and returns. In the right fold the recursive call is an argument of f. This is why the slides that follow use the right fold, and why block 1's exists, written with the left fold, could not stop. It is also true in Haskell: foldl on a list without end never returns, as the slide on Haskell shows.</aside>
+  
 </section>
 
 <!-- exists as a left fold -->
@@ -906,7 +906,7 @@ let b = t ()</code></pre>
 
 exists (fun c -> c = '\n') text</code></pre>
   <div id="sq-left"></div>
-  <aside class="notes">Block 1 wrote it with fold, which is session 4's fold_left. Step or Run; six steps. The pill under the cells is the accumulator that the fold carries from call to call. The blue line is the rest of the list: it is the fold's, and f is never given it. After the newline f is called twice more and has nothing to do. Recorded in block 1 from demos/lists.ml: visited=5.</aside>
+  
 </section>
 
 <!-- exists as a right fold -->
@@ -916,7 +916,7 @@ exists (fun c -> c = '\n') text</code></pre>
 
 exists (fun c -> c = '\n') text</code></pre>
   <div id="sq-right"></div>
-  <aside class="notes">Step or Run; twelve steps, in two phases. First the fold goes down the list: to call f on h it needs the rest, and so on to the end; f is not called once. Then f is called from the last character to the first, each time with the rest already computed. Recorded from demos/delay.ml: visited=5. The sentence to leave: our function is given the rest as a value, and OCaml computes an argument before the call. The rest reaches our function, and too late.</aside>
+  
 </section>
 
 <!-- the fold that stops -->
@@ -937,7 +937,7 @@ exists (fun c -> c = '\n') text</code></pre>
     </div>
   </div>
   <div id="sq-thunk"></div>
-  <aside class="notes">Two changes: fun () -> in the last case of the fold, rest () in our function. Step or Run; six steps. The dark box is the rest of the fold, not run. At h and at i our function calls it; at the newline p x is true, || does not compute its right side, and the box is never opened: y and o are not read. Recorded from demos/delay.ml: visited=3. This is a second way to stop, beside fold_until.</aside>
+  
 </section>
 
 <!-- a list without end -->
@@ -970,7 +970,7 @@ take 5 (from 0)</code></pre>
     </div>
   </div>
   <p class="ask fragment" data-fragment-index="3">The two programs are the same, line for line. Why does Haskell give an answer, and OCaml none?</p>
-  <aside class="notes">The hook of the part on Haskell. from n is the list of all the numbers from n on; take n l is the list of the first n elements of l. Ask what OCaml answers to the last line, and let the room commit; then the recorded error: OCaml computes the argument, from 0, before it calls take, and from 0 has no end. Click: the same two definitions in Haskell. : is Haskell's ::, == its =, case ... of its match ... with. Ask again before the output. Recorded from demos/take.ml and demos/Take.hs. The slide ends on the question; the next slide answers it, cell by cell.</aside>
+  
 </section>
 
 <!-- a list built when it is read -->
@@ -979,7 +979,7 @@ take 5 (from 0)</code></pre>
   <pre class="mid tight"><code class="language-haskell">take 5 (from 0)              -- Haskell also writes from 0 as [0 ..]</code></pre>
   <div id="sq-lazylist"></div>
   <div class="box fragment">Haskell builds a cell of the list when a function <span class="hl">reads</span> it, and not before. <code>take 5</code> reads five cells, so five cells are built.</div>
-  <aside class="notes">The answer to the question of the slide before. Step or Run; six steps. The hatched box is the rest of the list, a computation not yet run: first the whole list, from 0, then from 1, and so on. Each element that take reads turns one step of it into a cell. The reader is named by the call that reads: take 5 reads the first cell and goes on as take 4, which reads the second, down to take 0, which answers [] and does not read from 5. Haskell does not compute the argument before the call: take receives from 0 not yet run, and its case l of is what reads the first cell. A cell that is built stays built: another reader of the same list finds it. With other readers: from 0 !! 1000000 builds a million and one cells; takeWhile (&lt; 60) (map (^ 2) (from 0)) builds nine, since the cell with 64 is read, fails the test, and stops it (demos/Inf.hs).</aside>
+  
 </section>
 
 <!-- primes -->
@@ -996,7 +996,7 @@ take 5 (from 0)</code></pre>
     <tr class="fragment" data-fragment-index="3"><td><code>where</code></td><td>a definition written after its use</td><td>OCaml: <code>let … in</code>, before</td></tr>
   </table>
   <div class="box fragment" data-fragment-index="4"><code>sieve</code> keeps <code>p</code>, the first element, and calls itself on the rest <span class="hl">without the multiples of <code>p</code></span>. The list in brackets is block 1's <code>filter</code>.</div>
-  <aside class="notes">Two lines for all the prime numbers: the sieve of session 1's spirit, one problem written as what it is. Read the two lines with the table, one row per click: the notation first, then the sentence of the box. [x | x <- xs, c] is a list comprehension, the notation that Python took from Haskell; in OCaml it is filter (fun x -> x mod p <> 0) xs, block 1's filter. The backquotes make an operator of the function mod, and /= is "is not equal to". sieve has no case for the empty list: its list has no end. Recorded from demos/Inf.hs. The next slide draws how far the list is built.</aside>
+  
 </section>
 
 <section>
@@ -1011,7 +1011,7 @@ take 5 (from 0)</code></pre>
     <tr class="fragment" data-fragment-index="4"><td class="s"><code>take 5 primes</code></td><td class="p"><span>2</span></td><td class="p"><span>3</span></td><td class="x">4</td><td class="p"><span>5</span></td><td class="x">6</td><td class="p"><span>7</span></td><td class="x">8</td><td class="x">9</td><td class="x">10</td><td class="p"><span>11</span></td><td class="lz">12</td><td class="lz">13</td><td class="lz">14</td><td class="lz">15</td><td class="lz">16</td><td class="lz">17</td><td class="lz">18</td><td class="lz">19</td><td class="lz">20</td><td class="lz">21</td><td class="lz">22</td><td class="lz">23</td><td class="lz">24</td><td class="lz">25</td><td class="lz">…</td></tr>
   </table>
   <p class="fragment" data-fragment-index="5">A number is struck out when a prime kept before it divides it. To give its first <em>k</em> primes, Haskell builds <code>[2 ..]</code> up to the <em>k</em>-th prime: the hatched numbers are <span class="hl">not yet computed</span>.</p>
-  <aside class="notes">The recorded run of demos/Inf.hs and the question are on the slide from the start; let the room answer before the first click. Then one row per click. Each row is a moment: the list [2 ..] when take has given k primes. In orange, the primes kept; struck out, the numbers that were built and taken out, 4, 6, 8 and 10 by 2, 9 by 3; hatched, the rest of the list, not yet built: the same hatching as the rest of the list on the slide of the list built lazily. Every list that the sieve makes is read as far as the newest prime and no further, because that prime has to pass through all of them; the drawing shows the first one, [2 ..]. demos/Sieve.hs traces every cell as it is built, for five primes: the rows are read off its output. For take 10 primes the list is built up to 29. This sieve is slow, each number is tested against every prime before it; it is here for what it says, not for its speed.</aside>
+  
 </section>
 
 <!-- lazy evaluation -->
@@ -1025,7 +1025,7 @@ take 5 (from 0)</code></pre>
     <tr class="fragment" data-fragment-index="2"><td class="s">Session 6</td><td>two functions, for a search that can fail</td><td>the list of all the solutions, of which we read the first</td></tr>
   </table>
   <div class="box fragment" data-fragment-index="3">In session 4 the language chose when an argument is computed. In session 5 <span class="hl">the program chooses</span>, with a function.</div>
-  <aside class="notes">One minute. This is where Haskell stands in the two blocks and in session 6; the next slide shows the first row, and parts 2 and 3 the second. The third row is for session 6: a search with backtracking hands over what to do on success and what to do on failure; in a lazy language it returns the list of its solutions, which is computed as far as it is read (Wadler 1985, "How to replace failure by a list of successes"). Say it in one sentence here and come back to it in session 6.</aside>
+  
 </section>
 
 <!-- Haskell -->
@@ -1056,7 +1056,7 @@ take 5 (from 0)</code></pre>
     </div>
   </div>
   <div class="box fragment" data-fragment-index="5">Laziness delays what a function <b>is given</b>. In Haskell as in OCaml, only with the <span class="hl">right fold</span> is our function given the rest.</div>
-  <aside class="notes">Ask for the answer of each fold before showing it. Recorded from demos/Folds.hs and demos/Inf.hs: the right fold answers True. The left fold was run and stopped by hand after a minute. Under each run, the fold unfolded by its definition, with f for our function: foldr f z (x : xs) = f x (foldr f z xs), and foldl f z (x : xs) = foldl f (f z x) xs, the two of the slide "A left fold and a right fold". With foldr the call on top is f: Haskell runs it, and f 3 rest is True without rest. With foldl the call on top is foldl again, at every step: to know the result Haskell must go to the end of the list. Laziness does delay something: the argument f z x, the call of our function, which waits and is never run. So found would be True from 3 on, and nobody looks at it. demos/Folds.hs traces our function: with foldr it is called on 0, 1, 2, 3; with foldl on [0 .. 5] it is called at the end only, on 5 first; on [0 ..] it is never called. This closes the slide on the two folds: who holds the rest decides who can stop, in a lazy language too. It also answers the question of block 1's roadmap, where the problem of stopping was stated "in a strict language": in a lazy language the right fold stops by itself.</aside>
+  
 </section>
 
 <!-- part 2 -->
@@ -1087,7 +1087,7 @@ and 'a seq = unit -> 'a node</code></pre>
   </div>
   <div class="box fragment" data-fragment-index="1">A <span class="hl">sequence</span> <span class="aka">(also called a stream)</span><sup>*</sup> is a thunk that gives one element and the rest of the sequence.</div>
   <p class="fn fragment" data-fragment-index="1"><sup>*</sup> CS3110, section 9.4. OCaml's library has this type as <code>Seq.t</code>.</p>
-  <aside class="notes">The only difference between the two types is unit ->. Two types that refer to each other, hence "and". The names are the library's: Seq.t, Nil, Cons. We write the type ourselves in the lecture and in the lab, and use the library on the last slide of this part. It is a type with a parameter, 'a, written by us: session 11 explains how the compiler finds the types of the functions we write on it.</aside>
+  
 </section>
 
 <!-- nats and take -->
@@ -1112,7 +1112,7 @@ let rec take n (s : 'a seq) =
     </div>
   </div>
   <div class="box fragment" data-fragment-index="1">A sequence without end is a <span class="hl">value</span>: we can name it, pass it and keep it. Five of its elements are computed, because we ask for five.</div>
-  <aside class="notes">Recorded from demos/stream.ml, where nats counts the elements it produces. nats 0 returns at once: the recursive call nats (n + 1) is under fun () ->, so it is not run. With a list, let rec nats n = n :: nats (n + 1) never returns.</aside>
+  
 </section>
 
 <!-- drawing: a list and a sequence -->
@@ -1120,7 +1120,7 @@ let rec take n (s : 'a seq) =
   <h2>A list and a sequence, drawn</h2>
   <div id="sq-cells"></div>
   <div class="box fragment">After three calls, three cells are built. The rest, <code>nats 3</code>, is a thunk that <span class="hl">nobody has called</span>.</div>
-  <aside class="notes">Step three times, or Run: they are the calls that take 3 (nats 0) makes. A cell comes out of the thunk that builds it, with the next thunk. The thunks stay dark after the call: calling nats 0 again builds another cell with 0. A value that is kept after the first call is part 3's subject.</aside>
+  
 </section>
 
 <!-- map and filter -->
@@ -1147,7 +1147,7 @@ let rec take n (s : 'a seq) =
     </div>
   </div>
   <div class="box fragment" data-fragment-index="2">In a <code>Cons</code>, the recursive call returns at once: it makes a function that <span class="hl">nobody has called yet</span>. The rest is computed when the consumer asks for it.</div>
-  <aside class="notes">Read map aloud. Why this does not loop on a sequence without end: Cons (f x, map f rest) does call map f rest, and that call returns at once, since the body of map is under fun () ->; it does not call rest. On a list, map f rest would go through the whole rest before the cell is built. The same for Cons (x, filter p rest). The one call that runs at once is filter p rest (), with its (): it asks for the next element. Both are the functions of block 1 on lists, with the type of sequences in the place of the list. In filter, the last line calls the sequence filter p rest: it goes on until an element passes. A question for the room if there is time: what does filter do on nats with a predicate that is never true? It never returns; the lab asks it.</aside>
+  
 </section>
 
 <!-- how far -->
@@ -1170,14 +1170,14 @@ let squares =
     </div>
   </div>
   <div class="box fragment" data-fragment-index="3">Defining <code>squares</code> computes no element. The consumer decides <span class="hl">how far</span> it is computed.</div>
-  <aside class="notes">Recorded from demos/pipeline.ml. Two numbers from the room before the first click. The next slide runs take 5 squares step by step. In Haskell the same line is take 5 (map square (filter even [0 ..])), on an ordinary list. Session 6 builds its event loop on values of this kind: producers that run one step when asked.</aside>
+  
 </section>
 
 <!-- pipeline -->
 <section>
   <h2><code>take 5 squares</code>, step by step</h2>
   <div id="sq-pipe"></div>
-  <aside class="notes">The line of code is the slide before's take 5 squares, with squares written out. It is rewritten at every step: what the program has become, with the part that changed in orange. It starts as take 5 (...(nats 0)), becomes 0 :: take 4 (...(nats 1)), and ends as the list [0; 4; 16; 36; 64]. Every line is equal to the one before. The drawing has its four parts in the order of the code, from left to right: take, map, filter, nats. Read the first steps aloud with the definitions in mind. take 5 s calls s (): that is the dashed pill, a call, going to the right. The sequence of map calls that of filter, which calls nats 0. nats 0 () returns a cell, Cons (0, nats 1): the blue pill, going to the left, and the box on the right now reads nats 1. When even is false, filter does not return: it calls the rest itself, as its last line says. When an element reaches take, take keeps it and goes on as take 4: the box on the left counts down, as take (n - 1) rest does. Step for the first two elements, then Run. The counter ends on 9. What to leave: a call goes from the consumer to the producer, a cell comes back, and nothing runs that was not asked for. Session 6: an event loop runs producers of this kind, one step when asked.</aside>
+  
 </section>
 
 <!-- stopping by not asking -->
@@ -1198,7 +1198,7 @@ let squares =
     </div>
   </div>
   <div class="box fragment" data-fragment-index="1">With a sequence <span class="hl">we pull</span>. To stop, we do not ask for the next element.</div>
-  <aside class="notes">Recorded from demos/stream.ml. Block 1, part 3, needed fold_until because the list pushed its elements into our function. Here exists is written by us, the consumer, and it asks for an element only when it needs one: no flag, and no other interface.</aside>
+  
 </section>
 
 <!-- Seq -->
@@ -1212,7 +1212,7 @@ let squares =
   <pre class="out tr rec mid fragment" data-fragment-index="0">[0; 4; 16; 36; 64]</pre>
   <p class="fragment" data-fragment-index="1"><code>Seq.t</code> is the type that we wrote, and <code>Seq.ints 0</code> is our <code>nats 0</code>.</p>
   <p class="fragment" data-fragment-index="1"><code>x |> f</code> is <code>f x</code>. With it the line reads in the order the elements travel, from <code>ints</code> to <code>take</code>, and not from the inside out.</p>
-  <aside class="notes">Recorded from demos/stream.ml. Thirty seconds: the functions we wrote exist, under the same names. Java's Stream, Python's itertools and Rust's iterators offer the same operations; they are mutable iterators, not persistent sequences.</aside>
+  
 </section>
 
 <!-- part 3 -->
@@ -1248,14 +1248,14 @@ let b = Lazy.force l</code></pre>
   <p class="ask">What is <code>!ticks</code> at the end of each program?</p>
   <div class="box fragment" data-fragment-index="2">A thunk <b>delays</b>. A lazy value delays and <span class="hl">remembers</span>: it is session 4's <b>call-by-need</b>.</div>
   <p class="fn fragment" data-fragment-index="2">Okasaki 1998, chapter 4: a <em>stream</em> is part 2's sequence with a lazy value, not a thunk, for the rest.</p>
-  <aside class="notes">Question 4. Two numbers from the room; the usual answers are 1 and 1, or 2 and 2. Recorded from demos/stream.ml: 2, then 1. From here on we say lazy, and no longer delayed: lazy is delay with memoisation. The next slide shows how lazy is made.</aside>
+  
 </section>
 
 <!-- ticks drawn -->
 <section>
   <h2>A thunk and a lazy value, drawn</h2>
   <div id="sq-twice"></div>
-  <aside class="notes">Four steps: a and b for the thunk, a and b for the lazy value, in turn. The thunk stays what it is, and its body runs at every call. The lazy value is replaced by 42 at the first force; the second force reads it. The next slide writes this replacement in OCaml.</aside>
+  
 </section>
 
 <!-- lazy by hand -->
@@ -1290,7 +1290,7 @@ let b = force s</code></pre>
     <div class="fragment out" data-fragment-index="2"><div class="box fragment" data-fragment-index="1">With <code>delay</code> we write the <code>fun () -></code> ourselves. <code>lazy e</code> is a <span class="hl">keyword</span>: a function would receive <code>e</code> already computed.</div></div>
     <div class="box fragment" data-fragment-index="2">With a table in the place of the reference, we keep one result for each argument. This is the <span class="hl">memoisation</span> of a function: see the appendix.</div>
   </div>
-  <aside class="notes">Recorded from demos/delay.ml. This is block 1's counter again: a closure and a state of its own, here the state says whether the work is done. OCaml's runtime does the same replacement inside the memory block of the lazy value. If the computation raises an exception, every later Lazy.force raises it again without running it; the force of this slide keeps nothing in that case and runs f again (run: two forces of a computation that fails, ticks=2 by hand, ticks=1 with lazy). From the next slide on we use the library: lazy and Lazy.force. Last click: the box changes, to one sentence on the memoisation of a function, which sends to the appendix at the end of the deck; the appendix is not presented.</aside>
+  
 </section>
 
 <!-- fibs -->
@@ -1299,7 +1299,7 @@ let b = force s</code></pre>
   <pre class="mid has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos5/Fibs.hs#L1" data-file="demos5/Fibs.hs" data-at="the list of Fibonacci numbers" target="_blank" rel="noopener">Haskell</a><code class="language-haskell">fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code></pre>
   <div id="sq-fibs"></div>
   <div class="box fragment">The list is read at two places, one cell apart, and their sum is its next cell. Each cell is computed <span class="hl">once</span>, and read twice.</div>
-  <aside class="notes">Session 1 showed this line among the five answers and promised it for session 5. : is Haskell's ::, and zipWith (+) adds two lists element by element. Step or Run; six steps, one per new cell. The two readers move one cell to the right each time, and the cells they read are already there. The dark box is the rest of the list, not yet computed. The second counter says how many additions the same list costs when nothing is kept; the next slide gives the two numbers for 25 cells. Recorded from demos/Fibs.hs: take 10 fibs is [0,1,1,2,3,5,8,13,21,34]. Last year's lab builds this definition step by step (ones, nats, odds, then fibs); it is given as an exercise.</aside>
+  
 </section>
 
 <!-- fibs counted -->
@@ -1317,7 +1317,7 @@ let rec fibs = lazy (Cons (0, lazy (Cons (1, zip_with ( + ) fibs (tail fibs)))))
     <tr><td>a list, in Haskell</td><td>23</td></tr>
   </table>
   <div class="box fragment" data-fragment-index="1">With <code>lazy</code>, <code>fibs</code> and <code>tail fibs</code> <span class="hl">share</span> the numbers. In Haskell every value is lazy, by default.</div>
-  <aside class="notes">The expected answer is 23: one addition for each number after the first two. Recorded from demos/stream.ml, where the additions are counted: 196 392 with fun () ->, 23 with lazy. Haskell's 23 is what call-by-need gives; it was not counted by a program. "By default": GHC computes a value before it is needed when it can prove that it will be needed, its strictness analysis, and the programmer can ask for it with seq or a bang; the model on the slide is the language's definition, not what the compiled program does at every value. Okasaki's streams, cited here, are exactly this type: the rest of the sequence is a suspension that is memoised, which the type of part 2 is not. The OCaml on the slide is the version with lazy: the rest of the sequence is a lazy value in the place of a thunk, and the drawing of the slide before is the same. In demos/stream.ml its constructors are named LNil and LCons, beside the sequences of part 2; demos/fibs_lazy.ml is the program of the slide alone, with the type, zip_with and tail, which force their arguments with Lazy.force where part 2 called them. What is shared is a value that has a name: fibs is one list, read at two places. Two calls of a function with the same argument are two values, in Haskell too, and each is computed; keeping them is the memoisation of a function, in the appendix.</aside>
+  
 </section>
 
 <!-- the queue -->
@@ -1345,7 +1345,7 @@ let b = pop q</code></pre>
   <div class="box fragment" data-fragment-index="1">The queue is persistent: <code>q</code> can be used twice. With this <code>pop</code>, the reversal is then paid twice.</div>
   <div class="box fragment" data-fragment-index="2">With <code>lazy</code> the reversal is suspended inside <code>q</code>: the two pops share it, and it is <span class="hl">paid once</span>. We write that queue as homework, at the end of the warm-up's sheet.</div>
   <p class="fn fragment" data-fragment-index="2">Source: Okasaki 1998, chapter 6, the banker's queue.</p>
-  <aside class="notes">Lab 2, part D, ended on this question: the queue costs one reversal for n pushes, on average, as long as each version is used once. The code on the slide is lab 2's, unchanged: it is the problem, not its answer. Recorded from demos/delay.ml: two pops of the same q, reversals=2. First box: the problem. Second box: the answer, which is not on the slide; with the reversal under lazy, reversals=1. The lazy value is part of q, made once: a lazy made inside pop, at each call, would share nothing (run: reversals=2). What the slide shows is the effect in its smallest form. Okasaki's queue keeps the front as a stream and an invariant on the two lengths; that is for the warm-up and the reading.</aside>
+  
 </section>
 
 <!-- conclusion -->
@@ -1360,7 +1360,7 @@ let b = pop q</code></pre>
   <div class="box fragment" data-fragment-index="0">In this block a function held <span class="hl">a computation not yet run</span>: <code>unit -> 'a</code>. We call it to get a value.</div>
   <div class="box fragment" data-fragment-index="1">In session 6 a function holds <span class="hl">the rest of the computation</span>: <code>'a -> 'r</code>. We call it to give a value.</div>
   <p class="fn fragment" data-fragment-index="1">Session 6: a promise is a value that is not there yet, together with what to do when it arrives.</p>
-  <aside class="notes">One line per part. Promises paid in this block: session 4's "the program delays by hand" and "laziness when the program decides"; session 1's lazy list in Haskell; session 2's question on the queue, in the warm-up. The two boxes are last year's slide "From thunks to continuations": a thunk is "do this later", a continuation is "what to do once we have the value". Session 6 puts the two together: a promise is a placeholder for a result, a signal that it has arrived, and the continuations registered on it. Long break here.</aside>
+  
 </section>
 
 <!-- appendix -->
@@ -1388,7 +1388,7 @@ let b = fib 25</code></pre>
     </div>
   </div>
   <div class="box">A lazy value keeps the result of <b>one computation</b>. To memoise a function is to keep a result <span class="hl">for each argument</span>: a table in the place of the reference.</div>
-  <aside class="notes">Not presented. What part 3 did not do: lazy, and the reference of "lazy, made by hand", keep one value; fibs keeps one value for each position of one list. A function called with many arguments has a result for each of them. Recorded from demos/memo.ml: two calls of fib 25 run the body 485 570 times, twice 242 785; lazy (fib 25) forced twice runs it 242 785 times, and fib 24 after it 150 049 more. The next slide writes the table.</aside>
+  
 </section>
 
 <!-- memo -->
@@ -1416,7 +1416,7 @@ let b = fib 25</code></pre>
     </div>
   </div>
   <div class="box">The function returned is a <span class="hl">closure with a state</span>, as block 1's counter. <code>lazy</code> is the same with one entry: the table of a function of no argument.</div>
-  <aside class="notes">Not presented. memo : ('a -> 'b) -> 'a -> 'b. The table belongs to the function returned: nobody else can reach it. demos/memo.ml writes delay as memo applied to a function of no argument, and the tick counter reads 1, as on the slide "lazy, made by hand". The word is Michie's (1968, "Memo functions and machine learning").</aside>
+  
 </section>
 
 <!-- memo fib -->
@@ -1440,7 +1440,7 @@ let mfib = memo fib</code></pre>
   </div>
   <p>The second call is answered from the table. The first one is as slow as <code>fib 25</code>.</p>
   <div class="box">Inside <code>fib</code>, the two recursive calls are calls of <code>fib</code>, not of <code>mfib</code>. The table sees only the calls that <span class="hl">we</span> make.</div>
-  <aside class="notes">Not presented. Recorded from demos/memo.ml, where the body counts its runs. The name fib, in the body of fib, is bound to fib for ever; memo cannot change it. The next slide changes the function so that it no longer calls itself.</aside>
+  
 </section>
 
 <!-- memo_rec -->
@@ -1470,7 +1470,7 @@ the body ran 26 times</pre>
     </div>
   </div>
   <div class="box"><code>memo_rec</code> hands <code>g</code>, the function with the table, to <code>f</code> as its <code>self</code>. Every call goes <span class="hl">through the table</span>.</div>
-  <aside class="notes">Not presented. One line differs from memo: f g x in the place of f x. 26 is one run of the body for each argument from 0 to 25. fib' is written as the function that session 4 gave to Y: it receives "itself" as an argument. memo_rec is a fixed point that keeps a table. Recorded from demos/memo.ml.</aside>
+  
 </section>
 
 <!-- orders -->
@@ -1484,7 +1484,7 @@ the body ran 26 times</pre>
     <tr><td><code>memo_rec</code></td><td><code>(('a -> 'b) -> ('a -> 'b)) -> ('a -> 'b)</code></td><td>3</td><td>its argument is a function whose argument is a function</td></tr>
   </table>
   <div class="box">The three ways to keep a result are one construction: a reference for <b>one value</b> (<code>lazy</code>), a list for <b>each position</b> (<code>fibs</code>), a table for <b>each argument</b> (<code>memo</code>).</div>
-  <aside class="notes">Not presented. The order of a type without an arrow is 0; the order of a -> b is the larger of the order of a plus one and the order of b. fold, map and filter of block 1 are of order 2. Functions of order 3 are rare in everyday code; fixed points and memo_rec are the usual examples. In block 2, fibs on the slide with the two readers is a table whose keys are the positions in the list.</aside>
+  
 </section>
 
 <!-- exercises -->
@@ -1501,7 +1501,7 @@ the body ran 26 times</pre>
     <tr><td><code>choose (24, 12)</code></td><td>2 704 156</td><td>5 408 311 times</td></tr>
     <tr><td><code>memo_rec choose' (24, 12)</code></td><td>2 704 156</td><td>168 times</td></tr>
   </table>
-  <aside class="notes">Not presented, and not collected. The answers are in demos/memo_answers.ml, which is not published; the table appears on a click. For exercise 1: delay f is memo f, where f takes (), and force s is s (). For exercise 2 the argument is a pair, and the table has pairs as its keys; 168 is the number of pairs that choose (24, 12) depends on.</aside>
+  
 </section>
 
 </div>
@@ -1526,7 +1526,6 @@ the body ran 26 times</pre>
   })();
 </script>
 <script src="vendor/reveal/reveal.min.js"></script>
-<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
 <script src="vendor/hljs/highlight.min.js"></script>
 <script src="vendor/hljs/languages/ocaml.min.js"></script>
 <script src="vendor/hljs/languages/c.min.js"></script>
@@ -1601,7 +1600,7 @@ the body ran 26 times</pre>
     slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
     scrollActivationWidth: null,                  // never switch to reveal's scroll view in a narrow window
     keyboard: { 84: () => toggleToc() },          // T: list of parts
-    plugins: [ RevealNotes ]
+    plugins: [ ]
   });
 
 

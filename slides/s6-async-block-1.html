@@ -1077,17 +1077,7 @@ html.print-pdf .reveal .fig.tl .cap.last, html.reveal-print .reveal .fig.tl .cap
     <li><b>8</b>Message Passing</li>
     <li><b>9</b>Failure and Recovery</li>
   </ol>
-  <aside class="notes">
-    <p>Part 2 of the course takes four weeks.<br>
-      Its subject is coordination and communication: how the parts of a program that run at the same time, or on different machines, wait for each other and pass data to each other, and which constructs a language gives us to write that down.</p>
-    <p>The four sessions are on the slide.<br>
-      In session 6 one thread runs all our code and a function that waits gives the thread back.<br>
-      In session 7 several threads run at the same time on the same memory.<br>
-      In session 8 the parts of a program share no memory and send each other messages.<br>
-      In session 9 a message can be lost and a machine can stop.</p>
-    <p>This block shows what the four weeks are about, on one old program and on one small system, a bank.<br>
-      It explains nothing in depth.</p>
-  </aside>
+  
 </section>
 
 <!-- 1 -->
@@ -1111,39 +1101,25 @@ line 7: 28665 primes below 333333
 line 8: 35131 primes below 416666
 220 ms"></pre>
   <div class="box small" style="margin-top: 14px">A <b>portion</b> is one line of text: the count of primes below a bound, three bounds in turn so that the portions take different times. The <b>device</b> is slow: a pause of 5 to 25 ms before the line reaches the page. Eight lines in order, 220 ms, most of it waiting for the device.</div>
-  <aside class="notes">
-    <p>We start from a program with nothing new in it: a loop that runs eight times.<br>
-      Each time it does two things.<br>
-      First a computation: it counts how many prime numbers there are below a bound, and writes the answer as one line of text.<br>
-      We call that line a portion.<br>
-      Then a device prints the portion on a page.</p>
-    <p>The comment above the loop says what k is: it numbers the portions, 1 to 8, and it also fixes the bound.<br>
-      There are three bounds, taken in turn, so that the portions do not all take the same time to compute.<br>
-      The bounds and the primes mean nothing in themselves: the computation only has to keep the processor busy for a few milliseconds.</p>
-    <p>The device is slow.<br>
-      In our program it is imitated by a pause of 5 to 25 milliseconds, different each time, before the line is added to the page.</p>
-    <p>The page has eight lines, one for each portion, in the order 1 to 8, and the run took about a fifth of a second.<br>
-      Most of that time the program was doing nothing: it was waiting for the device.</p>
-    <p>This is how a computer of the 1950s spent most of its time: a costly processor standing still while a printer or a card punch, thousands of times slower, did its work.</p>
-  </aside>
+  
 </section>
 
 <!-- 2 -->
 <section id="buffer">
   <h2>Dijkstra&rsquo;s bounded buffer (1965)</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="One, the producer, computes portions.&#10;The other, the consumer, takes them and gives them to the device.&#10;Between the two is a buffer: a queue with room for a fixed number of portions, so that the producer can be a little ahead of the consumer.&#10;Ours has room for two.&#10;The names under the boxes are his, from the page.&#10;&#10;We press Run.&#10;A process that waits is hatched.&#10;At first the consumer waits for a portion.&#10;When both places are taken, the producer waits for room, with the next portion in its hands.&#10;Each portion is printed in the order 1 to 8."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Before his program, his two names.&#10;Before programming, a semaphore was a railway signal: an arm on a post, in Dutch a seinpaal.&#10;It guards a stretch of track.&#10;P: a train may pass the signal only when it shows safe, and once it has passed, the signal is set to stop behind it.&#10;V: when the train leaves the stretch, the signal is set to safe again.&#10;So there is one train at a time on the stretch.&#10;Dijkstra says the terms are taken from the railways, at least from his idea of them: EWD 51, in Dutch, for a semaphore that is only 0 or 1.&#10;His words are the railway&#x27;s: the semaphore stands op veilig, at safe, or op onveilig, at unsafe, the same words as the archive&#x27;s captions of these two photographs.&#10;Of our three semaphores, bufferManipulation is such a one; the other two count."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="On the right is his program in Java, line for line and in the same order.&#10;His P is acquire and his V is release."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Two differences from Dijkstra&#x27;s program:&#10;his processes run for ever, and ours stop after eight portions;&#10;his buffer has room for N portions, and ours for two."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="Each loop is an ordinary sequential program.&#10;Four of its lines are the actions we know from the previous slide:&#10;produce a portion, put it in the queue, take one out, process it."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="The other lines are new, and we read them by their labels.&#10;These lines call acquire.&#10;Intuitively, acquire waits until something is available, and then claims it:&#10;the producer claims a free place, the consumer claims a portion, and each claims the right to change the queue.&#10;The consumer&#x27;s acquire does not take the portion out: removeFirst does, two lines below."></span>
-  <span class="fragment step-note" data-fragment-index="6" data-notes="These lines call release.&#10;Intuitively, release makes something available, and a process waiting for it can go on:&#10;the producer makes a portion available, the consumer a free place, and each gives back the right to change the queue.&#10;What one claims, the other makes available: the producer claims free places and makes portions available; the consumer claims portions and makes free places available."></span>
-  <span class="fragment step-note" data-fragment-index="7" data-notes="Each of those three objects is a semaphore: a counter, with two operations:&#10;acquire waits until the counter is above zero and then takes one off; release adds one.&#10;How a semaphore is built, and what else a language offers in its place, is session 7.&#10;We come back to them shortly, for what each of them prevents."></span>
-  <span class="fragment step-note" data-fragment-index="8" data-notes="Before we run it, a question to the room:&#10;the two processes now run at the same time,&#10;and we do not control which of them goes first.&#10;What will nevertheless be true in every run?&#10;We take two or three answers."></span>
-  <span class="fragment step-note" data-fragment-index="9" data-notes="Here are five runs of the program.&#10;Each run is a column, read from top to bottom, with its time above it.&#10;A white box with the number k says that portion k has been produced;&#10;an orange box says that portion k has been processed, that is, printed.&#10;The runs were also faster than the sequential program: the producer computes the next portion while the device prints the previous one."></span>
-  <span class="fragment step-note" data-fragment-index="10" data-notes="First, what is true in every run.&#10;In every column each portion is printed after it was produced, and the portions are printed in the order 1 to 8.&#10;The printed page is the same as the sequential program&#x27;s."></span>
-  <span class="fragment step-note" data-fragment-index="11" data-notes="And the five columns differ.&#10;The two processes did not take their turns in the same order twice.&#10;The program is the same and its input is the same; what differs is how long the device took each time.&#10;How long the device takes is not the program&#x27;s to decide, and the order follows it."></span>
-  <span class="fragment step-note" data-fragment-index="12" data-notes="One thing the columns do not show: they record only produced and processed, not the moment a portion enters or leaves the queue.&#10;So up to four portions can be produced and not yet printed: one at the device, two in the queue, and one in the producer&#x27;s hands, waiting for room.&#10;In run 5, right after portion 5 is produced, only portion 1 has been printed: 2 is at the device, 3 and 4 are in the queue, and 5 is in the producer&#x27;s hands.&#10;&#10;The appendix has the same program written without threads, in the asynchronous style of session 6, for whoever asks what that looks like."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
+  <span class="fragment step-note" data-fragment-index="3"></span>
+  <span class="fragment step-note" data-fragment-index="4"></span>
+  <span class="fragment step-note" data-fragment-index="5"></span>
+  <span class="fragment step-note" data-fragment-index="6"></span>
+  <span class="fragment step-note" data-fragment-index="7"></span>
+  <span class="fragment step-note" data-fragment-index="8"></span>
+  <span class="fragment step-note" data-fragment-index="9"></span>
+  <span class="fragment step-note" data-fragment-index="10"></span>
+  <span class="fragment step-note" data-fragment-index="11"></span>
+  <span class="fragment step-note" data-fragment-index="12"></span>
   <div class="stack">
     <div class="fragment out" data-fragment-index="0">
       <div class="ewdcols">
@@ -1297,24 +1273,18 @@ for (int k = 1; k &lt;= 8; k++) {
     </div>
   </div>
   <a class="apx" href="#/a-async" data-tip="the same program without threads, in asynchronous style">appendix</a>
-  <aside class="notes">
-    <p>Now, Edsger Dijkstra in 1965, a text called Cooperating sequential processes.<br>
-      It gives the same task as two programs that run at the same time.<br>
-      He calls each of them a process: a sequential program being executed.</p>
-    <p>The names on the page are his: produce next portion, add portion to buffer, take portion from buffer, process portion taken.<br>
-      P and V are his names for two operations that we meet in a moment.</p>
-  </aside>
+  
 </section>
 
 <!-- 3 -->
 <section id="history">
   <h2>A short history of concurrent and distributed programming</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="1965.&#10;With several programs taking turns, the programs of the operating system itself began to go wrong in ways that did not repeat from one run to the next.&#10;Dijkstra named the difficulty, and gave the tool we have just seen, the semaphore.&#10;The program of the previous slide is from this text.&#10;For some years semaphores were operations of an operating system, and using them correctly was a matter of discipline: nothing checked that every acquire had its release."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="1974.&#10;The discipline becomes a construct of a programming language.&#10;A monitor, described by Tony Hoare, is a group of data and operations that the language itself lets only one process enter at a time: we no longer write acquire and release by hand.&#10;A year later Per Brinch Hansen built a language around it, Concurrent Pascal.&#10;In 1978 Hoare proposed the other way: communicating processes, which share no data at all and only send each other messages.&#10;That is where session 8 comes from.&#10;In 1996 Java put threads and a form of monitor in a language used by everyone: a thread is a process inside one program, sharing its memory with the others."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Meanwhile, a second line of work, on several machines.&#10;In 1978 Leslie Lamport shows that machines with no common clock can still agree on an order of events, and that a service can be kept in several copies by having every copy apply the same operations in the same order.&#10;Ten years later two protocols make that work when machines fail and messages are lost: Viewstamped Replication, by Oki and Liskov, in 1988, and Paxos, by Lamport, in 1989.&#10;He wrote Paxos as the story of a parliament on a Greek island; the journal did not know what to do with it, and it was printed only in 1998.&#10;Both keep copies that agree at every moment.&#10;&#10;In 2002 the CAP theorem is proved: when the link between copies is cut, a system must give up either answering or agreeing.&#10;CRDTs, in 2011, take the other side: data types whose copies may differ for a while and are guaranteed to agree in the end.&#10;And local-first software, in 2019, builds applications on them: the data lives on our own devices and is merged when they meet.&#10;We meet both sides in session 9."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="2005.&#10;For forty years hardware had made programs faster by itself: each new processor ran the same program more quickly.&#10;Machines with several processors existed from the early 1960s, but they were rare and costly.&#10;From 2005 an ordinary desktop processor has two cores, that is, two processors in one, and then more; two years later graphics processors, with thousands of small cores, were opened to general computing.&#10;Strictly this is parallelism, two things happening at the same instant, and not concurrency.&#10;It is on this timeline for what it did to software: a program now gets faster only if it does several things at once.&#10;&#10;Operating systems had kept moving meanwhile.&#10;In 1995 threads became a standard library of the system.&#10;And around 2000 servers met the problem of ten thousand connections at once, and systems gained calls by which one thread can watch thousands of connections at a cost that does not grow with their number: a choice that we meet again with the bank."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="Back to the languages, where we stay for four weeks.&#10;They answered the two pressures, more cores and more waiting, within a few years.&#10;Go, in 2009, gave cheap processes and channels between them, Dijkstra&#x27;s bounded buffer as a value of the language.&#10;async and await, which are session 6, let a function wait without holding a thread.&#10;Rust, in 2015, made the compiler reject a program in which two threads could touch the same data without protection: mutual exclusion checked, not trusted."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="And in 2023 Java made threads cheap again: a thread for each request, the position that was argued against in the 1990s, back thirty years later, because the runtime now keeps thousands of threads for the price of a few.&#10;&#10;What an operating system did by discipline, languages took over as constructs.&#10;Those constructs are our subject."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
+  <span class="fragment step-note" data-fragment-index="3"></span>
+  <span class="fragment step-note" data-fragment-index="4"></span>
+  <span class="fragment step-note" data-fragment-index="5"></span>
   <svg class="fig tl" viewBox="0 0 1420 660">
     <g>
       <text class="h" x="0" y="59">hardware</text><line class="w thin" x1="270" y1="50" x2="1410" y2="50"/>
@@ -1348,56 +1318,25 @@ for (int k = 1; k &lt;= 8; k++) {
     <g class="fragment current-visible cap" data-fragment-index="4"><text class="lead" x="0" y="584"><tspan class="m a">2009–15</tspan>  Go's channels, async and await, and Rust's <tspan class="m">Send</tspan> and <tspan class="m">Sync</tspan>, types that reject a data race</text><text class="more" x="0" y="620">Two pressures, more cores and more waiting. Go: cheap processes, and channels between them.</text><text class="more" x="0" y="652">async/await: a wait that does not hold a thread (session 6). Rust: mutual exclusion checked, not trusted.</text></g>
     <g class="fragment current-visible cap last" data-fragment-index="5"><text class="lead" x="0" y="584"><tspan class="m a">2023</tspan>  virtual threads: a thread for each request, made cheap</text><text class="more" x="0" y="620">A thread for each request, argued against in the 1990s, is back: the runtime keeps thousands for the price of a few.</text><text class="more" x="0" y="652">What an operating system did by discipline, languages took over as constructs: our subject.</text></g>
   </svg>
-  <aside class="notes">
-    <p>Where does this program stand in history?<br>
-      The slide has four lanes: what happened in hardware, in operating systems, in distributed systems, and, set apart at the bottom, in programming languages, which is our lane.<br>
-      Time runs from 1950 on the left to today on the right.</p>
-    <p>It begins in hardware, with waiting.<br>
-      In the 1950s a processor was costly and its devices, a printer, a tape, a card punch, were thousands of times slower.<br>
-      A program that started the printer had to keep asking it whether it had finished, or stopped as soon as it touched the printer again: our first program of today.<br>
-      Either way, the device could not tell the processor that it had finished.<br>
-      An interrupt changes that.</p>
-    <p>It is a signal from the device to the processor.<br>
-      When the device has finished, the processor stops what it is doing, at whatever instruction it has reached, runs a small routine that deals with the device,<br>
-      and then goes on with the interrupted program as if nothing had happened.<br>
-      So the processor no longer waits for the device: it works, and is told.</p>
-    <p>And for the first time a program is suspended at a point it did not choose, while something else runs.<br>
-      Concurrency on one machine descends from that.</p>
-    <p>Once a machine has interrupts, it can run another program while one waits for a device.<br>
-      In 1961 this became time-sharing: several people at terminals, each with a program, served in turn by one machine, fast enough for each to feel alone.<br>
-      This is concurrency without parallelism: one processor, several activities.<br>
-      A few machines of those years had several processors, and they stayed rare for forty years.</p>
-    <p>And in 1972 Unix gained pipes: the output of one program becomes the input of another, with a buffer between them.<br>
-      That is the program we just ran, a producer, a consumer and a bounded buffer, offered by the operating system.</p>
-  </aside>
+  
 </section>
 
 <!-- coordination and communication -->
 <section class="title divider" data-background-color="#23373B">
   <h1>Coordination and Communication</h1>
   <div class="rule"></div>
-  <aside class="notes">
-    <p>So much for where concurrency comes from.<br>
-      Look back at the constructs on that timeline: each of them answers one of two questions.</p>
-    <p>How do processes that run at the same time wait for each other?<br>
-      The semaphore and the monitor answer that one.<br>
-      How does data pass from one process to another?<br>
-      Pipes, communicating processes and messages between machines answer that one.</p>
-    <p>Dijkstra&#x27;s buffer already has both: its semaphores make the two processes wait for each other, and its queue carries the portions from one to the other.<br>
-      Coordination and communication: the two words of the title of Part 2.<br>
-      We say what they are on the next slide.</p>
-  </aside>
+  
 </section>
 
 <!-- 5 -->
 <section>
   <h2>Coordination and communication</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Coordination.&#10;A process alone decides nothing about when it acts: it does one instruction after the other.&#10;With several processes that is no longer enough.&#10;Some things must not be done yet, and some must not be done now.&#10;To coordinate is to restrict when a process may act, depending on what the others have done or are doing."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="The first form: not before.&#10;A process P must not go on before another process Q has done something.&#10;Until then P waits.&#10;In the drawing, time runs to the right; the blue blocks are the moments when a process acts, and the hatched bar is P waiting.&#10;The books call this condition synchronization: P waits until a condition becomes true, and it is another process that makes it true."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="The second form: not at the same time.&#10;There is a stretch of work that P and Q may each do, in either order, but never both at once.&#10;Whoever comes second waits until the first has finished.&#10;The books call this mutual exclusion, and the stretch a critical section.&#10;Notice the difference with the first form: here nobody has to come first; they only must not overlap."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Communication.&#10;Processes that work together have something to tell each other: a result, a request, an answer.&#10;To communicate is to pass data from one process to another.&#10;This too is done in two ways, and they are the two halves of the part."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="The first way: through memory that both can reach.&#10;P writes a value in a place, and Q reads it there.&#10;Nothing is sent; the data is simply where both can get at it.&#10;This is what sessions 6 and 7 work with, and it is why they need coordination so badly: a place that two processes can reach is a place where they can collide."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="The second way: by a message.&#10;P sends the value and Q receives it.&#10;The two processes need not share any memory, and they need not even be on the same machine.&#10;This is sessions 8 and 9.&#10;&#10;The two notions are not independent.&#10;A message that Q waits for is also a form of not before: Q cannot go on until P has sent.&#10;So one construct of a language often does both jobs.&#10;With these two words we can now read Dijkstra's program again."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
+  <span class="fragment step-note" data-fragment-index="3"></span>
+  <span class="fragment step-note" data-fragment-index="4"></span>
+  <span class="fragment step-note" data-fragment-index="5"></span>
   <div class="cc">
     <p class="cc-h fragment" data-fragment-index="0"><b>Coordination</b>: when a process may act depends on what the others have done or are doing.</p>
     <div class="cc-row fragment" data-fragment-index="1">
@@ -1435,20 +1374,16 @@ for (int k = 1; k &lt;= 8; k++) {
       </svg>
     </div>
   </div>
-  <aside class="notes">
-    <p>In Dijkstra&#x27;s buffer, and in everything on the timeline, there are several processes, and they are not independent: what one may do depends on the others, and they have data to give each other.<br>
-      Everything that is new in this part is in these two things, and they give the part its title.<br>
-      We first say what they are in general, without any program.</p>
-  </aside>
+  
 </section>
 
 <!-- 5b -->
 <section>
   <h2>Coordination and communication in the bounded buffer</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Now the same four things in the program of 1965.&#10;First: the consumer must not take a portion before one has been produced.&#10;This is not before.&#10;The line that says it is the consumer's first one: it asks the semaphore that counts the portions in the queue.&#10;While that count is zero, the queue is empty and the consumer waits.&#10;And who ends the wait?&#10;The producer, in its last line, which adds one to the same count.&#10;The two highlighted lines belong together: one waits, the other lets go."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Second, the same form in the other direction: the producer must not add a portion before there is room.&#10;It asks the semaphore that counts the empty places; while that count is zero, the queue is full and the producer waits.&#10;It is the consumer that ends this wait, when it has taken a portion out.&#10;So each process waits for the other, each for a different thing."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Third: not at the same time.&#10;Adding to the queue and removing from it both change the queue's own bookkeeping, and two changes at the same moment can leave it wrong.&#10;So each process takes the third semaphore before touching the queue and gives it back after.&#10;Its count is one, so only one of them can hold it.&#10;The four highlighted lines enclose the two critical sections.&#10;Here neither process has to come first; they only must not be inside together."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="And the communication: the portion itself.&#10;The producer puts it in the queue and the consumer takes it out.&#10;Nothing is sent: the queue is memory that both processes can reach, the first of the two ways.&#10;In session 8 the same program is written with a message in its place.&#10;&#10;Count the lines.&#10;Of the sixteen lines of the two loops, four do the work, two pass the data, and six coordinate; and all six are written by hand, with nothing to check that they are there and in the right order.&#10;What a language can do about that is the subject of the four weeks."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
+  <span class="fragment step-note" data-fragment-index="3"></span>
   <div class="marks">
     <pre class="has-src" data-lines="11,7:0;3,15:1;4,6,12,14:2;5,13:3"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demosp2/Portions.java#L37" data-file="demosp2/Portions.java" data-at="static void concurrent()" target="_blank" rel="noopener">Java</a><code class="language-java">// producer
 for (int k = 1; k &lt;= 8; k++) {
@@ -1475,20 +1410,14 @@ for (int k = 1; k &lt;= 8; k++) {
       <li class="fragment" data-fragment-index="3" data-lit="3"><b>communication</b>: a portion passes through the queue, memory that both reach.<br><code>addLast</code> in the producer, <code>removeFirst</code> in the consumer.</li>
     </ol>
   </div>
-  <aside class="notes">
-    <p>Dijkstra's program again, the one we ran.<br>
-      Each of its two processes, taken alone, is a program of Part 1: a loop and a few calls.<br>
-      Everything new is in the lines where one process depends on the other.<br>
-      We find the two forms of coordination and the communication in it, line by line.<br>
-      The highlighted lines in the code are the ones each click is about.</p>
-  </aside>
+  
 </section>
 
 <!-- 13a -->
 <section class="essay">
   <h2>Correctness: safety and liveness</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="For a concurrent or distributed program it is an order of magnitude harder, for two reasons that we have seen today.&#10;The first: a sequential program, given one input, does one thing; a concurrent program does not.&#10;Dijkstra's program, with the same input, took its steps in twenty different orders in thirty runs.&#10;Each such order is called an execution, and the program must be right in all of them.&#10;A test shows us one.&#10;The second reason: the parts of a distributed program do not fail together.&#10;One machine stops or cannot be reached, and the others go on; the program must be right then too."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="So we need a way to say what right means when there are many executions.&#10;The answer is the same in every book.&#10;What we require of a program is stated as properties, and a property is something that holds or does not hold of one execution.&#10;The program is correct when every one of its executions has every required property.&#10;And every such property is of one of two kinds, or a combination of the two.&#10;&#10;A safety property says that nothing bad ever happens.&#10;If an execution violates it, it does so at one definite moment, after finitely many steps, and nothing that comes later can repair it.&#10;&#10;A liveness property says that something good eventually happens.&#10;No finite beginning of an execution can violate it: however far we have come, the good thing may still happen later.&#10;&#10;The difference is practical.&#10;A violation of a safety property can be caught by one run that we are lucky enough to see.&#10;A violation of a liveness property cannot be seen in any run that has ended.&#10;Some properties of each kind are so common that they have names."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
   <div class="epi">
     <blockquote>&ldquo;Software is hard.&rdquo;</blockquote>
     <p class="by">Donald Knuth</p>
@@ -1501,24 +1430,17 @@ for (int k = 1; k &lt;= 8; k++) {
       <div><h3>Liveness</h3><p>Something good eventually happens.</p><p class="exact" data-widow="1">No finite beginning of an execution violates it.</p></div>
     </div>
   </div>
-  <aside class="notes">
-    <p>We have said what the part is about: coordination and communication.<br>
-      One general thing remains before we look at the part itself: what all these constructs are for.<br>
-      They are there so that the program is correct.<br>
-      That was already the aim in Part 1, and it was already hard.<br>
-      Donald Knuth, after ten years spent writing one program, summed it up in three words: software is hard.<br>
-      Writing a sequential program that is correct, for every input, is a challenge that we never fully leave behind.</p>
-  </aside>
+  
 </section>
 
 <!-- 13b -->
 <section id="properties">
   <h2>Common correctness properties</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Mutual exclusion.&#10;A critical section is a stretch of code that touches something shared.&#10;The property says that two processes are never inside it at the same time.&#10;We saw it on the bounded buffer, where it was the form not at the same time: one at a time on the queue.&#10;It is a safety property: if it is violated, there is a moment at which two processes are inside, and we can point at it."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Linearizability.&#10;Take an object that many clients use at once, for instance a bank account with deposits and withdrawals.&#10;Inside, their calls may overlap in any way.&#10;The property says that from outside nobody can tell: the calls answer as if they were made one at a time, in some order, and a call that had returned comes before one that was made later.&#10;The object behaves as one sequential machine.&#10;It is stronger than mutual exclusion: mutual exclusion is about one stretch of code, linearizability about everything a client can observe.&#10;For the objects of this course it is a safety property: a wrong answer is given at a definite moment."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Deadlock freedom.&#10;A deadlock is a state in which each of several processes waits for something that only another of them can give, so none will ever go on.&#10;The standard example: a transfer between two accounts takes the lock of each.&#10;One transfer has taken account 1 and asks for account 2; another has taken account 2 and asks for account 1; both wait for ever.&#10;That such a state is never reached is a safety property: reaching it happens at a definite moment.&#10;What is lost in that state is of the other kind: the two transfers never return.&#10;Some books use the same words for a property of the second kind; when we meet them, we give their definition."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Starvation freedom.&#10;The absence of deadlock is not enough: a system can go on working while one client is passed over again and again.&#10;Starvation freedom says that every process that asks is served in the end; for a server, that every request gets an answer.&#10;It is a liveness property, and like every liveness property it needs an assumption: here, that machines and links come back, and that whoever chooses which process runs next does not leave one out for ever.&#10;That assumption is called fairness."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="Eventual consistency.&#10;For data kept in several copies, on several machines: if no new request arrives, the copies come to agree in the end.&#10;Meanwhile they may differ.&#10;It is a liveness property: at no moment can we say that it has been violated, because the copies may still come to agree.&#10;The stronger requirement, that the copies never differ in what a client can see, is linearizability again, now across machines; we will see what it costs."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
+  <span class="fragment step-note" data-fragment-index="3"></span>
+  <span class="fragment step-note" data-fragment-index="4"></span>
   <table class="props">
     <tr><th>property</th><th>what it says</th><th>an example</th><th></th></tr>
     <tr class="fragment" data-fragment-index="0"><td><b>mutual exclusion</b></td><td data-widow="1">two processes are never in the same critical section at the same time</td><td data-widow="1">the bounded buffer: one at a time on the queue</td><td class="kind safety">safety</td></tr>
@@ -1528,25 +1450,15 @@ for (int k = 1; k &lt;= 8; k++) {
     <tr class="fragment" data-fragment-index="4"><td><b>eventual consistency</b></td><td data-widow="1">if the requests stop, the copies agree in the end</td><td data-widow="1">two copies of an account on two machines</td><td class="kind liveness">liveness</td></tr>
   </table>
   <a class="apx" href="#/a-example" data-tip="a worked example: the requirements of a bank account">appendix</a>
-  <aside class="notes">
-    <p>These are the five named properties that we meet most often in the four weeks.<br>
-      For each: what it says, an example, and of which kind it is.<br>
-      One of the examples we have seen; the others come in the overview that follows.<br>
-      The appendix has a worked example, the requirements of a bank account sorted into the two kinds, if the room wants one now.</p>
-    <p>One word is not in the table because it is not a property of this kind: deterministic.<br>
-      A program has a deterministic result when all its executions, for one input, give the same result.<br>
-      Dijkstra's program has it for the printed page and not for the order of its steps.<br>
-      It compares executions with one another, so no single execution can violate it.<br>
-      Session 7 comes back to it.</p>
-  </aside>
+  
 </section>
 
 <!-- language support -->
 <section id="support">
   <h2>Language support for correctness</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Mutual exclusion, a safety property.&#10;In Java, synchronized is a keyword, and in Go a lock is a library type; in both, the lock protects the data only if every piece of code that touches the data takes it.&#10;That is a rule for the programmer, and nothing checks it.&#10;Two languages move the property into the language itself.&#10;In Rust the data is placed inside its lock, and a program that reaches it without the lock is rejected by the compiler.&#10;In Erlang processes share no data, so the program with the fault cannot even be written.&#10;Same property, three places where it can live."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Starvation freedom, a liveness property.&#10;Here it is the runtime of the language that matters.&#10;Go and Erlang interrupt a process that computes for long, so that the others get their turn.&#10;JavaScript does not: all its code runs on one thread, and a long computation holds everything else up, so there the programmer must keep long computations off that thread.&#10;A library can add locks that serve those who wait in the order in which they came.&#10;The appendix has the same table for all five properties."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="The second point follows from the first.&#10;Many of us have met these notions, or will, in a course on concurrency, on operating systems or on distributed systems.&#10;Those courses ask which algorithm or which protocol makes a system correct.&#10;This course asks a different question of the same notions: what does a programming language give us to express them, and what does it then guarantee?&#10;Two examples.&#10;Where such a course studies mutual exclusion, we ask which construct of the language holds the lock, and who checks that it is taken.&#10;Where it studies failures, we ask in what form a failure reaches our program: an exception, a special value, a message, or silence.&#10;Java, OCaml, Go and Erlang are answers to these questions; they are not the subject.&#10;With this question in hand, we can look at the part."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
   <p class="core">For every property, who makes it hold: <b>the language</b>, <b>a library</b>, or <b>the programmer</b>?</p>
   <table class="who3 pair">
     <tr><th></th><th>the language<br>(compiler, runtime)</th><th>a library</th><th>the programmer<br>(keywords, discipline)</th></tr>
@@ -1561,22 +1473,14 @@ for (int k = 1; k &lt;= 8; k++) {
     </table>
   </div>
   <a class="apx" href="#/a-support" data-tip="the same table for all five properties">appendix</a>
-  <aside class="notes">
-    <p>Now the question of this course, and of this part in particular.<br>
-      For every property that we want a program to have: who makes it hold?<br>
-      There are three possible answers, the three columns: the language itself, through its compiler or its runtime; a library; or the programmer, with the keywords the language offers and with discipline.<br>
-      We take one property of each kind.</p>
-  </aside>
+  
 </section>
 
 <!-- overview -->
 <section class="title divider" data-background-color="#23373B">
   <h1>Overview of Part 2</h1>
   <div class="rule"></div>
-  <aside class="notes">
-    <p>That was the ground: what the part is about, and what its constructs are for.<br>
-      Now the part itself: the questions it answers, one small system on which we can see all four sessions, and a slide for each session.</p>
-  </aside>
+  
 </section>
 
 <!-- 7 -->
@@ -1589,34 +1493,14 @@ for (int k = 1; k &lt;= 8; k++) {
     <tr><td class="s">9</td><td data-widow="1">When a fault occurs, in what form does it reach the program, which constructs report it and recover from it, and what remains for the programmer?</td></tr>
   </table>
   <div class="box" style="margin-top: 0"><b>Every week:</b> who makes each property hold: the language, a library, or the programmer?</div>
-  <aside class="notes">
-    <p>Each session has one question, and one question returns every week.</p>
-    <p>Session 6.<br>
-      A function that waits must stop in the middle and let something else run.<br>
-      A function stopped in the middle, to be continued later, is a suspended computation.<br>
-      At which points of its text can that happen, and what holds the rest of the function meanwhile?</p>
-    <p>Session 7.<br>
-      Two processes reach the same data.<br>
-      Mutual exclusion is the not at the same time of Dijkstra's program; condition synchronization is its not before: waiting until something is true, such as the queue is not empty.<br>
-      Which constructs express the two?<br>
-      And do they compose: if two pieces of a program are each correct, is the program made of both still correct?</p>
-    <p>Session 8.<br>
-      If processes share no data, a value must be passed from one to the other.<br>
-      Afterwards, do both hold the same thing, does the receiver hold a copy, or has the sender given it away?</p>
-    <p>Session 9.<br>
-      A fault is something that goes wrong outside the program's control: a message is lost, a machine stops.<br>
-      In what form does the program learn of it, what does the language offer to report it and to recover, and what is left to the programmer?</p>
-    <p>And every week: of the properties we want, which does the language guarantee, which does a library guarantee, and which remain our responsibility?<br>
-      Each of these questions was answered in more than one way by the people who designed languages, and each way buys something and gives something up.<br>
-      One small system shows where each question arises.</p>
-  </aside>
+  
 </section>
 
 <!-- 8 -->
 <section>
   <h2>A running example: a bank account</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="There are two operations.&#10;A deposit of n adds n to the balance and answers ok.&#10;A withdrawal of n subtracts n and answers ok if the money is there; otherwise it leaves the balance alone and answers refused.&#10;So the balance can never go below zero.&#10;&#10;The third label says what must hold when several clients call at once.&#10;The balance and the answers must be those we would get if the same calls were made one at a time, in some order.&#10;With the three requests of the picture, whatever happens inside the server, the balance at the end is 80, and nobody is refused.&#10;Which order is not ours to choose; that there is one is the requirement.&#10;&#10;The bank is our example for the next slides.&#10;It is not the subject of the part."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="The third label is a property we named a few minutes ago.&#10;Several clients call at the same time, and inside the server their calls may overlap in any way.&#10;We require that from outside nobody can tell: the bank answers as one machine would that takes the calls one after another.&#10;Said exactly: for every execution there is one sequence of the calls in which each call gives the answer it gave, and the order of that sequence respects time in one point only: if a call had returned before another was made, it comes first.&#10;Two calls that overlap may be put in either order.&#10;That is linearizability; an operation that has it is also called atomic, because nobody can see it half done.&#10;Each of the next four pictures is one way of building the bank so that this stays true, and each session studies what the language does to keep it true."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
   <svg class="fig" style="margin-top: 6px" viewBox="0 68 1420 384">
     <rect class="o" x="2" y="70" width="1416" height="380" rx="8"/>
     <line class="w" x1="760" y1="70" x2="760" y2="450"/>
@@ -1637,19 +1521,15 @@ for (int k = 1; k &lt;= 8; k++) {
     <p>as if one at a time, in some order</p>
   </div>
   <div class="box fragment" data-fragment-index="1" style="margin-top: 22px">From outside, the bank must behave as <span class="hl">one sequential machine</span>.<br><b>Linearizability</b>: in every execution, the calls can be arranged in one sequence in which each call answers as it would if the calls were made alone, in that order, and a call that returned before another was made comes first.</div>
-  <aside class="notes">
-    <p>The system is a bank, reduced to very little: clients, a server, and one account with a balance of 100.<br>
-      The clients are on the left of the counter, each with a request.<br>
-      The server, on the right, is the program that receives the requests and is the only one that touches the balance.</p>
-  </aside>
+  
 </section>
 
 <!-- 9 -->
 <section id="many">
   <h2>Serving many clients: one loop, or a thread each</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Ten thousand clients at once is a real problem, named around 1999 by Dan Kegel: the C10K problem.&#10;Most of the clients are idle at any moment, waiting for something.&#10;A thread for each means ten thousand stacks in memory, and a system that spends its time switching between threads that only wait.&#10;One loop for all sets every connection so that a read never waits, and asks the system one question: which of these connections have something for me now?&#10;It handles those few, a little each, and asks again.&#10;select could already ask that question, but its cost grew with the number of connections.&#10;Calls whose cost does not grow came around 2000: kqueue in FreeBSD, described by Jonathan Lemon in 2001, and epoll in Linux.&#10;Which way is better was argued for decades: a well-known talk of the 1990s was called Why threads are a bad idea, and in 2003 a paper answered with the title Why events are a bad idea."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="The same two ways as programs, over time.&#10;Three requests, a, b and c.&#10;A blue block is a stretch where the request's code is running; a hatched bar is a stretch where it waits for something slow.&#10;&#10;Above, one loop: a single thread takes a request, runs it until it has to wait, and takes the next; when a wait is over, the loop runs the rest of that request.&#10;One request runs at a time, and a request can be set aside only at the places where its code says that it waits.&#10;Below, a thread for each client: each request is plain sequential code on its own thread.&#10;The requests run at the same time, and nothing in their text shows where another one gets in between two of its lines.&#10;&#10;The waits are the same in both pictures.&#10;Both ways are in use today."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="The first way is also how one client's own program is written, for instance a page in a browser: it sends its request, and the rest of the program waits for the reply while the one thread stays free for the user.&#10;That is where the next block starts."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
   <div class="stack">
     <div class="fragment out" data-fragment-index="1">
       <svg class="fig narrow small" viewBox="0 0 1420 520">
@@ -1719,24 +1599,14 @@ for (int k = 1; k &lt;= 8; k++) {
     </div>
   </div>
   <a class="apx" href="#/a-s6" data-tip="the outline of session 6, with two programs">appendix</a>
-  <aside class="notes">
-    <p>Now the bank has ten thousand clients, and most of them are waiting most of the time: for a slow network, for a disk, for another service.<br>
-      There are two ways to serve them, and engineers argued for decades over which is better.</p>
-    <p>On the left, one teller.<br>
-      Clients take a ticket.<br>
-      The teller takes one request, does what can be done at once, and when the request needs something slow, sets it aside on the shelf and calls the next ticket.<br>
-      On the right, a teller for each client.<br>
-      Each teller follows one client's request from beginning to end, and stands and waits when the request waits.<br>
-      The dashed teller is one who is waiting.<br>
-      The appendix has the slide of session 6, with two programs that run.</p>
-  </aside>
+  
 </section>
 
 <!-- 10 -->
 <section id="shared">
   <h2>Shared memory: threads and locks<span class="sx">session 7</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="How is a balance protected?&#10;With a lock: a thing that only one thread can hold at a time; the others wait until it is released.&#10;There are three ways to place it.&#10;&#10;One lock for the whole table: a thread takes it before touching any account.&#10;It is simple, and everyone waits for everyone, even two threads that work on different accounts.&#10;&#10;One lock for each account: threads that work on different accounts no longer wait for each other, so more runs at once.&#10;But a transfer from one account to another needs two locks, and with two locks come new difficulties, which we meet in session 7.&#10;&#10;In both of these, taking the lock before touching the balance is a rule that we follow.&#10;Nothing stops a programmer from forgetting it.&#10;In the third picture the balance is inside its lock: the only way to reach the number is to take the lock.&#10;A program that forgets the lock is not a program: the compiler rejects it.&#10;That is what Rust does.&#10;It protects one balance; it does not by itself make a transfer correct."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Two processes need the same data.&#10;Do they both reach it in memory, with a lock to keep them apart, as here?&#10;Or does each keep its own and send the other a copy?&#10;Two things push towards copies.&#10;On different machines there is no memory to share: between machines only copies travel.&#10;And sharing is hard: in 2006 Edward Lee wrote that threads are wildly nondeterministic, and that the programmer&#x27;s job becomes pruning that nondeterminism.&#10;Go&#x27;s advice is in one sentence: do not communicate by sharing memory; share memory by communicating.&#10;Erlang, a language built for telephone exchanges, made it a rule: its processes share nothing.&#10;That is the next slide."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
   <div class="stack">
     <div class="fragment out" data-fragment-index="0">
       <svg class="fig narrow" viewBox="0 0 1420 520">
@@ -1809,22 +1679,13 @@ for (int k = 1; k &lt;= 8; k++) {
     </div>
   </div>
   <a class="apx" href="#/a-s7" data-tip="the outline of session 7, with two programs">appendix</a>
-  <aside class="notes">
-    <p>One loop is not enough for the bank.<br>
-      At the end of the month it must compute the interest of a million accounts, and a loop that does that freezes every client meanwhile.<br>
-      And the server's machine has several cores, that is, several processors, of which one loop uses one.<br>
-      So the server runs several threads at the same time, and they all work on the same table of balances.</p>
-    <p>In the picture two cores compute the interest, going down the table, while two others carry out single requests: a withdrawal on account 3, a deposit on account 6.<br>
-      The withdrawal lands on an account that the interest computation is passing through.<br>
-      Two threads are about to change the same balance at the same time, and that must not happen: it is the one at a time of Dijkstra's queue.<br>
-      The appendix has the slide of session 7: what we will be able to explain, and the third picture as a Rust program.</p>
-  </aside>
+  
 </section>
 
 <!-- 11 -->
 <section id="messages">
   <h2>Message passing: isolated parts with mailboxes<span class="sx">session 8</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="A message carries a value from a sender to a receiver.&#10;After a value is sent, who can still use it?&#10;There are three answers.&#10;&#10;Shared: after the sending, both hold the same thing.&#10;It is cheap, because nothing is copied.&#10;But if that thing can be changed, the two can change it at the same time, and we are back at shared memory and its locks.&#10;&#10;Copied: the receiver gets a copy, and each has its own.&#10;What one does to its copy, the other never sees.&#10;The price is the copying.&#10;&#10;Handed over: the sender gives the value away and has it no more.&#10;Nothing is copied, and only one of the two can use the value at any time.&#10;The language must then make sure that the sender does not use it afterwards.&#10;&#10;Languages chose differently among the three, and that is the question of session 8.&#10;None of the three by itself makes a program of messages correct."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
   <div class="stack">
     <div class="fragment out" data-fragment-index="0">
       <svg class="fig" style="margin-top: 50px" viewBox="0 0 1420 540">
@@ -1868,26 +1729,15 @@ for (int k = 1; k &lt;= 8; k++) {
     </div>
   </div>
   <a class="apx" href="#/a-s8" data-tip="the outline of session 8, with two programs">appendix</a>
-  <aside class="notes">
-    <p>The other choice is to share nothing.<br>
-      The server is cut into parts, and each part owns its data: no other part can reach it.<br>
-      The front receives the clients' requests.<br>
-      The accounts hold the balance.<br>
-      The record keeps the list of what was done, and the notifier tells clients.<br>
-      A part can only send another part a message, and each part has a mailbox: a queue where the messages sent to it wait their turn.</p>
-    <p>The accounts take one message from their mailbox, handle it completely, and only then take the next.<br>
-      So nothing can touch the balance in the middle of a withdrawal, and there is no lock in the picture.<br>
-      The one at a time is now a property of how a part is built.<br>
-      The appendix has the slide of session 8, with the bounded buffer on a Go channel and the account as an Erlang process.</p>
-  </aside>
+  
 </section>
 
 <!-- 12 -->
 <section id="replication">
   <h2>Replication: two copies and a failed link<span class="sx">session 9</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="First way.&#10;It answers: cannot decide now.&#10;That is an answer and not a decision.&#10;The balance is never wrong.&#10;And the client has nothing definitive, neither ok nor refused, for as long as the link is down."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Second way.&#10;It decides from what it knows: it has 100, so it answers ok.&#10;Every client gets a decision at once.&#10;But a second client asks copy 2 for the same 100, and copy 2, which knows nothing of the first withdrawal, also answers ok.&#10;Each copy now shows 0.&#10;When the link comes back and each tells the other, the bank has paid 200 out of 100: the balance is minus 100, and we had required that it never be negative.&#10;For deposits the same way works well: deposits made on both copies can be added up afterwards, each counted once."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Third way.&#10;Before any failure, the 100 is divided: each copy holds a share of 50, and may approve withdrawals up to its share without asking the other.&#10;Now no failure of the link can make the balance negative.&#10;The price shows on the slide: this client's withdrawal of 100 is refused although the bank holds 100, because half of it is on the other copy.&#10;&#10;So how much the copies must wait for each other depends on what we require of the balance and on what each copy may do alone.&#10;Between copies that agree at every moment and copies that agree only in the end there is a whole range of choices.&#10;That range is what the word consistency names.&#10;We come back to it through our own question: what a language lets us write.&#10;&#10;And one more case, without a picture: a client sends a request and no reply comes.&#10;Was the request lost, or was it carried out and the reply lost?&#10;May the client send it again?&#10;That is where session 9 starts."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
   <p class="ask cap-q">Two copies cannot reach each other: what does a copy answer to a client? <a class="ref" href="https://www.comp.nus.edu.sg/~gilbert/pubs/BrewersConjecture-SigAct.pdf" target="_blank" rel="noopener">Refuse to answer, or let them differ?</a></p>
   <svg class="fig" style="margin-top: 8px" viewBox="0 0 1420 390">
     <use href="#i-person" class="o" x="0" y="122" width="60" height="96"/>
@@ -1923,20 +1773,7 @@ for (int k = 1; k &lt;= 8; k++) {
   <div class="box small fragment current-visible" data-fragment-index="2" style="margin-top: 0">Each copy approves up to its share without asking the other: no failure of the link makes the balance negative. The price: a withdrawal of 100 is refused although the bank holds 100.</div>
   </div>
   <a class="apx" href="#/a-s9" data-tip="the outline of session 9, with two programs">appendix</a>
-  <aside class="notes">
-    <p>Last step.<br>
-      A bank cannot stop because one machine stops.<br>
-      So the accounts are kept on two machines, each with a copy of the balance, here 100, and a link between them over which each tells the other what it has done.<br>
-      Between two machines a value cannot be passed as it is: it is turned into bytes, sent, and built again on the other side.<br>
-      So between machines only copies travel.</p>
-    <p>Now the link fails: the orange cross.<br>
-      Both machines still run, and neither can reach the other.<br>
-      A client asks copy 1 to withdraw the last 100.<br>
-      What does copy 1 do?<br>
-      It cannot know whether the same 100 is being withdrawn at copy 2 at this moment.<br>
-      Refuse to answer, or answer and let the copies differ: that was argued in print by people who built real systems, and it is not settled by taste.<br>
-      The appendix has the slide of session 9.</p>
-  </aside>
+  
 </section>
 
 <!-- 14 -->
@@ -1967,17 +1804,7 @@ for (int k = 1; k &lt;= 8; k++) {
     <line class="w thin" x1="556" y1="462" x2="556" y2="276"/><text x="420" y="494"><tspan class="a">session 8</tspan> messages</text>
     <line class="w thin" x1="1030" y1="462" x2="1030" y2="292"/><text x="930" y="494"><tspan class="a">session 9</tspan> failure</text>
   </svg>
-  <aside class="notes">
-    <p>The four sessions, on the one system.<br>
-      Session 6: the front serves all its clients from one loop, the circle.<br>
-      Session 7: inside the accounts, several threads, the three arrows, work on the same balance, which has its lock.<br>
-      Session 8: the parts send each other messages; the envelope on the arrow is one.<br>
-      Session 9: a second copy on another machine, drawn dashed, and a link that fails.</p>
-    <p>From each session to the next we give up one assumption.<br>
-      From 6 to 7: that only one thread runs our code.<br>
-      From 7 to 8: that the parts share memory.<br>
-      From 8 to 9: that what is sent arrives.</p>
-  </aside>
+  
 </section>
 
 <!-- 15 -->
@@ -1985,21 +1812,14 @@ for (int k = 1; k &lt;= 8; k++) {
   <div class="eyebrow">SESSION 6</div>
   <h1 class="q">What does a program do while it waits, and where is the rest of a function while it waits?</h1>
   <div class="rule"></div>
-  <aside class="notes">
-    <p>The next block begins with this question.<br>
-      A program sends a request and must wait for the reply.<br>
-      What does it do meanwhile?<br>
-      And the function that was in the middle of its work: where is the rest of it kept while it waits?</p>
-  </aside>
+  
 </section>
 
 <!-- appendix divider -->
 <section class="title divider" data-background-color="#23373B">
   <h1>Appendix</h1>
   <div class="rule"></div>
-  <aside class="notes">
-    <p>In reserve, each reached by the small appendix button of the slide it belongs to, and each with a back button: the bounded buffer written in asynchronous style; the animation of the bounded buffer, with its two loops; the requirements of a bank account as a worked example of safety and liveness; language support for all five properties; and one slide for each of the four sessions, with what it is about, what we will be able to explain after it and two short programs.</p>
-  </aside>
+  
 </section>
 
 <!-- appendix -->
@@ -2031,29 +1851,7 @@ static CompletableFuture&lt;Void&gt; consume(int k) {
 }</code></pre>
   </div>
   <a class="apx back" href="#/buffer">back</a>
-  <aside class="notes">
-    <p>For the question: what does Dijkstra's program look like in the style of session 6?<br>
-      The task and the two functions are those of the first two programs, in Java again.<br>
-      What changes is that there is one thread only, here called loop, and that it never stands still waiting.</p>
-    <p>The two labels of the bounded buffer are at the same places.<br>
-      Putting a portion in the queue and taking one out no longer make a thread wait.<br>
-      Each returns at once with a future: a value that stands for a result that is not there yet.<br>
-      What must happen once there is room, or once there is a portion, is given to the future as a function; that is what thenComposeAsync does, and the word loop in it says on which thread that function will run.<br>
-      The device is treated the same way: processPortionTaken starts the printing and returns a future that is completed when the line is on the page.<br>
-      Each of the two processes has become a function that calls itself for the next portion, because a loop cannot be cut in the middle and continued later; the next block shows how await hides this.</p>
-    <p>The third label is now on the first line, where the one thread is made.<br>
-      There is no semaphore and no lock around the queue, because one thread runs everything: two pieces of our code are never inside the queue at the same time.</p>
-    <p>We press Run once.<br>
-      The first run appears as a column.<br>
-      Then the program is run again and again, one run after the other, and each new run is compared with the first: the line under the columns says which run is under way and whether its order is the same.<br>
-      The second run has the same order as the first.<br>
-      The third has not, and appears as a second column: in the first run, portion 1 was printed before portion 4 was produced; in the third, after.</p>
-    <p>So on one thread too the order is not fixed by the program.<br>
-      But it varies much less than with two threads: in the sixty runs of this series there were two orders, and the runs are not faster than the sequential program.<br>
-      The reason is in the first boxes of each column: the one thread computes several portions one after the other, and while it computes it cannot do anything else, not even notice that the device has finished.<br>
-      Once the queue is full, the producer waits for room and the consumer waits for the device, so that only one of them can go on at any moment, and the two alternate.<br>
-      In asynchronous style, waiting costs nothing, and computing holds everyone up.</p>
-  </aside>
+  
 </section>
 
 <section id="a-anim">
@@ -2086,29 +1884,18 @@ for (let k = 1; k &lt;= 8; k++) {
 }</code></pre>
   </div>
   <a class="apx back" href="#/buffer">back</a>
-  <aside class="notes">
-    <p>For the question: what makes the diagram of slide 3 move?<br>
-      A short JavaScript program, the same two loops as the Java program, in the browser.<br>
-      The queue is an array; the producer waits while it holds two portions, the consumer while it holds none.<br>
-      until and signal are a promise that waits and the call that resolves it: they play acquire and release.</p>
-    <p>The times are made up and stretched so that we can watch: three production times in turn, and a random time at the device.<br>
-      That random time is why every press of Run gives a different run.</p>
-    <p>And there is one thread only.<br>
-      Two async functions take turns, and the turn passes only at an await.<br>
-      No await falls between taking the queue and changing it, so nothing else is needed to keep the two off the queue at the same time.<br>
-      That is the subject of session 6.</p>
-  </aside>
+  
 </section>
 
 <!-- 13 -->
 <section id="a-example">
   <h2>Example: the requirements of a bank account</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="At the balance: no deposit answered ok is lost.&#10;If a client was told ok, the money is in the balance, whatever happens afterwards."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="No request changes the balance twice.&#10;A client who sends the same deposit again, because no reply came, must not be credited twice."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="The balance is never negative.&#10;A withdrawal is answered ok only if the money is there."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="On the arrow from the client: every request gets a definitive answer in the end.&#10;Definitive means ok or refused; cannot decide now is not one.&#10;In the end means: provided the machines and the links come back, and the client goes on asking."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="Between the copies: the copies agree.&#10;At every moment, or only in the end?&#10;That is a real choice, with a price on each side: the one shown on the slide on replication."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="Now we sort them into the two kinds.&#10;The three requirements at the balance are safety properties: each says that something never happens.&#10;If a deposit is lost, or a request changes the balance twice, or the balance goes below zero, it happens at one moment, and we can point at it.&#10;&#10;That every request gets a definitive answer in the end is a liveness property, the starvation freedom of the table: as long as the execution goes on, the answer may still come.&#10;It holds only under an assumption, that machines and links come back and that the client goes on asking.&#10;&#10;The agreement of the copies can be read both ways.&#10;That the copies never differ in what a client can see is a safety property.&#10;That they agree in the end, once requests stop, is a liveness property, the eventual consistency of the table.&#10;Which of the two a bank should ask for is the choice shown on the slide on replication."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
+  <span class="fragment step-note" data-fragment-index="3"></span>
+  <span class="fragment step-note" data-fragment-index="4"></span>
+  <span class="fragment step-note" data-fragment-index="5"></span>
   <svg class="fig" style="margin-top: 20px" viewBox="0 0 1420 500">
     <use href="#i-person" class="o" x="0" y="182" width="60" height="96"/>
     <line class="w" x1="72" y1="230" x2="472" y2="230" marker-end="url(#ah)"/>
@@ -2127,23 +1914,17 @@ for (let k = 1; k &lt;= 8; k++) {
     <p><b>Safety</b>: the three requirements at the balance. Each says <i>never</i>.</p>
   </div>
   <a class="apx back" href="#/properties">back</a>
-  <aside class="notes">
-    <p>A worked example for the two kinds of property: the bank account of the overview.<br>
-      A client sends requests, deposits and withdrawals.<br>
-      The account has a balance, here 100, and it is kept in two copies on two machines, joined by a link, so that the bank survives the loss of one machine.<br>
-      What do we require of it, in every execution?<br>
-      Five things, each written at the place in the picture that it is about.</p>
-  </aside>
+  
 </section>
 
 <!-- 13c -->
 <section id="a-support">
   <h2>Language support, property by property</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Now the question of this course.&#10;For each property: who makes it hold?&#10;There are three possible answers, the three columns: the language itself, through its compiler or its runtime; a library; or the programmer, with the keywords the language offers and with discipline.&#10;&#10;Mutual exclusion.&#10;In Java, synchronized is a keyword, and in Go a lock is a library type; in both, the lock protects the data only if every piece of code that touches the data takes it.&#10;That is a rule for the programmer, and nothing checks it.&#10;Semaphores, as in Dijkstra's program, come from a library.&#10;Two languages move the property into the language.&#10;In Rust the data is placed inside its lock, and a program that reaches it without the lock is rejected by the compiler.&#10;In Erlang processes share no data, so there is nothing to exclude each other from: the program with the fault cannot be written."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Linearizability.&#10;A library can give it for one object: Java's atomic integers and concurrent maps promise that each of their operations behaves as if it happened at one instant.&#10;Erlang gives it by construction for the state of a process, since the process handles one message completely before taking the next.&#10;But no language of ours gives it for a group of operations.&#10;A withdrawal that first checks the balance and then subtracts is two operations; each may be atomic, and another withdrawal can still come between them.&#10;Making the two into one is left to the programmer, and it is the main difficulty of session 7."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Deadlock freedom.&#10;No language of this course prevents a deadlock, not even Rust: its compiler rejects data races and accepts a program that deadlocks.&#10;Go's runtime notices one case, when every process of the program is waiting, and stops the program with a message.&#10;A library can offer a way out, such as asking for a lock with a time limit and giving up.&#10;For the rest it is discipline: for instance, all code takes its locks in one agreed order, account 1 before account 2.&#10;With messages instead of locks the same thing can happen: two processes each waiting for the other's message."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Starvation freedom.&#10;Here the runtime of the language matters.&#10;Go and Erlang interrupt a process that computes for long, so that the others get their turn.&#10;JavaScript does not: all its code runs on one thread, and a long computation holds everything else up.&#10;A library can offer locks that serve those who wait in the order in which they came.&#10;And the programmer keeps long computations off that one thread, and puts a time limit on a wait that might never end."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="Eventual consistency.&#10;No general-purpose language provides it.&#10;Libraries offer data types that carry a merge operation which can be applied in any order and any number of times; a set with union is the smallest example, and we will see it in two lines of OCaml.&#10;What remains for the programmer is the design: which merge is right for the data, and whether a request that got no reply may be sent again.&#10;&#10;Read the table by columns.&#10;The further to the left a property stands, the less can go wrong in our own code, and the more the language has decided for us.&#10;The designs of the languages we meet differ exactly in this: what each of them moved into the left column, and at what price.&#10;That is the question we ask every week."></span>
+  <span class="fragment step-note" data-fragment-index="0"></span>
+  <span class="fragment step-note" data-fragment-index="1"></span>
+  <span class="fragment step-note" data-fragment-index="2"></span>
+  <span class="fragment step-note" data-fragment-index="3"></span>
+  <span class="fragment step-note" data-fragment-index="4"></span>
   <table class="who3">
     <tr><th></th><th>the language<br>(compiler, runtime)</th><th>a library</th><th>the programmer<br>(keywords, discipline)</th></tr>
     <tr class="fragment" data-fragment-index="0"><td><b>mutual exclusion</b></td><td data-widow="1">Rust: no way to the data in a <a class="ref" href="https://doc.rust-lang.org/std/sync/struct.Mutex.html" target="_blank" rel="noopener"><code>Mutex&lt;T&gt;</code></a> without its lock. Erlang: nothing is shared.</td><td data-widow="1">locks and semaphores: <code>java.util.concurrent</code></td><td data-widow="1"><code>synchronized</code>, <code>sync.Mutex</code>: every access must lock; nothing checks</td></tr>
@@ -2153,9 +1934,7 @@ for (let k = 1; k &lt;= 8; k++) {
     <tr class="fragment" data-fragment-index="4"><td><b>eventual consistency</b></td><td data-widow="1">Provided by no general-purpose language.</td><td data-widow="1"><a class="ref" href="https://www.cs.tufts.edu/~nr/cs257/archive/marc-shapiro/CRDTs_SSS-2011.pdf" target="_blank" rel="noopener">mergeable data types</a>, such as a set with <code>union</code></td><td data-widow="1">which merge is right; when to send again</td></tr>
   </table>
   <a class="apx back" href="#/support">back</a>
-  <aside class="notes">
-    <p>The table of the main line, for all five named properties: for each, what the language does, what a library offers, and what is left to the programmer.</p>
-  </aside>
+  
 </section>
 
 <!-- 9a -->
@@ -2223,25 +2002,7 @@ C Ada"></pre><button class="run" onclick="Py.run('src-py-pre,src-py,src-py-post'
     </div>
   </div>
   <a class="apx back" href="#/many">back</a>
-  <aside class="notes">
-    <p>Session 6: asynchronous programming, which is concurrency on one thread.<br>
-      One thread runs all our code, and a function that has to wait gives the thread back so that other code can run.<br>
-      We look at what a language does at the word await, which marks a place where a function waits.</p>
-    <p>After the session we can explain two things.<br>
-      Where the rest of a function is kept while it waits: the part that remains to be run, with its local variables, is set aside in memory until the function is resumed.<br>
-      Why waiting is not running, and why one thread does not rule out a race: a race is when the result depends on which of two pieces of code happens to run first.<br>
-      What a continuation is, and how await can be defined from a generator and a driver, a small loop that resumes it, is on the page of the lab's optional quest.</p>
-    <p>The two programs on the right need not be read today.<br>
-      The first, in JavaScript, is that driver: seven lines; the lab's optional quest writes it.<br>
-      The second, in Python, starts a piece of work without waiting for it.</p>
-    <p>We run the first program.<br>
-      The slide shows only the driver; the program it drives prints A, waits for a user's name to arrive, and prints C with the name, while its caller prints B. The output is A, B, C Ada: B comes before C because the caller went on while the function waited.</p>
-    <p>We run the second.<br>
-      The same work started as a task in Python: B, A, C Ada.<br>
-      Here even A comes after B: in Python, starting the work does not run any of it yet.<br>
-      Two languages, two answers to this session's question.<br>
-      The first press loads Python into the page and takes a few seconds.</p>
-  </aside>
+  
 </section>
 
 <!-- 10a -->
@@ -2276,24 +2037,7 @@ parallel   1999999"></pre><button class="run" onclick="runRec(this, 'out-sum')">
     </div>
   </div>
   <a class="apx back" href="#/shared">back</a>
-  <aside class="notes">
-    <p>Session 7: multi-threading, which is concurrency with shared memory.<br>
-      Several threads run our code at the same time and reach the same data.<br>
-      We look at how shared data is protected, at who checks that it is protected, and at the cases where nothing needs protecting.<br>
-      The subtitle names three tools: locks; atomic operations, which are operations that no other thread can ever see half done; and ownership, a rule of a language by which every value has one owner at a time, which lets a compiler check who may touch what.</p>
-    <p>After the session we can explain three things.<br>
-      Why a lock protects only if every access takes it, and how a compiler can check that.<br>
-      Why two protected operations, one after the other, are not one protected operation: between a check of the balance and the withdrawal that follows it, another thread can get in.<br>
-      And why a parallel map, that is, applying a function to every element of a collection on several threads at once, gives the same result in every execution when the function has no effects.</p>
-    <p>The two programs are not to be read today.<br>
-      The first is the third picture of the slide on shared memory, in Rust: the balance of 100 is created inside a lock, a second thread takes the lock and adds 20, and the first waits for it to finish.</p>
-    <p>We run it: 120, in every run.</p>
-    <p>The second, in Java, adds up a function of every number from 1 to a million, on several threads, with no lock anywhere.</p>
-    <p>We run it.<br>
-      The sequential sum and the parallel sum are equal, in every run.<br>
-      Nothing is locked because nothing is shared and changed: the function has no effects, and the order in which the numbers are added does not matter.<br>
-      Next week says when we can count on that.</p>
-  </aside>
+  
 </section>
 
 <!-- 11a -->
@@ -2343,30 +2087,7 @@ line 8"></pre><button class="run" onclick="runRec(this, 'out-go')">Run</button><
     </div>
   </div>
   <a class="apx back" href="#/messages">back</a>
-  <aside class="notes">
-    <p>Session 8: message passing, which is concurrency without shared memory.<br>
-      Processes share no data and send each other messages, and for this one week we assume that every message sent arrives.<br>
-      We look at two things: what a message is addressed to, and what sending does to a value.<br>
-      There are two families.<br>
-      With channels, a message is put into a channel, a queue that has a name of its own, and whoever is at the other end takes it: that is Go.<br>
-      With actors, a message is addressed to a process, which has a mailbox: that is Erlang.</p>
-    <p>After the session we can explain three things.<br>
-      Why a process that handles one message at a time needs no lock on its own state.<br>
-      What happens to a value that is sent: shared, copied or handed over.<br>
-      And why messages remove neither the deadlock nor the lost deposit.<br>
-      A deadlock is two processes each waiting for the other, for ever.<br>
-      A lost deposit is this: two clients each read the balance, each add their deposit to what they read, and each write the result back; one of the two deposits is gone.<br>
-      Both can be written with messages as well as with locks.</p>
-    <p>The first program, in Go, is Dijkstra's bounded buffer, the program we ran at the beginning.<br>
-      The queue for two portions and his three semaphores have become one value, a channel with room for two.<br>
-      The arrow puts a portion into the channel and waits if there is no room; the second loop takes portions out and waits if there is none.</p>
-    <p>We run it: The eight portions, in order.</p>
-    <p>The second, in Erlang, is the bank's account as a process.<br>
-      It waits for a message; the exclamation mark sends an answer back to whoever asked; then the process goes on with its new balance.<br>
-      The three cases are a deposit, a withdrawal when the money is there, and a withdrawal when it is not.</p>
-    <p>We run it.<br>
-      Starting from 100: a deposit of 20 is answered ok, a withdrawal of 150 is refused, a withdrawal of 120 is answered ok.</p>
-  </aside>
+  
 </section>
 
 <!-- 12a -->
@@ -2400,29 +2121,7 @@ merge a a = a: true"></pre></div>
     </div>
   </div>
   <a class="apx back" href="#/replication">back</a>
-  <aside class="notes">
-    <p>Session 9: failure and recovery, which is programming for several machines, where delivery is no longer assumed.<br>
-      A message can be lost, a process or a machine can stop, and the rest of the system goes on.<br>
-      We look at the form in which a failure reaches a program, and at what the program can do then.<br>
-      This session is the least settled of the four, and its slide may change.</p>
-    <p>After the session we can explain three things.<br>
-      Why a process that is slow and a process that has stopped look the same from outside: in both cases, no answer has come yet.<br>
-      When a request may be sent again: when doing it twice is the same as doing it once.<br>
-      And what a restart gives back and what it does not: a process that failed can be started again from a known state, and what it had in memory when it failed is gone.</p>
-    <p>The first program, in Erlang, asks an account and waits for the answer for at most one second, 1000 milliseconds.<br>
-      Then it gives up.</p>
-    <p>We run it.<br>
-      We ask a process that has already stopped.<br>
-      The answer is no_answer, after one second.<br>
-      The program cannot tell whether the account is slow or gone.<br>
-      It also accepts any message as its answer, even a late answer to an earlier request; that weakness is where the question of sending again begins.</p>
-    <p>The second, in OCaml, is two lines in the language of Part 1.<br>
-      Each copy of the bank records its deposits as a set of entries, and merge puts two such sets together by taking their union.</p>
-    <p>We run it.<br>
-      Merging in either order gives the same set, and merging a set with itself changes nothing.<br>
-      So two copies can exchange what they have recorded in any order and as often as they like, and they end with the same record.<br>
-      That is how the deposits made on two copies are counted, each once.</p>
-  </aside>
+  
 </section>
 
 </div>
@@ -2433,7 +2132,6 @@ merge a a = a: true"></pre></div>
   window.__anims = [];
 </script>
 <script src="vendor/reveal/reveal.min.js"></script>
-<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
 <script src="vendor/hljs/highlight.min.js"></script>
 <script src="vendor/hljs/languages/ocaml.min.js"></script>
 <script src="vendor/hljs/languages/python.min.js"></script>
@@ -2590,7 +2288,7 @@ merge a a = a: true"></pre></div>
     slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
     scrollActivationWidth: null,                  // never switch to reveal's scroll view in a narrow window
     keyboard: { 84: () => toggleToc() },          // T: list of parts
-    plugins: [ RevealNotes ]
+    plugins: [ ]
   });
 
 

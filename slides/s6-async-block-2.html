@@ -1318,17 +1318,7 @@ html.print-pdf .reveal #callbacks .cbswap > .current-visible, html.reveal-print 
   <div class="sub">concurrency on one thread</div>
   <div class="rule"></div>
   <p class="meta">What does a program do while it waits, and where is the rest of a function while it waits?</p>
-  <aside class="notes">
-    <p>The first block ended on this question: a program sends a request and must wait for the reply;</p>
-    <p>what does it do meanwhile,<br>
-      and where is the rest of the function that was in the middle of its work?</p>
-    <p>This block answers the first half, for one model of computation: one thread runs all our code,<br>
-      and the sources of events, the clock, the network, the disk, lie outside it.</p>
-    <p>We state what this model guarantees, as four properties, and we name them with the terms of the field.<br>
-      Then we watch three small programs run under these properties, and predict each before it runs.</p>
-    <p>No mechanism in this block: we state what a language with async and await guarantees.<br>
-      What the suspended function is, who holds it and who resumes it is on the page of the lab's optional quest.</p>
-  </aside>
+  
 </section>
 
 <!-- part 1 -->
@@ -1336,22 +1326,18 @@ html.print-pdf .reveal #callbacks .cbswap > .current-visible, html.reveal-print 
   <div class="eyebrow">PART 1</div>
   <h1>The model and its properties</h1>
   <div class="sub">one thread, four properties</div>
-  <aside class="notes">
-    <p>The model and what it guarantees, stated as four properties, in the terms of the field.</p>
-    <p>One slide runs programs, the callbacks slide; the others state the model and its properties.</p>
-    <p>About twenty minutes: the model and the callbacks slide are brief; the properties take the time. Other languages are part 3.</p>
-  </aside>
+  
 </section>
 
 <!-- 1 -->
 <section id="model">
   <h2>The model<span class="h2sub">one thread, a stack, a heap, a queue, and a host</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="The runtime runs our code on one thread.&#10;A call stack holds one frame per call that has not returned: its arguments, its local variables and where to return; only the frame on top executes.&#10;&#10;If asked: how does this relate to call frames? Each call pushes a frame on the stack, with its arguments, its local variables and where to return; the return pops it. At an await the stack must empty, so the frame of an asynchronous function cannot stay there. In JavaScript, as in Python, C#, Rust and Kotlin, the frame is popped and what is still needed, the live local variables and the point where to resume, is copied into an object in the heap: these coroutines are stackless, one frame is saved. Goroutines and Java&#39;s virtual threads are stackful: the runtime keeps the whole stack of the suspended computation. The last table of the appendix has this column."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="A heap holds every value that must survive after the frame that created it is popped: objects, closures, and, as we will see, the saved state of a suspended function, its local variables and where to resume.&#10;&#10;The point of async/await is exactly this. The rest of a function becomes a value that can be stored and resumed later.&#10;Without it, we write that rest by hand, as a callback: continuation-passing style, and every caller has to be rewritten too, what Adya and colleagues call stack ripping.&#10;With it, the compiler does the rewriting: it turns the function into an object that holds its local variables and the point where to resume, and we write straight-line code that still gives the thread back at each await."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="A queue holds functions that are ready to run and have not run yet.&#10;&#10;The heap holds the data, promises and saved states; the queue holds work to do. A queue entry is a function to run, which points to what it needs in the heap: run this, with this value. Nothing moves from the heap to the queue."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="The loop takes one function at a time from the queue to the stack and runs it to its end.&#10;&#10;For load: at the await the heap holds the pending promise and the saved state of load, registered on it; the host holds the timer. At 300 ms the host appends the timer&#39;s function to the queue. The loop runs it: it writes Ada into the promise, which is now fulfilled. Fulfilling it appends to the queue a function that resumes load with Ada, pointing to its saved state; in JavaScript, to the second queue, the microtask queue. The loop runs that: the frame of load is rebuilt on the stack, user is Ada, C Ada prints. The demo of load shows these steps.&#10;&#10;In one line: the heap remembers, the queue schedules, the loop dispatches, the stack runs. The suspended state itself never goes into the queue: the queue holds a function that points to it, and the state is copied back into a fresh frame when the loop runs that function."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="The host, a browser or an operating system, owns the clock and the devices.&#10;The host does its own work outside this thread. It cannot call into our program: when its work is done, it can only append to the queue a function that calls ours, the callback we gave it or the resolution of a promise.&#10;&#10;If asked: what can a browser put in the queue? A function that calls ours, from one of several sources: the user&#39;s input, a click or a key, which runs our event handlers; a timer that is due, from setTimeout or setInterval; a reply from the network, the response to a fetch or a message on a WebSocket; a message from a worker or from another window, sent with postMessage. The HTML standard calls these task sources, and a browser may favour one over another, the user&#39;s input for instance. The continuations of promises go to the second queue, the microtask queue, which is emptied after each task. A requestAnimationFrame callback is in neither: the browser runs it between tasks, when it prepares the next image on the screen."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="Two assumptions hold for the whole block.&#10;One thread: all of the program's own code runs on a single thread. The runtime may use other threads for its own purposes; none of them runs code of ours.&#10;An uncontrolled environment: the order in which the environment's events occur is not fixed by the program. Two requests sent at the same moment may be answered in either order."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="The runtime runs our code on one thread."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="A heap holds every value that must survive after the frame that created it is popped: objects, closures, and, as we will see, the saved state of a suspended function, its local variables and where to resume."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="A queue holds functions that are ready to run and have not run yet."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="The loop takes one function at a time from the queue to the stack and runs it to its end."></span>
+  <span class="fragment step-note" data-fragment-index="4" data-caption="The host, a browser or an operating system, owns the clock and the devices."></span>
+  <span class="fragment step-note" data-fragment-index="5" data-caption="Two assumptions hold for the whole block."></span>
   <svg class="fig" viewBox="0 0 1420 490">
     <g class="part">
       <rect class="soft" x="0" y="10" width="400" height="440" rx="10"/><text class="h" x="24" y="54">our code</text>
@@ -1415,28 +1401,16 @@ html.print-pdf .reveal #callbacks .cbswap > .current-visible, html.reveal-print 
       </div>
     </div>
   </div>
-  <aside class="notes">
-    <p>The runtime of the model has four parts. It is a model of what the language guarantees, not a description of an engine: V8 or SpiderMonkey keep a suspended function in their own form; what matters is that enough state is kept to resume it, and where it waits.<br>
-      A call stack holds one frame per call that has not returned: its arguments, its local variables and where to return; only the frame on top executes.<br>
-      A heap holds every value that must survive after the frame that created it is popped: objects, closures, and, as we will see, the saved state of a suspended function, its local variables and where to resume.<br>
-      A queue holds functions that are ready to run and have not run yet.<br>
-      And the host, a browser or an operating system, owns the clock and the devices.<br>
-      The host does its own work outside this thread. It cannot call into our program: when its work is done, it can only append to the queue a function that calls ours, the callback we gave it or the resolution of a promise.<br>
-      The loop takes one function at a time from the queue to the stack and runs it to its end.</p>
-    <p>This structure, a stack, a queue of pending deliveries and a heap served by one thread, is what Miller, Tribble and Shapiro called a vat in 2005, and they call it the classic event-loop model.<br>
-      The program on the left is the one we follow through the block: load prints A, asks for a user and prints C with the name; its caller prints B.</p>
-    <p>If asked: is the queue first in, first out? In the model, yes. JavaScript keeps two queues, one for the host's functions and one for the continuations of promises, and empties the second fully after each function of the first; the demo shows both, and the difference plays no role today.<br>
-      If asked about other threads: Node uses a pool for files and name resolution; none of those threads runs code of ours, which is the first assumption.</p>
-  </aside>
+  
 </section>
 
 <!-- 2 -->
 <section id="suspension">
   <h2>Suspension points<span class="h2sub">cooperative transfer of control</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="The figure: the three states of a computation of the model, and how it passes from one to the next.&#10;The highlighted line is the rest of load: what remains to be run after the await. It is what is kept and registered on the promise."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="A computation of the model is at every moment in one of three states.&#10;Running: on the stack.&#10;Suspended: waiting for a value that is not there yet.&#10;Ready: in the queue, its value available, waiting for the loop to run it.&#10;The transition at the await is the program&#39;s own. The value comes from the host, or from code of ours that resolves the promise; the loop takes the ready computation when the stack is empty. In JavaScript an await on a value already there goes straight to ready."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Control therefore passes from one computation to another only where the program&#39;s text says so. This is cooperative task management, the term of Adya and colleagues in 2002, as opposed to the preemptive management of threads, where control can be taken away between any two instructions."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Property 1, suspension.&#10;An asynchronous function is suspended only at an await written in it. Its caller then goes on with its next statement: after load(); the script prints B. A caller that writes await load(); is suspended too, and its own caller goes on.&#10;In JavaScript, in addition: a call runs the function up to its first await and then returns a promise to the caller.&#10;&#10;The common misreading is that await waits: that the thread stands still at the await until the value arrives. It does not. The function is suspended and its caller runs; the thread is held by nobody while the value is awaited."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="The figure: the three states of a computation of the model, and how it passes from one to the next."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="A computation of the model is at every moment in one of three states."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="Control therefore passes from one computation to another only where the program&#39;s text says so. This is cooperative task management, the term of Adya and colleagues in 2002, as opposed to the preemptive management of threads, where control can be taken away between any two instructions."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="Property 1, suspension."></span>
   <div class="two">
     <div>
       <pre data-lines="3:0" style="width: 560px"><code class="language-javascript">async function load() {
@@ -1469,30 +1443,20 @@ console.log("B");</code></pre>
       </div>
     </div>
   </div>
-  <aside class="notes">
-    <p>The definition, on the left.<br>
-      An asynchronous function, async function in JavaScript, async def in Python, is a function whose activation can be suspended at points marked in its text by await.<br>
-      At a suspension point its frame leaves the stack; the part of the function that remains to be executed, with the values of its local variables, is kept in the heap.<br>
-      The function's caller resumes.<br>
-      The activation is later resumed: the kept part returns to the stack and execution continues after the await, with the awaited value in place.</p>
-    <p>A function that is called runs at once, inside its caller, up to its first suspension point; what it leaves behind at that point is a promise, a first-class value that stands for its eventual result.<br>
-      The word is Friedman and Wise's, 1976, for a lazy suspension; Baker and Hewitt's future, 1977, is eager; Liskov and Shrira, 1988, gave the promise its typed form for asynchronous remote calls. A JavaScript promise is eager.</p>
-    <p>If asked: what does load return? A promise for its own result, pending until the rest of load has run. Two promises are in play at the await: the one load awaits, and the one load returns to its caller.<br>
-      If asked: what is the kept rest, concretely? A function with the values of its variables, a closure; the appendix shows it written by hand, and how a compiler produces it from the function's text.</p>
-  </aside>
+  
 </section>
 
 <!-- promise -->
 <section id="promise">
   <h2>Creating and awaiting a promise<span class="h2sub"><code>new Promise</code> and <code>await</code><sup>&dagger;</sup></span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="new Promise creates a promise p in the heap, pending."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="It calls the executor with res: the executor gives the host a timer that holds () =&gt; res(&quot;Ada&quot;)."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="fetchUser returns p: the value of the expression after await is a promise.&#10;The other end: await. It evaluates its operand; a value that is not a promise is wrapped into a fulfilled one."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="await registers the rest of load() on p, as one of its waiters: await p amounts to p.then(rest)."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="load() is suspended: its frame leaves the stack, and its caller goes on, Property 1."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="Later, the timer is due: the host puts its function in the task queue.&#10;The figure draws the model&#39;s one queue; JavaScript has two, the task queue for the host&#39;s functions and the microtask queue for what resumes after a promise, emptied first."></span>
-  <span class="fragment step-note" data-fragment-index="6" data-notes="The loop runs it: res fulfills p, and the rest of load() goes to the microtask queue. This is the third step of new Promise: whoever holds res calls it."></span>
-  <span class="fragment step-note" data-fragment-index="7" data-notes="The loop runs the rest: load() resumes, and the await expression has p&#39;s value."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="new Promise creates a promise p in the heap, pending."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="It calls the executor with res: the executor gives the host a timer that holds () =&gt; res(&quot;Ada&quot;)."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="fetchUser returns p: the value of the expression after await is a promise."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="await registers the rest of load() on p, as one of its waiters: await p amounts to p.then(rest)."></span>
+  <span class="fragment step-note" data-fragment-index="4" data-caption="load() is suspended: its frame leaves the stack, and its caller goes on, Property 1."></span>
+  <span class="fragment step-note" data-fragment-index="5" data-caption="Later, the timer is due: the host puts its function in the task queue."></span>
+  <span class="fragment step-note" data-fragment-index="6" data-caption="The loop runs it: res fulfills p, and the rest of load() goes to the microtask queue. This is the third step of new Promise: whoever holds res calls it."></span>
+  <span class="fragment step-note" data-fragment-index="7" data-caption="The loop runs the rest: load() resumes, and the await expression has p&#39;s value."></span>
   <div class="pwrap">
     <div class="cols">
       <div class="fragment fade-out" data-fragment-index="2">
@@ -1555,24 +1519,16 @@ console.log("B");</code></pre>
   </div>
   <p class="fn"><sup>&dagger;</sup> Python, C# and Rust have the same pair; what differs around it: part 3, and the appendix.<br><span class="fragment" data-fragment-index="2"><sup>*</sup> <code>p.then(f)</code> registers <code>f</code>, to be called with the value of <code>p</code> once <code>p</code> is fulfilled.</span></p>
   <a class="apx" href="#/a-langs" data-tip="languages against the model: the full comparison">appendix</a>
-  <aside class="notes">
-    <p>The two ends of one promise. new Promise makes a promise and hands us the function that settles it; await waits on a promise. The promise in the heap connects them.<br>
-      new Promise creates a pending promise and calls the executor at once, synchronously, with res. Here the executor gives the host a timer of 300 ms whose callback calls res("Ada"). new Promise is how a host&#39;s callback interface, setTimeout here, becomes a promise.</p>
-    <p>If asked: what about the second argument of the executor? It is rej: rej(e) rejects the promise with the error e, and an await on a rejected promise throws e at the await. Failure is not treated in this session.<br>
-      If asked: does res(v) always fulfill? When v is a plain value, yes. Strictly res resolves: if v is itself a promise, ours follows it, and is fulfilled only when v is.<br>
-      If asked: where is new Promise in load? Nowhere in our text: calling an async function creates its own promise, and its return settles it. In await fetchUser() the promise is fetchUser&#39;s; the caller of load gets load&#39;s.<br>
-      The dagger: the pair is not JavaScript&#39;s; every language with async and await has a result that starts pending, is settled from outside by whoever holds the setter, and is awaited. What differs is around it: whether the call starts the work, whether await suspends on a value already there, which thread resumes; part 3, and the appendix table. Python: fut = loop.create_future(), fut.set_result(v), await fut. C#: var tcs = new TaskCompletionSource&lt;T&gt;(), tcs.SetResult(v), await tcs.Task. Rust (tokio): let (tx, rx) = oneshot::channel(), tx.send(v), rx.await; there the future runs only when polled, as part 3 shows.<br>
-      If asked: can we wait without await? Yes, with then; the appendix builds then and a loop by hand, and await as a generator with a driver.</p>
-  </aside>
+  
 </section>
 
 <!-- callbacks -->
 <section id="callbacks">
   <h2>Callbacks<span class="h2sub">the rest of a computation, passed by hand</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Nesting. Three requests in turn: the request for b is made in a's callback, the one for c in b's. Each step adds a level; a loop over a list of keys cannot be written this way without a recursive helper.&#10;With await the same three steps are three lines, in order. Both print A B C after 900 ms."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="No composition. Both requests leave at once, as in Example 2's together; to go on when both have arrived, each callback stores its value and counts, and the one that finds the count at 2 goes on.&#10;With promises, pa and pb are values: we hold them, and await each. A promise can be stored, passed on, awaited by several computations, and combined, Promise.all for instance."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Inversion of control. We hand our rest to code that is not ours, and that code decides when to run it, and how many times. userK answers from a cache: on a miss later, from a timer; on a hit at once, inside the call. The same show prints B first on a miss and last on a hit. Schlueter, 2013, calls an interface that is sometimes synchronous and sometimes not 'releasing Zalgo'.&#10;A promise rules out two of these: it is settled at most once, and what waits on it always goes to the queue, Promises/A+ 2.2.4. It does not rule out never: a promise that nobody settles waits for ever. The appendix has the three cases."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Errors. The try ends when setTimeout returns; the callback runs 100 ms later, from the queue, with the try's frame gone. Nothing catches the exception: node prints it and stops.&#10;Node's convention gives every callback its error first, (err, value) =&gt; ..., and every callback checks it. A promise has a third state, rejected; await on a rejected promise throws at the await, where an ordinary try catches it. Failure is session 9's."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="Nesting. Three requests in turn: the request for b is made in a's callback, the one for c in b's. Each step adds a level; a loop over a list of keys cannot be written this way without a recursive helper."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="No composition. Both requests leave at once, as in Example 2's together; to go on when both have arrived, each callback stores its value and counts, and the one that finds the count at 2 goes on."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="Inversion of control. We hand our rest to code that is not ours, and that code decides when to run it, and how many times. userK answers from a cache: on a miss later, from a timer; on a hit at once, inside the call. The same show prints B first on a miss and last on a hit. Schlueter, 2013, calls an interface that is sometimes synchronous and sometimes not 'releasing Zalgo'."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="Errors. The try ends when setTimeout returns; the callback runs 100 ms later, from the queue, with the try's frame gone. Nothing catches the exception: node prints it and stops."></span>
   <script class="src" type="text/plain" id="src-cb-pre">
     const getK = (k, cb) => setTimeout(
       () => cb(k.toUpperCase()), 300);
@@ -1662,21 +1618,16 @@ Error: no user
     </div>
   </div>
   <a class="apx" href="#/a-ioc" data-tip="inversion of control: three cases, and what a promise rules out">appendix</a>
-  <aside class="notes">
-    <p>Why a promise at all? Before promises, from the first browsers to Node, an asynchronous function took a callback: the rest of the computation, written as a function, which the function calls with the result when it has it. setTimeout still works this way, and new Promise, on the previous slide, is how such an interface becomes a promise: get is getK wrapped.<br>
-      A callback is a continuation passed by hand; the appendix calls this continuation-passing style. Four problems came with it, and each one is what the promise and then were made for.</p>
-    <p>The order is the history: callbacks; promise libraries from about 2005, from Python's Twisted to Dojo, CommonJS and jQuery; Promises/A+ in 2012; the promise in the language, ES2015; await, ES2017.<br>
-      If asked: is callback hell the nesting? That is its name in the folklore; the other three problems are the serious ones.</p>
-  </aside>
+  
 </section>
 
 <!-- 3 -->
 <section id="rtc">
   <h2>Run-to-completion<span class="h2sub">the loop&rsquo;s rule, and two consequences</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Each lane is one request; blue is our code on the stack, hatched is the wait.&#10;Left blue: the function runs on the stack and calls get; the call creates a pending promise in the heap and gives the host a 300 ms timer. At the await its frame leaves the stack, and its saved state goes to the heap, registered on the promise.&#10;Hatched: nothing of ours is on the stack for this request. The promise and the saved state are in the heap, the timer counts down in the host, and the thread is free: in together, the other request is made then."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Right blue: at 300 ms the host puts the timer&#39;s function in the queue; the loop runs it, and it fulfills the promise in the heap. That puts the rest of the waiting function in the queue, the microtask queue; the loop takes it onto the stack, its frame is rebuilt from the heap, and it runs with the value.&#10;In the code, together is one function: one stretch makes both requests, then it awaits pa, then pb. The two lanes are the two requests, not two functions. The demo of two requests shows each step."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Property 2, waiting is not running.&#10;Waits can overlap in time; executions of the program's own code cannot: on one thread, at any moment at most one computation is running.&#10;The misreading this replaces: that async runs in parallel. Nothing of ours runs at the same time as anything else of ours."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Property 3 concerns the loop.&#10;It takes a ready function from the queue only when the stack is empty: the running code has returned, and so has everything it called. Nothing preempts running code.&#10;A computation that runs for a long time without reaching a suspension point delays every ready function behind it: the function of a timer due at 100 ms runs at about 500 ms, after a loop that computes for 500 ms. We will see this run.&#10;&#10;Property 3, run-to-completion.&#10;In the introduction's table of who makes a property hold, this is the starvation-freedom row for JavaScript: the runtime does not interrupt a long computation, and keeping the thread free is the programmer's responsibility, by splitting the work or by moving it to another thread. Go's and Erlang's runtimes, by contrast, interrupt a process that computes for too long."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="Each lane is one request; blue is our code on the stack, hatched is the wait."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="Right blue: at 300 ms the host puts the timer&#39;s function in the queue; the loop runs it, and it fulfills the promise in the heap. That puts the rest of the waiting function in the queue, the microtask queue; the loop takes it onto the stack, its frame is rebuilt from the heap, and it runs with the value."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="Property 2, waiting is not running."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="Property 3 concerns the loop."></span>
   <p class="lead2 ab"><b>a</b> and <b>b</b>: two requests, each answered after 300 ms; made in turn, or together before either is awaited.</p>
   <svg class="fig" viewBox="0 0 1420 290">
     <text class="h" x="0" y="40">in turn</text>
@@ -1715,25 +1666,16 @@ Error: no user
   </div>
   <p class="fn fragment" data-fragment-index="2"><sup>*</sup> JavaScript can run code of ours on another thread, a <b>worker</b>, with its own loop and its own heap.</p>
   <a class="apx" href="#/a-workers" data-tip="worker threads: another thread, another loop">appendix</a>
-  <aside class="notes">
-    <p>Because waiting is done by the host and not by the thread, any number of computations can be suspended at once while the thread does other work.<br>
-      The latencies of independent requests therefore overlap, provided the requests are started before any of them is awaited.<br>
-      The figure: two values, each taking 300 ms to arrive, asked for in two ways.<br>
-      In turn: the second request leaves after the first reply; about 600 ms.<br>
-      Together: both requests have left before either is awaited; about 300 ms.<br>
-      Blue is running, hatched is waiting: the waits overlap, the running stretches never do.</p>
-    <p>If asked: can the loop ever interrupt a long computation? No: that is Property 3, and it is the price of Property 4.<br>
-      If asked about worker threads: a worker is another thread with its own loop and its own heap; the two exchange messages, which are copied, session 8's subject. The model on this thread is unchanged. The one exception is a SharedArrayBuffer, memory both threads can write, and with it data races, session 7's subject. The asterisk's appendix slide shows a worker run.</p>
-  </aside>
+  
 </section>
 
 <!-- 4 -->
 <section id="atomicity">
   <h2>Interleavings and atomicity<span class="h2sub">where one computation can run inside another</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="The same program, the other arrival order: Q's value arrives first, and Q resumes first. Another execution.&#10;An execution of a program is one sequence of resumptions. One program with one input has as many executions as the environment can produce. The program itself is deterministic: given the arrival order, the loop's choices follow from the queue. The nondeterminism is observable all the same, Van Roy and Haridi's term, and it is the only kind this model has."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Resumption is not well bracketed. In the first execution P was suspended first and resumes first, while Q is still suspended: P begins before Q and also ends before Q, and the two lifetimes cross instead of nesting. A stack would require the last suspended to resume first.&#10;Who resumes first is decided by the arrival of the values, the environment: neither last-in-first-out nor first-in-first-out in general.&#10;So no single stack can hold the suspended computations: each saved state lives in the heap, one frame each in JavaScript, Python or C#, or a whole stack each for goroutines and virtual threads."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="Where can one computation observe another in the middle of its work? Only at a suspension point of the latter. The set of interleaving points is exactly the set of suspension points: the dots."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="Property 4, atomicity between suspension points.&#10;A suspended computation resumes only when the stack is empty. A stretch of a function's text that contains no await is therefore atomic with respect to all other code of the program: no other computation observes it half done. Others see all of it or none of it, and they can run between two stretches. A function called inside the stretch runs at once, inside its caller, and is part of the stretch; an async function, up to its first await. So is every function it calls in turn, even one we did not call by name: dispatchEvent calls the listeners of an event before it returns, and a listener of ours runs inside the stretch and can see it half done. The property protects a stretch from the computations the loop runs, not from the functions the stretch itself calls.&#10;In JavaScript every await is a suspension point, even await null.&#10;&#10;Atomic here has the introduction's sense: the stretch takes effect, for every other computation, as if at one instant. The word has other senses in the field; all or nothing under failure, session 9's sense, is not meant. MIT's course 6.102 states the same two facts for TypeScript: an atomic action effectively happens all at once, and at await control is always lost."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="The same program, the other arrival order: Q's value arrives first, and Q resumes first. Another execution."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="Resumption is not well bracketed. In the first execution P was suspended first and resumes first, while Q is still suspended: P begins before Q and also ends before Q, and the two lifetimes cross instead of nesting. A stack would require the last suspended to resume first."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="Where can one computation observe another in the middle of its work? Only at a suspension point of the latter. The set of interleaving points is exactly the set of suspension points: the dots."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="Property 4, atomicity between suspension points."></span>
   <svg class="fig" viewBox="0 0 1420 400">
     <text class="h" x="0" y="26">P&rsquo;s value arrives first</text>
     <g>
@@ -1781,27 +1723,20 @@ Error: no user
     </div>
   </div>
   <p class="core fragment" data-fragment-index="3"><b>Property 4 · Atomicity between suspension points.</b> A stretch of a function&rsquo;s text with no <code>await</code> in it is <b>atomic</b> with respect to all other code of ours: nobody observes it half done, except the functions it calls, which run inside it; others run only between stretches. Atomic: isolated, not all-or-nothing.</p>
-  <aside class="notes">
-    <p>From the previous slide: running code is never interrupted. So the only places where another computation can slip in are the points where ours gives the thread back: the awaits. What that means for two computations side by side.</p>
-    <p>Two computations, P and Q, each suspended at an await, each resumed when its value arrives.<br>
-      Blue is running, hatched is waiting. The order of the arrivals is the environment's: here P's value first.<br>
-      With several pending computations, which one resumes next is decided by the arrival of its value, and arrivals are the host's.</p>
-    <p>If asked: is this not determinism? Given the arrivals, yes: the loop's choices follow from the queue. The arrivals are not ours, and that is where the executions differ.<br>
-      If asked: why not call it a data race? Because no two accesses are ever concurrent on one thread. Next week the same program on two threads has one.</p>
-  </aside>
+  
 </section>
 
 <!-- 5 -->
 <section id="race">
   <h2>The race on one thread<span class="h2sub">a read, a suspension point, a write</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="deposit(10) runs to its await: it reads the balance, b is 100."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="At the await deposit(10) is suspended: its rest, with b = 100, is kept in the heap, and the script goes on to the next line."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="deposit(20) runs: it reads the balance. Nothing has written it yet: b is 100 again."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="deposit(20) is suspended too. Both approvals are pending; the stack is empty."></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="The first approval arrives: the rest of deposit(10) runs and writes b + n, 100 + 10: 110."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="The second arrives: the rest of deposit(20) writes its own b + n, 100 + 20: 120. The deposit of 10 is lost."></span>
-  <span class="fragment step-note" data-fragment-index="6" data-notes="Both calls read 100 before either writes. The second write overwrites the first: 120 where 130 was required. With the first approval slower, the first write comes last: 110.&#10;Neither execution is one in which the two deposits took effect one at a time: in the introduction's terms, the history of the account is not linearizable.&#10;A linearization point of a call is an instant between the call and its return at which the call takes effect. Herlihy and Wing's definition asks only that the calls can be ordered; the point is how the order is usually exhibited: pick one instant per call, inside its interval, and order the calls by them. Here no choice of one point for each deposit gives 120: whichever deposit is placed second would have read the balance the first one wrote.&#10;The invariant that the balance is 100 plus the finished deposits is false from the second write on."></span>
-  <span class="fragment step-note" data-fragment-index="7" data-notes="The error is a race condition in the sense of MIT 6.102: the result depends on the order in which two pieces of code happen to run; in Netzer and Miller's terms a general race, as against a data race. More precisely an atomicity violation: an operation meant to be atomic, the deposit, is split across a suspension point.&#10;It is not a data race. A data race is two conflicting accesses to the same location that are concurrent, and on one thread no two accesses are ever concurrent. The distinction matters next week, where a compiler, Rust, and a tool, Go's race detector, reject data races and nothing else: a version that locks the read and, separately, the write passes both and still loses a deposit (recorded, Rust with tokio).&#10;&#10;The repair follows from property 4. Whatever the function assumed before the suspension point must be re-established after it: here, the balance is read after the await, so that the read and the write lie in one atomic stretch. The repaired program gives 130 in both orders: each deposit takes effect in its one atomic stretch, and any instant of that stretch serves as its linearization point. Adya and colleagues state the discipline generally for cooperative code: after a yield point, re-read whatever may have changed."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="deposit(10) runs to its await: it reads the balance, b is 100."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="At the await deposit(10) is suspended: its rest, with b = 100, is kept in the heap, and the script goes on to the next line."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="deposit(20) runs: it reads the balance. Nothing has written it yet: b is 100 again."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="deposit(20) is suspended too. Both approvals are pending; the stack is empty."></span>
+  <span class="fragment step-note" data-fragment-index="4" data-caption="The first approval arrives: the rest of deposit(10) runs and writes b + n, 100 + 10: 110."></span>
+  <span class="fragment step-note" data-fragment-index="5" data-caption="The second arrives: the rest of deposit(20) writes its own b + n, 100 + 20: 120. The deposit of 10 is lost."></span>
+  <span class="fragment step-note" data-fragment-index="6" data-caption="Both calls read 100 before either writes. The second write overwrites the first: 120 where 130 was required. With the first approval slower, the first write comes last: 110."></span>
+  <span class="fragment step-note" data-fragment-index="7" data-caption="The error is a race condition in the sense of MIT 6.102: the result depends on the order in which two pieces of code happen to run; in Netzer and Miller's terms a general race, as against a data race. More precisely an atomicity violation: an operation meant to be atomic, the deposit, is split across a suspension point."></span>
   <div class="two">
     <div>
       <pre data-lines="2:0,2;6:0;3:1,3;7:2;4:4,5"><code class="language-javascript">let balance = 100;
@@ -1850,14 +1785,7 @@ deposit(20);   // required: 130</code></pre>
     </div>
   </div>
   <a class="apx" href="#/a-repair" data-tip="the repair, written and run">appendix</a>
-  <aside class="notes">
-    <p>The guarantee ends at the suspension point, and this is where the model's characteristic error occurs.<br>
-      A deposit on an account whose balance is shared by all computations of the program: it reads the balance, waits for an approval from another service, and writes.<br>
-      Two calls, 10 and 20. Required: 130 when both have finished.</p>
-    <p>The figure is one execution: both approvals take the same time.<br>
-      Blue is running, hatched is waiting for the approval.</p>
-    <p>If asked: would a lock fix it? A thread's lock cannot: there is one thread, and holding a lock across the wait while the other call takes it would block that thread. An asynchronous lock, whose acquire is itself an await, works, and so does the repair on the slide, which needs no lock: the read moves after the wait, so that the read and the write are one stretch.</p>
-  </aside>
+  
 </section>
 
 <!-- part 2 -->
@@ -1872,12 +1800,7 @@ deposit(20);   // required: 130</code></pre>
     <li>Two deposits</li>
   </ol>
   <p class="how">Each one is run in the demo, step by step, on the model&rsquo;s parts: our code, the runtime, the host.</p>
-  <aside class="notes">
-    <p>Now the same four properties as applications.<br>
-      Four programs: one await; two requests; a timer and a computation that holds the thread; two deposits.<br>
-      For each: we predict on the cards, neighbours compare, then we run it and follow it step by step in the demo, on the model&rsquo;s parts: our code, the runtime, the host.<br>
-      About thirty minutes: the deposits take the most; if time runs short, the demo of the timer is the one to skip, the program and its box say it.</p>
-  </aside>
+  
 </section>
 
 <!-- 8 -->
@@ -1928,45 +1851,30 @@ deposit(20);   // required: 130</code></pre>
     <div class="box fragment current-visible" data-fragment-index="0">Property 1: the call runs <code>load</code> up to its first <code>await</code> and returns; the script prints B; when the value arrives, the rest of <code>load</code> prints C Ada.</div>
     <div class="box fragment" data-fragment-index="1">With <code>await load();</code> instead, the script is suspended too, and prints B last: A, C Ada, B.</div>
   </div>
-  <aside class="notes">
-    <p>The reference program.<br>
-      fetchUser returns a promise that is fulfilled with "Ada" after 300 ms: a request to a server, imitated by a timer.<br>
-      load prints A, awaits the user, prints C with the name.<br>
-      The script calls load and prints B.</p>
-    <p>On the cards: what is printed, in which order?<br>
-      Compare with a neighbour, then we run it.</p>
-    <p>A, B, C Ada: load prints A, is suspended at the await, and its caller prints B; 300 ms later the value arrives and the rest of load prints C Ada.<br>
-      Property 1, as stated: a call runs the function up to its first await, then returns a promise; its caller then continues with its next statement, unless it awaits the call.</p>
-    <p>With the second box the code changes: await load(); in place of load();. At the top of a module, as in load.mjs, the script itself may await; it is then suspended too, and B comes last: A, C Ada, B. The in-page run wraps it in an async function to run it.<br>
-      If asked: why does C come last, 300 ms after? The host's timer; the rest of load waits for it in the heap, and the loop runs it when the value is there and the stack is empty.</p>
-  </aside>
+  
 </section>
 
 <!-- 9 -->
 <section id="load-stage" data-stage="roundtrip" data-steps="12" data-predicts="4">
   <h2>Demo 1: the run of <code>load</code><span class="h2sub">step by step, on the model&rsquo;s four parts</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="The script is the first function the loop runs. Line 6 calls load."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="load gets an activation on the stack, and its own promise in the heap, pending until load ends; it prints A."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="fetchUser makes a pending promise and gives the host a timer of 300 ms."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="load reaches the await with the promise still pending." data-ask="What runs next?" data-options="line 4, after 300 ms|line 7, which prints B|nothing: the thread waits"></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="Line 7: at the await the function is suspended, and its caller continues with its next statement." data-answer="1"></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="At the await, the rest of load leaves the stack and is kept in the heap, registered on p. load returns its own promise, still pending, to its caller."></span>
-  <span class="fragment step-note" data-fragment-index="6" data-notes="Line 7 prints B. So far A, then B."></span>
-  <span class="fragment step-note" data-fragment-index="7" data-notes="The stack is empty, the thread free; the timer counts down in the host."></span>
-  <span class="fragment step-note" data-fragment-index="8" data-notes="300 ms: the host puts the timer's function in the queue."></span>
-  <span class="fragment step-note" data-fragment-index="9" data-notes="The loop runs the timer&#39;s function, () =&gt; res(&quot;Ada&quot;): res fulfills the promise with Ada, and the kept rest of load becomes ready.&#10;How does it find res? The timer&#39;s function was made inside the executor, where res is a parameter: it is a closure, and keeps res. And res is tied to its promise: new Promise made this res for this promise.&#10;The demo shows JavaScript&#39;s two queues; the model has one."></span>
-  <span class="fragment step-note" data-fragment-index="10" data-notes="The loop takes the rest of load; it resumes at line 4 with user = Ada, prints C Ada and ends: its own promise is fulfilled."></span>
-  <span class="fragment step-note" data-fragment-index="11" data-notes="An await is this round trip: off the stack, into the heap, through the queue, back on the stack."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="The script is the first function the loop runs. Line 6 calls load."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="load gets an activation on the stack, and its own promise in the heap, pending until load ends; it prints A."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="fetchUser makes a pending promise and gives the host a timer of 300 ms."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="load reaches the await with the promise still pending." data-ask="What runs next?" data-options="line 4, after 300 ms|line 7, which prints B|nothing: the thread waits"></span>
+  <span class="fragment step-note" data-fragment-index="4" data-caption="Line 7: at the await the function is suspended, and its caller continues with its next statement." data-answer="1"></span>
+  <span class="fragment step-note" data-fragment-index="5" data-caption="At the await, the rest of load leaves the stack and is kept in the heap, registered on p. load returns its own promise, still pending, to its caller."></span>
+  <span class="fragment step-note" data-fragment-index="6" data-caption="Line 7 prints B. So far A, then B."></span>
+  <span class="fragment step-note" data-fragment-index="7" data-caption="The stack is empty, the thread free; the timer counts down in the host."></span>
+  <span class="fragment step-note" data-fragment-index="8" data-caption="300 ms: the host puts the timer's function in the queue."></span>
+  <span class="fragment step-note" data-fragment-index="9" data-caption="The loop runs the timer&#39;s function, () =&gt; res(&quot;Ada&quot;): res fulfills the promise with Ada, and the kept rest of load becomes ready."></span>
+  <span class="fragment step-note" data-fragment-index="10" data-caption="The loop takes the rest of load; it resumes at line 4 with user = Ada, prints C Ada and ends: its own promise is fulfilled."></span>
+  <span class="fragment step-note" data-fragment-index="11" data-caption="An await is this round trip: off the stack, into the heap, through the queue, back on the stack."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">load prints A, awaits a user that arrives after 300 ms, and prints C with the name. The script prints B.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="11">Property 1: suspended only at the <code>await</code>; the caller continues. A, B, C Ada.</p></div>
     <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=roundtrip&amp;embed=1" title="The run of load, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
-  <p class="stage-cap" data-note0="Our code in front; behind it, the runtime: the stack, the heap, the queues, the loop; at the back, the host.">Our code in front; behind it, the runtime: the stack, the heap, the queues, the loop; at the back, the host.</p>
-  <aside class="notes">
-    <p>Our code in front; behind it, the runtime: the stack, the heap, the queues, the loop; at the back, the host.<br>
-      First click: the script is the first function the loop runs; line 6 calls load.<br>
-      Each click is one step; the text under the demo follows it, and a prediction is asked on the left before its step is shown.</p>
-  </aside>
+  <p class="stage-cap" data-caption0="Our code in front; behind it, the runtime: the stack, the heap, the queues, the loop; at the back, the host.">Our code in front; behind it, the runtime: the stack, the heap, the queues, the loop; at the back, the host.</p>
+  
 </section>
 
 <!-- 10 -->
@@ -2008,48 +1916,36 @@ deposit(20);   // required: 130</code></pre>
     <div class="box fragment current-visible" data-fragment-index="0">Property 2: the two waits of <code>together</code> overlap, 300 ms. In <code>inTurn</code> the request for b leaves only after a has arrived: 600 ms.</div>
     <div class="box fragment" data-fragment-index="1">The text decides: a request written after an <code>await</code> leaves after it. Start the work first, then await.</div>
   </div>
-  <aside class="notes">
-    <p>Two values, a and b, each 300 ms away.<br>
-      inTurn asks for a, awaits it, then asks for b.<br>
-      together asks for both, then awaits both.</p>
-    <p>On the cards: how long does each take?</p>
-    <p>About 600 against about 300 ms.<br>
-      In inTurn, the request for b leaves only after a has arrived: the call to get("b") is in the rest of the function, kept while it waits.<br>
-      In together both requests have left before either is awaited, and the two waits overlap. Property 2.</p>
-    <p>If asked: could inTurn be made as fast without rewriting it? No. The request for b is written after the first await, so it leaves only after a has arrived; the order of the calls in the text decides it.</p>
-  </aside>
+  
 </section>
 
 <!-- 11 -->
 <section id="overlap-stage" data-stage="overlap" data-steps="17" data-predicts="4,12">
   <h2>Demo 2: two requests<span class="h2sub">in turn, then together</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="The script notes the time and calls inTurn."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="inTurn calls get(&quot;a&quot;): one request leaves for the host."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="At the await the rest of inTurn is kept; the thread is idle, and the request for b has not been made."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="The request for b has not left." data-ask="When does the request for b start?" data-options="at 0 ms, with a|at 300 ms, when a has arrived|as soon as the thread is idle"></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="At 300 ms: the call to get(&quot;b&quot;) is inside the kept rest of inTurn." data-answer="1"></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="300 ms: a arrives, its function fulfills the promise, and the rest passes through the queue."></span>
-  <span class="fragment step-note" data-fragment-index="6" data-notes="Resumed at line 3; only now does the request for b leave."></span>
-  <span class="fragment step-note" data-fragment-index="7" data-notes="Suspended again: another 300 ms with an idle thread."></span>
-  <span class="fragment step-note" data-fragment-index="8" data-notes="600 ms: b arrives, inTurn returns. Two waits, end to end."></span>
-  <span class="fragment step-note" data-fragment-index="9" data-notes="The script prints the result and 600 ms; t is reset, and the script calls together."></span>
-  <span class="fragment step-note" data-fragment-index="10" data-notes="together calls both before awaiting; both requests leave in the same turn, and pa and pb are pending."></span>
-  <span class="fragment step-note" data-fragment-index="11" data-notes="await pa: the rest of together is kept, waiting on pa; the host handles both requests at once."></span>
-  <span class="fragment step-note" data-fragment-index="12" data-notes="Each request takes 300 ms." data-ask="When does together return?" data-options="150 ms|300 ms|600 ms"></span>
-  <span class="fragment step-note" data-fragment-index="13" data-notes="300 ms: waiting is not running." data-answer="1"></span>
-  <span class="fragment step-note" data-fragment-index="14" data-notes="300 ms: both functions arrive in the task queue, one behind the other."></span>
-  <span class="fragment step-note" data-fragment-index="15" data-notes="a&#39;s function fulfills pa; the rest resumes, reaches await pb, finds pb pending, and is kept again, on pb."></span>
-  <span class="fragment step-note" data-fragment-index="16" data-notes="b&#39;s function fulfills pb; the rest resumes, and together returns at 300 ms."></span>
-  <span class="fragment step-note" data-fragment-index="17" data-notes="The script prints 300 ms. The difference is where the calls stand relative to the await: start the work first, await afterwards."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="The script notes the time and calls inTurn."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="inTurn calls get(&quot;a&quot;): one request leaves for the host."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="At the await the rest of inTurn is kept; the thread is idle, and the request for b has not been made."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="The request for b has not left." data-ask="When does the request for b start?" data-options="at 0 ms, with a|at 300 ms, when a has arrived|as soon as the thread is idle"></span>
+  <span class="fragment step-note" data-fragment-index="4" data-caption="At 300 ms: the call to get(&quot;b&quot;) is inside the kept rest of inTurn." data-answer="1"></span>
+  <span class="fragment step-note" data-fragment-index="5" data-caption="300 ms: a arrives, its function fulfills the promise, and the rest passes through the queue."></span>
+  <span class="fragment step-note" data-fragment-index="6" data-caption="Resumed at line 3; only now does the request for b leave."></span>
+  <span class="fragment step-note" data-fragment-index="7" data-caption="Suspended again: another 300 ms with an idle thread."></span>
+  <span class="fragment step-note" data-fragment-index="8" data-caption="600 ms: b arrives, inTurn returns. Two waits, end to end."></span>
+  <span class="fragment step-note" data-fragment-index="9" data-caption="The script prints the result and 600 ms; t is reset, and the script calls together."></span>
+  <span class="fragment step-note" data-fragment-index="10" data-caption="together calls both before awaiting; both requests leave in the same turn, and pa and pb are pending."></span>
+  <span class="fragment step-note" data-fragment-index="11" data-caption="await pa: the rest of together is kept, waiting on pa; the host handles both requests at once."></span>
+  <span class="fragment step-note" data-fragment-index="12" data-caption="Each request takes 300 ms." data-ask="When does together return?" data-options="150 ms|300 ms|600 ms"></span>
+  <span class="fragment step-note" data-fragment-index="13" data-caption="300 ms: waiting is not running." data-answer="1"></span>
+  <span class="fragment step-note" data-fragment-index="14" data-caption="300 ms: both functions arrive in the task queue, one behind the other."></span>
+  <span class="fragment step-note" data-fragment-index="15" data-caption="a&#39;s function fulfills pa; the rest resumes, reaches await pb, finds pb pending, and is kept again, on pb."></span>
+  <span class="fragment step-note" data-fragment-index="16" data-caption="b&#39;s function fulfills pb; the rest resumes, and together returns at 300 ms."></span>
+  <span class="fragment step-note" data-fragment-index="17" data-caption="The script prints 300 ms. The difference is where the calls stand relative to the await: start the work first, await afterwards."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">Two values, a and b, each 300 ms away. inTurn awaits a, then asks for b; together asks for both first.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="17">Property 2: the waits overlap, the running stretches never do. 600 against 300 ms.</p></div>
     <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=overlap&amp;embed=1" title="Two requests, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
-  <p class="stage-cap" data-note0="Two values, a and b, each 300 ms away in the host. First inTurn.">Two values, a and b, each 300 ms away in the host. First inTurn.</p>
-  <aside class="notes">
-    <p>Two values, a and b, each 300 ms away in the host. First inTurn.<br>
-      Each click is one step; the text under the demo follows it, and a prediction is asked on the left before its step is shown.</p>
-  </aside>
+  <p class="stage-cap" data-caption0="Two values, a and b, each 300 ms away in the host. First inTurn.">Two values, a and b, each 300 ms away in the host. First inTurn.</p>
+  
 </section>
 
 <!-- 12 -->
@@ -2077,38 +1973,27 @@ tick at 504 ms"></pre></div>
   </div>
   <div class="box fragment" data-fragment-index="0">Property 3: the timer&rsquo;s function is in the queue from 100 ms; the loop takes it only when the running code has returned. <code>done</code> at 500 ms, then <code>tick</code>.</div>
   <div class="box fragment" data-fragment-index="1">Keeping the thread free is our job: split the computation, or move it to another thread, a worker.</div>
-  <aside class="notes">
-    <p>A timer of 100 ms, then a loop that computes for 500 ms without reaching a suspension point.<br>
-      Hands: when does tick print?</p>
-    <p>done at 500 ms, then tick at about 505.<br>
-      The timer's function was in the queue from 100 ms on; the loop takes it only when the running code has returned.<br>
-      Property 3: running code is never interrupted; it keeps the thread until it returns.<br>
-      This is the starvation-freedom row of the introduction's table: keeping the thread free is ours to do.</p>
-    <p>If asked: would an await inside the loop help? Only an await that gives the thread back for long enough: an await on a promise resolved by a timer lets the queue drain. await null does not: it puts the rest of the computation in the microtask queue, which the loop empties before it takes the next function from the host's queue, so the timer's function still waits. In a browser, a loop of await null likewise keeps the page from being redrawn.</p>
-  </aside>
+  
 </section>
 
 <!-- 13 -->
 <section id="blocked-stage" data-stage="blocked" data-steps="9" data-predicts="4">
   <h2>Demo 3: a timer and a computation</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="A timer of 100 ms goes to the host."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="Line 4 computes for 500 ms; the script's activation stays on the stack."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="100 ms: the timer fires, the host puts its function in the queue."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="The function has been in the queue since 100 ms." data-ask="When does tick print?" data-options="at 100 ms|at about 500 ms|never"></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="At about 500 ms: the loop takes it only when the stack is empty." data-answer="1"></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="300 ms: a click in a browser would queue behind the timer; the page cannot even repaint."></span>
-  <span class="fragment step-note" data-fragment-index="6" data-notes="500 ms: the loop ends and line 5 prints done."></span>
-  <span class="fragment step-note" data-fragment-index="7" data-notes="The stack empties and tick prints, 400 ms late."></span>
-  <span class="fragment step-note" data-fragment-index="8" data-notes="Cooperative: the loop runs the next function only where our code gives the thread back. Long work is split up, or moved to another thread."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="A timer of 100 ms goes to the host."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="Line 4 computes for 500 ms; the script's activation stays on the stack."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="100 ms: the timer fires, the host puts its function in the queue."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="The function has been in the queue since 100 ms." data-ask="When does tick print?" data-options="at 100 ms|at about 500 ms|never"></span>
+  <span class="fragment step-note" data-fragment-index="4" data-caption="At about 500 ms: the loop takes it only when the stack is empty." data-answer="1"></span>
+  <span class="fragment step-note" data-fragment-index="5" data-caption="300 ms: a click in a browser would queue behind the timer; the page cannot even repaint."></span>
+  <span class="fragment step-note" data-fragment-index="6" data-caption="500 ms: the loop ends and line 5 prints done."></span>
+  <span class="fragment step-note" data-fragment-index="7" data-caption="The stack empties and tick prints, 400 ms late."></span>
+  <span class="fragment step-note" data-fragment-index="8" data-caption="Cooperative: the loop runs the next function only where our code gives the thread back. Long work is split up, or moved to another thread."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">A timer of 100 ms, then a loop that computes for 500 ms without an await.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="8">Property 3: running code keeps the thread until it returns. <code>done</code> at 500 ms, then <code>tick</code>.</p></div>
     <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=blocked&amp;embed=1" title="A timer and a computation, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
-  <p class="stage-cap" data-note0="The loop takes the next function only when the stack is empty; this script empties it only by returning.">The loop takes the next function only when the stack is empty; this script empties it only by returning.</p>
-  <aside class="notes">
-    <p>The loop takes the next function only when the stack is empty; this script empties it only by returning.<br>
-      Each click is one step; the text under the demo follows it, and a prediction is asked on the left before its step is shown.</p>
-  </aside>
+  <p class="stage-cap" data-caption0="The loop takes the next function only when the stack is empty; this script empties it only by returning.">The loop takes the next function only when the stack is empty; this script empties it only by returning.</p>
+  
 </section>
 
 <!-- 14 -->
@@ -2147,39 +2032,27 @@ tick at 504 ms"></pre></div>
     <div class="box fragment current-visible" data-fragment-index="0">Both calls read 100 before either writes; the second write overwrites the first: 120. With the first approval slower, 110. In both orders a deposit is lost.</div>
     <div class="box fragment" data-fragment-index="1">It happens wherever we read shared state, wait, then write it:<br>a counter updated after a request, a cache refreshed after a fetch.</div>
   </div>
-  <aside class="notes">
-    <p>The program of the slide on the race, now run.<br>
-      approve returns a promise fulfilled after 100 ms: a request to another service.<br>
-      Two deposits, 10 and 20; the requirement, from the introduction's bank: no deposit answered ok is lost; 130 when both have finished.</p>
-    <p>On the cards: what is the balance?<br>
-      Derive it from property 4 before we run: each call's stretch from the read to the await is atomic, and so is its stretch after the await; between the two, the other call runs.</p>
-    <p>120. The second Run makes the first approval slower: 110.<br>
-      In both orders a deposit is lost. Which one depends on the order of the approvals, which the program does not fix.</p>
-    <p>If asked: does this happen in practice? Yes, in any read, wait, write on shared state: a counter updated after a request, a cache refreshed after a fetch. The rule is Property 4's: whatever was assumed before the await is re-established after it.</p>
-  </aside>
+  
 </section>
 
 <!-- 15 -->
 <section id="deposits-stage" data-stage="deposits" data-steps="9" data-predicts="3">
   <h2>Demo 4: two deposits<span class="h2sub">equal approvals; then the first one slower</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="deposit(10) reads the balance: b is 100."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="At the await, deposit(10) is suspended. Its rest is kept, with b = 100. The script goes on to line 8."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="deposit(20) reads the balance." data-ask="What does it read?" data-options="100|110|it waits until deposit(10) has finished"></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="100: deposit(10) is suspended before its write. Nothing has changed the balance yet." data-answer="0"></span>
-  <span class="fragment step-note" data-fragment-index="4" data-notes="Both calls are suspended, each with its own b = 100. The stack is empty; the two approvals are in flight."></span>
-  <span class="fragment step-note" data-fragment-index="5" data-notes="100 ms: both approvals have arrived, and each rest is in the queue. They run one after the other, the first to arrive first."></span>
-  <span class="fragment step-note" data-fragment-index="6" data-notes="The rest of deposit(10) writes b + n: 110."></span>
-  <span class="fragment step-note" data-fragment-index="7" data-notes="The rest of deposit(20) writes b + n, with the b it read before it was suspended: 120. The deposit of 10 is lost."></span>
-  <span class="fragment step-note" data-fragment-index="8" data-notes="120, where 130 was required: each call was suspended between its read and its write, and the other ran there. First approval slower: 110."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="deposit(10) reads the balance: b is 100."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="At the await, deposit(10) is suspended. Its rest is kept, with b = 100. The script goes on to line 8."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="deposit(20) reads the balance." data-ask="What does it read?" data-options="100|110|it waits until deposit(10) has finished"></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="100: deposit(10) is suspended before its write. Nothing has changed the balance yet." data-answer="0"></span>
+  <span class="fragment step-note" data-fragment-index="4" data-caption="Both calls are suspended, each with its own b = 100. The stack is empty; the two approvals are in flight."></span>
+  <span class="fragment step-note" data-fragment-index="5" data-caption="100 ms: both approvals have arrived, and each rest is in the queue. They run one after the other, the first to arrive first."></span>
+  <span class="fragment step-note" data-fragment-index="6" data-caption="The rest of deposit(10) writes b + n: 110."></span>
+  <span class="fragment step-note" data-fragment-index="7" data-caption="The rest of deposit(20) writes b + n, with the b it read before it was suspended: 120. The deposit of 10 is lost."></span>
+  <span class="fragment step-note" data-fragment-index="8" data-caption="120, where 130 was required: each call was suspended between its read and its write, and the other ran there. First approval slower: 110."></span>
   <div class="stage-wrap">
     <div class="stage-side"><p class="stage-lead">Two deposits on one balance, 10 and 20, each suspended at its approval. Required: 130.</p><div class="stage-ask" hidden></div><p class="core fragment" data-fragment-index="8">Property 4 ends at the <code>await</code>: the read and the write are two stretches, and the other call runs between them. 120.</p></div>
     <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=deposits&amp;embed=1" title="Two deposits, the demo"></iframe><span class="stage-info" data-tip="In front, our code; behind it, the runtime; at the back, the host. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
-  <p class="stage-cap" data-note0="One thread runs our code. The balance is 100. We call deposit(10), then deposit(20)." style="font-size: 0.85em">One thread runs our code. The balance is 100. We call deposit(10), then deposit(20).</p>
-  <aside class="notes">
-    <p>One thread runs our code. The balance is 100. We call deposit(10), then deposit(20).<br>
-      Each click is one step; the text under the demo follows it, and a prediction is asked on the left before its step is shown.</p>
-  </aside>
+  <p class="stage-cap" data-caption0="One thread runs our code. The balance is 100. We call deposit(10), then deposit(20)." style="font-size: 0.85em">One thread runs our code. The balance is 100. We call deposit(10), then deposit(20).</p>
+  
 </section>
 
 <!-- part 3 -->
@@ -2187,9 +2060,7 @@ tick at 504 ms"></pre></div>
   <div class="eyebrow">PART 3</div>
   <h1>Other languages</h1>
   <div class="sub">the same programs, against the model</div>
-  <aside class="notes">
-    <p>Properties 1 to 4 describe JavaScript. This part locates other languages with respect to them: first the two programs in Python, run in the page; then four questions, each with a table for Python, C#, Rust, Kotlin, Go and Java. About ten minutes.</p>
-  </aside>
+  
 </section>
 
 <!-- 16 -->
@@ -2255,20 +2126,7 @@ waits 0 seconds: 120"></pre></div>
     <div class="box fragment current-visible" data-fragment-index="0">A bare call runs nothing; Python warns. <code>create_task</code> queues the work: B, A, C Ada. An <code>await</code> on a finished result goes straight on: 130; <code>sleep(0)</code> suspends: 120.</div>
     <div class="box fragment" data-fragment-index="1">A coroutine object that is never awaited never runs:<br>its work is lost, and the warning is the only sign of it.</div>
   </div>
-  <aside class="notes">
-    <p>The two programs in Python, with asyncio.<br>
-      On the left, load called in two ways: the bare call, then create_task.<br>
-      Cards: what is printed?<br>
-      The bare call prints a warning, then B: in Python a call builds a coroutine object and runs nothing, and Python warns that the coroutine was never awaited.<br>
-      create_task puts the work in the queue: B, A, C Ada. Even A comes after B.<br>
-      Two languages, two answers to the question of the next slide, does a call start the work: in JavaScript the call starts the work, in Python it only describes it.</p>
-    <p>On the right, the two deposits, with an approve that has nothing to wait for, then one that waits for zero seconds.<br>
-      Cards: the two balances?<br>
-      130, then 120. In Python an await on a result that is already there goes straight on, and the deposit is one stretch; sleep(0) really suspends.<br>
-      In JavaScript every await suspends, even await null: 120 both times.<br>
-      The first press loads Python into the page and takes a few seconds.</p>
-    <p>If asked: why does Python warn? Because a coroutine object that is never awaited never runs: its work is lost, and the warning is Python's only sign of it.</p>
-  </aside>
+  
 </section>
 
 <!-- 6 -->
@@ -2291,16 +2149,7 @@ waits 0 seconds: 120"></pre></div>
     </div>
   </div>
   <div class="box fragment">Two realizations of one model. In JavaScript and C# the call runs the function to its first <code>await</code>. In Python and Rust the call builds an object and runs nothing, session 5&rsquo;s thunk usable once: <code>await</code> runs it in place, <code>create_task</code> or <code>spawn</code> queues it.</div>
-  <aside class="notes">
-    <p>Properties 1 to 4 describe JavaScript.<br>
-      Four questions locate any other language with respect to the four properties: when the work starts, what an await does when the value is already there, which thread resumes, and how the rest is handed to the result it waits for.<br>
-      Each is a design decision of the language, and a small run shows it: load and the two deposits, written in each language and run on this machine. The appendix ends with the full table.</p>
-    <p>Does a call start the work?<br>
-      In JavaScript and C#, yes: the call runs the function to its first await, and then returns. A, B, C Ada.<br>
-      In Python, no: the call builds a coroutine object and runs nothing; the program prints B and a warning. With create_task the work is put in the queue: B, A, C Ada. In Rust a future runs when it is polled. In Go and Java the work runs on a goroutine or a virtual thread of its own; the order is not fixed: these runs printed B first, and A first is allowed.<br>
-      Each row is the default of its language. Python 3.12 added an eager task factory: with it, create_task runs the task at once up to its first wait, A, B, C Ada. Kotlin's launch queues the coroutine with the default start, CoroutineStart.DEFAULT, on a dispatcher that queues; with CoroutineStart.UNDISPATCHED it runs at once up to its first suspension. The runs: node 25, Python 3.14, .NET 10, Kotlin 2.4 with kotlinx.coroutines 1.10, Go 1.27, Java 26.<br>
-      The Python coroutine object is close to session 5's thunk, with the difference that it can be run once only.</p>
-  </aside>
+  
 </section>
 
 <!-- 6b -->
@@ -2322,12 +2171,7 @@ waits 0 seconds: 120"></pre></div>
     </div>
   </div>
   <div class="box fragment">Of these languages only JavaScript suspends at every <code>await</code>. Elsewhere an <code>await</code> on a value already there is not a suspension point: on one thread, the stretch around it stays atomic.</div>
-  <aside class="notes">
-    <p>Is every await a suspension point?<br>
-      In JavaScript yes: the deposits give 120 even with await null.<br>
-      In Python no: 130 when the awaited result is already available, 120 with await asyncio.sleep(0). C#, Rust and Kotlin: an await on a completed result goes straight on.<br>
-      So elsewhere an await is a suspension point only when its value is not yet available.</p>
-  </aside>
+  
 </section>
 
 <!-- 6c -->
@@ -2350,12 +2194,7 @@ waits 0 seconds: 120"></pre></div>
     </div>
   </div>
   <div class="box fragment">Where a pool resumes the computations, two of them run at the same time: the model&rsquo;s first assumption is gone, and Property 4 with it, although every suspension point is written. Session 7.</div>
-  <aside class="notes">
-    <p>Which thread resumes?<br>
-      This row is session 7's. In JavaScript and in Python's loop, the one thread: always 120.<br>
-      In C# the thread is chosen by the synchronization context in force at the await. A console program has none, so a thread of the pool resumes: 110 or 120 in these runs, .NET 10. The thread of a window has one, and it brings every rest back to that thread, as in the model. A context made by hand, pumped by one thread, did so in our runs; a real window was not run. In Rust the executor decides; in Kotlin the dispatcher. In Go and Java, several threads: 110 or 120 in these runs, and 130 is possible.<br>
-      Wherever a pool of threads resumes suspended computations, two of them can run at the same time, and property 4 is gone although every suspension point is still written in the text.</p>
-  </aside>
+  
 </section>
 
 <!-- 6d -->
@@ -2379,16 +2218,7 @@ waits 0 seconds: 120"></pre></div>
     </div>
   </div>
   <div class="box fragment">JavaScript could not block its one thread: passing the rest was the only way to wait. Languages with threads could block first, and added this later. With <code>await</code>, the compiler writes the registration for us.</div>
-  <aside class="notes">
-    <p>The fourth question is not decided by a run but by the interface each language gives: how the rest of a waiting function is attached to the result it waits for.<br>
-      In JavaScript, p.then(k) registers k on the promise p; before the promise entered the language in 2015, an asynchronous function took a callback, as on the callbacks slide. await is defined through the same step: await p registers the rest of the function on p, with two continuations, one for the value and one that throws the error.</p>
-    <p>C# and Java had threads, and their first futures could block: Java 5's Future.get, 2004, and C#'s Task.Wait park one thread while the others run. The registration came later: C#'s Task.ContinueWith with .NET 4, 2010; Java's CompletableFuture with Java 8, 2014, where thenApply and thenCompose split what JavaScript's then does in one, since then flattens a promise returned by k.<br>
-      Python's asyncio has add_done_callback on a future; code rarely calls it, and a task uses it to resume itself.<br>
-      Kotlin's compiler gives every suspend function one more parameter, a Continuation, and the library resumes it with resumeWith; the appendix shows the generated class.<br>
-      Rust has no registration: the executor polls a future, and the future, when it cannot finish, keeps the Waker it was given and calls it when it can make progress, so that the executor polls it again.<br>
-      Go and Java's virtual threads have none either: the waiting code blocks, and the runtime parks the goroutine or virtual thread with its whole stack.</p>
-    <p>Why then is so visible in JavaScript: the language had one thread and could not block, so from 1995 to 2017, when await arrived, every program that waited passed its rest by hand, by callback and then by then. Elsewhere await hides a mechanism that most programmers never meet.</p>
-  </aside>
+  
 </section>
 
 <!-- part 4 -->
@@ -2396,16 +2226,14 @@ waits 0 seconds: 120"></pre></div>
   <div class="eyebrow">PART 4</div>
   <h1>Conclusion</h1>
   <div class="sub">the four properties; what is left open; the lab, and session 7</div>
-  <aside class="notes">
-    <p>The four properties in one line each, the question of every week for this model, what the block leaves open, and what comes next. Five minutes.</p>
-  </aside>
+  
 </section>
 
 <!-- 17 -->
 <section id="closing">
   <h2>Conclusion of block 2</h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="The question of every week, for this model.&#10;The language guarantees atomicity between suspension points, given one thread.&#10;A library gives combinators over promises: Promise.all, gather.&#10;The programmer is responsible for every invariant that must survive a wait: what was assumed before the await is re-established after it."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="What this block leaves open.&#10;The suspended computation was drawn as an object that moves from the stack to the heap, to the queue, and back.&#10;Three questions: what is that object; who holds it while the function waits; who invokes it, and when.&#10;They are answered on the page of the lab's optional quest: the object is a continuation, the rest of the function as a value; a promise holds it; the loop invokes it, through a small driver that the quest writes."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="The question of every week, for this model."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="What this block leaves open."></span>
   <table class="qs">
     <tr><td class="s">1</td><td>Suspended only at an <code>await</code> in it; after <code>load();</code> the caller goes on, after <code>await load();</code> it waits.</td></tr>
     <tr><td class="s">2</td><td>Waits overlap; on one thread, running never does.</td></tr>
@@ -2419,9 +2247,7 @@ waits 0 seconds: 120"></pre></div>
   </div>
   <p class="core fragment" data-fragment-index="1" style="position: relative; left: -6px; top: 36px; width: 1430px"><b>Left open</b>: what the kept rest of a function is; who holds it while the function waits; who invokes it, and when. The lab&rsquo;s optional quest.</p>
   <a class="apx" href="#/a-cont" data-tip="the suspended computation as a value: six slides in reserve">appendix</a>
-  <aside class="notes">
-    <p>The four properties, in one line each.</p>
-  </aside>
+  
 </section>
 
 <!-- 18 -->
@@ -2431,13 +2257,7 @@ waits 0 seconds: 120"></pre></div>
     <tr><td class="s">lab</td><td>The warm-up: the two blocks of today, on JavaScript with Python beside it. The optional quest: a small page on continuations, with exercises on paper; the appendix of this deck is its reading.</td></tr>
     <tr><td class="s">7</td><td>Several threads on one memory. The repaired deposit, run by two Java threads twenty thousand times: 130 in about 98 runs of 100, 110 or 120 in the others. The suspension points are gone, and with them the atomic stretch.</td></tr>
   </table>
-  <aside class="notes">
-    <p>The lab this week is the warm-up on the two blocks of today; nothing is collected.<br>
-      The quest is optional: a small page on continuations, exercises by hand, on paper; the six slides of the appendix are its reading.</p>
-    <p>Next week the one-thread assumption goes: several threads on one memory.<br>
-      The repaired deposit of part 1, the read after the wait, run by two Java threads twenty thousand times, gives 130 in about ninety-eight runs of a hundred and 110 or 120 in the others.<br>
-      The suspension points are gone, and with them the atomic stretch; what replaces it is the subject of session 7.</p>
-  </aside>
+  
 </section>
 
 
@@ -2446,9 +2266,7 @@ waits 0 seconds: 120"></pre></div>
   <div class="eyebrow">APPENDIX</div>
   <h1>The suspended computation as a value</h1>
   <div class="sub">continuations, a promise, a loop, a generator and a driver</div>
-  <aside class="notes">
-    <p>In reserve, reached by the appendix button of the conclusion: the mechanism behind the properties of part 1. The suspended computation is a continuation; a promise holds it; a loop invokes it; the compiler produces it as a generator. About forty lines of JavaScript in all, and the first program run on them.</p>
-  </aside>
+  
 </section>
 
 <!-- A1 -->
@@ -2472,21 +2290,14 @@ waits 0 seconds: 120"></pre></div>
     <p>In <code>double(x) + 1</code>, while <code>double(x)</code> is computed, the rest is the context <code>[&middot;] + 1</code>: the function <code>v =&gt; v + 1</code>. At the <code>await</code> of <code>load</code>, the rest is <code>user =&gt; { console.log("C", user); }</code>.</p>
   </div>
   <a class="apx back" href="#/closing">back</a>
-  <aside class="notes">
-    <p>The first of the three questions: what is the kept rest of a function?<br>
-      It is a function: the rest of the computation from the suspension point, taking the awaited value as its argument. The field's word is continuation.<br>
-      Together with the values of the local variables it uses, it is a closure, as in session 5.</p>
-    <p>load written without await: the continuation is handed to the promise explicitly, by then.<br>
-      We run it: A, B, C Ada, the same three lines.<br>
-      Leroy defines the continuation of a whole program as the sequence of computations that remain to be performed; what await keeps is smaller, the rest of one function, invoked once.</p>
-  </aside>
+  
 </section>
 
 <!-- A2 -->
 <section id="a-cps">
   <h2>Continuation-passing style<span class="h2sub">a function that cannot return takes its continuation</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="Three candidates. A moves the addition into the continuation given to doubleK: it is the context [·] + 1 of the definition.&#10;B adds 1 to what doubleK returns, the timer's handle, and discards the sum: k gets 6, the addition was performed on the wrong value.&#10;C calls k at once with the timer's handle plus 1, 11 in this run of Node, a meaningless number, and fails 100 ms later, when doubleK tries to call a continuation it was not given.&#10;We run them: 7; 6; 11 and then a failure."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="The transformation has a structural cost. fK had to take a continuation because it needs a result that comes later; so must every function that calls fK and needs its result, and so on up the chain of calls. Adya and colleagues call this stack ripping; Nystrom calls it the colour of a function. It is the reason a function that uses await must itself be declared async, and so must every caller that awaits its result. Threads do not have this cost."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="Three candidates. A moves the addition into the continuation given to doubleK: it is the context [·] + 1 of the definition."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="The transformation has a structural cost. fK had to take a continuation because it needs a result that comes later; so must every function that calls fK and needs its result, and so on up the chain of calls. Adya and colleagues call this stack ripping; Nystrom calls it the colour of a function. It is the reason a function that uses await must itself be declared async, and so must every caller that awaits its result. Threads do not have this cost."></span>
   <pre><code class="language-javascript">// doubleK asks a server for 2x; the answer goes to k, 100 ms later
 const doubleK = (x, k) => setTimeout(() => k(2 * x), 100);
 const f = x => double(x) + 1;   // double cannot return: write fK</code></pre>
@@ -2497,12 +2308,7 @@ B gives k the value 6
 C gives k the value 11, then fails: k is not a function"></pre></div>
   <p class="core fragment" data-fragment-index="1"><b>The cost</b>: every function that needs the result of <code>fK</code> for its own result takes a continuation too, up the chain of calls. Hence <code>async</code> on every function that uses <code>await</code>, and on every caller that awaits its result.</p>
   <a class="apx back" href="#/closing">back</a>
-  <aside class="notes">
-    <p>A function whose result is not available when it is called cannot return it. It can instead take its own continuation as an argument and invoke it when the result exists: continuation-passing style.<br>
-      doubleK asks a server for 2x and calls k with the answer 100 ms later.<br>
-      f is x maps to double of x plus 1. Given doubleK, write fK: the same function, in this style.<br>
-      Written alone, then compared with a neighbour.</p>
-  </aside>
+  
 </section>
 
 <!-- A3 -->
@@ -2528,21 +2334,13 @@ C gives k the value 11, then fails: k is not a function"></pre></div>
   </div>
   <p class="ask"><code>resolve</code> has the waiting continuations. Call each of them now, inside <code>resolve</code>, or put each in the queue for the loop?</p>
   <a class="apx back" href="#/closing">back</a>
-  <aside class="notes">
-    <p>The second question: who holds the rest while the function waits? A promise.<br>
-      A promise is a cell with a state, pending then fulfilled, a value, and a list of continuations waiting for the value.<br>
-      then registers a continuation; resolve writes the value, once, and makes the waiting continuations ready.<br>
-      If the value is already there, then puts the continuation in the queue at once.</p>
-    <p>The box on the right: the heap is garbage collected, and a promise stays as long as something can reach it. A promise that is never resolved and no longer reachable is collected together with the computations waiting on it: they never resume, and nothing reports it, no error, no leak. One that is never resolved but still reachable keeps its waiting computations alive for ever: a memory leak. Either way the program waits for ever, and no finite execution shows the violation: a liveness property.</p>
-    <p>The one design decision in these twelve lines: what resolve does with the waiting continuations.<br>
-      Two answers are possible. On the cards: which does JavaScript take?</p>
-  </aside>
+  
 </section>
 
 <!-- A4 -->
 <section id="a-sched">
   <h2>The queue and the loop<span class="h2sub">the scheduler</span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="The test that separates the two answers registers a continuation on a pending promise, resolves it, and prints a line.&#10;Call now: k 1, then after resolve. Queue: after resolve, then k 1.&#10;Both are built in real systems: Cornell's teaching promise, OCaml's Lwt and C#'s TaskCompletionSource, by default, take the first; JavaScript takes the second, as rule 2.2.4 of Promises/A+: a function given to then is never called before the current code has run to completion.&#10;The second answer keeps property 4 true in the presence of promises. With the first, every resolve would be an interleaving point.&#10;&#10;Liveness enters here in one sentence: a computation waiting on a promise that nobody resolves waits for ever, and no finite execution shows the violation."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="The test that separates the two answers registers a continuation on a pending promise, resolves it, and prints a line."></span>
   <script class="src" type="text/plain" id="src-loop">
     const ready = []; let scheduled = false;
     function later(k) {                 // put k in the queue
@@ -2559,12 +2357,7 @@ C gives k the value 11, then fails: k is not a function"></pre></div>
 queue     : after resolve | k 1"></pre></div>
   <p class="core fragment" data-fragment-index="0">JavaScript queues: a function given to <code>then</code> is never called before the current code has run to completion (<a class="ref" href="https://promisesaplus.com/#point-34" target="_blank" rel="noopener">Promises/A+, 2.2.4</a>). Property 3 is these lines. Property 4 is kept by <code>then</code> and <code>resolve</code> calling <code>later</code> instead of <code>k</code>.</p>
   <a class="apx back" href="#/closing">back</a>
-  <aside class="notes">
-    <p>The third question: who invokes the rest, and when? The loop.<br>
-      later puts a continuation in the queue and makes sure the loop will run; run takes one continuation at a time and runs it to its end.<br>
-      Together they are the scheduler: the component that decides what runs next.<br>
-      The loop borrows the host's timer to start, so it sits on top of JavaScript's own loop; it is enough to see the mechanism.</p>
-  </aside>
+  
 </section>
 
 <!-- A5 -->
@@ -2612,22 +2405,16 @@ queue     : after resolve | k 1"></pre></div>
     </div>
   </div>
   <a class="apx back" href="#/closing">back</a>
-  <aside class="notes">
-    <p>Continuations written by hand fail on control structures: with an await inside a loop, the rest of the function is the remaining iterations, which is not a function one writes out.<br>
-      A compiler needs a uniform representation of a suspended function: an object that holds the local variables and a position in the code, resumable from that position.<br>
-      Session 5 built this object for generators: yield suspends, next resumes, and the object keeps the variables and a program counter. One feature was not needed then: a value can be sent in at resumption.<br>
-      Left: g.next("Ada") makes "Ada" the value of the yield. The first call to next has no yield to fill; its argument is dropped.<br>
-      Right: the loop with a wait inside, driven by the driver of the next slide: B, then 0 Ada, 1 Ada, 2 Ada; the object keeps i.</p>
-  </aside>
+  
 </section>
 
 <!-- A6 -->
 <section id="a-drive" data-stage="ours" data-steps="5" data-predicts="">
   <h2>An <code>async</code> function as a generator and a driver<span class="h2sub"><code>await</code> became <code>yield</code></span></h2>
-  <span class="fragment step-note" data-fragment-index="0" data-notes="load yields the promise p and is suspended: g keeps its position. step gives itself to p.then, and p keeps it among its waiters."></span>
-  <span class="fragment step-note" data-fragment-index="1" data-notes="drive returns. The script prints B."></span>
-  <span class="fragment step-note" data-fragment-index="2" data-notes="300 ms: the timer's function calls p.resolve(&quot;Ada&quot;). resolve does not call step: it puts it in ready, our queue."></span>
-  <span class="fragment step-note" data-fragment-index="3" data-notes="run, our loop, takes step from ready and calls it. g.next(&quot;Ada&quot;) puts Ada where the yield was, and load prints C Ada."></span>
+  <span class="fragment step-note" data-fragment-index="0" data-caption="load yields the promise p and is suspended: g keeps its position. step gives itself to p.then, and p keeps it among its waiters."></span>
+  <span class="fragment step-note" data-fragment-index="1" data-caption="drive returns. The script prints B."></span>
+  <span class="fragment step-note" data-fragment-index="2" data-caption="300 ms: the timer's function calls p.resolve(&quot;Ada&quot;). resolve does not call step: it puts it in ready, our queue."></span>
+  <span class="fragment step-note" data-fragment-index="3" data-caption="run, our loop, takes step from ready and calls it. g.next(&quot;Ada&quot;) puts Ada where the yield was, and load prints C Ada."></span>
   <script class="src" type="text/plain" id="src-drive">
     function drive(gen) {
       const g = gen();
@@ -2655,16 +2442,9 @@ queue     : after resolve | k 1"></pre></div>
     </div>
     <div class="stage-frame"><iframe class="stage" data-src="demos6/stage/stage.html?scenario=ours&amp;embed=1" title="the run of load on our own promise, queue, loop and driver"></iframe><span class="stage-info" data-tip="Our objects in the boxes: p, a P; g, a generator; step, the continuation. The arrow keys step through the run; drag, scroll and double-click move the view.">i</span></div>
   </div>
-  <p class="stage-cap" data-note0="drive makes g and calls step, which calls g.next(): load runs on the stack and prints A.">drive makes g and calls step, which calls g.next(): load runs on the stack and prints A.</p>
+  <p class="stage-cap" data-caption0="drive makes g and calls step, which calls g.next(): load runs on the stack and prints A.">drive makes g and calls step, which calls g.next(): load runs on the stack and prints A.</p>
   <a class="apx back" href="#/closing">back</a>
-  <aside class="notes">
-    <p>The definition, as the course text gives it: an asynchronous function can be defined as a generator that yields the promises it waits for, together with a driver, a function that, for each yielded promise, registers "resume the generator with the value" as the promise's continuation.<br>
-      load, with yield for await; drive, seven lines. The first step runs at once: A prints before B.<br>
-      Run on the promise and loop of the two slides before, it prints A, B, C Ada, as the language's own async function did.<br>
-      This is the informative desugaring of the proposal that added async functions to JavaScript; our drive is its spawn reduced to the success case: no promise returned, no failure, a promise expected at every yield. Compilers emit the same shape: C# a nested type with a state field and a MoveNext method, Kotlin a continuation class with a label, Python's coroutines are based on generators internally.</p>
-    <p>The three questions, answered: the rest of the function is a continuation, in compiled form the generator object; the promise holds it; the loop invokes it, when the value has arrived and the stack is empty.<br>
-      Each click is one step of the demo, with our objects in the boxes.</p>
-  </aside>
+  
 </section>
 
 <!-- A7 -->
@@ -2683,12 +2463,7 @@ queue     : after resolve | k 1"></pre></div>
   </table>
   <div class="box fragment"><b>Task management</b>: who may run between two of our lines. <b>Stack management</b>: who keeps the suspended state. Two independent questions (<a class="ref" href="https://www.usenix.org/legacy/publications/library/proceedings/usenix02/full_papers/adyahowell/adyahowell.pdf" target="_blank" rel="noopener">Adya et al., 2002</a>).</div>
   <a class="apx back" href="#/closing">back</a>
-  <aside class="notes">
-    <p>The full table, for reference: the first three decisions of part 3, and one that the appendix explains, who keeps the suspended state.<br>
-      The first three columns are the runs for JavaScript, Python, C#, Go and Java; the Rust and Kotlin cells are the recorded checks of S6_language_checks.md; OCaml's third cell is the design, not a run. The last column is what each compiler or runtime does, from the languages' own documentation and the recorded runs; C#'s compiler, for instance, turns each async method into a state machine.<br>
-      Adya and colleagues separate task management, who may run between two of our lines, from stack management, who keeps the suspended state; the two questions are independent, and every language here is a point in that plane.<br>
-      The split of the automatic row into the compiler's and the runtime's is this course's, and it is the stackless against stackful distinction of de Moura and Ierusalimschy.</p>
-  </aside>
+  
 </section>
 
 <section id="a-workers">
@@ -2723,15 +2498,7 @@ fib(40) at 563 ms"></pre></div>
     </div>
   </div>
   <a class="apx back" href="#/rtc">back</a>
-  <aside class="notes">
-    <p>JavaScript can run code of ours on another thread: a Web Worker in the browser, worker_threads in Node.<br>
-      A worker is a second instance of the model: its own loop, stack, heap and queue, beside the first.<br>
-      The two threads share no object. postMessage sends a copy of a value, by structured cloning, and the copy arrives in the other thread&#39;s queue as a function to run.</p>
-    <p>The program: the main thread starts a worker, sends it 40, and sets a timer of 100 ms; the worker computes fib(40) and sends the result back.<br>
-      The tick comes at about 104 ms, the result at about 570 ms: the computation does not hold the main thread. On the slide of the timer and the computation, the same kind of computation on the main thread delayed the tick to about 504 ms.<br>
-      Recorded with node 25, five runs: the tick at 103 to 105 ms, the result at 563 to 617 ms.</p>
-    <p>On each thread Properties 1 to 4 hold, since no other thread touches its objects. The exception is a SharedArrayBuffer: memory that both threads read and write, with Atomics for its operations. With it two threads can access the same location at the same time, and data races return: session 7. Messages between threads are session 8.</p>
-  </aside>
+  
 </section>
 
 <section id="a-repair">
@@ -2772,14 +2539,7 @@ fib(40) at 563 ms"></pre></div>
     </div>
   </div>
   <a class="apx back" href="#/race">back</a>
-  <aside class="notes">
-    <p>The program of the race, and beside it the repair: the same two lines in the other order.<br>
-      The run calls each version in both arrival orders: equal approvals, then the approval of 10 slower.<br>
-      deposit gives 120 and 110; repaired gives 130 both times.</p>
-    <p>Why it works: the read and the write now lie in one stretch with no await, and by Property 4 no other computation runs inside it. Each deposit takes effect in that stretch, and any instant of it serves as its linearization point.<br>
-      The rule is general for cooperative code, as Adya and colleagues put it: after a yield point, re-read whatever may have changed.<br>
-      Next week the stretch is no longer atomic: on two threads the repaired deposit loses money again.</p>
-  </aside>
+  
 </section>
 
 <section id="a-ioc">
@@ -2819,12 +2579,7 @@ fib(40) at 563 ms"></pre></div>
     </div>
   </div>
   <a class="apx back" href="#/callbacks">back</a>
-  <aside class="notes">
-    <p>When we pass a callback, we give our rest to code that is not ours, and it decides: whether to call it, when, and how many times. Three ways that goes wrong.<br>
-      Twice: a faulty library calls the callback twice, and our rest, a deposit for instance, runs twice. A promise is a write-once cell: the first res settles it, and a later res does nothing. new Promise(res =&gt; { res(1); res(2); }) is fulfilled with 1. In the appendix's promise by hand it is the line that returns when the state is no longer pending.<br>
-      Now or later: the cached userK calls back inside the call on a hit and from a timer on a miss, so show prints B last on a hit and first on a miss. Wrapped in a promise, the callback is the promise's res, and what then registers always goes to the queue, Promises/A+ 2.2.4: B comes first both times. The run prints B, C Ada, B, C Ada.<br>
-      Never: the rest waits for ever and nothing reports it, with a callback or with a promise. A promise does not fix this; a timer raced against it, Promise.race, ends the wait. It is a liveness property, as on the slide of the promise by hand: no finite execution shows the violation.</p>
-  </aside>
+  
 </section>
 
 </div>
@@ -2836,7 +2591,6 @@ fib(40) at 563 ms"></pre></div>
 </div>
 </div>
 <script src="vendor/reveal/reveal.min.js"></script>
-<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
 <script src="vendor/hljs/highlight.min.js"></script>
 <script src="vendor/hljs/languages/ocaml.min.js"></script>
 <script src="vendor/hljs/languages/python.min.js"></script>
@@ -2942,7 +2696,7 @@ fib(40) at 563 ms"></pre></div>
     slideNumber: 'c/t', controls: false, progress: true, navigationMode: 'linear',
     scrollActivationWidth: null,                  // never switch to reveal's scroll view in a narrow window
     keyboard: { 84: () => toggleToc() },          // T: list of parts
-    plugins: [ RevealNotes ]
+    plugins: [ ]
   });
 
 
@@ -3192,7 +2946,7 @@ fib(40) at 563 ms"></pre></div>
     if (fr.contentWindow) fr.contentWindow.postMessage({ type: 'stage', scenario: sec.dataset.stage, step: st[k].step, reveal: st[k].reveal }, '*');
     // the text of the step under the frame: the note of the fragment shown; on the left, the prediction with its options
     const note = sec.querySelector('p.stage-cap'), ask = sec.querySelector('.stage-ask'), cur = f >= 0 ? sec.querySelector('.step-note[data-fragment-index="' + f + '"]') : null;
-    if (note) note.textContent = cur ? cur.dataset.notes.split('\n')[0] : note.dataset.note0;
+    if (note) note.textContent = cur ? cur.dataset.caption.split('\n')[0] : note.dataset.caption0;
     if (ask) {
       const q = cur && (cur.dataset.ask ? cur : (cur.dataset.answer !== undefined ? sec.querySelector('.step-note[data-fragment-index="' + (f - 1) + '"]') : null));
       if (!q) ask.hidden = true;
@@ -3201,7 +2955,7 @@ fib(40) at 563 ms"></pre></div>
   };
   ['fragmentshown', 'fragmenthidden', 'slidechanged', 'ready'].forEach(ev => Reveal.on(ev, () => setTimeout(stageSync, 0)));
   // In the print every frame shows its last step.
-  if (PRINT) Reveal.on('pdf-ready', () => document.querySelectorAll('section[data-stage]').forEach(sec => { const cap = sec.querySelector('p.stage-cap'), sn = sec.querySelectorAll('.step-note'); if (cap && sn.length) cap.textContent = sn[sn.length - 1].dataset.notes.split('\n')[0]; const fr = sec.querySelector('iframe.stage'), st = stageStates(sec), last = st[st.length - 1]; fr.src = fr.dataset.src + '&step=' + last.step + '&reveal=1'; }));
+  if (PRINT) Reveal.on('pdf-ready', () => document.querySelectorAll('section[data-stage]').forEach(sec => { const cap = sec.querySelector('p.stage-cap'), sn = sec.querySelectorAll('.step-note'); if (cap && sn.length) cap.textContent = sn[sn.length - 1].dataset.caption.split('\n')[0]; const fr = sec.querySelector('iframe.stage'), st = stageStates(sec), last = st[st.length - 1]; fr.src = fr.dataset.src + '&step=' + last.step + '&reveal=1'; }));
 
   // For checking the deck by screenshots: ?press=1 presses the Run buttons of the slide shown (five times on slide 2).
   if (/[?&]press=1/.test(location.search)) Reveal.on('ready', () => setTimeout(() => Reveal.getCurrentSlide().querySelectorAll('button.run').forEach(b => { for (let i = 0; i < (b.closest('.runbar') ? 5 : 1); i++) b.onclick(); }), 300));
