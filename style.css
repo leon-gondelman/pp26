@@ -439,23 +439,14 @@ footer.site .meta a:hover{text-decoration:underline}
    the title in the schedule, three tiles on the session's page */
 .e-test{--e:var(--acc-t);--eb:var(--acc-l)} .e-why{--e:var(--orng);--eb:var(--orng-b)} .e-case{--e:var(--wine);--eb:var(--wine-l)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-/* the schedule: three outline circles under the date, centered on it, each on the
-   edge of a block line: why between the title and block 1, test between the blocks,
-   case under block 2. They stand beside the block lines, in the block rows on a wide
-   window and in the title cell's copies of the blocks elsewhere, so they follow the
-   lines whatever the title's height. Under the cursor a circle fills with a dim
-   yellow and unrolls its name. */
-tr.block td.ttl,td.ttl .blk-m{position:relative}
-.ctop,.cbot{position:absolute;left:var(--cx);display:flex;flex-direction:column;gap:.5rem;z-index:1}
-/* --cx: from the block line's left edge back to the centre of the date's text; the date
-   column is wider on a wide window; on a phone the column is too narrow and the circles are hidden */
-td.ttl .blk-m{--cx:-3.35rem}
-@media (min-width:1240px){tr.block td.ttl{--cx:-3.5rem}}
-@media (max-width:760px){.ctop,.cbot{display:none}}
-tr.block td.ttl .ctop{top:0;transform:translate(-50%,-50%)}
-tr.block td.ttl .cbot{bottom:calc(1.05rem - .12rem);transform:translate(-50%,50%)}  /* the last row's extra padding, less a row's own */
-td.ttl .blk-m .ctop{top:-.225rem;transform:translate(-50%,-50%)}   /* half the lines' margin: the middle of the gap */
-td.ttl .blk-m .cbot{bottom:-.225rem;transform:translate(-50%,50%)}
+/* the schedule: three outline circles under the date, as one column in the date cell,
+   why, test, case, at equal distances whatever the height of the block lines beside
+   them. Under the cursor a circle fills with a dim yellow and unrolls its name; on a
+   phone the date column is too narrow and the circles are hidden. */
+td.date .dcol{display:inline-flex;flex-direction:column;align-items:center;gap:.5rem;vertical-align:top}
+td.date .dcol .d{align-self:flex-start}
+td.date .ecol{display:flex;flex-direction:column;gap:.5rem;margin-top:.1rem}
+@media (max-width:760px){td.date .ecol{display:none}}
 .eic{position:relative;display:block;width:1.2rem;height:1.2rem;color:var(--lbl);text-decoration:none}
 .eic svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.2;
   stroke-linecap:round;stroke-linejoin:round}
