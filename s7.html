@@ -52,8 +52,8 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
   <div class="text">
   <p class="dim">Session 7</p>
   <h1>Multi-Threading</h1>
-  <p class="stl">shared-memory concurrency: locks, atomic operations, ownership</p>
-  <p class="lead">Not yet. This session&rsquo;s outline may still change.</p>
+  <p class="stl">shared-memory concurrency: mutual exclusion, atomic instructions, independence of the order</p>
+  <p class="lead">Multi-threading: a run of the program is one interleaving of its threads&#x27; steps, and there are three ways to control the interleavings: forbid them with a lock, detect them and redo with an atomic instruction, or make them irrelevant by sharing nothing until the end.</p>
   </div>
   <figure class="art"><img src="art/threads.jpg" width="640" height="640" alt=""></figure>
 </section>
@@ -65,7 +65,12 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 
 <section>
   <h2>Materials</h2>
-  <ul class="materials"><li class="dim">Published when the session runs.</li></ul>
+  <ul class="materials"><li class="blockhead"><span class="blk">Block 1</span> Mutual exclusion</li><li class="m-slides c-lecture"><span class="mi">Slides <span class="dim">&mdash; coming soon</span></span></li><li class="blockhead"><span class="blk">Block 2</span> Atomic instruction with retry; independence of the order</li><li class="m-slides c-lecture"><span class="mi">Slides <span class="dim">&mdash; coming soon</span></span></li><li class="m-paper c-warmup"><span class="mi">Warm-up — the three structures of the lab in Java, each with a contract and a check <span class="dim">&mdash; coming soon</span></span></li><li class="m-warmup c-warmup"><span class="mi">The warm-up&#x27;s files — the structures with holes, and their checks <span class="dim">&mdash; coming soon</span></span></li><li class="m-lab c-quest"><span class="mi">Lab — the warm-up, and the quest: a mini ray tracer <span class="dim">&mdash; coming soon</span></span></li></ul>
+</section>
+
+<section>
+  <h2>Lecture</h2>
+  <dl><div class="field"><dt>Main topics</dt><dd>The interleaving model; data races and atomicity violations; locks, deadlock and the lock order; monitors and the wait in a loop; compare-and-set, Treiber&#x27;s stack and linearizability; lock-free and wait-free; a count per thread and the parallel fold; the memory model&#x27;s promise.</dd></div><div class="field"><dt>You write</dt><dd>Java</dd></div><div class="field"><dt>You only read</dt><dd>OCaml 5, Rust</dd></div></dl>
 </section>
 
   </div>

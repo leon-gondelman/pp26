@@ -623,6 +623,8 @@ html:not(.pal-old) a.etile:hover .go{color:var(--acc-t)}
 .lecl a,.labfiles a{text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
 .lecl a:hover,.labfiles a:hover{text-decoration-color:currentColor}
 .lecl .sep,td.labf .sep{color:var(--ink3);margin:0 .4em;font-weight:400}
+.lecl .soon,.labfiles .soon{color:var(--ink3);font-weight:400}
+.lecl:has(> .soon),.labfiles:has(> .soon){white-space:normal}   /* the words may wrap; links stay on one line */
 td.labf a.sol{color:var(--file);font-weight:600;font-size:.84rem;text-decoration:underline;
   text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
 td.labf a.sol:hover{text-decoration-color:currentColor}
