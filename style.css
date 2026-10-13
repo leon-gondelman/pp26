@@ -464,11 +464,14 @@ td.ttl .blk-m .cbot{bottom:-.225rem;transform:translate(-50%,50%)}
 .eic.dim svg>g{color:color-mix(in srgb,var(--ink3) 32%,var(--bg))}
 .eic:hover svg>circle{fill:color-mix(in srgb,#e8c547 22%,var(--bg))}
 .eic.dim{color:color-mix(in srgb,var(--lbl) 32%,var(--bg))}
-.eic .lb{position:absolute;left:calc(100% + .12rem);top:50%;transform:translateY(-50%);z-index:2;
-  font:700 .74rem/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;text-indent:0;color:inherit;
+.eic .lb{position:absolute;left:calc(100% + .32rem);top:50%;transform:translateY(-50%);z-index:2;
+  font:700 .74rem/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;text-indent:0;color:var(--file);
   background:var(--bg);border-radius:4px;max-width:0;padding:0;overflow:hidden;
-  transition:max-width .38s ease-out,padding .38s ease-out;pointer-events:none}
+  transition:max-width .38s ease-out,padding .38s ease-out}
+a.eic:hover .lb{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+.eic.dim .lb{color:var(--ink3)}
 .eic:hover .lb,tbody.e3:hover .lb{max-width:11rem;padding:0 .25rem}   /* on the session's rows, the three unroll together */
+}
 /* under the lab: links to the session's lab solutions and homework, on a row of their own */
 tr.has-more td.mat,tr.has-more td.ttl,tr.block td{border-bottom:none}
 tr.morerow td{padding-top:.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--line-soft)}
@@ -789,4 +792,20 @@ table.sessions td.ttl{padding-right:.8rem}
 @media (max-width:760px) and (pointer:coarse){
   html:has(#cover){scroll-snap-type:y mandatory}
   .partband,table.sessions tbody tr:not(.block){scroll-snap-stop:always}
+}
+/* a session's file chips, PDF, HTML, OCaml, GitHub, solutions, and their separators, are
+   hidden until the cursor is on the session; they keep their place, so nothing moves.
+   Only where there is a cursor. */
+@media (hover:hover){
+  table.sessions tbody.ses .lecl,table.sessions tbody.ses .labfiles,table.sessions tbody.ses a.sol,
+  table.sessions tbody.ses td.labf .sep,table.sessions tbody.ses .lab-m .sep{visibility:hidden}
+  table.sessions tbody.ses:hover .lecl,table.sessions tbody.ses:hover .labfiles,table.sessions tbody.ses:hover a.sol,
+  table.sessions tbody.ses:hover td.labf .sep,table.sessions tbody.ses:hover .lab-m .sep{visibility:visible}
+}
+/* the session's title lights with the session: accent colour and a thin underline when the
+   cursor is on the session's box, as the chips and the circle names appear */
+@media (hover:hover){
+  table.sessions tbody.ses:hover td.ttl>a{color:var(--acc);text-decoration:underline;text-decoration-thickness:1px;
+    text-decoration-color:color-mix(in srgb,var(--acc) 45%,transparent);text-underline-offset:.18em}
+  table.sessions tbody.ses:hover td.ttl>a:hover{text-decoration-color:var(--acc)}
 }
