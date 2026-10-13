@@ -145,39 +145,39 @@ properties it guarantees, and the patterns that recur from one language to the n
 <div class="places box" id="places">
  <h2 class="boxhead">Five places it runs</h2>
  <div class="ptabs" role="tablist">
-  <button class="pv on" data-k="web" aria-controls="pc-web">
+  <button class="pv on" role="tab" aria-selected="true" data-k="web" aria-controls="pc-web">
     <img src="https://github.com/whatwg.png?size=96" alt=""><span>Every web page</span></button>
-  <button class="pv" data-k="node" aria-controls="pc-node">
+  <button class="pv" role="tab" aria-selected="false" data-k="node" aria-controls="pc-node">
     <img src="https://github.com/nodejs.png?size=96" alt=""><span>Node.js</span></button>
-  <button class="pv" data-k="srv" aria-controls="pc-srv">
+  <button class="pv" role="tab" aria-selected="false" data-k="srv" aria-controls="pc-srv">
     <img src="https://github.com/redis.png?size=96" alt=""><span>nginx and Redis</span></button>
-  <button class="pv" data-k="app" aria-controls="pc-app">
+  <button class="pv" role="tab" aria-selected="false" data-k="app" aria-controls="pc-app">
     <img src="https://github.com/microsoft.png?size=96" alt=""><span>Every app with a window</span></button>
-  <button class="pv" data-k="ai" aria-controls="pc-ai">
+  <button class="pv" role="tab" aria-selected="false" data-k="ai" aria-controls="pc-ai">
     <img src="https://github.com/anthropics.png?size=96" alt=""><span>AI agents</span></button>
  </div>
  <div class="pbody">
-    <div class="pt on" id="pc-web">
+    <div class="pt on" role="tabpanel" id="pc-web">
       <h3><img src="https://github.com/whatwg.png?size=96" alt="">Every web page<span class="prop">Property 3</span></h3>
       <p>A page's JavaScript runs on one thread; the HTML standard defines the event loop that feeds it clicks, timers and network replies. A long computation on it freezes the page.</p>
       <div class="links"><a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loops">HTML standard, event loops</a><a href="https://github.com/whatwg/html">whatwg/html</a></div>
     </div>
-    <div class="pt" id="pc-node">
+    <div class="pt" role="tabpanel" id="pc-node">
       <h3><img src="https://github.com/nodejs.png?size=96" alt="">Node.js<span class="prop">Property 2</span></h3>
       <p>In 2009 Ryan Dahl put that loop on the server: one thread serving many connections, waiting on all of them at once. Today it runs servers, build tools and command-line programs; its loop is the C library libuv.</p>
       <div class="links"><a href="https://github.com/nodejs/node">nodejs/node</a><a href="https://github.com/libuv/libuv">libuv/libuv</a></div>
     </div>
-    <div class="pt" id="pc-srv">
+    <div class="pt" role="tabpanel" id="pc-srv">
       <h3><img src="https://github.com/redis.png?size=96" alt="">nginx and Redis<span class="prop">Property 4</span></h3>
       <p>nginx serves a large part of the web with one event loop per worker. Redis executes every command on one thread, and that is why each command is atomic with no lock at all.</p>
       <div class="links"><a href="https://github.com/nginx/nginx">nginx/nginx</a><a href="https://github.com/redis/redis">redis/redis</a></div>
     </div>
-    <div class="pt" id="pc-app">
+    <div class="pt" role="tabpanel" id="pc-app">
       <h3><img src="https://github.com/microsoft.png?size=96" alt="">Every app with a window<span class="prop">Property 3</span></h3>
       <p>Android's <code>Looper</code>, Apple's <code>RunLoop</code>, the main thread of VS Code (Electron): a user interface is one loop handling one event at a time. “The app is not responding” is a function that did not return.</p>
       <div class="links"><a href="https://developer.android.com/reference/android/os/Looper">Android Looper</a><a href="https://developer.apple.com/documentation/foundation/runloop">Apple RunLoop</a><a href="https://github.com/microsoft/vscode">microsoft/vscode</a></div>
     </div>
-    <div class="pt" id="pc-ai">
+    <div class="pt" role="tabpanel" id="pc-ai">
       <h3><img src="https://github.com/anthropics.png?size=96" alt="">AI agents<span class="prop">Properties 2 and 4</span></h3>
       <p>A call to a language model takes seconds. An agent mostly waits: it awaits the model, runs the tools it asked for together (<code>asyncio.gather</code>), and awaits the model again. The model providers' Python libraries have asynchronous clients, and so do the Model Context Protocol's SDKs.</p>
       <div class="links"><a href="https://github.com/anthropics/anthropic-sdk-python">anthropic-sdk-python</a><a href="https://github.com/openai/openai-python">openai-python</a><a href="https://github.com/modelcontextprotocol/python-sdk">MCP python-sdk</a></div>
@@ -217,7 +217,7 @@ of the repositories linked. Logos are each organization's GitHub avatar.</p>
 (() => {
   const vs = document.querySelectorAll(".pv");
   const show = k => {
-    vs.forEach(v => v.classList.toggle("on", v.dataset.k === k));
+    vs.forEach(v => { const on = v.dataset.k === k; v.classList.toggle("on", on); v.setAttribute("aria-selected", on ? "true" : "false"); });
     document.querySelectorAll(".pt").forEach(p => p.classList.toggle("on", p.id === "pc-" + k));
   };
   vs.forEach(v => ["mouseenter", "focus", "click"].forEach(e => v.addEventListener(e, () => show(v.dataset.k))));

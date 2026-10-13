@@ -437,10 +437,38 @@ footer.site .meta a:hover{text-decoration:underline}
 /* ---------------------------------------------------------------- entry elements */
 /* a test, why the session matters, a story from practice: three icons under
    the title in the schedule, three tiles on the session's page */
-.ei{display:block;font:400 1.15rem/1 "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 .e-test{--e:var(--acc-t);--eb:var(--acc-l)} .e-why{--e:var(--orng);--eb:var(--orng-b)} .e-case{--e:var(--wine);--eb:var(--wine-l)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-td.ttl .ent{display:flex;gap:.4rem;margin-top:.5rem;padding-left:1.6rem}
+/* the schedule: three outline circles under the date, centered on it, each on the
+   edge of a block line: why between the title and block 1, test between the blocks,
+   case under block 2. They stand beside the block lines, in the block rows on a wide
+   window and in the title cell's copies of the blocks elsewhere, so they follow the
+   lines whatever the title's height. Under the cursor a circle fills with a dim
+   yellow and unrolls its name. */
+tr.block td.ttl,td.ttl .blk-m{position:relative}
+.ctop,.cbot{position:absolute;left:var(--cx);display:flex;flex-direction:column;gap:.5rem;z-index:1}
+/* --cx: from the block line's left edge back to the centre of the date's text; the date
+   column is wider on a wide window; on a phone the column is too narrow and the circles are hidden */
+td.ttl .blk-m{--cx:-3.35rem}
+@media (min-width:1240px){tr.block td.ttl{--cx:-3.5rem}}
+@media (max-width:760px){.ctop,.cbot{display:none}}
+tr.block td.ttl .ctop{top:0;transform:translate(-50%,-50%)}
+tr.block td.ttl .cbot{bottom:calc(1.05rem - .12rem);transform:translate(-50%,50%)}  /* the last row's extra padding, less a row's own */
+td.ttl .blk-m .ctop{top:-.225rem;transform:translate(-50%,-50%)}   /* half the lines' margin: the middle of the gap */
+td.ttl .blk-m .cbot{bottom:-.225rem;transform:translate(-50%,50%)}
+.eic{position:relative;display:block;width:1.2rem;height:1.2rem;color:var(--lbl);text-decoration:none}
+.eic svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.2;
+  stroke-linecap:round;stroke-linejoin:round}
+.eic svg>circle{fill:var(--bg);stroke-dasharray:2.2 2.2;transition:fill .15s ease}
+.eic svg>g{color:var(--ink3)}                       /* the symbol inside, in the text's gray */
+.eic.dim svg>g{color:color-mix(in srgb,var(--ink3) 32%,var(--bg))}
+.eic:hover svg>circle{fill:color-mix(in srgb,#e8c547 22%,var(--bg))}
+.eic.dim{color:color-mix(in srgb,var(--lbl) 32%,var(--bg))}
+.eic .lb{position:absolute;left:calc(100% + .12rem);top:50%;transform:translateY(-50%);z-index:2;
+  font:700 .74rem/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;text-indent:0;color:inherit;
+  background:var(--bg);border-radius:4px;max-width:0;padding:0;overflow:hidden;
+  transition:max-width .38s ease-out,padding .38s ease-out;pointer-events:none}
+.eic:hover .lb,tbody.e3:hover .lb{max-width:11rem;padding:0 .25rem}   /* on the session's rows, the three unroll together */
 /* under the lab: links to the session's lab solutions and homework, on a row of their own */
 tr.has-more td.mat,tr.has-more td.ttl,tr.block td{border-bottom:none}
 tr.morerow td{padding-top:.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--line-soft)}
@@ -453,10 +481,6 @@ tr.morerow td{padding-top:.1rem;padding-bottom:.8rem;border-bottom:1px solid var
 .more-m{display:none}
 /* a link to a group of a session's materials stops below the sticky bar */
 ul.materials li.group[id]{scroll-margin-top:4.5rem}
-.eic{display:grid;place-items:center;width:2rem;height:2rem;border-radius:7px;color:var(--e);background:var(--eb);
-  border:1px solid transparent;transition:border-color .12s ease}
-a.eic:hover{border-color:var(--e)}
-.eic.soon{opacity:.45}
 .entrysec .ehead{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .entrysec .eside{font-size:.85rem;color:var(--ink3)}
 .entry{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
@@ -583,7 +607,6 @@ html:not(.pal-old) .dl.c-homework,html:not(.pal-old) ul.materials li.c-homework{
 html:not(.pal-old) .more{--blkc:var(--lab)}
 html:not(.pal-old) .more a{border-color:color-mix(in srgb,var(--lab) 32%,var(--bg))}
 html:not(.pal-old) .blk{color:var(--lbl);font-weight:700;font-size:.74rem}
-html:not(.pal-old) .eic{background:var(--sunk);border-color:var(--line)}
 html:not(.pal-old) .etile .ic{background:var(--sunk);color:var(--ink2)}
 html:not(.pal-old) a.etile:hover{border-color:var(--ink3);box-shadow:none}
 html:not(.pal-old) a.etile:hover .go{color:var(--acc-t)}
@@ -604,7 +627,7 @@ td.labt .blk{width:4.4rem}
 td.labt .lt{color:var(--ink2);font-size:.93rem}
 td.labt,td.labf,td.labhead{white-space:nowrap}
 /* the lab's side: LAB in grey on the session's line, a faint rule on its left, close to it */
-td.labhead,td.labt{padding-left:.8rem!important}
+td.labhead,td.labt{padding-left:1.25rem!important}
 /* lines only between sessions: none inside a session, none beside the lab */
 table.sessions tr.has-blocks td{border-bottom:none}
 table.sessions tr.has-blocks td.date{border-bottom:1px solid var(--line-soft)}
