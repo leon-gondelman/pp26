@@ -193,7 +193,7 @@ table.sessions th.sub{font-weight:500;letter-spacing:.1em;opacity:.55;padding-to
 table.sessions td{padding:.65rem .55rem;border-bottom:1px solid var(--line-soft);
   vertical-align:top}
 table.sessions td.date{padding-top:.85rem}
-td.date{width:4.6rem;padding-right:.9rem;white-space:nowrap;color:var(--ink3);
+td.date{width:6.4rem;padding-right:.9rem;   /* room on the right for the circles' names to unroll */white-space:nowrap;color:var(--ink3);
   font:500 .85rem/1 var(--mono);font-variant-numeric:tabular-nums}
 /* hanging indents: a wrapped title lines up with its own first word, not with
    the session number; a wrapped block title with its own text, not the chip */
@@ -386,7 +386,7 @@ footer.site .meta a:hover{text-decoration:underline}
   table.sessions{min-width:0;display:block;font-size:.92rem}
   table.sessions thead{display:none}
   table.sessions tbody{display:block}
-  table.sessions tr{display:grid;grid-template-columns:4.5rem minmax(0,1fr);
+  table.sessions tr{display:grid;grid-template-columns:6.5rem minmax(0,1fr);
     gap:.15rem .6rem;padding:.75rem 0;border-bottom:1px solid var(--line-soft)}
   table.sessions td{display:block;border:0;padding:0;grid-column:2}
   table.sessions td.date{grid-column:1;grid-row:1;width:auto;padding-top:.2rem}
@@ -573,7 +573,7 @@ html.splashing #top figure.masthead img,html.splashing #top .hero h1,html.splash
   .nextscreen{animation:nudge 2.6s ease-in-out infinite}
   .nextscreen:hover{animation-play-state:paused}
   table.sessions{table-layout:fixed}
-  col.c-date{width:5rem} col.c-lecture{width:9rem}
+  col.c-date{width:6.8rem} col.c-lecture{width:9rem}
 }
 /* a window up to 1000 px tall (a 13-16" laptop, a 1080p monitor): the first screen tightens so
    that it fits without scaling or scrolling - the round button's room at the bottom (it stands
@@ -614,8 +614,6 @@ html:not(.pal-old) a.etile:hover .go{color:var(--acc-t)}
 .lecl a,.labfiles a{text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
 .lecl a:hover,.labfiles a:hover{text-decoration-color:currentColor}
 .lecl .sep,td.labf .sep{color:var(--ink3);margin:0 .4em;font-weight:400}
-.lecl .soon,.labfiles .soon{color:var(--ink3);font-weight:400}
-.lecl:has(> .soon),.labfiles:has(> .soon){white-space:normal}   /* the words may wrap; links stay on one line */
 td.labf a.sol{color:var(--file);font-weight:600;font-size:.84rem;text-decoration:underline;
   text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
 td.labf a.sol:hover{text-decoration-color:currentColor}
@@ -635,7 +633,7 @@ table.sessions tr.block td{border-left:none}
 td.labhead .lw{display:inline-block;padding-top:.3rem;font:600 .72rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
 .lab-m{display:none}
 table.sessions td.ttl{padding-right:.8rem}
-@media (min-width:981px){col.c-date{width:5rem} col.c-labt{width:21rem} col.c-labf{width:auto}}
+@media (min-width:981px){col.c-date{width:6.8rem} col.c-labt{width:21rem} col.c-labf{width:auto}}
 /* from 1240 px (a 1280 laptop at 150 %, a 1366x768 one): the session column as wide as its
    longest line, the lab beside it; at 15.5px the table needs about 940 px */
 @media (min-width:1240px){
@@ -649,8 +647,8 @@ table.sessions td.ttl{padding-right:.8rem}
    wrapping under the line), from the copies the phone uses; the block rows are collapsed */
 @media (min-width:761px) and (max-width:1239px){
   table.sessions{table-layout:auto;min-width:0}
-  table.sessions col.c-date{width:4.6rem} table.sessions col.c-ttl,table.sessions col.c-labt,table.sessions col.c-labf{width:auto}
-  table.sessions td.ttl{width:56%;min-width:0} table.sessions td.labhead{width:44%}
+  table.sessions col.c-date{width:6.4rem} table.sessions col.c-ttl,table.sessions col.c-labt,table.sessions col.c-labf{width:auto}
+  table.sessions td.date{min-width:6.4rem} table.sessions td.ttl{width:52%;min-width:0} table.sessions td.labhead{width:42%}
   /* collapsed, not removed: the date's cell spans them */
   table.sessions tr.block{visibility:collapse}
   table.sessions tr.block>td{font-size:0;padding:0;white-space:normal}
