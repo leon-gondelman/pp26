@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test yourself — Session 7</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --page:#e9ebf0;
+  --bg:#ffffff; --sunk:#f7f8fa;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
+  --line:#e6e9ef; --rule:#cfd4dd; --th:#5c6b8a; --lno:#9aa3b2;
+  --acc:#211a52; --acc-t:#3d3383; --acc-l:#eeecf7;
+  --ok:#2f6f55; --ok-l:#e9f3ee;
+  --no:#9b3a3a; --no-l:#f7eaea;
+  --c-kw:#3d3383; --c-str:#2f6f55; --c-num:#8a5a12; --c-com:#8a909c;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#07090c;
+    --bg:#0e1014; --sunk:#14171c;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+    --line:#23272e; --rule:#3a404a; --th:#93a3c4; --lno:#6b7484;
+    --acc:#a79cf5; --acc-t:#bdb4ff; --acc-l:#1b1930;
+    --ok:#7cc4a3; --ok-l:#13261e;
+    --no:#e09a9a; --no-l:#2a1618;
+    --c-kw:#bdb4ff; --c-str:#7cc4a3; --c-num:#e0a962; --c-com:#79808d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#07090c;
+  --bg:#0e1014; --sunk:#14171c;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+  --line:#23272e; --rule:#3a404a; --th:#93a3c4; --lno:#6b7484;
+  --acc:#a79cf5; --acc-t:#bdb4ff; --acc-l:#1b1930;
+  --ok:#7cc4a3; --ok-l:#13261e;
+  --no:#e09a9a; --no-l:#2a1618;
+  --c-kw:#bdb4ff; --c-str:#7cc4a3; --c-num:#e0a962; --c-com:#79808d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{margin:0;font:500 16px/1.5 var(--sans);color:var(--ink);background:var(--page);
+  display:grid;place-items:center;padding:0;-webkit-font-smoothing:antialiased}
+code{font-family:var(--mono);font-size:.92em;background:var(--sunk);border:1px solid var(--line);border-radius:4px;padding:0 .3em}
+button{font-family:var(--sans)}
+
+/* The windows: designed at 1080 by 716, zoomed as a whole to fit the browser; upright screens get a scrolling page.
+   The top strip, the program, the question and the reason are four cards on the common background. */
+.app{width:1080px;height:716px;zoom:var(--z,1);display:flex;flex-direction:column;gap:10px}
+.card{background:var(--bg);border-radius:12px;box-shadow:0 6px 20px rgba(15,17,21,.07),0 0 0 1px var(--line)}
+body.embed{padding:0;background:var(--page)}
+
+.top{flex:none;display:flex;align-items:center;gap:16px;padding:10px 18px}
+.x{flex:none;width:28px;height:28px;border:0;background:none;color:var(--ink3);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
+.x:hover{background:var(--sunk);color:var(--ink)}
+.name{flex:none;font-weight:700;font-size:16px}
+.name span{color:var(--ink3);font-weight:400}
+.track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--acc);transition:width .35s ease}
+.stat{flex:none;font-size:20px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:2.6em;text-align:right}
+
+/* The quiz: the program on the left, the question and its options on the right, the reason in a bar below */
+.main{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:10px}
+.main.single{grid-template-rows:minmax(0,1fr)}
+.upper{display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:0;gap:10px}
+.main.single .upper{grid-template-columns:minmax(0,1fr)}
+.left{overflow:hidden;padding:22px 24px 16px}
+.right{padding:22px 20px 16px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.main.single .right,.main.single .bar{display:none}
+.bar{height:190px;padding:14px 24px 12px;overflow:hidden}
+.screen{display:none}.screen.on{display:block}
+
+/* Start and end */
+.intro{max-width:34rem;margin:14vh auto 0}
+.kicker{font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 10px}
+.intro h1,.end h1{font:700 2.4rem/1.15 var(--sans);letter-spacing:-.01em;margin:0 0 12px}
+.intro h1{margin-bottom:28px}
+.intro p,.end p{color:var(--ink2);margin:0 0 14px}
+.end{max-width:34rem;margin:5vh auto 0}
+.recap{list-style:none;padding:0;margin:18px 0 22px;border-top:1px solid var(--line)}
+.recap li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);color:var(--ink);font-weight:600;font-size:16px}
+.recap .m{width:1.2em;font-weight:700}
+.recap .m.ok{color:var(--ok)} .recap .m.no{color:var(--no)} .recap .m.sk{color:var(--ink3)}
+.row{display:flex;gap:10px}
+
+/* The question */
+.qno{font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 6px}
+.qtitle{font:700 28px/1.15 var(--sans);letter-spacing:-.01em;margin:0 0 8px}
+.qprompt{color:var(--ink2);font-weight:500;margin:0 0 18px;font-size:17px;line-height:1.5}
+pre{background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:14px 18px;overflow:hidden;margin:0;
+  font:500 15px/1.5 var(--mono);color:var(--ink)}
+.kw{color:var(--c-kw)} .str{color:var(--c-str)} .num{color:var(--c-num)} .com{color:var(--c-com)}
+
+/* Pseudo-code, in the layout of Ben-Ari's book: the global declarations, then one column per
+   thread with its local declarations and numbered statements, then what the main thread does. */
+.pseudo{display:table;margin:0 auto;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:14px 22px;
+  font:500 14.5px/1.5 var(--mono);color:var(--ink);white-space:pre}
+.pseudo .pc{text-align:center;padding:2px 0}
+.pseudo .pt{display:flex;justify-content:center}
+.pseudo .pt .col{padding:0 20px;border-left:1.5px solid var(--rule)}
+.pseudo .pt .col:first-child{border-left:0;padding-left:6px}
+.pseudo .pt .col:last-child{padding-right:6px}
+.pseudo .th{font-family:var(--sans);font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--th);margin:0 0 6px}
+.pseudo .lc{color:var(--ink3);margin-bottom:4px}
+.pseudo .pc+.pt,.pseudo .pt+.pc{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+.pseudo .no{display:inline-block;width:2.3em;color:var(--lno);font-weight:400}
+
+.ask{font-weight:700;font-size:17px;line-height:1.4;margin:0 0 12px}
+.opts{display:flex;flex-direction:column;gap:9px;min-height:0}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;background:var(--bg);color:var(--ink);
+  border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;font-size:15.5px;line-height:1.35;font-weight:600}
+.opt:hover:not(:disabled){border-color:var(--acc-t)}
+.opt .k{flex:none;width:24px;height:24px;border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink3)}
+.opt .t code{font-size:.9em;font-weight:500}
+.opt.sel{border-color:var(--acc-t);background:var(--acc-l)}
+.opt.sel .k{border-color:var(--acc-t);color:var(--acc-t)}
+.opt.ok{border-color:var(--ok);background:var(--ok-l)}
+.opt.ok .k{border-color:var(--ok);color:var(--ok)}
+.opt.no{border-color:var(--no);background:var(--no-l)}
+.opt.no .k{border-color:var(--no);color:var(--no)}
+.opt:disabled{cursor:default}
+.foot{margin-top:auto;display:flex;gap:8px;padding-top:14px}
+.btn{display:block;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;font-weight:700;font-size:16px;
+  background:var(--acc);color:#fff;flex:1 1 0;min-width:0}
+.btn:hover{opacity:.9}
+.btn:disabled{background:var(--line);color:var(--ink3);cursor:default;opacity:1}
+.btn.plain{background:var(--bg);color:var(--ink);border:1px solid var(--line);flex:0 0 auto;padding:10px 14px}
+.foot .btn{flex:1 1 0;padding:10px 8px}
+.btn.plain:disabled{background:var(--bg);color:var(--ink3);border-color:var(--line)}
+.row .btn{flex:0 0 auto}
+.hidden{display:none!important}
+
+/* The reason */
+.hint{color:var(--ink3);margin:0 0 6px;font-size:16px}
+.verdict{font-weight:700;font-size:17px;margin:0 0 6px}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--no)} .verdict span{font-weight:600;color:var(--ink)}
+.why{font-size:16px;line-height:1.5;font-weight:500;color:var(--ink);columns:2;column-gap:32px}
+.why p{margin:0 0 8px;break-inside:avoid}
+.ctoggle{display:none;background:none;border:0;padding:0;margin-top:12px;cursor:pointer;color:var(--acc-t);font-weight:700;font-size:15px;text-decoration:underline;text-underline-offset:3px}
+
+/* Upright screens: a scrolling page, the program, then the question, then the reason */
+body.portrait .app{width:430px;gap:8px;padding:8px}
+body.portrait .main{display:block;overflow-y:auto}
+body.portrait .upper{display:block}
+body.portrait .left{overflow:visible;padding:16px 18px 12px}
+body.portrait .right{overflow:visible;padding:14px 18px 14px;margin-top:8px}
+body.portrait .bar{height:auto;min-height:120px;padding:14px 18px 16px;margin-top:8px}
+body.portrait .foot{margin-top:14px}
+body.portrait pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;padding:12px 14px}
+body.portrait .pseudo{display:block;font-size:14px;padding:12px 14px}
+body.portrait .pseudo .pt{flex-direction:column}
+body.portrait .pseudo .pt .col{padding:8px 4px 4px;border-left:0;border-top:1px solid var(--line)}
+body.portrait .pseudo .pt .col:first-child{border-top:0;padding-top:0}
+body.portrait .why{columns:1}
+body.portrait .qtitle{font-size:24px}
+body.portrait .name{display:none}
+body.portrait .intro,body.portrait .end{margin-top:6vh}
+body.portrait .intro h1,body.portrait .end h1{font-size:2rem}
+body.portrait .row{flex-direction:column}
+body.portrait .ctoggle{display:none!important}
+</style>
+</head>
+<body>
+<div class="app" role="dialog" aria-label="Test yourself, session 7">
+  <div class="top card">
+    <button class="x" id="close" aria-label="Close">✕</button>
+    <div class="name">Test yourself <span>· Session 7</span></div>
+    <div class="track"><i id="prog"></i></div>
+    <div class="stat" id="stat"></div>
+  </div>
+
+  <div class="main single" id="main">
+    <div class="upper">
+      <div class="left card" id="scroll">
+        <section class="screen on" id="start">
+          <div class="intro">
+            <p class="kicker">Session 7 · Multi-threading</p>
+            <h1>Test yourself, before or after this session</h1>
+            <button class="btn" id="go" style="width:auto;padding:11px 28px">Start</button>
+          </div>
+        </section>
+
+        <section class="screen" id="quiz">
+          <p class="qno" id="qno"></p>
+          <h2 class="qtitle" id="qtitle"></h2>
+          <p class="qprompt" id="qprompt"></p>
+          <pre id="qcode"></pre>
+          <div class="pseudo" id="qpseudo"></div>
+          <button class="ctoggle" id="ctoggle">Show the program</button>
+        </section>
+
+        <section class="screen" id="end">
+          <div class="end">
+            <p class="kicker">Session 7 · Test yourself</p>
+            <h1 id="endtitle"></h1>
+            <p id="endmsg"></p>
+            <ul class="recap" id="recap"></ul>
+            <div class="row">
+              <button class="btn" id="again">Try again</button>
+              <button class="btn plain hidden" id="closeEnd">Close</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right card" id="right">
+        <div id="rightinner">
+          <p class="ask" id="qask"></p>
+          <div class="opts" id="opts"></div>
+        </div>
+        <div class="foot"><button class="btn plain" id="back" disabled>Back</button><button class="btn plain" id="skip">Skip</button><button class="btn" id="act" disabled>Next</button></div>
+      </aside>
+    </div>
+
+    <div class="bar card" id="sidebody"><div id="sideinner"></div></div>
+  </div>
+</div>
+
+<script>
+// BEGIN GEN — the eleven questions, each a function returning it, so that the applet's loop
+// is session 6's; the questions are fixed, only the options are shuffled. A question: title,
+// prompt, one of code (Java), pseudo ({above, threads: [{name, local, lines}], below}) or
+// neither, ask, options [{text, ok}], explain (HTML). The programs are run in entry/check/.
+function shuffle(xs) { for (let i = xs.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [xs[i], xs[j]] = [xs[j], xs[i]]; } return xs; }
+const ok = text => ({ text, ok: true }), no = text => ({ text, ok: false });
+
+const GENS = [
+
+  // 1 (pseudo-code). The counter
+  () => ({
+    title: "Three threads, one counter",
+    prompt: "<code>count</code> is shared; each numbered line is one step.",
+    pseudo: {
+      above: ["integer count ← 0"],
+      threads: ["a", "b", "c"].map(t => ({ name: "thread " + t.toUpperCase(), local: "integer r",
+        lines: [[t + "1", "do 100 000 times:"], [t + "2", "  r ← count"], [t + "3", "  count ← r + 1"]] })),
+      below: ["wait for A, B and C to finish", "print count"],
+    },
+    ask: "Which values can it print?",
+    options: [
+      no("exactly 300000, every run"),
+      no("any value from 100000 to 300000"),
+      no("any value from 1 to 300000"),
+      ok("any value from 2 to 300000"),
+    ],
+    explain: `<p>Two threads that read the same value both write the next one, and an increment is lost. Ten runs of the Java version gave 106437 to 117309.</p>
+<p>Nothing keeps even one thread's work. B reads 0 at b2 and pauses; A does all but its last step, C everything; B writes 1; A reads 1 at a2 and pauses; B finishes; A writes 2. Not 1: the last write is <code>r + 1</code> for an <code>r</code> that was read, and the thread that read 0 had more to do.</p>`,
+  }),
+
+  // 2 (theory). No data race
+  () => ({
+    title: "A program without data races",
+    prompt: "Each shared location has a lock, and every access to it is under that lock or by an atomic instruction: the program has no data race.",
+    ask: "What does the absence of data races guarantee?",
+    options: [
+      ok("that every run is some interleaving of the threads' steps"),
+      no("that no update is lost"),
+      no("that every run gives the same result"),
+      no("that no deadlock occurs"),
+    ],
+    explain: `<p>That is the memory model's promise, and all of it: every run is one sequence of all the threads' steps, each thread's steps in their own order, so interleavings are the right way to reason. Which one is not fixed, so runs differ; locks taken in a cycle still deadlock; and question 1's counter with a lock around each step has no data race and still loses updates.</p>
+<p>With a data race the promise is off: a read may return a value no interleaving explains.</p>`,
+  }),
+
+  // 3 (Java). Four changes
+  () => ({
+    title: "Four changes to the counter",
+    prompt: "The counter of question 1 in Java, and four single changes to it.",
+    code:
+`class Counter {
+  int count = 0;
+  void bump() { count += 1; }
+}
+// 3 threads, 100_000 calls of bump() each; then print count
+
+// 1. volatile int count = 0;
+// 2. AtomicInteger n;  bump() { n.set(n.get() + 1); }
+// 3. synchronized (new Object()) { count += 1; } in bump
+// 4. a local per thread, added by main after join`,
+    ask: "Which change makes it print 300000 on every run?",
+    fixed: true,
+    options: [
+      no("the field volatile"),
+      no("the atomic integer, read then set"),
+      no("a new lock for each call"),
+      ok("a local per thread, added after join"),
+    ],
+    explain: `<p>Three of the four carry a word of concurrency and fix nothing: <code>volatile</code> makes each read and write visible, not the three steps one; an atomic integer read, then set, is the plain counter; a lock made by each call is shared with nobody. The local count shares nothing while the threads run, and <code>join</code> makes the three results visible to main.</p>
+<p>The two other fixes: a lock all threads share, <code>synchronized void bump()</code>; one atomic instruction, <code>n.incrementAndGet()</code>. Those three are the session's three ways.</p>`,
+  }),
+
+  // 4 (pseudo-code). A deposit and a reset
+  () => ({
+    title: "A deposit and a reset",
+    prompt: "<code>balance</code> is shared; <code>L</code> is a lock.",
+    pseudo: {
+      above: ["integer balance ← 100", "lock L"],
+      threads: [
+        { name: "thread 1", local: "integer b", lines: [["p1", "acquire L"], ["p2", "b ← balance"], ["p3", "balance ← b + 10"], ["p4", "release L"]] },
+        { name: "thread 2", local: "", lines: [["q1", "balance ← 0"]] },
+      ],
+      below: ["wait for both", "print balance"],
+    },
+    ask: "Which final balances are possible?",
+    options: [
+      no("0 and 10"),
+      ok("0, 10 and 110"),
+      no("10 and 110"),
+      no("0 and 110"),
+    ],
+    explain: `<p>A lock keeps out the threads that take it. Thread 2 takes none, so q1 may run between p2 and p3: the reset is lost and the balance is 110. q1 before p1 gives 10, after p4 gives 0.</p>
+<p>The window is nanoseconds wide and 110 is rare; a program that is usually right is wrong. The rule: every access to the shared state under the lock.</p>`,
+  }),
+
+  // 5 (theory). A check, then a withdrawal
+  () => ({
+    title: "A check, then a withdrawal",
+    prompt: "<code>balance()</code> and <code>withdraw(x)</code> are each atomic. The balance is 100. Two threads each run <code>if balance() ≥ 100 then withdraw(100)</code>.",
+    ask: "Can the balance go negative?",
+    options: [
+      no("no: each call is atomic, so the line is"),
+      ok("yes: both threads may read 100 before either withdraws"),
+      no("no, if the account is lock-free"),
+      no("no, if <code>balance()</code> and <code>withdraw(x)</code> are synchronized methods"),
+    ],
+    explain: `<p>Two atomic steps are not one atomic step: both read 100, both withdraw, the balance is −100. Lock-free changes nothing, each call is still one step. Making each call synchronized is what "each atomic" already means; the gap between the two calls stays. One lock around both calls works only if every caller of <code>withdraw</code> takes that same lock.</p>
+<p>The fix is one operation, withdraw-if-enough, atomic under the account's own lock or by one compare-and-set.</p>`,
+  }),
+
+  // 6 (Java). The compare-and-set loop
+  () => ({
+    title: "The compare-and-set loop",
+    prompt: "<code>compareAndSet(v, w)</code> writes <code>w</code> only if the value is still <code>v</code>, in one step, and says whether it did.",
+    code:
+`static final AtomicInteger n = new AtomicInteger(0);
+static void bump() {
+  int v;
+  do { v = n.get(); } while (!n.compareAndSet(v, v + 1));
+}
+// 3 threads, 100_000 calls of bump() each; then print n.get()`,
+    ask: "Which holds?",
+    options: [
+      no("300000, and compareAndSet never fails"),
+      ok("300000; a compareAndSet fails exactly when another thread wrote first"),
+      no("less than 300000 whenever a compareAndSet fails"),
+      no("the loop can spin for ever: the program may not end"),
+    ],
+    explain: `<p>A failure loses nothing: the loop reads again. Three runs: 300000, with 305565 to 389805 failed attempts.</p>
+<p>A failure needs another thread's success, and the others succeed 200000 times in all: the work is bounded, so every thread finishes. Question 8 is what holds without that bound.</p>`,
+  }),
+
+  // 7 (pseudo-code). Three transfers
+  () => ({
+    title: "Three transfers",
+    prompt: "Each account has its own lock; a transfer holds both, the source's first.",
+    pseudo: {
+      above: ["accounts a, b, c, each with a lock"],
+      threads: [["a", "b", "p"], ["b", "c", "q"], ["c", "a", "r"]].map(([x, y, t], i) => ({
+        name: "thread " + (i + 1), local: "",
+        lines: [[t + "1", "repeat:"], [t + "2", `  acquire ${x}`], [t + "3", `  acquire ${y}`], [t + "4", `  move 1: ${x} → ${y}`], [t + "5", `  release ${y}, ${x}`]],
+      })),
+      below: [],
+    },
+    ask: "Can they deadlock?",
+    options: [
+      no("no: deadlock needs two threads wanting each other's locks"),
+      no("no: no two threads take the same pair of accounts"),
+      no("yes, and two of the threads alone can deadlock"),
+      ok("yes: each holds one lock and waits for the next, a cycle of three"),
+    ],
+    explain: `<p>Thread 1 holds a and wants b, 2 holds b and wants c, 3 holds c and wants a: a cycle of waiting, which is what deadlock is, of any length. Two threads alone cannot: with threads 1 and 2 only, thread 2 gets c and finishes.</p>
+<p>The rule that breaks every cycle: all threads take the locks in one global order, a before b before c.</p>`,
+  }),
+
+  // 8 (theory). The lock-free guarantee
+  () => ({
+    title: "The lock-free guarantee",
+    prompt: "A lock-free stack: push is the loop of question 6, on the pointer to the top.",
+    code:
+`// recall:  do { v = n.get(); } while (!n.compareAndSet(v, v + 1));
+
+void push(T x) {
+  Node node = new Node(x);
+  do {
+    node.next = top.get();
+  } while (!top.compareAndSet(node.next, node));
+}`,
+    ask: "Which is guaranteed?",
+    options: [
+      no("every push finishes in a bounded number of steps"),
+      ok("some push always finishes; a thread may retry for ever"),
+      no("no thread ever waits, so every push finishes"),
+      no("pushes finish in the order they started"),
+    ],
+    explain: `<p>Lock-free promises the whole, not each thread: a compare-and-set fails only because another succeeded, so some operation completes; a thread may lose every race. The stronger promise, every thread finishes in a finite number of its own steps, is wait-free, and the plain loop does not give it.</p>
+<p>Question 6's loop ended because the other threads' work was bounded; pushes arriving for ever give no such bound. What lock-free buys: a thread stopped in mid-push stops nobody else; under a lock it would stop everyone.</p>`,
+  }),
+
+  // 9 (theory). Lock-free versions
+  () => ({
+    title: "Lock-free versions",
+    prompt: "A stack, a queue, a hash table, a tree: each exists under a lock.",
+    ask: "Does each exist lock-free?",
+    options: [
+      no("no: some structures need a lock"),
+      ok("yes, by a general construction from compare-and-set, a slow one"),
+      no("yes, and a compiler can do the rewriting efficiently"),
+      no("only structures under a single lock"),
+    ],
+    explain: `<p>Compare-and-set is universal: any object with a sequential specification has a lock-free, even wait-free, implementation on it (Herlihy, 1991). For any fixed number of threads, the construction is cubic in memory and runs the operations one at a time, so it has none of the parallelism we wanted.</p>
+<p>Yes in principle; in practice each fast structure is a paper of its own: Treiber's stack, the Michael and Scott queue, Harris's list.</p>`,
+  }),
+
+  // 10 (pseudo-code). A queue with wait and notify
+  () => ({
+    title: "A queue with wait and notify",
+    prompt: "<code>wait on L</code> releases L, sleeps until a <code>notify all</code>, then takes L back.",
+    pseudo: {
+      above: ["queue q, empty", "lock L"],
+      threads: [
+        { name: "producer", local: "", lines: [["p1", "repeat:"], ["p2", "  acquire L"], ["p3", "  q.add(next item)"], ["p4", "  notify all"], ["p5", "  release L"]] },
+        { name: "consumer 1", local: "item x", lines: [["q1", "repeat:"], ["q2", "  acquire L"], ["q3", "  if q is empty:"], ["q4", "    wait on L"], ["q5", "  x ← q.remove()"], ["q6", "  release L"]] },
+        { name: "consumer 2", local: "item x", lines: [["r1", "repeat:"], ["r2", "  acquire L"], ["r3", "  if q is empty:"], ["r4", "    wait on L"], ["r5", "  x ← q.remove()"], ["r6", "  release L"]] },
+      ],
+      below: [],
+    },
+    ask: "What can happen?",
+    options: [
+      no("it works: a consumer is woken only when there is an item"),
+      ok("a consumer removes from an empty queue: it was empty again when it woke"),
+      no("deadlock: both consumers wait for ever"),
+      no("a consumer gets the same item twice"),
+    ],
+    explain: `<p>Both consumers wait; one add wakes both. The first to get the lock back removes the item; the second does not look again and removes from an empty queue, an exception in Java. Three runs threw it at a consumer's 1st, 1st and 204th take.</p>
+<p>Check the condition again after every wake-up, <code>while</code> not <code>if</code>: another thread may have come first, and Java allows a wake-up with no notify.</p>`,
+  }),
+
+  // 11 (Java). A parallel fold
+  () => ({
+    title: "A parallel fold",
+    prompt: "<code>fold(a, k, op)</code>: k threads, each folds its part of <code>a</code> left to right; then the k results are folded left to right.",
+    code:
+`long[] a = { 1, 2, 3, 4, 5, 6 };
+
+fold(a, 2, (x, y) -> x + y)   // two halves:   21
+fold(a, 3, (x, y) -> x + y)   // three pairs:  21
+fold(a, 2, (x, y) -> x - y)   // two halves:   ?
+fold(a, 3, (x, y) -> x - y)   // three pairs:  ?`,
+    ask: "What do the two folds with subtraction give?",
+    options: [
+      no("−19 and −19, the sequential answer"),
+      ok("3 and 1"),
+      no("3 and 3"),
+      no("−4 and −7"),
+    ],
+    explain: `<p>Two halves: (1 − 2 − 3) − (4 − 5 − 6) = −4 + 7 = 3. Three pairs: −1, −1, −1, and −1 + 1 + 1 = 1. One thread gives −19. Subtraction is not associative, so the grouping shows.</p>
+<p>A parallel fold is right for every split exactly when the operation is associative; an identity is what an empty part needs. Addition, maximum, and concatenation qualify, the last not commutative, but the parts keep their order.</p>`,
+  }),
+];
+// END GEN
+
+// The applet.
+const $ = id => document.getElementById(id);
+const APP = document.querySelector(".app");
+const embedded = new URLSearchParams(location.search).has("embed") || window.self !== window.top;
+if (embedded) document.body.classList.add("embed");
+let qs = [], i = 0, score = 0, results = [], sels = [], state = "start";   // start | ask | shown | end
+const HINT = `<p class="hint">Choose an answer: the reason appears here.</p><p class="hint">Keys 1 to 4; S skips; Enter or → moves on; ← goes back. Only an answer is final.</p>`;
+
+function hl(src) {
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const KW = /\b(class|interface|int|long|boolean|void|static|final|private|public|synchronized|volatile|new|return|while|do|if|else|for|throws|try|catch|this|null|true|false)\b/;
+  return src.split("\n").map(line => {
+    const c = line.indexOf("//");
+    const body = c >= 0 ? line.slice(0, c) : line, com = c >= 0 ? line.slice(c) : "";
+    const out = esc(body).replace(new RegExp(`("[^"]*")|${KW.source}|\\b(\\d[\\d_]*)\\b`, "g"),
+      (m, str, kw, num) => str ? `<span class="str">${str}</span>` : kw ? `<span class="kw">${kw}</span>` : `<span class="num">${num}</span>`);
+    return out + (com ? `<span class="com">${esc(com)}</span>` : "");
+  }).join("\n");
+}
+function pseudo(p) {
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const block = lines => lines.length ? `<div class="pc">${lines.map(esc).join("\n")}</div>` : "";
+  const col = t => `<div class="col"><div class="th">${esc(t.name)}</div>` +
+    (t.local ? `<div class="lc">${esc(t.local)}</div>` : "") +
+    t.lines.map(([n, l]) => `<span class="no">${n}:</span>${esc(l)}`).join("\n") + `</div>`;
+  return block(p.above) + `<div class="pt">${p.threads.map(col).join("")}</div>` + block(p.below);
+}
+
+// Fitting: zoom the whole window to the browser; if a panel still overflows, shrink only its text.
+function fit() {
+  const portrait = innerWidth < 760 || innerWidth / innerHeight < 0.8;
+  document.body.classList.toggle("portrait", portrait);
+  const W = 1080, H = 700, pad = embedded ? 0 : 32;
+  let z = portrait ? innerWidth / 430 : Math.min((innerWidth - pad) / W, (innerHeight - pad) / H, 1.2);
+  document.documentElement.style.setProperty("--z", z);
+  APP.style.height = portrait ? `${innerHeight / z}px` : "";   // upright: the whole screen, under the zoom
+  fitPanels();
+}
+function shrink(box, inner) {
+  if (!inner) return;
+  let k = 1; inner.style.zoom = 1;
+  while (box.scrollHeight > box.clientHeight + 1 && k > 0.6) { k -= 0.03; inner.style.zoom = k; }
+}
+function fitWidth(el) {
+  if (!el || el.classList.contains("hidden")) return;
+  let k = 1; el.style.zoom = 1;
+  const room = () => el.parentElement.getBoundingClientRect().width - 2 * parseFloat(getComputedStyle(el.parentElement).paddingLeft);
+  while (el.getBoundingClientRect().width > room() + 1 && k > 0.5) { k -= 0.03; el.style.zoom = k; }
+}
+function fitPanels() {
+  if (document.body.classList.contains("portrait")) {
+    for (const el of [$("qpseudo"), document.querySelector(".screen.on"), $("rightinner"), $("sideinner")]) if (el) el.style.zoom = 1;
+    return;
+  }
+  fitWidth($("qpseudo"));
+  shrink($("scroll"), document.querySelector(".screen.on"));
+  shrink($("right"), $("rightinner"));
+  shrink($("sidebody"), $("sideinner"));
+}
+addEventListener("resize", fit);
+
+$("ctoggle").onclick = () => {
+  const on = APP.classList.toggle("showcode");
+  $("ctoggle").textContent = on ? "Show the reason" : "Show the program";
+  fitPanels();
+};
+function screen(id) {
+  for (const s of ["start", "quiz", "end"]) $(s).classList.toggle("on", s === id);
+  $("main").classList.toggle("single", id !== "quiz");
+  $("scroll").scrollTop = 0; $("main").scrollTop = 0;
+}
+function status() {
+  $("prog").style.width = `${100 * results.filter(r => r !== undefined).length / GENS.length}%`;
+  $("stat").textContent = `${score}/${GENS.length}`;
+}
+
+function begin() {
+  qs = GENS.map(g => { const q = g(); if (!q.fixed) q.options = shuffle(q.options); return q; });
+  i = 0; score = 0; results = []; sels = [];
+  screen("quiz"); render();
+}
+// Renders question i in its recorded state: open, skipped, or answered. Only an answer is final
+// in a run: an answered question is shown as it was left and nothing in it can be changed. An open
+// or skipped question can be answered whenever it is shown; Skip only marks it and moves on.
+function render() {
+  const q = qs[i], done = typeof results[i] === "boolean", live = !done;
+  state = live ? "ask" : "shown";
+  APP.classList.toggle("answered", done); APP.classList.remove("showcode"); $("ctoggle").textContent = "Show the program";
+  $("qno").textContent = `Question ${i + 1} of ${qs.length}`;
+  $("qtitle").innerHTML = q.title;
+  $("qprompt").innerHTML = q.prompt;
+  $("qcode").innerHTML = hl(q.code || ""); $("qcode").classList.toggle("hidden", !q.code);
+  $("qpseudo").innerHTML = q.pseudo ? pseudo(q.pseudo) : ""; $("qpseudo").classList.toggle("hidden", !q.pseudo);
+  $("ctoggle").classList.toggle("hidden", !q.code && !q.pseudo);
+  $("qask").innerHTML = q.ask;
+  $("opts").innerHTML = "";
+  const skipped = results[i] === "skip", chosen = sels[i];
+  q.options.forEach((o, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = `<span class="k">${k + 1}</span><span class="t">${o.text}</span>`;
+    b.onclick = () => choose(k);
+    if (done) { b.disabled = true; if (o.ok) b.classList.add("ok"); else if (k === chosen) b.classList.add("no"); }
+    $("opts").appendChild(b);
+  });
+  if (skipped) $("sideinner").innerHTML = `<p class="verdict"><span>Skipped, for now.</span></p>` + HINT;
+  else if (live) $("sideinner").innerHTML = HINT;
+  else {
+    const right = results[i];
+    $("sideinner").innerHTML =
+      `<p class="verdict ${right ? "ok" : "no"}">${right ? "✓ Correct" : "✗ Not this one"}` +
+      (right ? "" : ` <span>· the answer: ${q.options.find(o => o.ok).text}</span>`) + `</p>` +
+      `<div class="why">${q.explain}</div>`;
+  }
+  $("back").disabled = i === 0;
+  $("skip").disabled = done;
+  $("act").textContent = i + 1 < qs.length ? "Next" : "See the result"; $("act").disabled = false;
+  $("sidebody").scrollTop = 0; $("main").scrollTop = 0;
+  status(); fitPanels();
+}
+function choose(k) {
+  if (state !== "ask" || typeof results[i] === "boolean") return;
+  sels[i] = k;
+  const right = qs[i].options[k].ok;
+  if (right) score++;
+  results[i] = right;
+  render();
+  if (document.body.classList.contains("portrait")) $("sidebody").scrollIntoView({ block: "nearest" });
+}
+function skip() {                 // marks the question skipped and moves on; it can still be answered
+  if (state !== "ask") return;
+  sels[i] = -1; results[i] = "skip";
+  next();
+}
+function next() {                 // always moves on; an open question stays open, Back returns to it
+  if (state !== "ask" && state !== "shown") return;
+  i++; i < qs.length ? render() : finish();
+}
+function back() {
+  if (i > 0 && state !== "start" && state !== "end") { i--; render(); }
+}
+function finish() {
+  state = "end"; APP.classList.remove("answered", "showcode"); screen("end");
+  const n = qs.length, skipped = qs.filter((q, k) => results[k] === "skip" || results[k] === undefined).length;
+  $("endtitle").textContent = `${score}/${n} questions right`;
+  $("endmsg").innerHTML =
+    (skipped ? `${skipped} skipped or left open. ` : "") +
+    (score === n ? "The three ways hold for us already. The session's news is then in their obligations, and in the promise about memory it pays at the end."
+    : score >= n - 2 ? "Most of it holds. The session states each of these as a contract with its obligation, and the lab makes us keep one."
+    : "Each of these is one slide of the session: the lost update drawn as an interleaving, what a lock excludes, the compare-and-set loop, the fold that needs an associative operation.");
+  $("recap").innerHTML = qs.map((q, k) =>
+    `<li><span class="m ${results[k] === true ? "ok" : results[k] === false ? "no" : "sk"}">${results[k] === true ? "✓" : results[k] === false ? "✗" : "–"}</span>${k + 1}. ${q.title}</li>`).join("");
+  $("closeEnd").classList.toggle("hidden", !embedded);
+  status(); fitPanels();
+}
+function close() {
+  if (embedded) parent.postMessage({ applet: "close" }, "*");
+  else { state = "start"; results = []; sels = []; score = 0; screen("start"); status(); }
+}
+$("go").onclick = begin;
+$("again").onclick = begin;
+$("act").onclick = next;
+$("skip").onclick = skip;
+$("back").onclick = back;
+$("close").onclick = close;
+$("closeEnd").onclick = close;
+document.addEventListener("keydown", e => {
+  if (state === "ask" && /^[1-4]$/.test(e.key)) choose(+e.key - 1);
+  else if (state === "ask" && /^[sS]$/.test(e.key)) skip();
+  else if (e.key === "ArrowLeft") back();
+  else if (e.key === "ArrowRight") next();
+  else if (e.key === "Enter") {
+    if (state === "start" || state === "end") { e.preventDefault(); begin(); }
+    else { e.preventDefault(); next(); }
+  }
+  else if (e.key === "Escape" && embedded) close();
+});
+status();
+fit();
+</script>
+</body>
+</html>

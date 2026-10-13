@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why study this — Session 7</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --bg:#ffffff; --sunk:#f7f8fa;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
+  --line:#e6e9ef;
+  --acc:#211a52; --acc-l:#eeecf7;
+  --lab:#0d6b63; --lab-b:#d9f2ef;
+  --hw:#a2540a; --hw-b:#fbeeda; --orange:#c2410c;
+  --code:#fbfbfd;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1014; --sunk:#14171c;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+    --line:#23272e;
+    --acc:#a79cf5; --acc-l:#1b1930;
+    --lab:#6fd3c4; --lab-b:#0f2b29;
+    --hw:#e0a962; --hw-b:#2c2113; --orange:#fb923c;
+    --code:#111419;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1014; --sunk:#14171c;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+  --line:#23272e;
+  --acc:#a79cf5; --acc-l:#1b1930;
+  --lab:#6fd3c4; --lab-b:#0f2b29;
+  --hw:#e0a962; --hw-b:#2c2113; --orange:#fb923c;
+  --code:#111419;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{font-size:clamp(15.5px,0.55rem + 0.5vw,19px);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 var(--sans)}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 16px 4rem}
+.kicker{font:500 .78rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .8rem}
+h1{font:600 2.5rem/1.15 var(--serif);margin:0 0 .8rem}
+h2{font:600 1.55rem/1.25 var(--serif);margin:2.4rem 0 1rem}
+p{margin:0 0 1rem;color:var(--ink2)}
+p,li,figcaption,h1,h2,h3{text-wrap:pretty}
+.lede{font:400 1.2rem/1.5 var(--serif);color:var(--ink)}
+code{font-family:var(--mono);font-size:.88em}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+figure{margin:1.6rem 0;padding:1.2rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk)}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:.85rem;color:var(--ink3);margin-top:.7rem}
+svg text{font-family:var(--sans);fill:var(--ink)}
+svg .soft{fill:var(--ink3)}
+svg .mono{font-family:var(--mono)}
+.prop{display:inline-block;font:500 .72rem/1 var(--sans);padding:.25rem .45rem;border-radius:4px;background:var(--acc-l);color:var(--acc);margin-left:.3rem;vertical-align:.1rem}
+.src{font-size:.82rem;color:var(--ink3);margin:-.4rem 0 1.2rem}
+ol.ways,ul.ways{padding-left:1.4rem;margin:0 0 1rem}
+ol.ways li,ul.ways li{margin:0 0 .6rem;color:var(--ink2)}
+ol.ways b,ul.ways b{color:var(--ink);font-weight:600}
+.src a{margin-right:.8rem;white-space:nowrap}
+.note{font-size:.8rem;color:var(--ink3);margin-top:2.4rem;border-top:1px solid var(--line);padding-top:1rem}
+
+/* the five languages: a row of logos, the chosen one's text below */
+.box{border:1px solid var(--acc);border-radius:10px;overflow:hidden;margin:2.4rem 0 0;background:var(--bg)}
+p + .box{margin-top:1.4rem}      /* a box under its introducing sentence */
+.box + p{margin-top:2.4rem}      /* a sentence after a box starts a new part */
+.boxhead{font:500 1.3rem/1.25 var(--serif);margin:0;padding:.8rem 1.3rem;background:var(--acc);color:var(--bg)}
+.ptabs{display:grid;grid-template-columns:repeat(5,1fr);}
+.ptabs{background:var(--sunk);border-bottom:1px solid var(--line)}
+.pv{position:relative;display:flex;flex-direction:column;align-items:center;gap:.4rem;background:none;border:0;border-left:1px solid transparent;border-right:1px solid transparent;margin-bottom:-1px;
+  padding:.9rem .3rem .7rem;cursor:pointer;font:500 .8rem/1.2 var(--sans);color:var(--ink3);text-align:center}
+.pv img{width:2.6rem;height:2.6rem;border-radius:10px;background:var(--bg);border:1px solid var(--line);padding:2px;opacity:.75;transition:opacity .15s}
+.pv:hover img,.pv.on img{opacity:1}
+.pv:hover span{color:var(--ink2)}
+.pv.on{background:var(--bg);border-left-color:var(--line);border-right-color:var(--line);box-shadow:inset 0 3px 0 var(--acc)}
+.pv.on span{color:var(--ink);font-weight:600}
+.pbody{padding:1.1rem 1.3rem 1rem;display:grid}
+/* every panel in the same cell: the box takes the height of the tallest and keeps it */
+.pt{grid-area:1/1;visibility:hidden}.pt.on{visibility:visible}
+.pt h3{font:400 1.3rem/1.25 var(--serif);margin:0 0 .5rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.pt h3 img{width:1.8rem;height:1.8rem;border-radius:7px;border:1px solid var(--line);padding:1px;background:var(--bg)}
+.pt p{font-size:.93rem;margin:0 0 .6rem}
+.pt .links{font-size:.82rem}
+.pt .links a{margin-right:.8rem;white-space:nowrap}
+@media (max-width:560px){.pv{font-size:.68rem}.pv img{width:2.1rem;height:2.1rem}}
+/* the learning objectives */
+.goals-in{padding:.2rem 1.3rem 1.2rem}
+ol.goals + .glabel{margin-top:1.6rem;padding-top:1.3rem;border-top:1px solid var(--line)}
+.glabel{font:700 .9rem/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--orange);margin:1.1rem 0 1rem}
+ol.goals{list-style:none;counter-reset:g;padding:0;margin:0;display:grid;gap:.7rem}
+ol.goals[start="6"]{counter-reset:g 5}
+ol.goals > li{counter-increment:g;position:relative;padding-left:2.4rem;color:var(--ink2)}
+ol.goals > li::before{content:counter(g);position:absolute;left:0;top:.05rem;width:1.6rem;height:1.6rem;border-radius:50%;
+  background:var(--acc);color:var(--bg);font:600 .8rem/1.6rem var(--sans);text-align:center}
+ol.goals b{color:var(--ink)}
+ul.sub{list-style:none;padding:0;margin:.5rem 0 0;display:grid;gap:.45rem}
+ul.sub li{padding-left:0}
+</style>
+</head>
+<body>
+<main>
+
+<p class="kicker">Programming Paradigms · Session 7 ·&nbsp;Multi-threading</p>
+<h1>Why study&nbsp;this</h1>
+<p class="lede">Multi-threading is the model of computation in which several threads of control execute in
+one address space and communicate by reading and writing the same&nbsp;memory.</p>
+<p class="lede">The central challenge of writing a correct multi-threaded program can be stated in one
+sentence: the outcome of a run depends on the interleaving of the threads' instructions, which the
+scheduler chooses and the program does not control. This is the interleaving model; the session
+assumes it at the start and shows at the end that each language guarantees it only for programs
+without data races. A correctness argument must therefore cover every interleaving, and the bugs
+are subtle and can be&nbsp;costly.</p>
+<h2>The three ways of&nbsp;coordination</h2>
+<p>This session presents the three ways in which such an argument is made, each a coordination
+mechanism: mutual exclusion, atomic instructions with retry, and independence of the order. For
+each it examines what it guarantees, what it requires of the programmer, and who, if anyone,
+verifies that&nbsp;requirement.</p>
+<ol class="ways">
+  <li><b>Mutual exclusion.</b> A lock lets one thread at a time run the code that touches the
+  shared state; the harmful interleavings are&nbsp;forbidden.</li>
+  <li><b>Atomic instruction with retry.</b> The operation writes its result with one instruction,
+  compare-and-set, which succeeds only if the value is still the one the operation read, and starts
+  again otherwise; interference is detected by its effect, and the operation is&nbsp;redone.</li>
+  <li><b>Independence of the order.</b> The threads share no mutable state while they run, and their results
+  are combined by an operation whose result does not depend on how the parts are grouped, nor,
+  where the parts may arrive in any order, on that order; the interleavings are&nbsp;irrelevant.</li>
+</ol>
+
+<h2>Programming language support for&nbsp;concurrency</h2>
+<p>Threaded concurrency is the model of operating system kernels and database engines, of the
+runtimes of Java, Go, OCaml 5 and Rust, and, since 2025, of Python without its global lock. OCaml
+<a href="https://ocaml.org/releases/5.0.0">acquired parallel threads in December 2022</a>. Python,
+whose interpreter lock had for decades prevented its threads from executing Python code
+concurrently, began in October 2025 to support
+<a href="https://docs.python.org/3/whatsnew/3.14.html">execution without it</a>. Java, the language of the lab, offers all three&nbsp;ways.</p>
+
+<div class="places box" id="places">
+ <h2 class="boxhead">Support and verification, by&nbsp;language</h2>
+ <div class="ptabs" role="tablist">
+  <button class="pv on" role="tab" aria-selected="true" data-k="java" aria-controls="pc-java">
+    <img src="https://github.com/openjdk.png?size=96" alt=""><span>Java</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="ocaml" aria-controls="pc-ocaml">
+    <img src="https://github.com/ocaml.png?size=96" alt=""><span>OCaml 5</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="go" aria-controls="pc-go">
+    <img src="https://github.com/golang.png?size=96" alt=""><span>Go</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="rust" aria-controls="pc-rust">
+    <img src="https://github.com/rust-lang.png?size=96" alt=""><span>Rust</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="py" aria-controls="pc-py">
+    <img src="https://github.com/python.png?size=96" alt=""><span>Python</span></button>
+ </div>
+ <div class="pbody">
+    <div class="pt on" role="tabpanel" id="pc-java">
+      <h3><img src="https://github.com/openjdk.png?size=96" alt="">Java<span class="prop">All three ways · no one&nbsp;verifies</span></h3>
+      <p>The language of the lab, and one that offers all three ways: <code>synchronized</code> and
+      the locks of <a href="https://jcp.org/en/jsr/detail?id=166"><code>java.util.concurrent</code></a>;
+      <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html"><code>AtomicInteger.compareAndSet</code></a>;
+      <a href="https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html">parallel
+      streams</a>, which are correct when the combining operation is associative and has an identity.
+      The first two, with the
+      <a href="https://www.cs.umd.edu/~pugh/java/memoryModel/jsr133.pdf">memory model</a>, arrived
+      with Java 5 on 30 September 2004, the third with
+      <a href="https://openjdk.org/projects/jdk8/">Java 8 on 18 March 2014</a>. No one verifies the
+      obligation of the lock: a read performed outside the lock, concurrent with a write under it,
+      compiles, executes, and constitutes a data&nbsp;race.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-ocaml">
+      <h3><img src="https://github.com/ocaml.png?size=96" alt="">OCaml 5<span class="prop">All three ways · races&nbsp;bounded</span></h3>
+      <p>The second language of the lectures.
+      <a href="https://ocaml.org/releases/5.0.0">OCaml 5.0.0, released on 16 December 2022</a>,
+      <a href="https://ocaml.org/manual/5.4/parallelism.html">executes domains in parallel</a>;
+      <code>Mutex</code> and <code>Condition</code> provide the lock, <code>Atomic.compare_and_set</code>
+      the instruction. Before it,
+      <a href="https://ocaml.org/manual/4.14/libthreads.html">at most one thread at a time executed
+      OCaml code</a>. Its memory model carries a
+      <a href="https://kcsrk.info/papers/pldi18-memory.pdf">proved guarantee</a>: the effect of a data
+      race is bounded in space and in time, so that a racy program may compute a wrong value but
+      cannot&nbsp;crash.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-go">
+      <h3><img src="https://github.com/golang.png?size=96" alt="">Go<span class="prop">A tool verifies, at run&nbsp;time</span></h3>
+      <p>Go retains the lock and the atomic instruction and adds a tool:
+      <a href="https://go.dev/blog/race-detector">the race detector</a>, built on ThreadSanitizer and
+      part of Go since version 1.1 in 2013, reports the data races that occur in a given run, and no
+      others. <a href="https://go.dev/ref/mem">Its memory model</a> guarantees that a program free of
+      data races behaves as if its goroutines were interleaved on a single processor; a race on a map
+      or a slice may corrupt&nbsp;memory.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-rust">
+      <h3><img src="https://github.com/rust-lang.png?size=96" alt="">Rust<span class="prop">The compiler&nbsp;verifies</span></h3>
+      <p><a href="https://blog.rust-lang.org/2015/05/15/Rust-1.0/">Rust 1.0, released on 15 May 2015</a>,
+      <a href="https://blog.rust-lang.org/2015/04/10/Fearless-Concurrency/">rejects at compile time every
+      program that contains a data race</a>, provided the program is written in safe Rust. The rule is
+      ownership: each value has exactly one owner, and may be shared or mutated but never both at
+      once. The compiler does not check the order in which locks are acquired. Session 12 states the&nbsp;rule.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-py">
+      <h3><img src="https://github.com/python.png?size=96" alt="">Python<span class="prop">One lock, optional since&nbsp;2025</span></h3>
+      <p>A single interpreter lock allowed at most one thread at a time to execute Python code.
+      <a href="https://peps.python.org/pep-0703/">PEP 703</a> makes the lock optional.
+      <a href="https://docs.python.org/3/whatsnew/3.13.html">Python 3.13, released on 7 October 2024</a>,
+      shipped the free-threaded build as experimental;
+      <a href="https://docs.python.org/3/whatsnew/3.14.html">Python 3.14, released on 7 October 2025</a>,
+      <a href="https://peps.python.org/pep-0779/">supports it officially</a>, as a separate build.
+      Every question of this session now applies to&nbsp;Python.</p>
+    </div>
+  </div>
+</div>
+
+<p>Multi-threading is everywhere in AI systems, and three of the connections are exactly this
+session's&nbsp;material.</p>
+
+<div class="places box" id="ai">
+ <h2 class="boxhead">Multi-threading and&nbsp;AI</h2>
+ <div class="ptabs" role="tablist">
+  <button class="pv on" role="tab" aria-selected="true" data-k="gpu" aria-controls="pc-gpu">
+    <img src="https://github.com/NVIDIA.png?size=96" alt=""><span>The GPU</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="train" aria-controls="pc-train">
+    <img src="https://github.com/pytorch.png?size=96" alt=""><span>Training</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="gil" aria-controls="pc-gil">
+    <img src="https://github.com/python.png?size=96" alt=""><span>Python's lock</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="serve" aria-controls="pc-serve">
+    <img src="https://github.com/vllm-project.png?size=96" alt=""><span>Serving</span></button>
+  <button class="pv" role="tab" aria-selected="false" data-k="tok" aria-controls="pc-tok">
+    <img src="https://github.com/huggingface.png?size=96" alt=""><span>The tokenizer</span></button>
+ </div>
+ <div class="pbody">
+    <div class="pt on" role="tabpanel" id="pc-gpu">
+      <h3><img src="https://github.com/NVIDIA.png?size=96" alt="">The GPU<span class="prop">Atomic instruction with&nbsp;retry</span></h3>
+      <p>A kernel runs thousands of threads over one memory. The backward pass of PyTorch's
+      FlashAttention backend
+      <a href="https://docs.pytorch.org/docs/stable/notes/randomness.html">uses atomic additions by
+      default</a>. An atomic addition needs no retry; it is the second way in its one-instruction case.
+      The order of the additions may vary from run to run, and floating-point addition is not
+      associative, so the result may&nbsp;vary.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-train">
+      <h3><img src="https://github.com/pytorch.png?size=96" alt="">Training<span class="prop">Independence of the&nbsp;order</span></h3>
+      <p>Gradients computed by many workers are summed, a parallel fold.
+      <a href="https://docs.pytorch.org/docs/stable/notes/randomness.html">Floating-point addition is
+      not associative</a>, so two runs of the same training differ in their last bits: the third way,
+      with its obligation&nbsp;unmet.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-gil">
+      <h3><img src="https://github.com/python.png?size=96" alt="">Python's lock<span class="prop">The runtime’s lock, now&nbsp;optional</span></h3>
+      <p>The <a href="https://peps.python.org/pep-0703/#motivation">motivation of PEP 703</a> is
+      neural-network training in Python, where PyTorch's data loader uses processes rather than threads
+      for parallelism, because the lock lets only one thread at a time execute Python&nbsp;code.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-serve">
+      <h3><img src="https://github.com/vllm-project.png?size=96" alt="">Serving<span class="prop">A producer–consumer&nbsp;queue</span></h3>
+      <p><a href="https://github.com/vllm-project/vllm">An inference server</a> batches the requests
+      that arrive concurrently into one GPU call. The queue between the request handlers and the
+      batching loop is the lecture's producer–consumer queue; whether it is bounded is
+      <a href="https://github.com/vllm-project/vllm/blob/main/vllm/config/scheduler.py">a configuration
+      choice</a>, unbounded by&nbsp;default.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-tok">
+      <h3><img src="https://github.com/huggingface.png?size=96" alt="">The tokenizer<span class="prop">The compiler&nbsp;verifies</span></h3>
+      <p>The tokenizer that runs before each prompt is sent to the model has
+      <a href="https://github.com/huggingface/tokenizers">its reference implementation in Rust</a>,
+      the language whose compiler verifies the absence of data&nbsp;races.</p>
+    </div>
+  </div>
+</div>
+
+<section class="goals-box box">
+  <h2 class="boxhead">Learning&nbsp;objectives</h2>
+  <div class="goals-in">
+  <p class="glabel">In the&nbsp;session</p>
+  <ol class="goals">
+    <li><b>Predict</b> the output of a short two-threaded program, and justify the prediction by
+    exhibiting an interleaving that produces&nbsp;it.</li>
+    <li><b>Classify</b> an operation by the contract it satisfies, atomic by exclusion, atomic without
+    exclusion, or deterministic under every interleaving; <b>state</b> the obligation the contract
+    places on the programmer, the progress risk it entails, and who verifies the&nbsp;obligation.</li>
+    <li><b>Distinguish</b> a data race from an atomicity violation, and a safety property from a
+    liveness property; place every conditional wait in a loop; eliminate a deadlock by imposing an
+    order on the&nbsp;locks.</li>
+    <li><b>State</b> the guarantee that the memory models of Java, C++, Go, OCaml 5 and Rust have in
+    common, that a program free of data races behaves as some interleaving of its threads, and the
+    condition it carries in C++ and Rust, that atomic accesses use the sequentially consistent
+    ordering; <b>decide</b> whether a given history of push and pop operations is explained by a
+    sequential stack; <b>state</b> the lock-free and wait-free progress conditions; and <b>say</b> why
+    locks and compare-and-set do not compose into one atomic operation while transactions&nbsp;do.</li>
+    <li><b>Say</b> when a parallel fold agrees with the sequential one, that the combine is associative
+    with an identity and the parts are combined in order, and when commutativity is needed too; and
+    why the counter's result is the same under every way while the stack's depends on
+    the&nbsp;interleaving.</li>
+  </ol>
+  <p class="glabel">In the&nbsp;lab</p>
+  <ol class="goals" start="6">
+    <li><b>Build</b> a mini ray tracer in Java, in two steps.
+      <ul class="sub">
+        <li><b>Warm-up:</b> the three structures the ray tracer needs, each with a contract and a
+        check. A counter, written three ways: with a lock, with an atomic instruction, and with one
+        count per thread. Workers, which start the threads and join them. A bounded buffer, written
+        as a&nbsp;monitor.</li>
+        <li><b>Quest:</b> the picture, rendered by one worker per processor and joined before it is
+        written; the work handed out through a shared counter; the workers stopped from outside with
+        a flag; and, for every piece of shared state, which of the three ways protects&nbsp;it.</li>
+      </ul>
+    </li>
+  </ol>
+  </div>
+</section>
+
+<p class="note">13 October 2026. Each date and claim is linked to its source in the text. Logos
+are the organizations' GitHub&nbsp;avatars.</p>
+
+</main>
+<script>
+// In each box, pointing at a logo, focusing it or tapping it shows its text below.
+document.querySelectorAll(".places").forEach(box => {
+  const vs = box.querySelectorAll(".pv");
+  const show = k => {
+    vs.forEach(v => { const on = v.dataset.k === k; v.classList.toggle("on", on); v.setAttribute("aria-selected", on ? "true" : "false"); });
+    box.querySelectorAll(".pt").forEach(p => p.classList.toggle("on", p.id === "pc-" + k));
+  };
+  vs.forEach(v => ["mouseenter", "focus", "click"].forEach(e => v.addEventListener(e, () => show(v.dataset.k))));
+});
+</script>
+</body>
+</html>
