@@ -187,8 +187,9 @@ concurrently, began in October 2025 to support
       <h3><img src="https://github.com/golang.png?size=96" alt="">Go<span class="prop">A tool verifies, at run&nbsp;time</span></h3>
       <p>Go retains the lock and the atomic instruction and adds a tool:
       <a href="https://go.dev/blog/race-detector">the race detector</a>, built on ThreadSanitizer and
-      part of Go since version 1.1 in 2013, reports the data races that occur in a given run, and no
-      others. <a href="https://go.dev/ref/mem">Its memory model</a> guarantees that a program free of
+      part of Go since version 1.1 in 2013, reports two unordered accesses that the run made, even when
+      the run's timing kept them apart and the answer was right; a path the run did not take is not
+      checked. <a href="https://go.dev/ref/mem">Its memory model</a> guarantees that a program free of
       data races behaves as if its goroutines were interleaved on a single processor; a race on a map
       or a slice may corrupt&nbsp;memory.</p>
     </div>
