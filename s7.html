@@ -286,6 +286,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 .notes-wrap .nside{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk)}
 .notes-wrap .nside-parts{columns:2 15rem;column-gap:2rem}
 .notes-wrap .nside-part{break-inside:avoid}
+.notes-wrap .nside-back{display:none}
 .notes-fold>summary{cursor:pointer;font:600 1rem/1.4 var(--sans);color:var(--acc);margin:1.2rem 0;list-style:none}
 .notes-fold>summary::before{content:"\25B8\00A0"}
 .notes-fold[open]>summary::before{content:"\25BE\00A0"}
@@ -296,29 +297,33 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 .notes-embed section>p{max-width:none}
 .notes-embed [id]{scroll-margin-top:4.5rem}
 .notes-embed .notes-sep{border:0;border-top:1px solid var(--line);margin:3.5rem 0 2.5rem}
-@media (min-width:901px){
-  .notes-wrap.open{display:grid;grid-template-columns:14.5rem minmax(0,1fr);gap:2.2rem;align-items:start}
-  .notes-wrap.open .nside{position:sticky;top:4.5rem;max-height:calc(100vh - 6rem);overflow:auto;
-    padding:.2rem 0;border:0;background:none}
-  .notes-wrap.open .nside-parts{columns:auto}}
+/* the notes open: their contents take the place of the course's links and sessions in the rail */
+.notes-mode aside.rail>nav:not(.nside),.notes-mode aside.rail>.railhead{display:none}
+aside.rail .nside{margin:0 0 1.5rem}
+aside.rail .nside-parts{columns:auto}
+aside.rail .nside a{padding:.22rem .6rem;border-radius:0;font-size:.9rem;color:var(--ink2)}
+aside.rail .nside .nside-part>a{color:var(--ink);font-weight:600;margin-top:.4rem}
+aside.rail .nside a.on{color:var(--acc);border-left-color:var(--acc);background:none}
+aside.rail .nside-back{display:block;font:600 .88rem/1.3 var(--sans);color:var(--acc);text-decoration:none;
+  padding:.4rem .6rem;margin:0 0 1rem;border-radius:6px;background:var(--acc-l)}
 </style>
-<div class="notes-wrap" id="notes-wrap"><nav class="nside" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1">Block 1, Mutual&nbsp;exclusion</a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
-<li><a href="#b1-counter">2. Race&nbsp;conditions</a></li>
-<li><a href="#b1-instruction">3. Atomic&nbsp;instructions</a></li>
-<li><a href="#b1-lock">4.&nbsp;Locks</a></li>
+<div class="notes-wrap" id="notes-wrap"><nav class="nside" aria-label="Contents"><a class="nside-back" href="#notes">&larr; Back to the&nbsp;course</a><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1">Block 1, Mutual&nbsp;exclusion</a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
+<li><a href="#b1-counter">2. Race conditions</a></li>
+<li><a href="#b1-instruction">3. Atomic instructions</a></li>
+<li><a href="#b1-lock">4. Locks</a></li>
 <li><a href="#b1-checker">5. Race detection and&nbsp;prevention</a></li>
-<li><a href="#b1-two-locks">6.&nbsp;Deadlock</a></li>
-<li><a href="#b1-waiting">7. Condition&nbsp;synchronization</a></li>
-<li><a href="#b1-closing">8.&nbsp;Summary</a></li>
-<li><a href="#b1-priority-inversion">Appendix. Priority&nbsp;inversion</a></li></ol></div>
+<li><a href="#b1-two-locks">6. Deadlock</a></li>
+<li><a href="#b1-waiting">7. Condition synchronization</a></li>
+<li><a href="#b1-closing">8. Summary</a></li>
+<li><a href="#b1-priority-inversion">Appendix. Priority inversion</a></li></ol></div>
 <div class="nside-part"><a href="#block2">Block 2, Atomics; independence of the&nbsp;order</a><ol><li><a href="#b2-standards">1. Linearizability and&nbsp;progress</a></li>
-<li><a href="#b2-cas">2.&nbsp;Compare-and-set</a></li>
-<li><a href="#b2-treiber">3. Treiber&#x27;s&nbsp;stack</a></li>
-<li><a href="#b2-cost">4.&nbsp;Contention</a></li>
-<li><a href="#b2-independence">5. Deterministic&nbsp;parallelism</a></li>
-<li><a href="#b2-composition">6.&nbsp;Composition</a></li>
-<li><a href="#b2-discovery">7. Memory&nbsp;models</a></li>
-<li><a href="#b2-closing">8.&nbsp;Summary</a></li>
+<li><a href="#b2-cas">2. Compare-and-set</a></li>
+<li><a href="#b2-treiber">3. Treiber&#x27;s stack</a></li>
+<li><a href="#b2-cost">4. Contention</a></li>
+<li><a href="#b2-independence">5. Deterministic parallelism</a></li>
+<li><a href="#b2-composition">6. Composition</a></li>
+<li><a href="#b2-discovery">7. Memory models</a></li>
+<li><a href="#b2-closing">8. Summary</a></li>
 <li><a href="#b2-appendix">Appendix</a></li></ol></div></div></nav>
 <details class="notes-fold" id="notes-fold"><summary>The notes of both blocks, on this page</summary>
 <div class="notes-embed">
@@ -3089,15 +3094,26 @@ the reader: 109518919 readings, 2611258 with a sum other than 200
 })();
 
 (function(){
-  var w=document.getElementById('notes-wrap'), d=document.getElementById('notes-fold');
+  var w=document.getElementById('notes-wrap'), d=document.getElementById('notes-fold'),
+      rail=document.getElementById('rail'), root=document.documentElement;
   if(!w||!d)return;
-  function sync(){w.classList.toggle('open',d.open);}
+  var nav=w.querySelector('nav.nside'), back=nav.querySelector('.nside-back');
+  /* open: the contents move into the rail, under the course's name; folded: back in the page */
+  function sync(){
+    var open=d.open;
+    root.classList.toggle('notes-mode',open);
+    if(!rail)return;
+    if(open&&nav.parentNode!==rail){var at=rail.querySelector('.brand-sub'); rail.insertBefore(nav,at?at.nextSibling:rail.firstChild);}
+    if(!open&&nav.parentNode!==w){w.insertBefore(nav,w.firstChild);}
+  }
   d.addEventListener('toggle',sync);
   function go(id){var t=document.getElementById(id); if(!t||!d.contains(t))return false;
-    d.open=true; sync(); requestAnimationFrame(function(){t.scrollIntoView();}); return true;}
-  w.querySelectorAll('nav.nside a').forEach(function(a){a.addEventListener('click',function(e){
+    if(!d.open){d.open=true; sync();} requestAnimationFrame(function(){t.scrollIntoView();}); return true;}
+  nav.querySelectorAll('a:not(.nside-back)').forEach(function(a){a.addEventListener('click',function(e){
     var id=a.getAttribute('href').slice(1);
     if(go(id)){e.preventDefault(); history.replaceState(null,'','#'+id);}});});
+  back.addEventListener('click',function(e){e.preventDefault(); d.open=false; sync();
+    history.replaceState(null,'','#notes'); document.getElementById('notes').scrollIntoView();});
   if(location.hash)go(location.hash.slice(1));
 })();
 </script>
