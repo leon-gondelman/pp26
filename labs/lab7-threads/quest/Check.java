@@ -131,6 +131,26 @@ public final class Check {
     return first < 0 ? null : "rows " + first + " to " + last + " are unrendered";
   }
 
+  /** Waits until no pixel of the picture has changed for 0.3 s, at most 5 s: until workers that were
+   *  not joined have stopped writing. */
+  static void quiet(Picture p) throws InterruptedException {
+    long last = sum(p), t0 = System.nanoTime();
+    int still = 0;
+    while (still < 3 && System.nanoTime() - t0 < 5_000_000_000L) {
+      Thread.sleep(100);
+      long now = sum(p);
+      still = now == last ? still + 1 : 0;
+      last = now;
+    }
+  }
+
+  static long sum(Picture p) {
+    long h = 0;
+    for (int y = 0; y < p.height; y++)
+      for (int x = 0; x < p.width; x++) h = h * 31 + p.rgb(x, y);
+    return h;
+  }
+
   /** The first pixel where the two differ, as "pixel (12, 40)", or null. */
   static String firstDifference(Picture p, Picture ref) {
     for (int y = 0; y < p.height; y++)
@@ -159,8 +179,13 @@ public final class Check {
       Picture p = new Picture(scene.width(), scene.height());
       Render.render(scene, 1, threads, new AtomicCounter(), p, null);
       String grey = unrenderedRows(p);
-      if (grey != null)
-        return grey + ": was every worker joined before the PNG was written, and does every row belong to a band? (Render.java, holes 1 and 2)";
+      if (grey != null) {
+        quiet(p);                                                   // workers not joined may still be rendering
+        String still = unrenderedRows(p);
+        if (still == null)
+          return grey + " when render returned, and the picture was whole only later: was every worker joined before the PNG was written? (Render.java, hole 2)";
+        return still + ", even once the workers have stopped writing: does every row belong to a band, the last taking the remainder? (Render.java, hole 1)";
+      }
       String diff = firstDifference(p, reference(scene, "small"));
       if (diff != null) return diff + " differs from the sequential picture: which worker wrote it, and from which row? (Render.java, hole 1)";
       return null;
@@ -323,7 +348,7 @@ public final class Check {
       run.start();
       run.join(20_000);
       if (error[0] != null) {
-        if (isTodo(error[0])) throw new IllegalStateException(message(error[0]));
+        if (isTodo(error[0])) throw new IllegalStateException(message(error[0]) + "; hole 12 is checked once hole 13 is written");
         throw new RuntimeException(error[0]);
       }
       int n;
@@ -353,12 +378,17 @@ public final class Check {
 
   // ---- part 6: the explorer --------------------------------------------------------------
 
-  /** A picture that remembers who wrote when. A thread that wrote before the camera changed
-   *  is a worker of the old view; its writes after the first write of a new worker are the
-   *  old view landing among the new. */
+  /** A picture that remembers who wrote when. A thread made before the camera changed is a
+   *  worker of the old view, whether or not it had written yet (FRESH tells them apart); its
+   *  writes after the first write of a new worker are the old view landing among the new. */
   static final class Watched extends Picture {
     final AtomicLong writes = new AtomicLong();
     volatile boolean changed = false;                     // set by the check when the camera changes
+    /** True in the threads made by the restart: set in the check's thread just before it, and
+     *  inherited by every thread made from then on, the new workers; the old ones keep false. */
+    static final InheritableThreadLocal<Boolean> FRESH = new InheritableThreadLocal<>() {
+      @Override protected Boolean initialValue() { return false; }
+    };
     volatile boolean newBegan = false;                    // set here when a new worker first writes
     final ConcurrentHashMap<Thread, long[]> byThread = new ConcurrentHashMap<>();   // {before, after the new began, last x, last y, after the change}
 
@@ -368,8 +398,9 @@ public final class Check {
       super.set(x, y, c);
       writes.incrementAndGet();
       long[] me = byThread.computeIfAbsent(Thread.currentThread(), t -> new long[5]);
+      boolean fresh = FRESH.get();                       // made by the restart, after the change
       if (!changed) me[0]++;
-      else if (me[0] == 0) newBegan = true;               // a worker of the new view
+      else if (fresh) newBegan = true;                    // a worker of the new view
       else {                                              // an old worker, after the camera changed
         me[4]++;
         if (newBegan) { me[1]++; me[2] = x; me[3] = y; }  // and after the new view began
@@ -389,7 +420,9 @@ public final class Check {
       while (p.writes.get() < enough && System.nanoTime() < deadline) Thread.sleep(1);
       if (p.writes.get() < enough) return "the first render wrote nothing: does the worker loop render its tiles? (Explorer.java)";
       p.changed = true;
+      Watched.FRESH.set(true);                          // the threads the restart makes inherit it
       e.restart(b);
+      Watched.FRESH.set(false);
       Workers fresh = e.current();
       if (fresh == null) return "no render after the new camera (Explorer.java)";
       fresh.join();

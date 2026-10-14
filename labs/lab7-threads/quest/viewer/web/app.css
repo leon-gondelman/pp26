@@ -57,6 +57,8 @@ button{font:inherit;color:inherit}
 .recheck{margin-left:auto;font-size:.78rem;padding:.2rem .65rem}
 .threads input[type=checkbox]{width:auto;accent-color:var(--path)}
 .st.pending{border-style:dashed}
+.st.stale{border-style:dashed;opacity:.55}
+.st.stale.checking{opacity:1}
 .st.checking{animation:pulse 1s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.35}}
 

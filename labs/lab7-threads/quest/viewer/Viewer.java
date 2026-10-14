@@ -84,7 +84,8 @@ public final class Viewer {
   volatile int bar = 0;
   volatile boolean noted = true;                       // the run's note on its holes is said
 
-  // the stations: for each hole, "done", "todo" or "pending", and the check's sentence when todo
+  // the stations: for each hole, "done", "todo" or "pending", the check's sentence when todo, and
+  // "stale" while a round has not yet checked its part again
   final Map<Integer, String[]> stations = new TreeMap<>();
   // the student's mode: the files watched, and the round of checks under way
   final Map<Path, Long> seen = new HashMap<>();
@@ -109,7 +110,7 @@ public final class Viewer {
       raf.setLength(4L * (MAX + HEAD));
       map = raf.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, 4L * (MAX + HEAD)).asIntBuffer();
     }
-    for (int n = 1; n <= 13; n++) stations.put(n, new String[] { teacher ? "done" : "pending", "" });
+    for (int n = 1; n <= 13; n++) stations.put(n, new String[] { teacher ? "done" : "pending", "", "" });
     Runtime.getRuntime().addShutdownHook(new Thread(() -> { stopEngine(); stopChecks(); }));
     if (teacher) prepare();
     else watch();
@@ -157,6 +158,7 @@ public final class Viewer {
   /** One round: compile the quest, then run each part's check and set its stations. */
   void checkRound(int r) {
     stopChecks();
+    synchronized (this) { for (String[] st : stations.values()) st[2] = "stale"; }
     compile = "compiling";
     state();
     try {
@@ -192,6 +194,7 @@ public final class Viewer {
         List<String> lines = check(ph[0]);
         if (r != round) return;
         verdict(ph, lines);
+        for (String l : lines) if (!l.startsWith("pass")) log(l);
       }
       checking = "";
       long done = stations.values().stream().filter(s -> s[0].equals("done")).count();
@@ -283,7 +286,7 @@ public final class Viewer {
         }
       }
       String w = named != null ? named : why != null ? why : "the check of part " + ph[0] + " did not reach this hole";
-      stations.put(n, covered && ok ? new String[] { "done", "" } : new String[] { "todo", w });
+      stations.put(n, covered && ok ? new String[] { "done", "", "" } : new String[] { "todo", w, "" });
     }
     state();
   }
@@ -298,7 +301,7 @@ public final class Viewer {
   void toggle(int n) {
     synchronized (this) {
       if (!given.remove(n)) given.add(n);
-      for (int k = 1; k <= 13; k++) stations.put(k, new String[] { given.contains(k) ? "todo" : "done", "" });
+      for (int k = 1; k <= 13; k++) stations.put(k, new String[] { given.contains(k) ? "todo" : "done", "", "" });
     }
     log(given.isEmpty() ? "every hole with its solution" : "holes as the student starts: " + given + "; the next run uses them");
     state();
@@ -482,7 +485,8 @@ public final class Viewer {
     synchronized (this) {
       for (var e : stations.entrySet())
         st.append(st.length() == 0 ? "" : ",").append("\"").append(e.getKey()).append("\":{\"s\":")
-          .append(json(e.getValue()[0])).append(",\"why\":").append(json(e.getValue()[1])).append("}");
+          .append(json(e.getValue()[0])).append(",\"why\":").append(json(e.getValue()[1]))
+          .append(",\"stale\":").append(!e.getValue()[2].isEmpty()).append("}");
     }
     return "{\"mode\":\"" + (teacher ? "teacher" : "student") + "\",\"stations\":{" + st + "},\"building\":" + building
         + ",\"running\":" + running + ",\"exploring\":" + exploring + ",\"rendering\":" + rendering + ",\"film\":" + filmReady + ",\"part\":\"" + part

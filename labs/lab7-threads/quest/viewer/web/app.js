@@ -258,6 +258,8 @@ function description() {
   else if (state === "done") status = `<div class="opens">Done: part ${p.n}'s check passes on it. Opens: ${st[2]}.</div>`;
   else if (state === "todo") status = `<div class="opens missing">To write. The check: ${esc(why)}</div>`;
   else status = `<div class="opens">Not checked yet: the checks run once the quest compiles.</div>`;
+  if (!teacher() && selected > 0 && station(selected).stale && state !== "pending")
+    status += `<div class="opens">Being checked again since the last save.</div>`;
   d.innerHTML = `<div class="where">${selected === 0 ? "Part 0" : "Station " + selected} · part ${p.n}, ${p.name} · ${file}</div>
     <div class="what">${esc(what)}</div>${status}
     <a class="inlab" href="/lab/index.html#part${p.n}" target="lab7-page">In the lab: Part ${p.n}, ${p.name} <span>↗</span></a>`
@@ -282,7 +284,8 @@ function render() {
     for (const [n] of p.st) {
       const done = on(n);
       $("st" + n).className = "st " + (p.branch ? "ext" : "path") + (done ? " done" : "") + (n === selected ? " sel" : "")
-        + (n > 0 && station(n).s === "pending" ? " pending" : "") + (S.checking === String(p.n) && !done ? " checking" : "");
+        + (n > 0 && station(n).s === "pending" ? " pending" : "") + (n > 0 && station(n).stale ? " stale" : "")
+        + (S.checking === String(p.n) ? " checking" : "");
       $("task" + n).className = "task" + (done ? "" : " hollow") + (n === selected ? " sel" : "");
     }
   }
@@ -319,7 +322,7 @@ function out(line) {
   const o = $("out"), last = o.querySelector(".last");
   if (last) last.classList.remove("last");
   const s = document.createElement("span");
-  const warn = /^(part \d+'s holes? |  hole \d+: |error|the quest does not compile|  .*error:)/.test(line);
+  const warn = /^(part \d+'s holes? |  hole \d+: |error|the quest does not compile|  .*error:|FAIL \d|todo \d)/.test(line);
   s.className = "last" + (warn ? " warn" : "");
   s.textContent = line + "\n";
   o.append(s);
