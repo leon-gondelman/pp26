@@ -6,7 +6,8 @@
 // lock, so the producers still queue); the consumer must take them in that order. The main thread joins the producers and then puts the end marker,
 // BufferCheck.END, a value this file reserved (exercise 2's join, and question 1 of the
 // primitives' page). The consumer's loop, which stops on the marker, is given here. At a
-// deadline, a run that has not ended is reported with the threads that wait.
+// deadline, 20 s after the start, a run that has not ended is reported with the threads that
+// wait.
 public class BufferCheck {
   static final int PRODUCERS = 8, PER_PRODUCER = 20_000, CAPACITY = 4;
   record Item(int producer, int seq) { }
@@ -71,7 +72,7 @@ public class BufferCheck {
       if (consumer.getState() == Thread.State.WAITING) waiting.append("the consumer waits");
       if (waitingProducers > 0) waiting.append(waiting.length() > 0 ? " and " : "").append(waitingProducers).append(" producers wait");
       System.out.println("FAIL  buffer  stuck at the deadline: " + waiting
-          + "; a wake-up went to a thread that could do nothing with it, and the one that needed it sleeps on (rule 5); a run that did not stop proves nothing (rule 8)");
+          + "; a wake-up went to a thread that could do nothing with it, and the one that needed it sleeps on (rule 5)");
       System.exit(0);
     }
     long expected = (long) PRODUCERS * PER_PRODUCER, got = 0;

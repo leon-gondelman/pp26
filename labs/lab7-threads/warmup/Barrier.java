@@ -7,9 +7,10 @@
 // party wrote before its await, and everything the action wrote, is visible to every party
 // after. The round ends when the last arrives; the next begins at once, and a party that
 // returns cannot pass the next await until the others have arrived again. If the action
-// throws, or a waiting party is interrupted, the barrier is broken: every party waiting and
-// every later arrival leaves await with a BrokenBarrierException, and the barrier stays
-// broken; that is CyclicBarrier's rule.
+// throws or a waiting party is interrupted, the barrier is broken for good: the interrupted
+// party leaves with InterruptedException, every other waiting party and every later arrival
+// with BrokenBarrierException. For the parties still waiting, this is the rule of
+// java.util.concurrent.CyclicBarrier.
 //
 // Given: the count of parties, the action, and the empty await(). Write it in two steps:
 // first for one round, every arrival but the last waits, the last runs the action, resets the

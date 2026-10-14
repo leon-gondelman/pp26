@@ -94,9 +94,17 @@ public class BarrierCheck {
     Thread.sleep(200);                      // both are waiting: the third never comes
     ts[0].interrupt();
     for (Thread t : ts) t.join(3_000);
-    try { b.await(); } catch (Throwable e) { got[2] = e; }   // a later arrival
     if (ts[0].isAlive() || ts[1].isAlive()) {
       System.out.println("FAIL  broken  at the deadline a party still waits after another was interrupted: does an interrupted wait break the barrier and wake the rest?");
+      return;
+    }
+    Thread later = new Thread(() -> {       // a later arrival, on a thread of its own
+      try { b.await(); } catch (Throwable e) { got[2] = e; }
+    }, "later arrival");
+    later.start();
+    later.join(3_000);
+    if (later.isAlive()) {
+      System.out.println("FAIL  broken  a later arrival on the broken barrier still waits at the deadline: does await throw at once when the barrier is broken?");
       return;
     }
     if (!(got[0] instanceof InterruptedException)) {

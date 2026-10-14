@@ -98,7 +98,7 @@ figure svg text.t{fill:var(--ink2);text-anchor:middle}
 
 <p class="notes-kicker">Programming Paradigms · Session 7 · Multi-threading · Block&nbsp;1</p>
 <h1>Mutual&nbsp;exclusion</h1>
-<p class="notes-date">Lecture notes of block 1, session 7, Wednesday 14 October 2026. Written to be read before the lecture, to arrive prepared, and after it, to have the whole argument in one place. Every program on this page was run while the session was prepared and its output recorded; what is shown is one sample of a run, never a live one. The session's entry test, eleven questions on the course site, is referred to by its question&nbsp;numbers.</p>
+<p class="notes-date">Lecture notes of block 1, session 7, Wednesday 21 October 2026. Written to be read before the lecture, to arrive prepared, and after it, to have the whole argument in one place. Every program on this page was run while the session was prepared and its output recorded; what is shown is one sample of a run, never a live one. The session's entry test, eleven questions on the course site, is referred to by its question&nbsp;numbers.</p>
 
 <article id="block1">
 
@@ -109,9 +109,9 @@ figure svg text.t{fill:var(--ink2);text-anchor:middle}
 
 <p>A <b>thread</b> is a sequence of instructions that the processor executes one after another. Each thread has its own <b>program counter</b>, the position of the instruction it executes next, and its own local variables, which live in a region of memory called the thread's <b>stack</b> (a different thing from the stack data structure of block&nbsp;2). A program may have several threads, started one from another; the first is started when the program is. An <b>instruction</b> is one step that the processor executes as a whole. The instructions this block needs are three: a read of one memory location into a <b>register</b>, a small storage cell inside the processor that belongs to the running thread; a write of one register into one memory location; and an operation on registers, such as an addition. A line of source code is usually several&nbsp;instructions.</p>
 
-<p>The <b>shared memory</b> is a set of locations, each holding one value, that every thread of the program can read and write by its <b>address</b>, the number that names the location. A field of an object and an element of an array are locations. A local variable of a Java or OCaml method is not, since no other thread can reach it, though an object it refers to may be shared by another thread that also holds a reference to it; in C and in Rust a thread may be given the address of another thread's local variable, which the Rust program of section&nbsp;5&nbsp;does.</p>
+<p>The <b>shared memory</b> is a set of locations, each holding one value, that every thread of the program can read and write by its <b>address</b>, the number that names the location. A field of an object and an element of an array are locations. A local variable of a Java or OCaml method is not, since no other thread can reach it, though an object it refers to may be shared by another thread that also holds a reference to it; in C and in Rust a thread may be given the address of another thread's local variable, which the first Rust program of section&nbsp;5 attempts and the compiler&nbsp;rejects.</p>
 
-<p>The <b>scheduler</b> is the part of the operating system and of the language's runtime that decides which thread runs on which processor. It may stop a thread between any two of its instructions, run other threads, and resume the stopped thread later, from the instruction where it was stopped. The program does not control when this&nbsp;happens.</p>
+<p>The <b>scheduler</b> is the part of the operating system and of the language's runtime that decides which thread runs on which processor. It may stop a thread between any two of its instructions, run other threads, and resume the stopped thread later, from the instruction where it was stopped. The program does not control when this happens. The scheduler has four parts: a queue of the threads ready to run; a policy that chooses which of them runs next; a timer interrupt that stops the running thread when its turn is up; and a context switch that saves the stopped thread's registers and program counter and loads those of the next&nbsp;thread.</p>
 
 <p class="notes-def"><b>Definition.</b> An <b>execution</b> of a multi-threaded program is an <b>interleaving</b> of its threads' instructions: one sequence that contains every instruction of every thread, each thread's instructions in the order the thread issues them. Which interleaving a run follows is decided by the scheduler, not by the&nbsp;program.</p>
 
@@ -274,7 +274,7 @@ public static void main(String[] args) throws InterruptedException {
 got      1017204</code></pre>
 <p class="notes-sample">One sample. Ten further runs of the same program printed ten different numbers, all between 1,009,914 and 1,790,018, and none printed&nbsp;2,000,000.</p>
 
-<p>The statement <code>n++</code> is one line of Java and several instructions of the machine. The Java compiler turns it into four instructions of the virtual machine, <code>getstatic</code>, <code>iconst_1</code>, <code>iadd</code> and <code>putstatic</code>, of which the first is the read of <code>n</code> into a register and the last the write of the register back to <code>n</code>; whatever machine code the runtime makes of them, the read and the write of <code>n</code> are two accesses, and the scheduler may run another thread between them. For the argument, the three steps that matter are&nbsp;these:</p>
+<p>The statement <code>n++</code> is one line of Java and several instructions of the machine. The Java compiler turns it into four instructions of the virtual machine, <code>getstatic</code>, <code>iconst_1</code>, <code>iadd</code> and <code>putstatic</code>, of which the first reads <code>n</code> and the last writes&nbsp;it; whatever machine code the runtime makes of them, the read and the write of <code>n</code> are two accesses, and the scheduler may run another thread between them. For the argument, the three steps that matter are&nbsp;these:</p>
 
 <pre><code>int v = n;      // read
 v = v + 1;      // add
@@ -291,12 +291,12 @@ n = v;          // write</code></pre>
 
 <p>Counted for one increment of each thread: the six steps <code>r1 a1 w1 r2 a2 w2</code>, read, add and write of each thread, can be put in 720 orders. Program order within each thread, <code>r</code> before <code>a</code> before <code>w</code>, leaves 20 of them, the interleavings of section&nbsp;1. In 18 of the 20 each thread reads before the other writes, and an update is lost; only the 2 that run one increment entirely before the other count&nbsp;correctly.</p>
 
-<p>Why each card is right or wrong, for any <i>N</i> of at least two. The arguments reason in the model of section&nbsp;1, with one memory and every read returning the latest write. This program has data races, so Java guarantees the model only for the runs that happen to behave that way; what the arguments give is what the model gives, and the recorded runs matched&nbsp;it.</p>
+<p>Why each card is right or wrong, for any <i>N</i> of at least two. The arguments reason in the model of section&nbsp;1, with one memory and every read returning the latest write. This program has data races, so Java does not guarantee the model for it; the arguments give what the model gives, and the recorded runs matched&nbsp;it.</p>
 <ul>
 <li><b>Not A.</b> The interleaving of the table exists, so a run can print less than 2<i>N</i>; the recorded run&nbsp;did.</li>
 <li><b>B.</b> First, <code>n</code> never exceeds the number of writes made so far. This holds before the first write, when <code>n</code> is 0. Suppose it holds up to the <i>k</i>-th write. That write stores a value that was read from <code>n</code> at some earlier moment, plus one; at that moment at most <i>k</i>&nbsp;−&nbsp;1 writes had happened, so the value read was at most <i>k</i>&nbsp;−&nbsp;1, and the value written is at most <i>k</i>. So after the <i>k</i>-th write the claim still holds, and after all 2<i>N</i> writes <code>n</code> is at most 2<i>N</i>. Second, which number is printed depends on the run, because the scheduler chooses the interleaving: every interleaving in which no two increments overlap, that is, in which no read of <code>n</code> falls between another increment's read and its write, gives exactly 2<i>N</i>, and the one in the table loses&nbsp;one.</li>
 <li><b>Not C.</b> By the argument just given, more than 2<i>N</i> is&nbsp;impossible.</li>
-<li><b>Not D.</b> An interleaving in which no two increments overlap gives 2<i>N</i>, and it occurs: twenty runs made while preparing this session, with a thousand increments per thread, printed the exact total three times, since with so few increments a thread usually finishes before the other has started. A run that prints the right number proves nothing about the&nbsp;program.</li>
+<li><b>Not D.</b> An interleaving in which no two increments overlap gives 2<i>N</i>, and it occurs: twenty runs made while preparing this session, with a thousand increments per thread, printed the exact total three times: with so few increments, one thread sometimes finishes its loop before the other thread starts its own. A run that prints the right number proves nothing about the&nbsp;program.</li>
 </ul>
 <figure id="b1-fig-bounds">
 <svg viewBox="0 0 1000 180" width="1420" role="img" aria-label="A number line of the printed value from 0 to 2N" font-family="'Fira Sans', sans-serif" font-size="19" xmlns="http://www.w3.org/2000/svg"><rect class="range" x="240" y="70" width="660" height="28" fill="var(--acc-l)" stroke="none"/><text class="axis lbl" x="0" y="91" text-anchor="start" fill="currentColor">printed value</text><g class="axis"><line x1="140" y1="84" x2="392" y2="84" stroke="currentColor" stroke-width="1.5"/><line x1="404" y1="84" x2="950" y2="84" stroke="currentColor" stroke-width="1.5"/><line x1="384" y1="96" x2="396" y2="72" stroke="currentColor" stroke-width="1.5"/><line x1="396" y1="96" x2="408" y2="72" stroke="currentColor" stroke-width="1.5"/></g><g class="ticks"><line x1="170" y1="76" x2="170" y2="92" stroke="currentColor" stroke-width="1.5"/><line x1="240" y1="76" x2="240" y2="92" stroke="currentColor" stroke-width="1.5"/><line x1="560" y1="76" x2="560" y2="92" stroke="currentColor" stroke-width="1.5"/><line x1="900" y1="76" x2="900" y2="92" stroke="currentColor" stroke-width="1.5"/></g><g class="ticklbl"><text x="170" y="132" text-anchor="middle" fill="currentColor">0</text><text x="240" y="132" text-anchor="middle" fill="currentColor">2</text><text x="560" y="132" text-anchor="middle" fill="currentColor"><tspan font-style="italic">N</tspan></text><text x="900" y="132" text-anchor="middle" fill="currentColor">2<tspan font-style="italic">N</tspan></text></g><g class="ceil"><path d="M888 64 H900 V104 H888" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="910" y="44" text-anchor="end" fill="currentColor">at most 2<tspan font-style="italic">N</tspan>: every write stores one more than a value read</text></g><g class="exact"><circle cx="900" cy="84" r="8" fill="currentColor"/><text x="910" y="170" text-anchor="end" fill="currentColor">exactly 2<tspan font-style="italic">N</tspan>: no overlap</text></g><g class="floor"><path d="M252 64 H240 V104 H252" fill="none" stroke="var(--acc)" stroke-width="3"/><text x="240" y="44" text-anchor="middle" fill="currentColor">at least 2</text></g></svg>
@@ -304,7 +304,7 @@ n = v;          // write</code></pre>
 </figure>
 
 
-<p>The harder question is the smallest value the program can print in the model, and the answer is 2, for every <i>N</i> of at least two; the table shows the interleaving. Not 1: the last write stores one more than a value that was read, and the thread that read 0 had more than one increment to do, so by the time it writes its last value the other thread's writes have raised what it&nbsp;read.</p>
+<p>The harder question is the smallest value the program can print in the model, and the answer is 2, for every <i>N</i> of at least two; the table shows the interleaving. Not 1: the printed value is the one stored by the last write, which is one more than the value its thread read just before it. No write stores 0, since every write stores one more than a value read. The thread that makes the last write has at least two increments, so it wrote <code>n</code> once before its last read; that read therefore returns the value of some write, at least 1, and the last write stores at least&nbsp;2.</p>
 
 <table class="notes-interleaving">&nbsp;<thead class="notes-table-head"><tr><th>Step</th><th>Thread&nbsp;A</th><th>Thread&nbsp;B</th><th>n</th></tr></thead>
 <tbody>&nbsp;<tr><td>1</td><td>reads 0, is&nbsp;stopped</td><td></td><td>0</td></tr>&nbsp;<tr><td>2</td><td></td><td><i>N</i>&nbsp;−&nbsp;1 complete&nbsp;increments</td><td><i>N</i>&nbsp;−&nbsp;1</td></tr>&nbsp;<tr><td>3</td><td>writes&nbsp;1</td><td></td><td>1</td></tr>&nbsp;<tr><td>4</td><td></td><td>reads 1, is&nbsp;stopped</td><td>1</td></tr>&nbsp;<tr><td>5</td><td>its remaining <i>N</i>&nbsp;−&nbsp;1&nbsp;increments</td><td></td><td><i>N</i></td></tr>&nbsp;<tr><td>6</td><td></td><td>writes&nbsp;2</td><td>2</td></tr>
@@ -333,9 +333,9 @@ let () =
 got      1056147</code></pre>
 <p class="notes-sample">One sample; ten further runs all lost&nbsp;updates.</p>
 
-<p>Two words name what went wrong, and they name two different things. Both are needed, because later sections show them apart: a transfer that is an atomicity violation with no data race (section&nbsp;6), and a flag read by one thread and written by another that is a data race with no multi-step operation at all (section&nbsp;5). The definition of the data race names three devices of the program, the lock, the join and the atomic, which sections 3 and 4 define; here it is enough to know that each of them orders one thread's instructions before&nbsp;another's.</p>
+<p>Two words name what went wrong, and they name two different things. Both are needed, because later sections show them apart: a transfer that is an atomicity violation with no data race (section&nbsp;6), and a flag read by one thread and written by another that is a data race with no multi-step operation at all (section&nbsp;5). The definition of the data race names three devices of the program: the lock, defined in sections 3 and 4; a thread's start and join, described at the opening of this section; and the atomic, defined in section&nbsp;3. Here it is enough to know that each of them orders one thread's instructions before&nbsp;another's.</p>
 
-<p class="notes-def"><b>Definition.</b> A <b>data race</b> is two accesses to one memory location from two threads, at least one of them a write, with nothing of the program ordering one before the other: no lock released by the one thread and taken by the other between them, no join, no atomic written by the one and read by the other, and no chain of such orders through other threads. Such two accesses can be adjacent in some interleaving, and that is the harm: one thread may read an old value, or its write may overwrite a result based on a value the other thread read&nbsp;earlier.</p>
+<p class="notes-def"><b>Definition.</b> A <b>data race</b> is two accesses to one memory location from two threads, at least one of them a write, with nothing of the program ordering one before the other: no lock released by the one thread and taken by the other between them, no <code>start</code> or <code>join</code> by which the one thread starts the other or waits for its end, no atomic written by the one and read by the other, and no chain of such orders through other threads. Such two accesses can be adjacent in some interleaving, and that is the harm: one thread may read an old value, or its write may overwrite a result based on a value the other thread read&nbsp;earlier.</p>
 <figure id="b1-fig-race">
 <svg viewBox="0 0 1000 250" width="1420" role="img" aria-label="Two lanes and the shared memory n between them; A writes n and B reads n at the same position in time, with nothing between them" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor">
     
@@ -358,7 +358,7 @@ got      1056147</code></pre>
 </figure>
 
 
-<p>To avoid the race, the two threads must coordinate: the program must put something between the two accesses that orders one before the other. The order that the program can impose is called <b>synchronization</b>. In this session it comes from three sources, each of which block&nbsp;1 meets: a lock's release is ordered before the acquire that follows it (sections 3 and 4); the call of <code>start</code> by the thread that creates a new thread is ordered before the new thread's first instruction, and the new thread's last instruction before the return of the <code>join</code> that waits for it; and a write to an atomic variable (section&nbsp;3) or a volatile variable (section&nbsp;5) is ordered before the read that sees it; in Java and OCaml&nbsp;5 every atomic or volatile access is such an order, in C, C++ and Rust only an atomic access whose named ordering says so, which the sequentially consistent ordering of section&nbsp;1 does. In each case, whatever the first thread wrote before its ordering operation is seen by the second thread after its own, and the orders chain: what is ordered before an operation of the second thread is ordered before what the second thread then orders before a third. The definitions of every language of this session say the same thing in these terms; the Java Language Specification calls the order <i>happens-before</i>, and C++, Go and Rust define a data race the same way.<sup><a href="#b1-src-jls">2</a></sup> Why this ordering is what the fourth assumption's condition is about is the last part of block&nbsp;2.</p>
+<p>To avoid the race, the two threads must coordinate: the program must put something between the two accesses that orders one before the other. The order that the program can impose is called <b>synchronization</b>. In this session it comes from three sources, each of which block&nbsp;1 meets: a lock's release is ordered before the acquire that follows it (sections 3 and 4); the call of <code>start</code> by the thread that creates a new thread is ordered before the new thread's first instruction, and the new thread's last instruction before the return of the <code>join</code> that waits for it; and a write to an atomic variable (section&nbsp;3) or a volatile variable (section&nbsp;5) is ordered before the read that sees it; in Java every access to a volatile field is such an order, and so are the methods <code>get</code>, <code>set</code>, <code>getAndSet</code> and <code>compareAndSet</code> of the atomic classes, which also offer weaker access modes, such as <code>getPlain</code>, that are not; in OCaml&nbsp;5 every operation of the <code>Atomic</code> module is such an order, all of them sequentially consistent; in C, C++ and Rust only an atomic access whose named ordering says so, which the sequentially consistent ordering of section&nbsp;1 does. In each case, whatever the first thread wrote before its ordering operation is seen by the second thread after its own, and the orders chain: what is ordered before an operation of the second thread is ordered before what the second thread then orders before a third. The definitions of every language of this session say the same thing in these terms; the Java Language Specification calls the order <i>happens-before</i>, and C++, Go and Rust define a data race the same way.<sup><a href="#b1-src-jls">2</a></sup> Why this ordering is what the fourth assumption's condition is about is the last part of block&nbsp;2.</p>
 <figure id="b1-fig-sync">
 <svg viewBox="0 0 1000 300" width="1420" role="img" aria-label="Two lanes; A writes n, starts B, writes x atomically, locks, runs its critical section, unlocks and joins B; B reads n, reads x atomically, locks, runs its critical section and unlocks; arrows order steps of one thread before steps of the other" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor">
     <defs><marker id="n-sync-m10b-f3-a" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
@@ -386,7 +386,7 @@ got      1056147</code></pre>
 </figure>
 
 
-<p>An operation is <b>atomic</b> when every other thread sees either all of it or none of it: to the other threads it appears to happen at one instant. One instruction is atomic by definition; an operation of several instructions is atomic only if the program makes it&nbsp;so.</p>
+<p>An operation is <b>atomic</b> when every other thread sees either all of it or none of it: to the other threads it appears to happen at one instant. An instruction of the model of section&nbsp;1, a read of one location, a write of one location or an operation on registers, is atomic by definition. An instruction of a real processor need not be: on x86, <code>inc</code> applied to a memory location is one instruction that reads the location and writes it, and another processor's write can fall between the two unless the instruction carries the <code>lock</code> prefix. An operation of several instructions is atomic only if the program makes it&nbsp;so.</p>
 
 <p class="notes-def"><b>Definition.</b> An <b>atomicity violation</b> is an operation of several steps that the program meant as a unit and did not protect as a unit, so that another thread's step can fall between two of its&nbsp;steps.</p>
 
@@ -590,18 +590,18 @@ got      2000000</code></pre>
 <p>Suspension saves processor time; it removes neither source of the risk. Only an order among the waiters removes starvation: a ticket lock, section&nbsp;3, spins in turn, and a fair lock, such as Java's <code>new ReentrantLock(true)</code>, suspends in turn and costs&nbsp;throughput.</p>
 
 
-<p>Who checks the obligation is the subject of section&nbsp;5. One consequence of the obligation can be stated now, and question&nbsp;3 of the entry test asks it: a lock protects only against the threads that take it. A new lock created for each call of the increment, <code>synchronized (new Object()) { n++; }</code>, is held by one thread and never taken by any other, so it forbids nothing, and the program is section&nbsp;2's; the lock that works is one lock shared by every thread that touches <code>n</code>. The obligation is then the programmer's discipline: the lock enforces none of&nbsp;it. The same question's fourth change, a local count per thread that the main thread adds up after <code>join</code>, is exact too, by the third way of the session, independence of the order, which block&nbsp;2&nbsp;presents.</p>
+<p>Who checks the obligation is the subject of section&nbsp;5. One consequence of the obligation can be stated now, and question&nbsp;3 of the entry test asks it: a lock protects only against the threads that take it. A new lock created for each call of the increment, <code>synchronized (new Object()) { n++; }</code>, is held by one thread and never taken by any other, so it forbids nothing, and the program is section&nbsp;2's; the lock that works is one lock shared by every thread that touches <code>n</code>. The obligation is then the programmer's discipline: the lock enforces none of&nbsp;it. Two other changes of the same question leave the count wrong as well. A <code>volatile</code> field orders each write before the read that sees it, but <code>n++</code> on it is still a read, an addition and a write, and another thread's increment can fall between the read and the write. An atomic integer read with <code>get</code> and then written with <code>set</code>, <code>n.set(n.get() + 1)</code>, makes each of the two calls atomic but not the pair, so another thread's <code>set</code> can fall between them and an update is lost, as in section&nbsp;2. The same question's fourth change, a local count per thread that the main thread adds up after <code>join</code>, makes the count exact, by the third way of the session, independence of the order, which block&nbsp;2&nbsp;presents.</p>
 </section>
 
 <section id="b1-checker">
 <h2>5. Race detection and&nbsp;prevention</h2>
 
-<p class="notes-lede">The obligation of the lock is a rule about every access in the program. Nobody verifies it in Java and OCaml; in Go and C++ a tool verifies it at run time; in Rust the compiler verifies it, for data races&nbsp;only.</p>
+<p class="notes-lede">The obligation of the lock is a rule about every access in the program. In Java and OCaml nothing verifies it by default; in Go and C++ a tool detects its violations in the runs that are made; in Rust the compiler verifies it, for data races&nbsp;only.</p>
 
-<p>The program of this section and of section&nbsp;6 is one program with two accounts. An account is an object with a name, an id (A has id 1, B has id 2), and a balance, a plain <code>int</code> field; each account's own lock is the one Java gives to every object, so <code>synchronized (from)</code> takes the lock of the account <code>from</code>. Both balances start at 100. A transfer takes an amount from one account and adds it to the other; two threads, t1 and t2, transfer in opposite directions, a million times each. The program has four modes, chosen by a command-line argument, <code>java Accounts a</code> to <code>d</code>; this section shows mode d, the transfer in its correct form of section&nbsp;6, both locks taken in a fixed order (section&nbsp;6 says why), with a third thread added that reads both balances and takes no&nbsp;lock.</p>
+<p>The program of this section and of section&nbsp;6 is one program with two accounts. An account is an object with a name, an id (A has id 1, B has id 2), and a balance, a plain <code>int</code> field; each account's own lock is the one Java gives to every object, so <code>synchronized (from)</code> takes the lock of the account <code>from</code>. Both balances start at 100. A transfer takes an amount from one account and adds it to the other, and every transfer of the program moves an amount of 1; two threads, t1 and t2, transfer in opposite directions, a million times each. The program has four modes, chosen by a command-line argument, <code>java Accounts a</code> to <code>d</code>; this section shows mode d, the transfer in its correct form of section&nbsp;6, both locks taken in a fixed order (section&nbsp;6 says why), with a third thread added that reads both balances and takes no&nbsp;lock.</p>
 
 <span class="notes-file">Accounts.java, mode d, the lines shown on the slide</span>
-<pre><code>// (c) the same, but the locks always taken in the order of the ids
+<pre><code>// (c) both locks, in the order of the ids
 static void transferC(Account from, Account to, int x) {
   Account first  = from.id &lt; to.id ? from : to;
   Account second = from.id &lt; to.id ? to : from;
@@ -609,7 +609,7 @@ static void transferC(Account from, Account to, int x) {
     synchronized (second) { from.balance -= x; to.balance += x; }
   }
 }
-// (d) the reader with no lock: broken on purpose, a data race
+// (d) a reader that takes no lock
 static int[] readUnlocked() {
   return new int[] { A.balance, B.balance };
 }</code></pre>
@@ -637,14 +637,14 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 <p>The same program in OCaml&nbsp;5 behaves the same way, and the standard compiler reports nothing either. In its listing, <code>w</code> is a record of what the calling domain holds and waits for, kept for the watchdog that detects the deadlock of section&nbsp;6; <code>lock w first</code> takes the lock of <code>first</code> and notes it&nbsp;there.</p>
 
 <span class="notes-file">accounts.ml, mode unlocked, the lines shown on the slide</span>
-<pre><code>(* (c) Both locks, the smaller id first. *)
+<pre><code>(* (c) both locks, in the order of the ids *)
 let transfer_ordered w src dst k =
   let first, second = if src.id &lt; dst.id then src, dst else dst, src in
   lock w first; lock w second;
   src.balance &lt;- src.balance - k; dst.balance &lt;- dst.balance + k;
   unlock w second; unlock w first
 
-(* (d) The reader with no lock: broken on purpose, a data race. *)
+(* (d) a reader that takes no lock *)
 let read_unlocked () = (a.balance, b.balance)</code></pre>
 <span class="notes-file">$ ./accounts unlocked</span>
 <pre class="notes-out"><code>2000000 transfers, A = 100, B = 100, sum 200
@@ -660,7 +660,7 @@ the reader: 109518919 readings, 2611258 with a sum other than 200
 
 <table>&nbsp;<thead class="notes-table-head"><tr><th>Language</th><th>Who checks that every access is under the&nbsp;lock</th></tr></thead>
 <tbody>
-<tr><td>Java, OCaml&nbsp;5</td><td>Nobody. The program above compiles and runs with no warning. A comment beside the field, <code>// guarded by lock</code>, is the only record of the&nbsp;rule.</td></tr>
+<tr><td>Java, OCaml&nbsp;5</td><td>Nobody by default. The program above compiles and runs with no warning, and a comment beside the field, <code>// guarded by lock</code>, is the only record of the rule. In Java an annotation, <code>@GuardedBy("lock")</code>, can record it instead, and static analysis tools such as Error Prone check the annotation before any&nbsp;run.</td></tr>
 <tr><td>Go; C and&nbsp;C++</td><td>Nobody by default; a detector at run time when the program is built and run with Go's <code>-race</code> flag or with ThreadSanitizer, a race detector that the C and C++ compilers clang and gcc include and that a compiler flag turns on. The detector reports two unordered accesses that the run made, even when the run's timing kept them apart and the answer was right, as far as its record of each location's recent accesses reaches; a path the run did not take is not checked. OCaml&nbsp;5.2 and later can be compiled with ThreadSanitizer too; the standard compiler is&nbsp;not.</td></tr>&nbsp;<tr><td>Rust</td><td>The compiler, before any run, for data races&nbsp;only.</td></tr>
 </tbody>
 </table>
@@ -724,7 +724,7 @@ fn main() {
 <pre class="notes-out"><code>2000000</code></pre>
 <p class="notes-sample">One sample; three runs printed the&nbsp;same.</p>
 
-<p>In Rust the lock owns the data: a <code>Mutex&lt;T&gt;</code> holds the <code>T</code>, and while the lock is shared between threads the only way to the <code>T</code> is the guard that <code>lock()</code> returns, which releases the lock when it goes out of scope. There is no way for a thread to reach the integer without holding its lock, so the first part of the obligation of section&nbsp;4 cannot be broken. In Java, example 3's <code>lock</code> and <code>n</code> are tied only by a comment, <code>// guarded by lock</code>: the compiler accepts <code>n++</code> outside <code>synchronized (lock)</code>. A Java class whose fields are private and whose every method is <code>synchronized</code> keeps other classes away from its fields, but inside the class the compiler still checks nothing. In Rust, as in the monitors of Brinch Hansen and Hoare (the appendix on condition synchronization), the data is reachable only under its lock; Rust states the rule in the types of a library, <code>std::sync::Mutex</code>, rather than in a construct of the language, and the compiler checks it. Rust checks the first part of the obligation, every access under its lock; the others remain the&nbsp;programmer's. The same compiler accepts a program in which each thread writes one slot of a shared array with no lock and no atomic, because the array can be split into disjoint mutable borrows, one slot per thread, and the compiler checks that they do not overlap and that the sum is read only after the threads have ended; that program is block&nbsp;2's third way, and the compiler checks its obligation by the same&nbsp;rule.</p>
+<p>In Rust the lock owns the data: a <code>Mutex&lt;T&gt;</code> holds the <code>T</code>, and while the lock is shared between threads the only way to the <code>T</code> is the guard that <code>lock()</code> returns, which releases the lock when it goes out of scope. There is no way for a thread to reach the integer without holding its lock, so the first part of the obligation of section&nbsp;4 cannot be broken. In Java, the <code>lock</code> and <code>n</code> of CounterLocked.java, section&nbsp;4, are tied only by a comment, <code>// guarded by lock</code>: the compiler accepts <code>n++</code> outside <code>synchronized (lock)</code>. A Java class whose fields are private and whose every method is <code>synchronized</code> keeps other classes away from its fields, but inside the class the compiler still checks nothing. In Rust, as in the monitors of Brinch Hansen and Hoare (the appendix on condition synchronization), the data is reachable only under its lock; Rust states the rule in the types of a library, <code>std::sync::Mutex</code>, rather than in a construct of the language, and the compiler checks it. Rust checks the first part of the obligation, every access under its lock; the others remain the&nbsp;programmer's. The same compiler accepts a program in which each thread writes one slot of a shared array with no lock and no atomic, because the array can be split into disjoint mutable borrows, one slot per thread, and the compiler checks that they do not overlap and that the sum is read only after the threads have ended; that program is block&nbsp;2's third way, and the compiler checks its obligation by the same&nbsp;rule.</p>
 
 <p>What the Rust compiler does not check is as important as what it does. It does not check the order in which locks are taken: the deadlock of section&nbsp;6 compiles in safe Rust. It does not check atomicity: the transfer in two halves of section&nbsp;6 compiles in safe Rust and is wrong in the same way. A compiler can rule out a data race; an atomicity violation falls to the&nbsp;programmer.</p>
 </section>
@@ -734,15 +734,15 @@ fn main() {
 
 <p class="notes-lede">Two accounts, each with a lock. A transfer between them shows that two atomic steps are not one atomic step; taking both locks shows deadlock, defined below; a fixed order of the locks removes it. Each account is a counter, a number that is increased and decreased, so that the session reasons about one number here and about a list, the stack, in block&nbsp;2.</p>
 
-<p>The two accounts A and B of section&nbsp;5 start with 100 each. The <b>invariant</b> of the pair is that the sum of the balances is 200: a transfer moves money and creates none. Two threads transfer in opposite directions, and a third thread reads both balances under both locks and checks the&nbsp;sum.</p>
+<p>The two accounts A and B of section&nbsp;5 start with 100 each, and each transfer moves 1 from one to the&nbsp;other. The <b>invariant</b> of the pair is that the sum of the balances is 200: a transfer moves money and creates none. Two threads transfer in opposite directions, and a third thread reads both balances under both locks and checks the&nbsp;sum.</p>
 
 <span class="notes-file">Accounts.java, mode a, the lines shown on the slide</span>
-<pre><code>// (a) each step under its lock, the transfer as a whole under none: broken on purpose
+<pre><code>// (a) each step under its lock, the transfer as a whole under none
 static void transferA(Account from, Account to, int x) {
   synchronized (from) { from.balance -= x; }
   synchronized (to)   { to.balance   += x; }
 }
-// the reader: both balances under both locks, A's first (the order of the ids)
+// the reader: both balances, both locks
 static int[] read() {
   synchronized (A) { synchronized (B) { return new int[] { A.balance, B.balance }; } }
 }</code></pre>
@@ -788,7 +788,7 @@ after the transfers: A = 100, B = 100, sum = 200</code></pre>
 <p>The repair is to hold both locks for the whole transfer. The first attempt takes the source's lock first, then the destination's. The lines after the transfer are the deadlock detector that Java ships, <code>ThreadMXBean.findDeadlockedThreads</code>, which the main thread calls until it finds threads waiting for each other's locks in a cycle; it then prints which lock each of them holds and waits&nbsp;for.</p>
 
 <span class="notes-file">Accounts.java, mode b, the lines shown on the slide</span>
-<pre><code>// (b) the whole transfer under both locks, the source's first: can deadlock
+<pre><code>// (b) both locks, the source's first
 static void transferB(Account from, Account to, int x) {
   synchronized (from) {
     synchronized (to) { from.balance -= x; to.balance += x; }
@@ -873,7 +873,7 @@ main ends; the two threads stay blocked until the JVM exits</code></pre>
 
 
 <span class="notes-file">Accounts.java, mode c, the lines shown on the slide</span>
-<pre><code>// (c) the same, but the locks always taken in the order of the ids
+<pre><code>// (c) the locks always taken in the order of the ids
 static void transferC(Account from, Account to, int x) {
   Account first  = from.id &lt; to.id ? from : to;
   Account second = from.id &lt; to.id ? to : from;
@@ -887,7 +887,7 @@ readings during the transfers: 530369, sums other than 200: 0
 at the end: A = 100, B = 100, sum = 200</code></pre>
 <p class="notes-sample">One sample. The OCaml&nbsp;5 version, <code>transfer_ordered</code>, read the sum 200 in every reading and ended in every one of ten further&nbsp;runs.</p>
 
-<p>A global order of the locks: every thread that takes several locks takes them in the same order, here the order of the accounts' ids. Then no cycle can form: a thread waits only for a lock later in the order than every lock it holds, so along any chain of waiting threads the locks waited for come later and later, and a chain whose locks only go up cannot return to its start. On three locks a, b and c in that order, a cycle would need a thread that holds c and waits for a, and under the order no thread waits for a lock earlier than one it holds. Question&nbsp;7 of the entry test is three transfers around three accounts, each thread taking its source first: a cycle of three, which two threads alone cannot form, and which the one order removes. The order is the third part of the lock's obligation, after every access under the lock and every lock the invariant needs: in Java, OCaml, Go and C, nobody checks it, and the same deadlock compiles in safe&nbsp;Rust.</p>
+<p>A global order of the locks: every thread that takes several locks takes them in the same order, here the order of the accounts' ids. Then no cycle can form: a thread waits only for a lock later in the order than every lock it holds, so along any chain of waiting threads the locks waited for come later and later, and a chain whose locks only go up cannot return to its start. On three locks a, b and c in that order, a cycle would need a thread that holds c and waits for a, and under the order no thread waits for a lock earlier than one it holds. Question&nbsp;7 of the entry test is three transfers around three accounts, each thread taking its source first: a cycle of three, which two threads alone cannot form, and which the one order removes. The order is the third part of the lock's obligation, after every access under the lock and every lock the invariant needs, and no compiler checks it: the deadlock compiles in Java, OCaml, Go and C, and in safe Rust. Tools find a violation only in a run that makes it. ThreadSanitizer reports two locks that a run of a C or C++ program took in opposite orders, even when that run did not deadlock; Java's <code>findDeadlockedThreads</code>, used above, finds a deadlock after it has&nbsp;occurred.</p>
 
 <p>A lock makes a thread wait, spinning or suspended, for its turn. A consumer that finds a buffer empty must wait until the buffer holds an item, which no lock gives: waiting until a condition on the shared state holds is the subject of the appendix on condition synchronization, which the lecture leaves to reading and the lab's warm-up builds on. Progress lost with one lock and no cycle, Mars Pathfinder, is the appendix on priority&nbsp;inversion.</p>
 
@@ -908,7 +908,7 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 </tbody>
 </table>
 
-<p>The counter has been exact twice, under the spin lock of section&nbsp;3 and under the language's lock of section&nbsp;4, both by exclusion: one thread at a time between the acquire and the release. The spin lock was built from one instruction that is itself atomic, test-and-set, and the question that block&nbsp;2 opens on is whether the lock around it was needed at all: its first program is the counter written with one such instruction, compare-and-set, and no&nbsp;lock.</p>
+<p>The counter has been exact twice, under the spin lock of section&nbsp;3 and under the language's lock of section&nbsp;4, both by exclusion: one thread at a time between the acquire and the release. The spin lock was built from one instruction that is itself atomic, test-and-set, and the question that block&nbsp;2 opens on is whether the lock around it was needed at all. Block&nbsp;2 first states what an operation must guarantee to the threads that call it at once, with a stack under one lock as the reference. Its first program without a lock is the counter written as a loop around compare-and-set, an atomic instruction: the loop reads <code>n</code> and retries until the instruction&nbsp;succeeds.</p>
 
 
 <figure id="b1-fig-bridge">
@@ -920,7 +920,7 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
     <text class="fused-lbl" x="255" y="30" text-anchor="middle" fill="currentColor">one instruction, no lock</text>
     <g class="mem"><rect x="155" y="130" width="200" height="62" rx="5" fill="var(--sunk)" stroke="currentColor" stroke-width="1.5"/><text x="255" y="155" text-anchor="middle" fill="currentColor">shared memory</text><text x="255" y="182" text-anchor="middle" fill="currentColor" font-family="'Fira Mono', monospace">n</text></g>
   </svg>
-<figcaption>The increment of block 1 made atomic by a critical section, and the same increment as one instruction of the processor, fetch-and-add, with no lock around it: the first program of block&nbsp;2.</figcaption>
+<figcaption>The increment of block 1 made atomic by a critical section, and the same increment as one instruction of the processor, fetch-and-add, with no lock around it; block&nbsp;2 runs it beside the counter written with&nbsp;compare-and-set.</figcaption>
 </figure>
 <p class="notes-def"><b>The question.</b> Can an operation be atomic without a lock around&nbsp;it?</p>
 

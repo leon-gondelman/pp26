@@ -5,7 +5,8 @@
 //      the same value and the second write loses the first, every time.
 //   2. The free run: twelve threads add many times each to the counter named on the command
 //      line, while a reader calls get() again and again. After the join the total must be the
-//      number of adds. During the run each read is held to the contract's bounds: at least the
+//      number of adds, and for the per-worker counter get(t) must be the adds of worker t.
+//      During the run each read is held to the contract's bounds: at least the
 //      adds completed before the call began, at most the adds begun before it returned, and
 //      never less than the read before. Each adder marks its progress in a slot of its own,
 //      before and after every add, and the reader reads the slots around each get().
@@ -119,6 +120,15 @@ public class CounterCheck {
             + group(firstBackwards[1]) + ": a thread wrote a value it had read before another's add");
       return;
     }
+    if (counter instanceof PerWorkerCounter c) {
+      for (int t = 0; t < THREADS; t++) {
+        if (c.get(t) != PER_THREAD) {
+          System.out.println("FAIL  " + name + "worker " + t + "'s count is " + group(c.get(t)) + " after the join, not its "
+              + group(PER_THREAD) + " adds: does add increment the slot of the worker it is given?");
+          return;
+        }
+      }
+    }
     if (firstBackwards[1] != 0) {
       System.out.println("FAIL  " + name + which + " counted " + group(total) + " but a read during the run went backwards, from "
           + group(firstBackwards[0]) + " to " + group(firstBackwards[1]) + ": is get inside the lock?");
@@ -131,12 +141,13 @@ public class CounterCheck {
     }
     if (tooHigh[1] != 0) {
       System.out.println("FAIL  " + name + "a read during the run gave " + group(tooHigh[0]) + " when only " + group(tooHigh[1])
-          + " adds had begun before it returned");
+          + " adds had begun before it returned: "
+          + (which.equals("locked") ? "is get under the same lock as add?" : "does get read each count once, and add nothing?"));
       return;
     }
     System.out.println("pass  " + name + "the total is " + group(total) + " of " + group(EXPECTED)
         + "; " + group(reads[0]) + " reads during the run, each within the adds completed before it and the adds begun, none backwards"
-        + (which.equals("perworker") ? ", each the sum of the slots" : "") + "; a right total in one run proves nothing (rule 8)");
+        + (which.equals("perworker") ? ", each the sum of the slots; every worker's slot holds its own adds" : "") + "; a right total in one run proves nothing (rule 8)");
   }
 
   static String group(long n) { return String.format("%,d", n).replace(',', ' '); }

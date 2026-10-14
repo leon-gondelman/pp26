@@ -2,9 +2,9 @@
 // The check: java -cp out WorkersCheck
 //
 // The contract. new Workers(n) then start(task) runs task.accept(i) once on each of n threads;
-// start on a Workers already started is an error, and a render that restarts makes a fresh
-// Workers. join() returns only when every thread has ended, and everything they wrote is
-// visible after it. stop() makes stopped() true on every worker from some point on; it ends
+// start on a Workers already started throws IllegalStateException, and a render that restarts
+// makes a fresh Workers. join() returns only when every thread has ended, and everything they
+// wrote is visible after it. stop() makes stopped() true on every worker from some point on; it ends
 // nothing, and a task that does not ask will not stop. With the flag plain, the last sentence
 // has no "from some point on": the language permits a worker never to see it (rule 9).
 //
@@ -25,7 +25,8 @@ public final class Workers {
   public Workers(int n) { threads = new Thread[n]; }
 
   public void start(IntConsumer task) {
-    // TODO 1: one thread per index, each running task.accept(i) once; a second start is an error
+    // TODO 1: one thread per index, each running task.accept(i) once; a second start throws
+    // IllegalStateException
     throw todo(1);
   }
 

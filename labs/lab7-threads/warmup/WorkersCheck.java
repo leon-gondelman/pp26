@@ -1,10 +1,10 @@
 // The check of exercise 2: java -cp out WorkersCheck
 // Three lines. (1) start and join: each index runs once, on a thread of its own, distinct from
-// the others', and every slot the workers wrote is there after the join. (2) a second start is
-// an error. (3) stop: workers whose loop body is empty but for the test of the flag; after a
+// the others', and every slot the workers wrote is there after the join. (2) a second start
+// throws IllegalStateException. (3) stop: workers whose loop body is empty but for the test of the flag; after a
 // while, stop(); at a deadline the line says which workers stopped, and then the process ends,
-// abandoning the rest. The verdict is on the flag's declaration, read from the class: a plain
-// flag fails, whatever the run showed, since the language permits a worker never to see it
+// abandoning the rest. The verdict is on the flag's declaration, read from the class (the field
+// stopFlag, or else the field stop() writes): a plain flag fails, whatever the run showed, since the language permits a worker never to see it
 // (rule 9); the run is reported beside it as what was observed. Then add volatile.
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -85,20 +85,43 @@ public class WorkersCheck {
       System.out.println("FAIL  start twice  a second start on the same Workers did not throw: the contract says it is an error; a restart makes a fresh Workers");
     } catch (IllegalStateException e) {
       System.out.println("pass  start twice  the second start threw " + e.getClass().getSimpleName());
+    } catch (Throwable e) {
+      System.out.println("FAIL  start twice  the second start threw " + e + ", not IllegalStateException");
     }
   }
 
-  // whether Workers declares a field another thread is guaranteed to see: volatile, or atomic
-  static boolean flagIsVisible() {
-    for (Field f : Workers.class.getDeclaredFields()) {
-      if (Modifier.isVolatile(f.getModifiers())) return true;
-      if (f.getType().getName().startsWith("java.util.concurrent.atomic.")) return true;
-    }
-    return false;
+  // the stop flag: the field named as in the skeleton, stopFlag; failing that, the field whose
+  // value stop() changes on a fresh Workers; null if neither is found
+  static Field stopFlag() {
+    try { return Workers.class.getDeclaredField("stopFlag"); } catch (NoSuchFieldException e) { }
+    try {
+      Workers w = new Workers(1);
+      Field[] fs = Workers.class.getDeclaredFields();
+      String[] before = new String[fs.length];
+      for (int k = 0; k < fs.length; k++) {
+        if (Modifier.isStatic(fs[k].getModifiers())) continue;
+        fs[k].setAccessible(true);
+        before[k] = String.valueOf(fs[k].get(w));   // an atomic prints its value
+      }
+      w.stop();
+      for (int k = 0; k < fs.length; k++)
+        if (before[k] != null && !before[k].equals(String.valueOf(fs[k].get(w)))) return fs[k];
+    } catch (Throwable e) { }
+    return null;
+  }
+
+  // whether a field is one another thread is guaranteed to see: volatile, or atomic
+  static boolean isVisible(Field f) {
+    return Modifier.isVolatile(f.getModifiers()) || f.getType().getName().startsWith("java.util.concurrent.atomic.");
   }
 
   static void stop() throws Exception {
-    boolean visible = flagIsVisible();
+    Field flag = stopFlag();
+    if (flag == null) {
+      System.out.println("FAIL  stop  Workers has no field stopFlag, and stop() changes no field: does stop() write the flag?");
+      return;
+    }
+    boolean visible = isVisible(flag);
     boolean[] left = new boolean[N];        // left[i]: worker i left its loop
     thrown = null;
     Workers w = new Workers(N);
@@ -119,7 +142,10 @@ public class WorkersCheck {
       Thread.sleep(10);
     }
     StringBuilder stopped = new StringBuilder(), spinning = new StringBuilder();
-    for (int i = 0; i < N; i++) (left[i] ? stopped : spinning).append(spinning.length() + stopped.length() > 0 ? ", " : "").append(i);
+    for (int i = 0; i < N; i++) {
+      StringBuilder list = left[i] ? stopped : spinning;
+      list.append(list.length() > 0 ? ", " : "").append(i);
+    }
     String observed = spinning.length() == 0
         ? "every worker left its loop after stop()"
         : "at the deadline, workers " + spinning + " never left the loop" + (stopped.length() > 0 ? " (workers " + stopped + " did)" : "");

@@ -1945,7 +1945,7 @@ window.addEventListener('load', () => {
     <li><b>Several threads.</b> Two or more, each a sequence of&nbsp;instructions.</li>
     <li><b>One shared memory.</b> All threads read and write the same&nbsp;locations.</li>
     <li><b>A scheduler that may stop a thread between any two instructions.</b> So an execution is an interleaving, and any interleaving may&nbsp;occur.</li>
-    <li class="fragment" data-fragment-index="0"><b>Sequential consistency.</b> There is one memory, and every read returns the value of the latest write to the same location before it in the interleaving; with assumption 3, this is Lamport's sequential consistency<sup><a class="cite" href="https://lamport.azurewebsites.net/pubs/multi.pdf" target="_blank" rel="noopener">*</a></sup>.<span class="b1-line">Each processor has a cache and compilers reorder, so this is not literally what the hardware does: a guarantee of the language, given only for programs without <b>data races</b>, defined in part&nbsp;2.</span></li>
+    <li class="fragment" data-fragment-index="0"><b>Sequential consistency.</b> There is one memory, and every read returns the value of the latest write to the same location before it in the interleaving; with assumption 3, this is Lamport's sequential consistency<sup><a class="cite" href="https://lamport.azurewebsites.net/pubs/multi.pdf" target="_blank" rel="noopener">*</a></sup>.<span class="b1-line">Each processor buffers its writes and compilers reorder, so this is not literally what the hardware does: a guarantee of the language, given only for programs without <b>data races</b>, defined in part&nbsp;2.</span></li>
   </ol>
   <p class="fn fragment" data-fragment-index="0"><sup>*</sup> <a class="cite" href="https://lamport.azurewebsites.net/pubs/multi.pdf" target="_blank" rel="noopener">L. Lamport, IEEE Transactions on Computers C-28(9), September 1979</a>, pages 690–691: the&nbsp;definition.</p>
   
@@ -2808,7 +2808,7 @@ at the end: A = 100, B = 100</pre>
       <div class="b1-4c-stack">
       <div class="fragment fade-out" data-fragment-index="3">
       <p class="fragment" data-fragment-index="1" style="font-size: 0.795em">Every thread that takes several locks takes them in the <b>same order</b>. A thread waits only for a lock <b>later in the order</b> than every lock it holds; along a chain of waiting threads the locks come later and later, and a chain that only goes up <b>cannot return to its&nbsp;start</b>.</p>
-      <p class="fragment" data-fragment-index="2" style="font-size: 0.795em">The order is the <b>third part of the obligation</b>. <b>Nobody checks it</b> in Java, OCaml, Go or C, and the deadlock <b>compiles in safe&nbsp;Rust</b>.</p>
+      <p class="fragment" data-fragment-index="2" style="font-size: 0.795em">The order is the <b>third part of the obligation</b>. <b>No compiler checks it</b>, and the deadlock <b>compiles in safe Rust</b>; tools find it only in&nbsp;runs.</p>
       </div>
       <div class="fragment" data-fragment-index="3">
         <p class="def b1-ask">A lock makes a thread wait, spinning or suspended, for its turn. But a consumer that finds a buffer empty must wait until the buffer holds an item: what does a thread use to wait until a condition on the shared state&nbsp;holds?</p>

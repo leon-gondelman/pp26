@@ -16,5 +16,3 @@ keeps it, in both languages. Not graded; nothing is handed in.
 Rule names: `every-access two-steps volatile|ref-not-atomic wait-while notify-all|broadcast lock-order
 cas-identity runs visibility many-threads|many-domains`. A program that deadlocks on purpose
 reports "stuck at the deadline" and leaves; nothing is wrong with the machine.
-
-The folder's name is provisional: the lab of session 7 is not designed yet.

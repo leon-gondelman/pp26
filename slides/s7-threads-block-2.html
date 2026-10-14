@@ -1709,7 +1709,7 @@ fetch-and-add: got 2000000 in both</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The progress risk.</b> A compare-and-set fails only because another succeeded, so operations keep completing: lock-free. Not wait-free, which would bound every thread's own steps: a thread may fail at every attempt while the others finish. Fetch-and-add asks for no expected value, so it never fails: wait-free, each call one&nbsp;step.</p>
+    <p><b>The progress risk.</b> A compare-and-set fails only because another succeeded, so operations keep completing: lock-free. Not wait-free, which would bound every thread's own steps: a thread may fail at every attempt while the others keep completing operations. Fetch-and-add takes no expected value, so it never fails: wait-free, each call one&nbsp;step.</p>
     <p class="fragment" data-fragment-index="0"><b>Who checks.</b> Nobody but the programmer, by proof; Java and OCaml accept a loop that keeps an old value, or two atomic steps meant to be&nbsp;one.</p>
   </div>
   
@@ -2449,7 +2449,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
   <h2>The ways&nbsp;compared</h2>
   <table class="ways3">
     <tr><th>The&nbsp;way</th><th>Contract</th><th>Obligation</th><th>Progress&nbsp;risk</th><th>Who&nbsp;checks</th></tr>
-    <tr><td>Mutual exclusion: forbid the&nbsp;interleaving</td><td>atomic by exclusion; linearizable by&nbsp;construction</td><td>every access under the lock; the invariant; a global order of the&nbsp;locks</td><td>deadlock, starvation; a stopped holder stops the threads that wait for its&nbsp;lock</td><td>nobody (Java, C, C++); a detector at run time (Go, ThreadSanitizer); the compiler (Rust, data&nbsp;races)</td></tr>
+    <tr><td>Mutual exclusion: forbid the&nbsp;interleaving</td><td>atomic by exclusion; linearizable by&nbsp;construction</td><td>every access under the lock; the invariant; a global order of the&nbsp;locks</td><td>deadlock, starvation; a stopped holder stops the threads that wait for its&nbsp;lock</td><td>not the language (Java, C, C++, Go); a detector at run time (Go, ThreadSanitizer); the compiler (Rust, data&nbsp;races)</td></tr>
     <tr><td>Atomic instruction with retry: detect it and&nbsp;retry</td><td>atomic without exclusion; linearizable at a point of&nbsp;effect</td><td>the loop re-reads; the invariant; the point of effect&nbsp;named</td><td>lock-free, not wait-free: a thread may retry for ever; fetch-and-add&nbsp;wait-free</td><td>the programmer, by proof; the collector removes ABA when no node is reused; checkers of&nbsp;histories</td></tr>
     <tr><td>Independence of the order: make it&nbsp;irrelevant</td><td>a deterministic final&nbsp;result</td><td>independent parts and an associative combine in order; or commuting atomic updates; or determinism by&nbsp;construction</td><td>none from interleaving; the join waits for every&nbsp;worker</td><td>that nothing is shared, the type system can; associativity or commutativity, the programmer&nbsp;only</td></tr>
   </table>
@@ -2462,7 +2462,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
   <h2>Conclusion of block&nbsp;2</h2>
   <div class="defs">
     <p><b>The session's question.</b> Three questions of any program: which contract it chooses, how that contract is stated, and which obligation is left to the&nbsp;programmer.</p>
-    <p class="fragment" data-fragment-index="0"><b>The lab</b> builds three structures in Java, each with its contract and a check: the counter in three versions, worker threads, and the bounded buffer, with a barrier as the extension. Then it makes a small ray tracer multi-threaded with them, so that each mistake shows in the&nbsp;picture.</p>
+    <p class="fragment" data-fragment-index="0"><b>The lab</b> builds four structures in Java, each with its contract and a check: the counter in three versions, worker threads, the bounded buffer, and a barrier as the extension. Then it makes a small ray tracer multi-threaded with them, so that each mistake shows in the&nbsp;picture.</p>
     <p class="fragment" data-fragment-index="0"><b>Workers.</b> The thread that starts the workers owns them and joins them. Stopping is a request through a flag, which ends nothing by&nbsp;itself.</p>
     <p class="fragment" data-fragment-index="1"><b>The mini-project</b> builds the bounded buffer as a queue in three versions, with one lock, with two locks and without locks, behind one interface, with a checker of histories and a measurement of&nbsp;throughput.</p>
   </div>
@@ -2937,12 +2937,12 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     <path class="w a" d="M280 150 C 330 240, 360 280, 410 280" marker-end="url(#cp-arrow-a)"/>
     <text class="sx" x="250" y="244">CAS</text>
     <text class="a" x="900" y="292">the transfer: one&nbsp;compare-and-set</text>
-    <text class="s" x="140" y="400">every update of the map competes for this one&nbsp;reference</text>
+    <text class="s" x="140" y="400">every update of the dictionary competes for this one&nbsp;reference</text>
     </g>
   </svg>
   <div class="claims">
     <p><b>Locks compose by hand.</b> Both locks around both steps make the transfer one operation, at the cost of deadlock and a global order of the&nbsp;locks.</p>
-    <p class="fragment" data-fragment-index="0"><b>One compare-and-set covers one reference.</b> Both accounts behind one reference to a persistent map: the transfer is one compare-and-set, and every update of the map competes for that reference, the cost of Clojure's&nbsp;atom.</p>
+    <p class="fragment" data-fragment-index="0"><b>One compare-and-set covers one reference.</b> Both accounts behind one reference to a persistent dictionary: the transfer is one compare-and-set, and every update of the dictionary competes for that reference, the cost of Clojure's&nbsp;atom.</p>
   </div>
   <a class="apx back" href="#/composition">back</a>
   
