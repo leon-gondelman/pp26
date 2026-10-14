@@ -2131,7 +2131,7 @@ n := v             (* write *)</code></pre></div>
       </svg>
   <p class="def fragment" data-fragment-index="0"><b>Data race.</b> Two accesses to one memory location from two threads, at least one a write, with nothing of the program ordering one before the&nbsp;other.<sup>*</sup></p>
   <p class="def b1-ask fragment" data-fragment-index="1">To avoid the race, the two threads must coordinate: what can the program put between the two&nbsp;accesses?</p>
-  <p class="fn fragment" data-fragment-index="0"><sup>*</sup> <a class="cite" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">The Java Language Specification, chapter 17, section 17.4.5</a>; C++, Go and Rust define a data race the same&nbsp;way.</p>
+  <p class="fn fragment" data-fragment-index="0"><sup>*</sup> <a class="cite" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">The Java Language Specification, 17.4.5</a>; C++, Rust and OCaml state the same; Java and Go, in their own&nbsp;terms.</p>
   
 </section>
 

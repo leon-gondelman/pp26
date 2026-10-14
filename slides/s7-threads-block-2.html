@@ -2118,7 +2118,7 @@ Java and OCaml 5 print the same</pre>
       </ol>
     </div>
   </div>
-  <div class="box fragment" data-fragment-index="0">With subtraction the answer depends on how the sequence is split, never on which thread finishes first. If the operation is associative, every part is folded from its identity, and the parts are combined in their order, every split gives the sequential fold's&nbsp;answer.</div>
+  <div class="box fragment" data-fragment-index="0">With subtraction the answer depends on how the sequence is split, never on which thread finishes first. If the operation has no side effects and is associative, every part is folded from its identity, and the parts are combined in their order, every split gives the sequential fold's&nbsp;answer.</div>
   
 </section>
 
@@ -2202,7 +2202,7 @@ Java and OCaml 5 print the same</pre>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Independent parts and a combine step.</b> No location written by one thread is read or written by another while they run; the combine is associative with an identity, and the parts are combined in their&nbsp;order.</p>
+    <p><b>Independent parts and a combine step.</b> No location written by one thread is read or written by another while they run; the combine has no side effects and is associative with an identity, and the parts are combined in their&nbsp;order.</p>
     <p class="fragment" data-fragment-index="0"><b>Commuting updates.</b> Each update is one atomic step, or goes to a replica merged at the end; the interleaving orders the steps, and commutativity makes the final state the same for every&nbsp;order.</p>
   </div>
   
@@ -2395,12 +2395,12 @@ OCaml 5  first wrong reading: A = 234, B = -35</pre></div>
     <text class="s" x="60" y="420">every access is ordered by one of these: no data race, so the guarantee&nbsp;applies</text>
     </g>
     <g class="fragment " data-fragment-index="0">
-    <text class="a" x="60" y="420">every run was some interleaving, and the reasoning by interleavings was&nbsp;sound</text>
+    <text class="a" x="60" y="420">every run behaved as an interleaving; the reasoning by interleavings was&nbsp;sound</text>
     </g>
   </svg>
   <div class="claims">
     <p><b>What made the session's programs race-free.</b> In the spin lock, the order test-and-set gives between one thread's release and the next's acquire; in the count per thread, the join; in the loop and Treiber's stack, every access to <code>top</code> atomic, the nodes published through&nbsp;it.</p>
-    <p class="fragment" data-fragment-index="0"><b>The guarantee applied to them</b>: every run was some interleaving, and the reasoning by interleavings was&nbsp;sound.</p>
+    <p class="fragment" data-fragment-index="0"><b>The guarantee applied to them</b>: every run behaved as an interleaving; the reasoning by interleavings was&nbsp;sound.</p>
   </div>
   
 </section>
@@ -3013,7 +3013,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
   <h2>Languages that limit shared mutation<span class="h2sub">Erlang, Clojure,&nbsp;JavaScript</span></h2>
   <table class="langs5">
 <tr><th>Language</th><th>What the programmer&nbsp;expresses</th><th>Who&nbsp;checks</th><th>What a race&nbsp;costs</th><th>What holds by&nbsp;construction</th></tr>
-<tr><td>Erlang</td><td>processes that share nothing and send copied messages; shared tables for&nbsp;speed</td><td>nothing to check between&nbsp;processes</td><td>no data race between processes; a get then a set by messages still loses&nbsp;updates</td><td>a process's state is its own, one message at a&nbsp;time</td></tr>
+<tr><td>Erlang</td><td>processes that share no heap, send copied messages; ETS tables are&nbsp;shared</td><td>nothing between heaps; nobody on ETS&nbsp;tables</td><td>no data race between processes; a get then a set by messages still loses&nbsp;updates</td><td>a process's state is its own, one message at a&nbsp;time</td></tr>
 <tr><td>Clojure</td><td>immutable values; an atom (<code>swap!</code>); refs with <code>dosync</code>;&nbsp;agents</td><td>nothing: the function of <code>swap!</code> should be pure, and nothing enforces&nbsp;it</td><td>the function of <code>swap!</code> runs once per attempt; its effects&nbsp;repeat</td><td>an atom's value replaced as a whole; a transaction sees a&nbsp;snapshot</td></tr>
 <tr><td>JavaScript</td><td>workers that receive copies; <code>SharedArrayBuffer</code> and <code>Atomics</code> by&nbsp;choice</td><td>nothing</td><td>a plain <code>++</code> on a shared array loses updates; <code>Atomics.add</code> does&nbsp;not</td><td>without a shared buffer nothing is shared; one thread per&nbsp;worker</td></tr>
   </table>
