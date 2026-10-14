@@ -610,6 +610,8 @@ html:not(.pal-old) a.etile:hover .go{color:var(--acc-t)}
    lab's WARM-UP or QUEST, its title, its files, its solutions in orange. */
 .lecl,.labfiles{white-space:nowrap;font-size:.84rem;font-weight:600}
 .lecl{margin-left:.8rem}
+/* the notes of all the blocks, once, on the title's line */
+td.ttl>a:has(+.ttl-notes){display:inline-block}
 .lecl a,.labfiles a{color:var(--file)}
 .lecl a,.labfiles a{text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:.2em}
 .lecl a:hover,.labfiles a:hover{text-decoration-color:currentColor}
