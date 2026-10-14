@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Race Hunt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{--ground:#f5f4f0;--surface:#fff;--sunken:#f0eeea;--ink:#15171c;--ink-2:#3b4250;--rule:#d8d5cd;
+--accent:#0a5f96;--accent-soft:#e2edf6;--ans:#1b7a45;--ans-soft:#e6f3ea;--kw:#2a6f97;--st:#14803d;
+--cm:#5f6774;--nu:#9a4b06;--con:#7a4a0a;--con-soft:#f6ecdc}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#111318;--surface:#181b22;
+--sunken:#14171d;--ink:#e8eaef;--ink-2:#b6bdc9;--rule:#2a2f39;--accent:#62b8ee;--accent-soft:#14283a;
+--ans:#52c283;--ans-soft:#13281b;--kw:#7cc4f0;--st:#6fd394;--cm:#97a0ad;--nu:#e3ab55;--con:#e2b36a;--con-soft:#2d2415}}
+:root[data-theme="dark"]{--ground:#111318;--surface:#181b22;--sunken:#14171d;--ink:#e8eaef;--ink-2:#b6bdc9;
+--rule:#2a2f39;--accent:#62b8ee;--accent-soft:#14283a;--ans:#52c283;--ans-soft:#13281b;--kw:#7cc4f0;
+--st:#6fd394;--cm:#97a0ad;--nu:#e3ab55;--con:#e2b36a;--con-soft:#2d2415}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.62 "IBM Plex Sans",-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+main.wrap{padding-bottom:96px}
+.masthead{background:var(--surface);border-bottom:1px solid var(--rule);padding:28px 0 22px;margin-bottom:28px}
+.kicker{margin:0;color:var(--ink-2);font-size:15px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;margin:6px 0 0}
+h2{font-family:"IBM Plex Serif",Georgia,serif;font-size:27px;margin:56px 0 12px;padding-top:12px;border-top:2px solid var(--ink)}
+h3{font-size:20px;margin:40px 0 10px}
+h3 .where,h3 .opt,h2 .opt{font-weight:400;font-size:15px;color:var(--ink-2);margin-left:12px}
+h4{margin:0 0 6px;font-size:17px}
+.num{color:var(--accent)}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;background:var(--sunken);padding:1px 4px;border-radius:3px}
+a{color:var(--accent)}
+.toc{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:10px 18px;margin:20px 0}
+.toc ol{margin:0;padding-left:20px}
+.recall,.contract{border-left:4px solid var(--accent);padding:10px 16px;margin:16px 0 22px;border-radius:0 6px 6px 0}
+.recall{background:var(--accent-soft)}
+.contract{background:var(--con-soft);border-color:var(--con)}
+.recall p,.contract p{margin:6px 0}
+.recall-h,.answer-h,.contract-h{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.contract-h{color:var(--con)}
+.item{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;margin:18px 0}
+.item p{margin:8px 0}
+figure.code{margin:12px 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+figure.code figcaption{display:flex;gap:12px;font-size:13px;padding:4px 12px;background:var(--sunken);border-bottom:1px solid var(--rule);color:var(--ink-2)}
+figure.code .file{font-family:"IBM Plex Mono",monospace}
+figure.code pre{margin:0;padding:10px 12px;overflow-x:auto;background:var(--surface)}
+figure.code pre code{background:none;padding:0;font-size:14.5px;line-height:1.5}
+figure.commands{margin:16px 0 24px}
+.kw{color:var(--kw);font-weight:500}.st{color:var(--st)}.cm{color:var(--cm);font-style:italic}.nu{color:var(--nu)}
+ol.options,ol.alpha{list-style:none;counter-reset:o;padding-left:4px;margin:10px 0}
+ol.options li,ol.alpha li{counter-increment:o;margin:4px 0;padding-left:34px;position:relative}
+ol.options li::before,ol.alpha li::before{content:"(" counter(o, lower-alpha) ")";position:absolute;left:0;color:var(--ink-2);font-weight:600}
+ol.options li{background:var(--sunken);border-radius:5px;padding:4px 10px 4px 40px}
+ol.options li::before{left:10px;top:4px}
+.check span,.form span,.need span,.gives span{font-weight:600;color:var(--ink-2);margin-right:4px}
+ul.holes{margin:10px 0;padding-left:22px}
+.note{color:var(--ink-2);font-size:15px}
+.answer{background:var(--ans-soft);border-left:4px solid var(--ans);padding:8px 14px;margin-top:14px;border-radius:0 6px 6px 0}
+.answer .answer-h{color:var(--ans)}
+.banner{background:var(--ans-soft);border:1px solid var(--ans);border-radius:6px;padding:8px 14px}
+h3.end{margin-top:36px}
+@media (max-width:560px){h1{font-size:27px}body{font-size:16px}.item{padding:12px}figure.code pre code{font-size:12px}}
+</style>
+</head>
+<body>
+<header class="masthead"><div class="wrap">
+<p class="kicker">Programming Paradigms · Lab 7 · session 7: threads and shared&nbsp;memory</p>
+<h1>The Race&nbsp;Hunt</h1>
+</div></header>
+<main class="wrap">
+
+<p>The lecture's thesis: the steps of one thread interleave with the steps of every other, and a program is right only if it is right in every interleaving; a run can show a bug, and only an argument shows there is none. The lecture gave the primitives: threads, the lock, the atomic instruction, the monitor's wait, the join, the visible write. The monitor's wait is in the <strong>appendix of the slides of block 1</strong>, <em>Condition synchronization</em>: Dijkstra's bounded buffer, the monitor, example 5 and Mesa's monitors, which the lecture does not present; it is read before the bounded buffer and the barrier below. The <strong>warm-up</strong> builds four structures on them, in Java, each under a contract and guarded by a check, and studies on paper the two primitives that are not structures, the join and the visible write. The <strong>quest</strong> builds one program from the structures, a ray tracer, in parts whose failures show in the&nbsp;picture.</p><p>Three phrases the lab uses as names, from session 6: <em>not at the same time</em>, two threads are never both inside the part that changes shared data; <em>not before</em>, a thread does not act until another has acted; <em>visibility</em>, a write by one thread is seen by a read on another. The lock, the atomic instruction and the per-thread copy settle the first; the join, the barrier and the monitor's wait settle the second, and each of them settles the third as well: what was written before the join, the arrival, or the release of the monitor is seen after it. The volatile write settles the third alone: the word written, and everything written before it, are seen by the thread that reads the word, and nothing else; it forbids no overlap and makes no two fields change as&nbsp;one.</p><p>The warm-up is the lab: <code>Counter</code>, <code>Workers</code> and <code>BoundedBuffer</code>, with questions 6, 7, 8, 1 and 5 of the primitives' page between them, in the order below; what is not reached in the lab is finished at home. The extensions, over the week: <code>Barrier</code>, and the rest of the page. The quest's required path, parts 1, 2, 3 and 6, needs only <code>Counter</code> and <code>Workers</code>; the <code>BoundedBuffer</code>'s use is its own check here and, after the lab, the mini-project's queue. Nothing is handed in: the lab collects&nbsp;nothing.</p><p>The lab needs the JDK of session 1. The structures are in <code>warmup/</code>, one file each, with their checks. A hole is marked <code>TODO n</code> and holds <code>throw todo(n)</code> until the code is written in its place; two holes hold a wrong line instead, said where they are. Each check prints one line per point, <em>pass</em>, <em>FAIL</em> or <em>todo</em>, and a FAIL says which sentence of the contract failed and what to ask. A check can show a bug and cannot prove its absence (rule 8 of the rules sheet): every check runs its structure under heavy contention, so that the bug of each given version showed on every run made while writing the lab; where a failure can be forced, it is forced. The rules are those of the rules sheet, cited by number. The primitives' page is <code>warmup/primitives.pdf</code>; its questions are also below, where the lab takes them&nbsp;up.</p><p>The block below compiles the folder and names every check. Each check is run after its exercise, where the page says so, and says <em>todo</em> until the exercise is written; the buffer's says <em>FAIL</em> until then, as its exercise explains; <code>BarrierCheck</code> belongs to the&nbsp;extension.</p>
+<nav class="toc"><ol><li><a href="#counter">Part 1: The counter, three&nbsp;ways</a></li><li><a href="#visible">Part 2: The visible write: questions 6, 7 and 8 of the primitives&#x27;&nbsp;page</a></li><li><a href="#workers">Part 3: Workers: start, join,&nbsp;stop</a></li><li><a href="#join">Part 4: The join: questions 1 and 5 of the primitives&#x27;&nbsp;page</a></li><li><a href="#buffer">Part 5: The bounded buffer as a&nbsp;monitor</a></li><li><a href="#barrier">Part 6: The barrier&nbsp;(extension)</a></li><li><a href="#rest">Part 7: The rest of the primitives&#x27; page&nbsp;(extension)</a></li><li><a href="#quest">Quest: the ray&nbsp;tracer</a></li></ol></nav>
+<section id="warmup"><h2>Warm-up</h2><figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>cd warmup
+javac -d out *.java
+java -cp out CounterCheck locked      <span class="cm"># or racy, atomic, perworker</span>
+java -cp out WorkersCheck
+java -cp out BufferCheck
+java -cp out BarrierCheck</code></pre></figure><section class="part" id="counter"><h3>Part 1: The counter, three ways<span class="where">at the&nbsp;keyboard</span></h3>
+<p>One interface, four implementations: the racy one is given, and the exercise writes the three repairs of the lecture. Each is predicted before it is&nbsp;run.</p>
+<aside class="recall"><div class="recall-h">From the lecture</div><p><code>n++</code> on a shared field is three steps, read, add, write, and another thread may run between any two of them (example 1; rule 3). Three repairs: the lock, one thread at a time inside the critical section (example 3); the atomic instruction, the three steps as one, fetch-and-add, or a compare-and-set loop in which the thread that lost the race retries (example 6); a count per thread, nothing shared while they run, the sum after the join (example&nbsp;8).</p></aside>
+<aside class="contract"><div class="contract-h">The contract</div><figure class="code"><figcaption><span class="lang">Java</span></figcaption><pre><code><span class="kw">interface</span> Counter {
+  <span class="kw">void</span> add(<span class="kw">int</span> worker);
+  <span class="kw">long</span> get();
+}
+<span class="kw">final</span> <span class="kw">class</span> PerWorkerCounter <span class="kw">implements</span> Counter {
+  PerWorkerCounter(<span class="kw">int</span> workers);
+  <span class="kw">long</span> get(<span class="kw">int</span> worker);
+}</code></pre></figure><p><code>add</code> never loses an add: after every thread that adds has ended and been joined, <code>get()</code> is the number of adds. During the run, <code>get()</code> returns a value at least the number of adds that completed before the call began and at most the number that began before it returned; for the count per worker, the value is a sum of slots read one after another, not a snapshot. Three of the four implementations ignore the argument; the fourth, <code>PerWorkerCounter</code>, also offers <code>get</code> with a worker's index, that worker's own count. The racy implementation breaks both sentences: a reader may never see a write, and a plain <code>long</code> may be read&nbsp;half-written.</p></aside>
+<article class="item" id="e1">
+<h4><span class="num">Exercise&nbsp;1</span></h4>
+<p>Given the interface <code>Counter</code>, the racy <code>RacyCounter</code>, and the three classes <code>LockedCounter</code>, <code>AtomicCounter</code> and <code>PerWorkerCounter</code> with their holes, write the three: <code>synchronized</code> on both methods; an <code>AtomicLong</code> with <code>incrementAndGet</code>; an <code>AtomicLongArray</code> with one slot per worker, written by its owner only, summed by <code>get()</code>. The slot is atomic not against other writers, there are none, but so that a reader during the run sees the writes: a plain array would be exact after the join and a data race before it. Before each is run, the prediction goes as a comment above its class, in the line left for it: the exact total, less, more, or it depends on the run. The lecture's spin lock from <code>AtomicBoolean.getAndSet</code> is an optional&nbsp;fourth.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/Counter.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">interface</span> Counter {
+  <span class="kw">void</span> add(<span class="kw">int</span> worker);
+  <span class="kw">long</span> get();
+}</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/RacyCounter.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">final</span> <span class="kw">class</span> RacyCounter <span class="kw">implements</span> Counter {
+  <span class="kw">private</span> <span class="kw">long</span> n = <span class="nu">0</span>;                       <span class="cm">// shared by every thread, protected by nothing</span>
+
+  <span class="kw">public</span> <span class="kw">void</span> add(<span class="kw">int</span> worker) { n++; }
+  <span class="kw">public</span> <span class="kw">long</span> get() { <span class="kw">return</span> n; }
+}</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/LockedCounter.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">final</span> <span class="kw">class</span> LockedCounter <span class="kw">implements</span> Counter {
+  <span class="kw">static</span> RuntimeException todo(<span class="kw">int</span> n) { <span class="kw">return</span> <span class="kw">new</span> UnsupportedOperationException(<span class="st">&quot;TODO &quot;</span> + n); }   <span class="cm">// a hole: write the code in place of throw todo(n)</span>
+  <span class="kw">private</span> <span class="kw">long</span> n = <span class="nu">0</span>;                       <span class="cm">// guarded by this</span>
+
+  <span class="kw">public</span> <span class="kw">void</span> add(<span class="kw">int</span> worker) {
+    <span class="cm">// TODO 1: the increment under the lock</span>
+    <span class="kw">throw</span> todo(<span class="nu">1</span>);
+  }
+
+  <span class="kw">public</span> <span class="kw">long</span> get() {
+    <span class="cm">// TODO 2: the read under the same lock</span>
+    <span class="kw">throw</span> todo(<span class="nu">2</span>);
+  }
+}</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/AtomicCounter.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">final</span> <span class="kw">class</span> AtomicCounter <span class="kw">implements</span> Counter {
+  <span class="kw">static</span> RuntimeException todo(<span class="kw">int</span> n) { <span class="kw">return</span> <span class="kw">new</span> UnsupportedOperationException(<span class="st">&quot;TODO &quot;</span> + n); }   <span class="cm">// a hole: write the code in place of throw todo(n)</span>
+  <span class="kw">private</span> <span class="kw">final</span> AtomicLong n = <span class="kw">new</span> AtomicLong(<span class="nu">0</span>);
+
+  <span class="kw">public</span> <span class="kw">void</span> add(<span class="kw">int</span> worker) {
+    <span class="cm">// TODO 3: the increment as one instruction</span>
+    <span class="kw">throw</span> todo(<span class="nu">3</span>);
+  }
+
+  <span class="kw">public</span> <span class="kw">long</span> get() {
+    <span class="cm">// TODO 4: the read</span>
+    <span class="kw">throw</span> todo(<span class="nu">4</span>);
+  }
+}</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/PerWorkerCounter.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">final</span> <span class="kw">class</span> PerWorkerCounter <span class="kw">implements</span> Counter {
+  <span class="kw">static</span> RuntimeException todo(<span class="kw">int</span> n) { <span class="kw">return</span> <span class="kw">new</span> UnsupportedOperationException(<span class="st">&quot;TODO &quot;</span> + n); }   <span class="cm">// a hole: write the code in place of throw todo(n)</span>
+  <span class="kw">private</span> <span class="kw">final</span> AtomicLongArray slots;      <span class="cm">// slot i is written by worker i only</span>
+
+  <span class="kw">public</span> PerWorkerCounter(<span class="kw">int</span> workers) { slots = <span class="kw">new</span> AtomicLongArray(workers); }
+
+  <span class="kw">public</span> <span class="kw">void</span> add(<span class="kw">int</span> worker) {
+    <span class="cm">// TODO 5: the worker&#x27;s own slot, one more</span>
+    <span class="kw">throw</span> todo(<span class="nu">5</span>);
+  }
+
+  <span class="kw">public</span> <span class="kw">long</span> get() {
+    <span class="cm">// TODO 6: the sum of the slots, read one after another</span>
+    <span class="kw">throw</span> todo(<span class="nu">6</span>);
+  }
+
+  <span class="kw">public</span> <span class="kw">long</span> get(<span class="kw">int</span> worker) { <span class="kw">return</span> slots.get(worker); }
+}</code></pre></figure>
+<p class="check"><span>The check:</span> <code>java -cp out CounterCheck racy</code>, then <code>locked</code>, <code>atomic</code>, <code>perworker</code>. Two halves, both given, read and not edited. First a schedule chosen by hand: two threads run the three steps of <code>n++</code> on the check's own copy of the racy add, with a barrier between the read and the write, so that both read the same value and the second write loses the first, every time; the line shows the two reads, the two writes, and the one lost. Then the free run: twelve threads add many times each to the counter named, while a reader calls <code>get()</code> again and again. After the join the total must be the number of adds. Each read during the run is held to the contract's bounds: at least the adds completed before the call began, at most the adds begun before it returned, and never less than the read before; each adder marks its progress in a slot of its own, and the reader reads the slots around each <code>get</code>, so that a <code>get</code> left outside the lock is caught when it shows. The racy counter lost adds on every run made while writing the lab; a right total in one run proves nothing (rule&nbsp;8).</p>
+</article>
+</section><section class="part" id="visible"><h3>Part 2: The visible write: questions 6, 7 and 8 of the primitives&#x27; page<span class="where">on&nbsp;paper</span></h3>
+<p>The counter's racy run is a write that a reader never saw. Three questions on what makes a write visible, from the page; the answers go on a separate page, in the form each question&nbsp;gives.</p>
+<aside class="recall"><div class="recall-h">From the lecture</div><p><strong>The visible write.</strong> All reads and writes of volatile fields in a program fall in one order that every thread agrees on, consistent with each thread's own order; a write to a volatile field is seen by every later read of it in that order, on any thread, and everything written before that write is visible after that read. It does not make a read-modify-write one step, and does not make two fields change as&nbsp;one.</p></aside>
+<article class="item" id="q6">
+<h4><span class="num">Question&nbsp;6</span></h4>
+<p>Given the loop <code>while (!stop) { }</code> on a plain flag <code>stop</code>, written to <code>true</code> by another thread, say whether the loop may spin for ever and why the compiler is allowed to make it; then with <code>stop</code> declared&nbsp;<code>volatile</code>.</p>
+<p class="form"><span>Answer form:</span> may or may not, and the rule that allows it. The <code>Workers</code> check is this question&nbsp;run.</p>
+</article>
+<article class="item" id="q7">
+<h4><span class="num">Question&nbsp;7</span></h4>
+<p>Given a plain field <code>data</code> written by thread A before A sets the volatile flag <code>ready</code> to <code>true</code>, and a reader on thread B that sees <code>ready</code> true, say what B may read in&nbsp;<code>data</code>.</p>
+<p class="form"><span>Answer form:</span> the written value only, or&nbsp;anything.</p>
+</article>
+<article class="item" id="q8">
+<h4><span class="num">Question&nbsp;8</span></h4>
+<p>Given a <code>volatile int n</code>, two threads that each do <code>n++</code> a thousand times, and the value of <code>n</code> printed after both are joined, say whether it is always 2000, and if not, the range it may fall in and why <code>volatile</code> does not make it&nbsp;2000.</p>
+<p class="form"><span>Answer form:</span> yes, or a range and a&nbsp;sentence.</p>
+</article>
+</section><section class="part" id="workers"><h3>Part 3: Workers: start, join, stop<span class="where">at the&nbsp;keyboard</span></h3>
+<p><em>n</em> threads over an indexed task, joined, and stopped through a flag. The join and the visible write of the page are what this class rests&nbsp;on.</p>
+<aside class="recall"><div class="recall-h">From the lecture</div><p>A platform thread is made with <code>new Thread(r)</code>, started with <code>start()</code> and awaited with <code>join()</code>; the join also makes everything the thread wrote visible to the thread that joins it (example 1). A flag or a result another thread must see goes through a volatile or an atomic, never a plain field (rule&nbsp;9).</p></aside>
+<aside class="contract"><div class="contract-h">The contract</div><figure class="code"><figcaption><span class="lang">Java</span></figcaption><pre><code><span class="kw">final</span> <span class="kw">class</span> Workers {
+  Workers(<span class="kw">int</span> n);
+  <span class="kw">void</span> start(IntConsumer task);
+  <span class="kw">void</span> join() <span class="kw">throws</span> InterruptedException;
+  <span class="kw">void</span> stop();
+  <span class="kw">boolean</span> stopped();
+}</code></pre></figure><p>A <code>Workers</code> of <em>n</em>, then <code>start</code> with a task, runs the task once on each of <em>n</em> threads, with the thread's index; <code>start</code> on a <code>Workers</code> already started is an error, and a render that restarts makes a fresh <code>Workers</code>. <code>join()</code> returns only when every thread has ended, and everything they wrote is visible after it. <code>stop()</code> makes <code>stopped()</code> true on every worker from some point on; it ends nothing, and a task that does not ask will not stop. With the flag plain, the last sentence has no "from some point on": the language permits a worker never to see&nbsp;it.</p></aside>
+<article class="item" id="e2">
+<h4><span class="num">Exercise&nbsp;2</span></h4>
+<p>Given the class with its constructor, <code>start</code>, <code>join</code>, <code>stop</code> and <code>stopped</code>, the threads kept in an array, write the start, the join, and the stop, with the flag plain, as it is declared. The task reaches the flag through the object it closes&nbsp;over:</p>
+<figure class="code"><figcaption><span class="lang">Java</span></figcaption><pre><code>Workers w = <span class="kw">new</span> Workers(n);
+w.start(i -&gt; { <span class="kw">while</span> (!w.stopped()) work(i); });
+w.stop();
+w.join();</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/Workers.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">final</span> <span class="kw">class</span> Workers {
+  <span class="kw">static</span> RuntimeException todo(<span class="kw">int</span> n) { <span class="kw">return</span> <span class="kw">new</span> UnsupportedOperationException(<span class="st">&quot;TODO &quot;</span> + n); }   <span class="cm">// a hole: write the code in place of throw todo(n)</span>
+  <span class="kw">private</span> <span class="kw">final</span> Thread[] threads;
+  <span class="kw">private</span> <span class="kw">boolean</span> started = <span class="kw">false</span>;
+  <span class="cm">// TODO 4: plain for the first run of the check; then volatile</span>
+  <span class="kw">private</span> <span class="kw">boolean</span> stopFlag = <span class="kw">false</span>;
+
+  <span class="kw">public</span> Workers(<span class="kw">int</span> n) { threads = <span class="kw">new</span> Thread[n]; }
+
+  <span class="kw">public</span> <span class="kw">void</span> start(IntConsumer task) {
+    <span class="cm">// TODO 1: one thread per index, each running task.accept(i) once; a second start is an error</span>
+    <span class="kw">throw</span> todo(<span class="nu">1</span>);
+  }
+
+  <span class="kw">public</span> <span class="kw">void</span> join() <span class="kw">throws</span> InterruptedException {
+    <span class="cm">// TODO 2: return only when every thread has ended</span>
+    <span class="kw">throw</span> todo(<span class="nu">2</span>);
+  }
+
+  <span class="kw">public</span> <span class="kw">void</span> stop() {
+    <span class="cm">// TODO 3: the flag</span>
+    <span class="kw">throw</span> todo(<span class="nu">3</span>);
+  }
+
+  <span class="kw">public</span> <span class="kw">boolean</span> stopped() { <span class="kw">return</span> stopFlag; }
+}</code></pre></figure>
+<p class="check"><span>The check:</span> <code>java -cp out WorkersCheck</code>, three lines. The first: each index runs once, on a thread of its own, distinct from the others', and every slot the workers wrote is there after the join. The second: a second <code>start</code> is an error. The third: workers whose loop body is empty but for the test of the flag; the check waits a while, calls <code>stop</code>, and at a deadline notes which workers stopped; then it ends the process, abandoning the rest. Its verdict is on the flag's declaration, which it reads from the class: a plain flag fails, whatever the run showed, because the language permits a worker never to see a plain write (rule 9); the run is reported beside the verdict as what was observed. Before the first run, then: the third line will fail, and it is not a bug in the <code>stop</code> just written. On this JDK, once the compiler has compiled the loop, it keeps the field in a register and the loop never ends, on every run made while writing the lab; on another machine every worker may stop, and that proves nothing (rule 8). Then <code>volatile</code> goes on the flag's declaration, <code>TODO 4</code>, and the check runs again: the language now guarantees that a read of the flag after the write, in the order of volatile accesses, sees it, and forbids the compiler to keep the field in a register; it states no bound on how soon the read happens. On the course's setup every worker stopped on every run: that is what was observed, beside what is guaranteed. This run is the second half of question&nbsp;6.</p>
+</article>
+</section><section class="part" id="join"><h3>Part 4: The join: questions 1 and 5 of the primitives&#x27; page<span class="where">on&nbsp;paper</span></h3>
+<p><code>Workers.join</code> is the primitive the structure rests on, and the quest's part 1 fails without it. Two questions on what the join&nbsp;guarantees.</p>
+<aside class="recall"><div class="recall-h">From the lecture</div><p><strong>The join.</strong> After <code>t.join()</code> returns, <code>t</code> has ended, and everything <code>t</code> wrote is visible to the thread that joined it; <code>t.start()</code> is its mirror: everything written before the start is visible to&nbsp;<code>t</code>.</p></aside>
+<article class="item" id="q1">
+<h4><span class="num">Question&nbsp;1</span></h4>
+<p>Given a worker that writes its result into <code>counts[id]</code>, and a main thread that reads the array, say what main may read in <code>counts[id]</code> before the join, after the join, and after joining only the other&nbsp;workers.</p>
+<p class="form"><span>Answer form:</span> for each, one of: the written value; anything, the old value&nbsp;included.</p>
+</article>
+<article class="item" id="q5">
+<h4><span class="num">Question&nbsp;5</span></h4>
+<p>Given the guarantee of the join above, say which of the three phrases it settles: <em>not at the same time</em>, <em>not before</em>,&nbsp;visibility.</p>
+<p class="form"><span>Answer form:</span> one or more of the&nbsp;three.</p>
+</article>
+</section><section class="part" id="buffer"><h3>Part 5: The bounded buffer as a monitor<span class="where">at the&nbsp;keyboard</span></h3>
+<p>Example 5 of the slides, in the appendix of block 1, <em>Condition synchronization</em>, which is read before this exercise; and the one-lock queue the mini-project starts&nbsp;from.</p>
+<aside class="recall"><div class="recall-h">From the lecture</div><p>Every Java object is a monitor: a <code>synchronized</code> method holds its lock, <code>wait()</code> releases the lock and sleeps, <code>notifyAll()</code> wakes every thread waiting on that object. An object has one waiting set, so producers and consumers wait on the same bench (rule 5). Between the wake-up and the lock, another thread may have made the condition false again, and a wake-up with no cause is allowed too, so the condition is tested again after every wake-up: a loop does that and an <code>if</code> does not (rule&nbsp;4).</p></aside>
+<aside class="contract"><div class="contract-h">The contract</div><figure class="code"><figcaption><span class="lang">Java</span></figcaption><pre><code><span class="kw">final</span> <span class="kw">class</span> BoundedBuffer&lt;T&gt; {
+  BoundedBuffer(<span class="kw">int</span> capacity);
+  <span class="kw">void</span> put(T x) <span class="kw">throws</span> InterruptedException;
+  T take() <span class="kw">throws</span> InterruptedException;
+}</code></pre></figure><p>Capacity <em>K</em>, one consumer. <code>put</code> blocks while <em>K</em> items are in; <code>take</code> blocks while none is. Items come out in the order they went in, each exactly once, and everything a producer wrote before its <code>put</code> of an item is visible to the thread whose <code>take</code> returns it. The end of work is a convention, not a method: the client puts a value it reserved as the end marker after the last item, and the consumer stops when <code>take</code> returns it; with many producers, the thread that joined them puts it. With the <code>if</code>, "each exactly once" fails; with <code>notify</code>, "blocks while" may become "blocks for&nbsp;ever".</p></aside>
+<article class="item" id="e3">
+<h4><span class="num">Exercise&nbsp;3</span></h4>
+<p>Given the ring of slots under the object's lock, <code>put</code> and <code>take</code> written with each wait checked once, and the convention of the end marker in the contract, write the two waits in a loop with <code>notifyAll</code> (<code>TODO 1</code>, <code>TODO 2</code>). Nothing else is a hole: the end marker is a value the client reserves, <code>BufferCheck.END</code> in the check and <code>Frame.END</code> in the quest, and the consumer loop that stops on it is the check's and is given. The check runs first as given, with the <code>if</code>s, and its report is read; then with the&nbsp;loops.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/BoundedBuffer.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">final</span> <span class="kw">class</span> BoundedBuffer&lt;T&gt; {
+  <span class="kw">private</span> <span class="kw">final</span> Object[] slots;             <span class="cm">// the ring; guarded by this</span>
+  <span class="kw">private</span> <span class="kw">int</span> head = <span class="nu">0</span>, tail = <span class="nu">0</span>, count = <span class="nu">0</span>;
+
+  <span class="kw">public</span> BoundedBuffer(<span class="kw">int</span> capacity) { slots = <span class="kw">new</span> Object[capacity]; }
+
+  <span class="kw">public</span> <span class="kw">synchronized</span> <span class="kw">void</span> put(T x) <span class="kw">throws</span> InterruptedException {
+    <span class="cm">// TODO 1: wait while the buffer is full, in a loop (rule 4)</span>
+    <span class="kw">if</span> (count == slots.length) wait();
+    slots[tail] = x;
+    tail = (tail + <span class="nu">1</span>) % slots.length;
+    count++;
+    notifyAll();                            <span class="cm">// wake every waiting thread (rule 5)</span>
+  }
+
+  @SuppressWarnings(<span class="st">&quot;unchecked&quot;</span>)
+  <span class="kw">public</span> <span class="kw">synchronized</span> T take() <span class="kw">throws</span> InterruptedException {
+    <span class="cm">// TODO 2: wait while the buffer is empty, in a loop (rule 4)</span>
+    <span class="kw">if</span> (count == <span class="nu">0</span>) wait();
+    T x = (T) slots[head];
+    slots[head] = <span class="kw">null</span>;
+    head = (head + <span class="nu">1</span>) % slots.length;
+    count--;
+    notifyAll();
+    <span class="kw">return</span> x;
+  }
+}</code></pre></figure>
+<p class="check"><span>The check:</span> <code>java -cp out BufferCheck</code>: many producers against one consumer that pauses now and then, so that producers queue at the full buffer and one wake-up lets them all through the <code>if</code>; the main thread joins the producers and then puts the end marker, which is question 1 again. The check makes each <code>put</code> while holding the buffer's own lock, so that it can write down the order the items went in as it happens (a wait inside <code>put</code> releases the lock, so the producers still queue), and the consumer must take them in that order, each once. With the <code>if</code>, items never arrive, and the line names the wait. With one consumer, the <code>if</code> of <code>take</code> fails only on a wake-up with no cause, which the language allows and a run seldom shows; the lecture's example 5, with two consumers, showed it on every run. <code>notifyAll</code> does not remove the loop; the loop is what makes the extra wake-ups harmless. Then, as an experiment: change <code>notifyAll</code> to <code>notify</code> in both methods, run, and change it back. The run may stop, when a wake-up the consumer needed is delivered to a producer that can do nothing with it and everyone waits; the check reports it at a deadline, with the threads that wait, and says that a run that did not stop proves nothing (rule&nbsp;8).</p>
+</article>
+</section><section class="part" id="barrier"><h3>Part 6: The barrier<span class="opt">extension</span><span class="where">at the&nbsp;keyboard</span></h3>
+<p><em>Not before</em> over a whole phase, built from the monitor: arrivals counted under the lock, the last runs an action and wakes the rest. The quest's video, part 5, needs&nbsp;it.</p>
+<aside class="contract"><div class="contract-h">The contract</div><figure class="code"><figcaption><span class="lang">Java</span></figcaption><pre><code><span class="kw">final</span> <span class="kw">class</span> Barrier {
+  <span class="kw">interface</span> Action { <span class="kw">void</span> run() <span class="kw">throws</span> InterruptedException; }
+  Barrier(<span class="kw">int</span> parties, Action action);
+  <span class="kw">void</span> await() <span class="kw">throws</span> InterruptedException, BrokenBarrierException;
+}</code></pre></figure><p>A <code>Barrier</code> of a count of parties and an action, the action allowed to throw <code>InterruptedException</code>. <code>await()</code> returns only after all parties have called it in this round, the action has run once, by the last arrival, before anyone is released, and everything any party wrote before its <code>await</code>, and everything the action wrote, is visible to every party after. The round ends when the last arrives; the next begins at once, and a party that returns cannot pass the next <code>await</code> until the others have arrived again. If the action throws, or a waiting party is interrupted, the barrier is broken: every party waiting and every later arrival leaves <code>await</code> with a <code>BrokenBarrierException</code>, and the barrier stays broken; that is <code>CyclicBarrier</code>'s rule, and the quest's video ends its workers on&nbsp;it.</p></aside>
+<article class="item" id="e4">
+<h4><span class="num">Exercise&nbsp;4</span></h4>
+<p>Given the count of parties, the action, and the empty <code>await()</code>, write it, in two steps. First for one round: arrivals counted under the lock, every arrival but the last waits, the last runs the action, resets the count and wakes the rest. Then make it reusable with a round number: a waiter waits while the round it arrived in is still the current one. Without the round number two things break: the reset of the count makes a slow waiter's condition true again and it waits for ever; and a fast party arriving again before the slow ones have left corrupts the count. A waiting party that is interrupted, and an action that throws, break the barrier, as the contract&nbsp;says.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/Barrier.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">final</span> <span class="kw">class</span> Barrier {
+  <span class="kw">static</span> RuntimeException todo(<span class="kw">int</span> n) { <span class="kw">return</span> <span class="kw">new</span> UnsupportedOperationException(<span class="st">&quot;TODO &quot;</span> + n); }   <span class="cm">// a hole: write the code in place of throw todo(n)</span>
+  <span class="kw">public</span> <span class="kw">interface</span> Action { <span class="kw">void</span> run() <span class="kw">throws</span> InterruptedException; }
+
+  <span class="kw">private</span> <span class="kw">final</span> <span class="kw">int</span> parties;
+  <span class="kw">private</span> <span class="kw">final</span> Action action;
+  <span class="kw">private</span> <span class="kw">int</span> waiting = <span class="nu">0</span>;                  <span class="cm">// arrivals in this round; guarded by this</span>
+  <span class="kw">private</span> <span class="kw">long</span> round = <span class="nu">0</span>;                   <span class="cm">// the current round; guarded by this</span>
+  <span class="kw">private</span> <span class="kw">boolean</span> broken = <span class="kw">false</span>;           <span class="cm">// guarded by this</span>
+
+  <span class="kw">public</span> Barrier(<span class="kw">int</span> parties, Action action) {
+    <span class="kw">this</span>.parties = parties;
+    <span class="kw">this</span>.action = action;
+  }
+
+  <span class="kw">public</span> <span class="kw">synchronized</span> <span class="kw">void</span> await() <span class="kw">throws</span> InterruptedException, BrokenBarrierException {
+    <span class="cm">// TODO 1: count the arrival; the last runs the action, resets, wakes; the rest wait</span>
+    <span class="kw">throw</span> todo(<span class="nu">1</span>);
+  }
+}</code></pre></figure>
+<p class="check"><span>The check:</span> <code>java -cp out BarrierCheck</code>, two lines. The first sends a few parties through many rounds as fast as they can, with an action that counts the rounds; a party that passes before the others have arrived is recorded, the action must have run once per round, by the last arrival, and a run that has not ended at a deadline is reported with the parties that wait. The second interrupts one waiting party: it leaves with <code>InterruptedException</code>, the other with <code>BrokenBarrierException</code>, and so does a later&nbsp;arrival.</p>
+</article>
+</section><section class="part" id="rest"><h3>Part 7: The rest of the primitives&#x27; page<span class="opt">extension</span><span class="where">on&nbsp;paper</span></h3>
+<p>Questions 2, 3 and 4 on the join, 9 and 10 on the visible write. Question 9 has a program, <code>warmup/Reorder.java</code>, given&nbsp;whole.</p>
+<aside class="recall"><div class="recall-h">From the lecture</div><p><strong>The join.</strong> After <code>t.join()</code> returns, <code>t</code> has ended, and everything <code>t</code> wrote is visible to the thread that joined it; <code>t.start()</code> is its mirror: everything written before the start is visible to&nbsp;<code>t</code>.</p><p><strong>The visible write.</strong> All reads and writes of volatile fields in a program fall in one order that every thread agrees on, consistent with each thread's own order; a write to a volatile field is seen by every later read of it in that order, on any thread, and everything written before that write is visible after that read. It does not make a read-modify-write one step, and does not make two fields change as&nbsp;one.</p></aside>
+<article class="item" id="q2">
+<h4><span class="num">Question&nbsp;2</span></h4>
+<p>Given three workers that each write their own slot of <code>counts</code>, joined in the order 2, 0, 1, say whether the order of the joins changes what main sees after the&nbsp;three.</p>
+<p class="form"><span>Answer form:</span> yes or no, and the sentence of the guarantee that says&nbsp;so.</p>
+</article>
+<article class="item" id="q3">
+<h4><span class="num">Question&nbsp;3</span></h4>
+<p>Given two workers that both write one plain field <code>last</code>, both joined, say what the join guarantees about the field and what it does&nbsp;not.</p>
+<p class="form"><span>Answer form:</span> what main sees, and what is left&nbsp;open.</p>
+</article>
+<article class="item" id="q4">
+<h4><span class="num">Question&nbsp;4</span></h4>
+<p>Given the guarantee above and a thread <code>t</code> that was made with <code>new Thread(r)</code> but never started, say what <code>t.join()</code> guarantees and what it does&nbsp;not.</p>
+<p class="form"><span>Answer form:</span> when the join returns, and what it says about <code>r</code>'s&nbsp;writes.</p>
+</article>
+<article class="item" id="q9">
+<h4><span class="num">Question&nbsp;9</span></h4>
+<p>Given two volatile fields <code>x</code> and <code>y</code>, both 0, thread A doing <code>x = 1; r1 = y</code> and thread B doing <code>y = 1; r2 = x</code>, say whether <code>r1</code> and <code>r2</code> can both be 0; then with plain fields. Then run the given program, <code>java -cp out Reorder plain</code> and <code>java -cp out Reorder volatile</code>: with plain fields it may happen, and it did on the machine the lab was written on; a run where it does not happen proves nothing (rule 8). That is the lecture's discovery as a&nbsp;question.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">warmup/Reorder.java</span></figcaption><pre><code><span class="kw">public</span> <span class="kw">class</span> Reorder {
+  <span class="kw">static</span> <span class="kw">int</span> x, y, r1, r2;                              <span class="cm">// plain</span>
+  <span class="kw">static</span> <span class="kw">volatile</span> <span class="kw">int</span> vx, vy;                           <span class="cm">// volatile</span>
+  <span class="kw">static</span> <span class="kw">volatile</span> <span class="kw">int</span> go = -<span class="nu">1</span>;                          <span class="cm">// the number of the trial that may run</span>
+  <span class="kw">static</span> <span class="kw">final</span> AtomicInteger done = <span class="kw">new</span> AtomicInteger();
+  <span class="kw">static</span> <span class="kw">final</span> <span class="kw">int</span> TRIALS = 200_000;
+
+  <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="kw">String</span>[] args) <span class="kw">throws</span> Exception {
+    <span class="kw">boolean</span> vol = args.length &gt; <span class="nu">0</span> &amp;&amp; args[<span class="nu">0</span>].equals(<span class="st">&quot;volatile&quot;</span>);
+    Thread a = <span class="kw">new</span> Thread(() -&gt; {
+      <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; TRIALS; i++) {
+        <span class="kw">while</span> (go != i) Thread.onSpinWait();            <span class="cm">// wait for the trial to open</span>
+        <span class="kw">if</span> (vol) { vx = <span class="nu">1</span>; r1 = vy; } <span class="kw">else</span> { x = <span class="nu">1</span>; r1 = y; }
+        done.incrementAndGet();
+      }
+    });
+    Thread b = <span class="kw">new</span> Thread(() -&gt; {
+      <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; TRIALS; i++) {
+        <span class="kw">while</span> (go != i) Thread.onSpinWait();
+        <span class="kw">if</span> (vol) { vy = <span class="nu">1</span>; r2 = vx; } <span class="kw">else</span> { y = <span class="nu">1</span>; r2 = x; }
+        done.incrementAndGet();
+      }
+    });
+    a.start(); b.start();
+    <span class="kw">int</span> bothZero = <span class="nu">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; TRIALS; i++) {
+      x = y = vx = vy = <span class="nu">0</span>;
+      done.set(<span class="nu">0</span>);
+      go = i;                                           <span class="cm">// both threads run their two lines</span>
+      <span class="kw">while</span> (done.get() &lt; <span class="nu">2</span>) Thread.onSpinWait();       <span class="cm">// both have finished them</span>
+      <span class="kw">if</span> (r1 == <span class="nu">0</span> &amp;&amp; r2 == <span class="nu">0</span>) bothZero++;
+    }
+    a.join(); b.join();
+    System.out.println((vol ? <span class="st">&quot;volatile&quot;</span> : <span class="st">&quot;plain&quot;</span>) + <span class="st">&quot; fields: r1 and r2 both 0 in &quot;</span> + bothZero + <span class="st">&quot; of &quot;</span> + TRIALS + <span class="st">&quot; trials&quot;</span>);
+  }
+}</code></pre></figure>
+<p class="form"><span>Answer form:</span> can or cannot, twice, each with its&nbsp;reason.</p>
+</article>
+<article class="item" id="q10">
+<h4><span class="num">Question&nbsp;10</span></h4>
+<p>Given four needs, a stop signal; a counter that many threads add to; a count that one thread writes and another reads after a join; two fields that must change together, say for each whether a visible flag, an atomic, a count per thread, or a lock is the right tool, and why the others are&nbsp;not.</p>
+<p class="form"><span>Answer form:</span> one tool per&nbsp;need.</p>
+</article>
+</section><h3 class="end">What the warm-up hands&nbsp;on</h3><p>The quest takes <code>Counter</code> and <code>Workers</code> into one program: the bar and the tiles per worker over the counter, every render and the restart of the explorer over the workers; each has a given copy beside the student's, <code>--given counter</code>, <code>--given workers</code>, so that one unfinished structure blocks nothing. The <code>BoundedBuffer</code> is used by its own check here and, after the lab, by the mini-project, whose first step takes it as the one-lock queue, names its point of effect, and only then replaces it by the two-lock and the lock-free versions. The <code>Barrier</code> goes with part 5 of the quest, the&nbsp;video.</p></section><section id="quest"><h2>Quest</h2><p>The quest is one program, a ray tracer in Java, given whole and sequential: it reads a scene from a text file, spheres, cubes, a floor, lights, a camera, and writes a PNG, with shadows and mirror reflections. The quest makes it multi-threaded with the structures of the warm-up, in six parts, each a need the picture makes felt, two or three holes, and a payoff seen on screen. The holes are uses, not mechanisms: which structure goes where, in what order, with what end marker or restart, and the sentence that says why that structure and not another. By the end the program renders in parallel with a live bar, balances its work, takes a new camera from the keyboard while it renders, and, as extensions, samples the picture many times for soft shadows and renders a video of a turning cube with its&nbsp;reflection.</p><p>Parts 1, 2, 3 and 6 are the path, taken by every student in that order; parts 4 and 5 are extensions, over the week. Parts 1, 2, 3 and 6 use <code>Counter</code> and <code>Workers</code> only; part 5 is the one that needs the <code>Barrier</code> and the <code>BoundedBuffer</code>. On the path, the <code>BoundedBuffer</code> is used by its own check in the warm-up and, after the lab, as the mini-project's first queue; nobody looks for its use in parts 1 to 3. The lab collects&nbsp;nothing.</p><p>The tracing itself is sealed: the folder <code>quest/tracer/</code> is not read, and the program uses it through this interface only, listed here&nbsp;once.</p><figure class="code"><figcaption><span class="lang">Java</span></figcaption><pre><code>Colour  Tracer.sample(Scene scene, <span class="kw">int</span> x, <span class="kw">int</span> y, Rng rng)   <span class="cm">// one ray through pixel (x, y), jittered by rng; rng null: the pixel&#x27;s centre, hard shadows</span>
+Rng     Rng.of(<span class="kw">int</span> x, <span class="kw">int</span> y, <span class="kw">int</span> sample)                     <span class="cm">// the generator of sample s of pixel (x, y)</span>
+Scene   Scene.read(<span class="kw">String</span> file); scene.at(<span class="kw">int</span> frame)         <span class="cm">// the scene of the file; the scene at that frame, an immutable value</span>
+Scene   scene.withCamera(Vec eye, Vec look); scene.width(); scene.height(); scene.samples(); scene.frames()
+Picture <span class="kw">new</span> Picture(w, h); picture.set(x, y, colour); picture.write(file)   <span class="cm">// the buffer and the PNG</span>
+Preview <span class="kw">new</span> Preview(file); preview.write(picture)            <span class="cm">// the picture so far, to the same file, now and then</span>
+Frame   <span class="kw">new</span> Frame(k, w, h); frame.picture; Frame.END         <span class="cm">// a frame of the video and the end marker</span></code></pre></figure><p>The quest's files are in <code>quest/</code>. First, the four structures of the warm-up go into <code>quest/structures/</code>, every file of them, finished or not: the skeletons compile. Then, from <code>quest/</code>, the compile and the first&nbsp;run:</p><figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>cd quest
+javac -d out *.java tracer/*.java structures/*.java
+javac -d out/given given/*.java
+java -cp out Render scene.txt
+java -cp out Render scene.txt --part <span class="nu">1</span> --counter racy
+java -cp out Check <span class="nu">1</span></code></pre></figure><p><code>Render</code> renders <code>scene.txt</code> into <code>render.png</code>; <code>--part n</code> selects how far the program has come, <code>--counter racy|locked|atomic|perworker</code> which counter the bar reads, <code>--threads n</code> how many workers, <code>--out file</code> where the picture goes. <code>Check n</code> runs the check of part <em>n</em>; each line says <em>pass</em>, <em>FAIL</em> or <em>todo</em> (the hole is not written yet), and a <em>FAIL</em> names the file, the hole and the question to ask. A structure not finished yet is taken from the sealed copies in <code>given/</code> with <code>--given workers</code>, or <code>--given counter,buffer</code>, on any run, so that one unfinished structure blocks nothing. A check can show a bug and cannot prove its absence (rule 8): every check runs under contention heavy enough that the given version's bug showed on every run made while writing the lab; where a failure can be forced, it is&nbsp;forced.</p><p>The parts are cumulative in one <code>Render.java</code>: the bar of part 2 is still there in part 3. Each part says which lines it replaces. From part 0 on, the program writes the picture so far to the PNG now and then, and an image viewer that reloads a changed file, Preview on macOS, most viewers on Linux and Windows, shows it&nbsp;grow.</p><section class="part" id="part0"><h3>Part 0: The first run&nbsp;(given)</h3>
+<article class="item">
+<p class="need"><span>The need:</span> <code>java -cp out Render scene.txt</code> renders sequentially: one sample per pixel, jagged edges, hard shadows, one front sweeping down slowly, a bar that moves with it, the preview growing in the&nbsp;viewer.</p>
+<p>Given the program and the scene file, open the PNG and the scene file, change a colour or move the sphere, and render again; this part has no hole. The scene language is one object per line, a keyword then key-value pairs; <code>yaw</code> is the rotation about the vertical axis in degrees, <code>spin</code> the degrees per frame; <code>radius</code> on a light gives soft shadows from part 4; a light's colour above 1 is what makes the tone map of part 4 needed. The same file serves all six parts: <code>samples</code> is read from part 4, <code>frames</code> from part&nbsp;5.</p>
+<figure class="code"><figcaption><span class="lang">Text</span><span class="file">quest/scene.txt</span></figcaption><pre><code># The scene of the quest. One object per line: a keyword, then key-value pairs.
+# yaw is the rotation about the vertical axis in degrees, spin the degrees per frame;
+# radius on a light gives soft shadows from part 4; a light&#x27;s colour above 1 is what makes
+# the tone map of part 4 needed. samples is read from part 4, frames from part 5.
+settings  size 1280 720   samples 24     frames 60
+camera    eye 0 1.6 -7    look 0 0.6 0   fov 40
+light     at -4 6 -3      colour 1.4 1.4 1.4   radius 0.8
+light     at  5 4 -2      colour 0.4 0.4 0.5
+light     at  0 3 -9      colour 0.25 0.22 0.2
+plane     y 0             checker 0.85 0.85 0.85 / 0.15 0.15 0.15
+sphere    at -1.8 1 0.5   radius 1       colour 0.9 0.3 0.2   mirror 0.3
+cube      at  1.2 0.75 0  size 1.5       colour 0.2 0.4 0.9   mirror 0.6   yaw 20   spin 3
+cube      at  3.5 0.5 2.5 size 1         mirror 0.9           yaw 45
+sphere    at -4.5 0.5 3   radius 0.5     colour 0.95 0.8 0.2  mirror 0.2
+sphere    at -3.2 0.4 4.5 radius 0.4     colour 0.3 0.8 0.4   mirror 0.5
+sphere    at -0.6 0.35 3  radius 0.35    colour 0.9 0.9 0.9   mirror 0.9
+sphere    at  5.5 0.6 6   radius 0.6     colour 0.6 0.3 0.8   mirror 0.4
+sphere    at  1.5 0.3 -2.2 radius 0.3    colour 0.2 0.7 0.9   mirror 0.7</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Render.java</span></figcaption><pre><code>  <span class="cm">// ---- part 0: one thread, one front -----------------------------------------------------</span>
+
+  <span class="kw">static</span> <span class="kw">void</span> sequential(Scene scene, Counter counter, Picture picture) {
+    <span class="kw">for</span> (<span class="kw">int</span> y = <span class="nu">0</span>; y &lt; scene.height(); y++) row(scene, y, picture, counter, <span class="nu">0</span>);
+  }
+
+  /** One row of the picture, every pixel counted on the counter as worker i&#x27;s. */
+  <span class="kw">static</span> <span class="kw">void</span> row(Scene scene, <span class="kw">int</span> y, Picture picture, Counter counter, <span class="kw">int</span> worker) {
+    <span class="kw">for</span> (<span class="kw">int</span> x = <span class="nu">0</span>; x &lt; scene.width(); x++) {
+      picture.set(x, y, Tracer.sample(scene, x, y, <span class="kw">null</span>));
+      counter.add(worker);
+    }
+  }</code></pre></figure>
+<figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>java -cp out Render scene.txt</code></pre></figure>
+<p class="gives"><span>Gives:</span> The picture, and the feeling that it is slow. Every pixel is <code>Tracer.sample</code> once, written into the buffer by <code>picture.set</code>, and counted on the counter the bar&nbsp;reads.</p>
+</article></section><section class="part" id="part1"><h3>Part 1:&nbsp;Workers</h3>
+<article class="item">
+<p class="need"><span>The need:</span> The render is slow and the machine has as many processors as <code>Runtime.getRuntime().availableProcessors()</code> says; one of them&nbsp;works.</p>
+<p>Given <code>Render.java</code>, with the sequential loop over rows and the picture buffer; the bar, wired to the racy <code>Counter</code>; the warm-up's <code>Workers</code>; and the band loop with its two holes, write, in <code>bands</code>: worker <em>i</em>'s band of rows, from its index, the bands covering every row and the last taking the remainder, each row rendered with <code>row(scene, y, picture, counter, i)</code>; and the <code>join</code> before the PNG is written. Then write, as a comment at the first hole, why no two workers write the same&nbsp;pixel.</p><p>As given, the workers do nothing and nothing waits for them: the PNG is written at once, grey. With the band written and the join still missing, the PNG is written with bands still grey (<code>teacher/pictures/p1-no-join.png</code> on the teacher's page). With both, the preview shows every front advancing at once and the picture is done long before the sequential run. The bar, still on the racy counter, ends short of 100 % under a finished picture: that is part 2's need, felt before it is&nbsp;told.</p><p>From here on the preview is written by a thread of its own, the bar's, while the workers write the buffer. That is a data race on plain <code>int</code>s, tolerated by design: an <code>int</code> is written whole, a stale pixel costs only a late preview, nothing is computed from what the preview reads, and the final read is after the join. It is the first item of the list that the last question of the lab asks&nbsp;for.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Render.java</span></figcaption><pre><code>  <span class="cm">// ---- parts 1 and 2: workers over bands of rows -----------------------------------------</span>
+
+  /** The picture cut into one band of rows per worker, each worker over its own band. */
+  <span class="kw">static</span> <span class="kw">void</span> bands(Scene scene, <span class="kw">int</span> threads, Counter counter, Picture picture) <span class="kw">throws</span> InterruptedException {
+    <span class="kw">int</span> h = scene.height();
+    Workers w = <span class="kw">new</span> Workers(threads);
+    w.start(i -&gt; {
+      <span class="cm">// TODO 1: worker i renders its own band of rows with row(scene, y, picture, counter, i):</span>
+      <span class="cm">// the bands cover every row, the last takes the remainder. Then write here why no two</span>
+      <span class="cm">// workers write the same pixel.</span>
+      
+    });
+    <span class="cm">// TODO 2: nothing waits for the workers here, and the PNG is written at once.</span>
+    
+  }</code></pre></figure>
+<ul class="holes"><li>hole 1: the band's bounds from the worker's index, and the loop over its rows; then the sentence: no two workers write the same pixel, because&nbsp;…</li><li>hole 2: the join, before the PNG is&nbsp;written.</li></ul>
+<figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>java -cp out Render scene.txt --part <span class="nu">1</span>
+java -cp out Check <span class="nu">1</span></code></pre></figure>
+<p class="check"><span>The check:</span> the picture equals the sequential one, pixel for pixel. Failure: <em>rows 180 to 224 are unrendered: was every worker joined before the PNG was written, and does every row belong to a&nbsp;band?</em></p>
+<p class="gives"><span>Gives:</span> The third way as the first move, not the last. The picture buffer is shared, and nothing protects it; what makes that right is ownership: every pixel is written by exactly one worker, two writes never meet, and no invariant spans two pixels (rule 1 has nothing to protect). The join is what publishes the workers' writes to the main thread; question 1 of the primitives' page is this&nbsp;join.</p>
+</article></section><section class="part" id="part2"><h3>Part 2: The&nbsp;bar</h3>
+<article class="item">
+<p class="need"><span>The need:</span> The bar lied in part 1, and now twelve threads do the work while a thirteenth&nbsp;prints.</p>
+<p>Given the bar's loop, in <code>Bar.java</code>, reading the counter now and then; the flag <code>--counter racy | locked | atomic | perworker</code>; and <code>Render.counter</code>, which gives the racy counter whatever the flag says: write the choice, one implementation per word, the warm-up's three beside the racy one. Then run the bar on each of the four and write, at the hole, which one the bar keeps and why, from the contract: what it guarantees, what it costs. The predictions were made in the warm-up and are not asked again; this is the same climb seen on a&nbsp;picture.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Render.java</span></figcaption><pre><code>  /** The counter the --counter flag names, one of racy, locked, atomic, perworker. */
+  <span class="kw">static</span> Counter counter(<span class="kw">String</span> kind, <span class="kw">int</span> workers) {
+    <span class="cm">// TODO 3: the counter the flag names: &quot;racy&quot; is new RacyCounter(), &quot;locked&quot;, &quot;atomic&quot; and</span>
+    <span class="cm">// &quot;perworker&quot; (which takes the number of workers) are the warm-up&#x27;s three; until</span>
+    <span class="cm">// then every flag gives the racy one. Then run the bar on each of the four, and write</span>
+    <span class="cm">// here which one the bar keeps, and why, from the contract: what does it guarantee,</span>
+    <span class="cm">// what does it cost?</span>
+    <span class="kw">return</span> <span class="kw">new</span> RacyCounter();
+    
+  }</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Bar.java</span></figcaption><pre><code>  @Override <span class="kw">public</span> <span class="kw">void</span> run() {
+    <span class="kw">while</span> (!done) {
+      show(counter.get());
+      preview.run();
+      <span class="kw">try</span> { Thread.sleep(<span class="nu">100</span>); } <span class="kw">catch</span> (InterruptedException e) { <span class="kw">return</span>; }
+    }
+  }
+
+  <span class="kw">private</span> <span class="kw">void</span> show(<span class="kw">long</span> n) {
+    <span class="kw">int</span> cells = <span class="nu">40</span>;
+    <span class="kw">int</span> filled = (<span class="kw">int</span>) Math.min(cells, cells * n / Math.max(<span class="nu">1</span>, total));
+    StringBuilder sb = <span class="kw">new</span> StringBuilder(<span class="st">&quot;\r[&quot;</span>);
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; cells; i++) sb.append(i &lt; filled ? <span class="st">&#x27;#&#x27;</span> : <span class="st">&#x27; &#x27;</span>);
+    sb.append(<span class="st">&quot;] &quot;</span>).append(<span class="nu">100</span> * n / Math.max(<span class="nu">1</span>, total)).append(<span class="st">&quot; %   &quot;</span>);
+    System.out.print(sb);
+    System.out.flush();
+  }</code></pre></figure>
+<ul class="holes"><li>hole 3: the counter the flag names; then the sentence: the bar keeps …, because&nbsp;…</li></ul>
+<figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>java -cp out Render scene.txt --part <span class="nu">2</span> --counter racy
+java -cp out Render scene.txt --part <span class="nu">2</span> --counter locked
+java -cp out Render scene.txt --part <span class="nu">2</span> --counter atomic
+java -cp out Render scene.txt --part <span class="nu">2</span> --counter perworker
+java -cp out Check <span class="nu">2</span></code></pre></figure>
+<p class="check"><span>The check:</span> each repaired counter equals the number of pixels after the join, and during the run its <code>get</code> never decreases and never exceeds the adds begun; the racy one is reported for information. Failure: *<code>locked</code> counted 614 400 but a read during the run went backwards: is <code>get</code> inside the&nbsp;lock?*</p>
+<p class="gives"><span>Gives:</span> The racy bar short of 100 % under a finished picture, the three repairs at 100 %, and the cost and guarantee of each said on a program rather than a check. <code>n++</code> on a shared word is three steps whatever the word's type (rule&nbsp;3).</p>
+</article></section><section class="part" id="part3"><h3>Part 3:&nbsp;Balance</h3>
+<article class="item">
+<p class="need"><span>The need:</span> The preview shows it: the bands with the mirror cube and the sphere are still grey when the sky bands are done. Static bands are&nbsp;unfair.</p>
+<p>Given <code>Tiles.java</code>, which replaces the band loop of <code>Render.java</code>: the picture cut into tiles, and a <code>Dispenser</code> with one operation, <code>int next()</code>, which must hand each tile index out exactly once, given as a plain <code>next++</code>; and the tiles per worker counted on a <code>PerWorkerCounter</code>, read by <code>get(int worker)</code>, printed at the end: write, first, at the hole of <code>next</code>, the prediction of what two workers running <code>next++</code> at once hand out; then make <code>next</code> one instruction, <code>AtomicInteger.getAndIncrement</code>; then the count of each tile as its worker's; then the sentence: why one instruction is enough for the dispenser, why no lock is needed, and why the per-worker way, right for the counts, is impossible for the&nbsp;dispenser.</p><p>The dispenser is not the warm-up's <code>Counter</code>: <code>add</code> and <code>get</code> cannot hand out a unique index, and a count per worker cannot either, since the value handed out is the one thing that must be&nbsp;shared.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Tiles.java</span></figcaption><pre><code>  /** Hands out the tile indices <span class="nu">0</span>, <span class="nu">1</span>, <span class="nu">2</span>, ... each exactly once, to any number of threads;
+   *  from count on, every call returns count or more: there is no more work. */
+  <span class="kw">static</span> <span class="kw">final</span> <span class="kw">class</span> Dispenser {
+    <span class="kw">private</span> <span class="kw">int</span> next = <span class="nu">0</span>;
+
+    <span class="cm">// TODO 4: next++ is three steps; predict here what two workers running them at once hand</span>
+    <span class="cm">// out, then make next() one instruction, and write why one instruction is enough, why no</span>
+    <span class="cm">// lock is needed, and why a count per worker cannot do it.</span>
+    <span class="kw">int</span> next() { <span class="kw">return</span> next++; }
+    
+  }
+
+  /** Part <span class="nu">3</span>&#x27;s render: workers pull tiles from one dispenser until it runs dry. Returns the
+   *  line of tiles per worker, the observation of balance. */
+  <span class="kw">static</span> <span class="kw">String</span> render(Scene scene, <span class="kw">int</span> threads, Counter counter, Picture picture) <span class="kw">throws</span> InterruptedException {
+    Tiles tiles = <span class="kw">new</span> Tiles(scene.width(), scene.height());
+    Dispenser dispenser = <span class="kw">new</span> Dispenser();
+    PerWorkerCounter tilesDone = <span class="kw">new</span> PerWorkerCounter(threads);
+    Workers w = <span class="kw">new</span> Workers(threads);
+    w.start(i -&gt; {
+      <span class="kw">for</span> (<span class="kw">int</span> k = dispenser.next(); k &lt; tiles.count; k = dispenser.next()) {
+        tiles.render(scene, k, picture, counter, i);
+        <span class="cm">// TODO 5: count this tile as worker i&#x27;s on tilesDone</span>
+        
+      }
+    });
+    w.join();
+    StringBuilder sb = <span class="kw">new</span> StringBuilder(<span class="st">&quot;tiles per worker:&quot;</span>);
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; threads; i++) sb.append(<span class="st">&#x27; &#x27;</span>).append(tilesDone.get(i));
+    <span class="kw">return</span> sb + <span class="st">&quot;  (&quot;</span> + tiles.count + <span class="st">&quot; tiles)&quot;</span>;
+  }
+}</code></pre></figure>
+<ul class="holes"><li>hole 4: the prediction, then <code>next</code> as one instruction; then the&nbsp;sentence.</li><li>hole 5: each tile counted as worker <em>i</em>'s on&nbsp;<code>tilesDone</code>.</li></ul>
+<figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>java -cp out Render scene.txt --part <span class="nu">3</span> --counter perworker
+java -cp out Check <span class="nu">3</span></code></pre></figure>
+<p class="check"><span>The check:</span> <code>Check</code> wraps the dispenser and counts, in an <code>AtomicIntegerArray</code>, how often each index came out, with <code>next()</code> called outside any lock so that the race is not serialized away, and requires every count to be exactly one; the picture over tiles equals the sequential one; the tiles per worker add up to the tiles, and are printed beside as the observation of balance, which proves nothing about coverage. Failure: *tile 1 234 was handed out twice: two workers read the same <code>next</code>; what makes <code>getAndIncrement</code> one&nbsp;step?*</p>
+<p class="gives"><span>Gives:</span> The counter in its second role, handing out work, and the finding that a lost increment here does not skip a tile but renders one twice, so this race is caught by a count, not by the eye: the racy dispenser's picture (<code>teacher/pictures/p3-racy-dispenser.png</code>) looks right. The printed counts show the imbalance the dispenser absorbed: one worker took many more tiles than another, and every front kept the same&nbsp;pace.</p>
+</article></section><section class="part" id="part6"><h3>Part 6: The&nbsp;explorer</h3>
+<article class="item">
+<p class="need"><span>The need:</span> Moving the camera and waiting for the whole render is slow; the explorer takes a new camera from the keyboard while it renders, and the picture restarts at&nbsp;once.</p>
+<p>Given <code>Explorer.java</code>: the keyboard read on the main thread, a render that can be started from a camera over a fresh <code>Workers</code> per render, one picture buffer reused across restarts, and <code>restart</code>, written as a fresh start with nothing before it: write the three lines: the workers ask <code>stopped()</code> at the top of the tile loop; the restart calls <code>stop()</code> on the old workers; the restart joins them before the fresh ones start. It needs only <code>Workers</code> and the&nbsp;tiles.</p><p>As given, a new camera starts a second render over the first, and the two views land in one picture (<code>teacher/pictures/p6-two-views-mixed.png</code>). With the flag asked and set but the join missing, the old workers' last tiles land in the reused buffer among the new view's; the check sees them, the eye rarely does. A <code>Workers</code> whose flag was left plain in the warm-up does not show the old render running on here, and the page says why: the tile loop calls the tracer and the dispenser, after which this JDK reads the field again; the language permits the old render to run on, and the warm-up's empty loop is where that permission showed (rule&nbsp;9).</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Explorer.java</span></figcaption><pre><code>  /** Renders the view on fresh workers, after the render in progress has been stopped and
+   *  joined; returns at once, the workers go on. */
+  <span class="kw">synchronized</span> <span class="kw">void</span> restart(Scene view) <span class="kw">throws</span> InterruptedException {
+    Workers old = current;
+    <span class="kw">if</span> (old != <span class="kw">null</span>) {
+      <span class="cm">// TODO 7: tell the old render to stop</span>
+      
+      <span class="cm">// TODO 8: and wait until every old worker has ended, before the fresh ones start</span>
+      
+    }
+    Tiles tiles = <span class="kw">new</span> Tiles(view.width(), view.height(), ++renders);
+    Tiles.Dispenser dispenser = <span class="kw">new</span> Tiles.Dispenser();
+    Workers fresh = <span class="kw">new</span> Workers(threads);
+    current = fresh;
+    fresh.start(i -&gt; {
+      <span class="kw">for</span> (<span class="kw">int</span> k = dispenser.next(); k &lt; tiles.count; k = dispenser.next()) {
+        <span class="cm">// TODO 6: ask fresh.stopped() here, at the top of the tile loop, and return if so</span>
+        
+        tiles.render(view, k, picture, counter, i);
+      }
+    });
+  }</code></pre></figure>
+<ul class="holes"><li>hole 6: the test of the flag at the top of the tile&nbsp;loop.</li><li>hole 7: <code>stop()</code> on the old&nbsp;workers.</li><li>hole 8: <code>join()</code> on the old workers, before the fresh ones&nbsp;start.</li></ul>
+<figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>java -cp out Explorer scene.txt
+java -cp out Check <span class="nu">6</span></code></pre></figure>
+<p class="check"><span>The check:</span> driven by a scripted camera change, not the keyboard: after a new camera, no tile of the old view in the picture, and no old worker writing after the new render has begun. Failure: <em>tile (3, 7) holds the old view: were the old workers joined before the new ones&nbsp;started?</em></p>
+<p class="gives"><span>Gives:</span> The warm-up's flag at work, and what the order of the restart buys: cancellation and restart as the last coordination of the path. <code>stop</code> then <code>join</code> then a fresh <code>start</code>: the flag settles visibility, the join settles <em>not before</em>. An interactive ray tracer in the terminal, the preview reloading in the&nbsp;viewer.</p>
+</article></section><section class="part" id="part4"><h3>Part 4: The film and the fold&nbsp;(extension)</h3>
+<article class="item">
+<p class="need"><span>The need:</span> Jagged edges and hard shadows. Many samples per pixel, jittered, with the lights given a size, give smooth edges and soft shadows; and with lights brighter than 1 the picture needs tone mapping, which needs the whole picture's brightest value before any pixel is written to eight&nbsp;bits.</p>
+<p>Given the design, stated here: rendering is progressive, the outer loop is over sample passes, and each pass hands out the tiles anew through the dispenser, so that the samples of one pixel come from different workers in different passes and the preview after each pass shows the noise clearing. Because of that, one shared film would be written by every worker; the film is therefore one per worker, <code>Film.java</code>, in fixed point: each sample's channel is capped at a radiance of 16, rounded to the nearest 1/4 096, and added as an integer at most 65 536 into one <code>int</code> per channel per pixel; with the sample count capped at 32 767 the sum stays below 2³¹, so no sum overflows, and the order of adding cannot change it. Given <code>ToneMap.java</code>, wrong in the way that shows: each band of the merged film is mapped by its own maximum, no fold. Given <code>Rng.of(x, y, s)</code>, the generator of sample <em>s</em> of pixel (<em>x</em>,&nbsp;<em>y</em>).</p><p>Write: the merge of the per-worker films into one, with its identity; the fold of the maximum luminance over the bands of the merged film, its combine and identity, and the mapping moved after the fold; and the samples loop's generator, <code>Rng.of(x, y, s)</code>, not one of the&nbsp;worker's.</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Film.java</span></figcaption><pre><code>  /** The merge of the workers&#x27; films: one film holding every sample of every film. */
+  <span class="kw">static</span> Film merge(Film[] films) {
+    <span class="cm">// TODO 9: every film, added from the zero film; until then, the first worker&#x27;s film alone</span>
+    <span class="kw">return</span> films[<span class="nu">0</span>];
+    
+  }</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Film.java</span></figcaption><pre><code>  /** Passes over the tiles, each pass handing the tiles out anew, each worker adding its
+   *  samples to its own film; the films after the join. */
+  <span class="kw">static</span> Film[] films(Scene scene, <span class="kw">int</span> threads, Counter counter, Picture picture, Bar bar) <span class="kw">throws</span> InterruptedException {
+    <span class="kw">int</span> samples = Math.min(scene.samples(), MAX_SAMPLES);
+    Tiles tiles = <span class="kw">new</span> Tiles(scene.width(), scene.height());
+    Tiles.Dispenser[] passes = <span class="kw">new</span> Tiles.Dispenser[samples];
+    <span class="kw">for</span> (<span class="kw">int</span> s = <span class="nu">0</span>; s &lt; samples; s++) passes[s] = <span class="kw">new</span> Tiles.Dispenser();
+    Film[] films = <span class="kw">new</span> Film[threads];
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; threads; i++) films[i] = <span class="kw">new</span> Film(scene.width(), scene.height());
+    <span class="kw">if</span> (bar != <span class="kw">null</span>) bar.preview(() -&gt; ToneMap.map(merge(films), picture));   <span class="cm">// the picture so far, from the films as they are</span>
+    Workers w = <span class="kw">new</span> Workers(threads);
+    w.start(i -&gt; {
+      Film mine = films[i];
+      <span class="kw">for</span> (<span class="kw">int</span> s = <span class="nu">0</span>; s &lt; samples; s++)
+        <span class="kw">for</span> (<span class="kw">int</span> k = passes[s].next(); k &lt; tiles.count; k = passes[s].next())
+          <span class="kw">for</span> (<span class="kw">int</span> y = tiles.y0(k); y &lt; tiles.y1(k); y++)
+            <span class="kw">for</span> (<span class="kw">int</span> x = tiles.x0(k); x &lt; tiles.x1(k); x++) {
+              <span class="cm">// TODO 11: the generator of this sample is the pixel&#x27;s and the sample&#x27;s, Rng.of(x, y, s),</span>
+              <span class="cm">// not the worker&#x27;s: then the picture is a function of the scene alone</span>
+              mine.add(x, y, Tracer.sample(scene, x, y, Rng.of(i, <span class="nu">0</span>, s)));
+              
+              counter.add(i);
+            }
+    });
+    w.join();
+    <span class="kw">return</span> films;
+  }
+}</code></pre></figure>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/ToneMap.java</span></figcaption><pre><code>  /** The whole film into the picture: the fold of the maximum over the bands, then the mapping. */
+  <span class="kw">static</span> <span class="kw">void</span> map(Film film, Picture picture) {
+    <span class="kw">int</span> h = film.height;
+    <span class="cm">// TODO 10: each band is mapped by its own maximum, and no band knows the others&#x27;: fold</span>
+    <span class="cm">// the maximum over all the bands first, with its combine and its identity, then map every</span>
+    <span class="cm">// band by the one value.</span>
+    <span class="kw">for</span> (<span class="kw">int</span> band = <span class="nu">0</span>; band &lt; BANDS; band++) {
+      <span class="kw">int</span> y0 = h * band / BANDS, y1 = h * (band + <span class="nu">1</span>) / BANDS;
+      mapRows(film, picture, y0, y1, maxLuminance(film, y0, y1));
+    }
+    
+  }
+}</code></pre></figure>
+<ul class="holes"><li>hole 9: the merge, every film added from the zero&nbsp;film.</li><li>hole 10: the fold of the maximum over all bands, then one&nbsp;mapping.</li><li>hole 11: the sample's generator, the pixel's and the&nbsp;sample's.</li></ul>
+<figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>java -cp out Render scene.txt --part <span class="nu">4</span> --counter perworker
+java -cp out Check <span class="nu">4</span></code></pre></figure>
+<p class="check"><span>The check:</span> the merged film equals the sequential many-sample film, exactly, the reference rendered once at a reduced size: first the sample counts per pixel are compared, which catches the merge or the identity, then the values, which catches the seeding; then the tone map scales the whole picture by one maximum; then the picture with one worker equals the picture with twelve. Failures: <em>pixel (12, 40) holds 23 samples of 24: is the merge adding every film, from the zero film?</em>; <em>band 7 is brighter than it should be: is the maximum folded over all bands before any pixel is&nbsp;mapped?</em></p>
+<p class="gives"><span>Gives:</span> The fold with its two laws, and what no fold does: bands of different brightness (<code>teacher/pictures/p4-no-fold.png</code>), wrong on every picture whose bands have different maxima, which is every picture but a flat one. The per-worker film is taught as the right design, not as the repair of a visible bug: a racy shared film loses a few samples in a hundred thousand, invisible. And determinism by construction, the third form of the third way: with the generator seeded by pixel and sample, the picture is a function of the scene alone, whoever drew which tile in which&nbsp;pass.</p>
+</article></section><section class="part" id="part5"><h3>Part 5: The video&nbsp;(extension)</h3>
+<article class="item">
+<p class="need"><span>The need:</span> One cube turns, and its reflection in the mirror cube must turn with&nbsp;it.</p>
+<p>Given <code>Video.java</code>, at one sample per pixel, with its architecture written at the top of the file: the workers live for the whole video; a frame is one buffer, its pixels owned by tiles as in part 3; the scene of a frame is an immutable value, <code>Scene.at(k)</code>, held in one field that every worker reads and only the barrier's action writes, and so are the current frame and the dispenser. For frame <em>k</em>, each worker renders its tiles into the frame, then arrives at the barrier; the action, run by the last arrival before anyone is released, puts the finished frame into the buffer to the encoder and installs the next frame, or the end marker after the last; every worker leaves the barrier and starts frame <em>k</em> + 1. The encoder is the main thread: it takes frames until the end marker, writes each, and then joins the workers. Two happens-before chains carry a frame: the barrier publishes every worker's tiles to the last arrival, and the buffer's <code>put</code> and <code>take</code> publish the frame from the last arrival to the encoder; the barrier alone establishes nothing with the encoder, which is not a party. The action's <code>put</code> may block on a full buffer while the others wait at the barrier, which is&nbsp;harmless.</p><p>Given, as the program first runs: no barrier; each worker that finishes its tiles of frame <em>k</em> moves the scene on and begins frame <em>k</em> + 1 on its own, and the frame goes to the encoder when a plain count says everyone has finished. Write: the barrier at the end of each worker's frame, its action <code>nextFrame</code>; the hand-over's end, <code>Frame.END</code> into the buffer after the last frame, and the encoder's loop, <code>take</code> until the end marker; and, in place of code, the answer to this: why do the frames reach the encoder in order here without any parking, and in which design, frames rendered in parallel as a render farm does, would parking by frame number be&nbsp;needed?</p>
+<figure class="code"><figcaption><span class="lang">Java</span><span class="file">quest/Video.java</span></figcaption><pre><code>  /** The barrier&#x27;s action: the finished frame to the encoder, then the next frame installed. */
+  <span class="kw">void</span> nextFrame() <span class="kw">throws</span> InterruptedException {
+    Frame done = frame;
+    buffer.put(done);                            <span class="cm">// the hand-over: the buffer publishes the frame to the encoder</span>
+    advance(done.k + <span class="nu">1</span>);
+    <span class="cm">// TODO 13 (a): after the last frame, the end marker goes into the buffer too</span>
+    
+  }
+
+  /** One worker: its tiles of each frame, then the barrier; until the end marker. */
+  <span class="kw">void</span> worker(<span class="kw">int</span> i) {
+    <span class="kw">try</span> {
+      <span class="kw">while</span> (<span class="kw">true</span>) {
+        Frame f = frame;                         <span class="cm">// this frame and its dispenser, installed by the action</span>
+        <span class="kw">if</span> (f == Frame.END) <span class="kw">return</span>;
+        Tiles.Dispenser d = dispenser;
+        <span class="kw">for</span> (<span class="kw">int</span> k = d.next(); k &lt; tiles.count; k = d.next())
+          tiles.render(scene, k, f.picture, counter, i);   <span class="cm">// the scene field: the one the action installed</span>
+        <span class="cm">// TODO 12: no barrier: whoever finishes its tiles moves the scene on and begins the</span>
+        <span class="cm">// next frame at once, while the others may still be on this one; and the frame goes to</span>
+        <span class="cm">// the encoder when a plain count says everyone has finished. Replace the two lines by</span>
+        <span class="cm">// the barrier&#x27;s await, whose action is nextFrame.</span>
+        <span class="kw">if</span> (f == frame) advance(f.k + <span class="nu">1</span>);
+        <span class="kw">if</span> (++finished == threads) { finished = <span class="nu">0</span>; buffer.put(f); <span class="kw">if</span> (frame == Frame.END) buffer.put(Frame.END); }
+        
+      }
+    } <span class="kw">catch</span> (Exception e) {
+      <span class="cm">// the barrier is broken (BrokenBarrierException) or this worker was interrupted: it ends</span>
+    }
+  }
+
+  /** Renders the video: the workers over the frames, the encoder taking them in order. */
+  <span class="kw">void</span> run(Sink sink) <span class="kw">throws</span> Exception {
+    Workers w = <span class="kw">new</span> Workers(threads);
+    w.start(<span class="kw">this</span>::worker);
+    <span class="cm">// TODO 13 (b): the encoder&#x27;s loop: take frames and give each to the sink, until the end marker</span>
+    todo(<span class="nu">13</span>);
+    
+    w.join();
+  }</code></pre></figure>
+<ul class="holes"><li>hole 12: <code>barrier.await()</code> at the end of each worker's&nbsp;frame.</li><li>hole 13: the end marker after the last frame, and the encoder's loop until&nbsp;it.</li><li>the question: why in order, and when parking would be&nbsp;needed.</li></ul>
+<figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>java -cp out Video scene.txt
+ffmpeg -framerate <span class="nu">24</span> -i frames/frame-%04d.png -pix_fmt yuv420p video.mp4
+java -cp out Check <span class="nu">5</span></code></pre></figure>
+<p class="check"><span>The check:</span> the frames come in order and each equals its sequential frame; a run that never ends is reported at a deadline. Failure: <em>frame 17 holds tiles from two scenes: what moved the scene before every worker had finished the&nbsp;frame?</em></p>
+<p class="gives"><span>Gives:</span> The barrier in its place, and what happens without it: a frame torn in two rotations (<code>teacher/pictures/p5-torn-frame.png</code>), since a fast worker begins frame <em>k</em> + 1 on the moved scene while a slow one still renders frame <em>k</em>; shared state changed between phases, the scene, the frame and the dispenser, by one thread, inside the barrier, which is the part's lesson; the buffer in its place, with the waits in a loop and everyone woken (rules 4 and 5), and the hang when the end marker is forgotten; and ordering as a concern of its own, settled here by the phase structure and elsewhere by a sequence&nbsp;number.</p>
+</article></section><h3 class="end">The last question, and what comes&nbsp;next</h3><p>For every piece of shared state in the program, the preview's read included, say which of the three ways protects it: ownership, the lock or the atomic word, a copy per thread; and for every hand-over between threads or phases, which mechanism orders it: a join, a barrier, a monitor's wait, a flag another thread can see; and why that one. The sentence holes are this question asked part by part; the answers stay in the student's&nbsp;files.</p><p>The mini-project rebuilds one of the four structures, the <code>BoundedBuffer</code>, as a queue three ways. Its first step takes the warm-up's <code>BoundedBuffer</code> as the one-lock queue and names its point of effect, anywhere inside the lock, before the two-lock version with the dummy node and the lock-free version with the lagging tail replace&nbsp;it.</p></section>
+</main>
+</body>
+</html>

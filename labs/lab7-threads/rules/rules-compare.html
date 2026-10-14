@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threads in Java and OCaml 5: the two sheets compared</title><style>
+:root{--bg:#fbfaf7;--fg:#1f2328;--muted:#5a626b;--rule:#d9d5cc;--panel:#f1eee7;--code-bg:#f0ede6;
+  --bad:#8a1f1f;--bad-bg:#f9dfdf;--good:#17633a;--good-bg:#dff3e6;--who:#7a5200;--who-bg:#fbeecb}
+@media (prefers-color-scheme: dark){:root{--bg:#15181c;--fg:#e4e6ea;--muted:#a0a8b2;--rule:#343a42;--panel:#1d2126;--code-bg:#1f242a;
+  --bad:#f2a3a3;--bad-bg:#3d1b1b;--good:#8fd9a8;--good-bg:#173524;--who:#f0cd7a;--who-bg:#3a2e10}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;font-size:17px;line-height:1.55}
+main{max-width:62rem;margin:0 auto;padding:2.2rem 1.2rem 4rem}
+h1,h2,.lab,.meta,.tag,nav,table{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+h1{font-size:1.9rem;line-height:1.2;margin:0 0 .3rem}
+h2{font-size:1.25rem;margin:2.2rem 0 .4rem;padding-top:.8rem;border-top:1px solid var(--rule)}
+h2 small{color:var(--muted);font-weight:400;font-size:.85rem;margin-left:.5rem}
+p{margin:.6rem 0} .meta{color:var(--muted);font-size:.9rem}
+nav{font-size:.9rem;margin:.8rem 0 0;line-height:1.9} nav a{margin-right:1rem;white-space:nowrap}
+pre{margin:.6rem 0;background:var(--code-bg);padding:.6rem .8rem;border-radius:6px;overflow-x:auto;line-height:1.4}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem}
+p code,li code,td code,div code{background:var(--code-bg);padding:.06em .3em;border-radius:3px;font-size:.84em}
+pre code{background:none;padding:0;font-size:.78rem}
+.run{font-size:.9rem;color:var(--muted);margin:.5rem 0 0}
+.bad,.good,.who{border-left:4px solid;border-radius:0 6px 6px 0;padding:.4rem .8rem;margin:.6rem 0;font-size:.95rem}
+.bad{border-color:var(--bad);background:var(--bad-bg)} .good{border-color:var(--good);background:var(--good-bg)} .who{border-color:var(--who);background:var(--who-bg)}
+.lab{display:inline-block;font-weight:600;font-size:.8rem;margin-right:.4rem}
+.bad .lab{color:var(--bad)} .good .lab{color:var(--good)} .who .lab{color:var(--who)}
+table{border-collapse:collapse;width:100%;font-size:.88rem;margin:1rem 0}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .5rem;text-align:left;vertical-align:top} th{background:var(--panel)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:.9rem} .tag{display:block;font-size:.78rem;color:var(--muted);margin:.4rem 0 -.3rem}
+@media (max-width:860px){.pair{grid-template-columns:1fr}}
+@media print{body{font-size:11pt} main{max-width:none;padding:0} nav{display:none} pre{white-space:pre-wrap} h2{break-inside:avoid}}
+</style></head><body><main>
+<h1>Threads in Java and OCaml 5: the two sheets compared</h1><p class="meta">Programming Paradigms, session 7. The ten rules of the two sheets set side by side: what never to write and what to write in each language, who checks, the runs, where the languages part, and the code.</p>
+<nav><a href=#>never and write</a><a href=#>who checks</a><a href=#>the runs</a><a href=#>where they part</a><a href=#code>the code</a></nav><h2>What never to write, and what to write</h2><table><tr><th>Rule</th><th>Java: never</th><th>Java: write</th><th>OCaml 5: never</th><th>OCaml 5: write</th></tr><tr><td>1 every access, or none</td><td>protect some of the accesses to a piece of data.</td><td>one lock per piece of data, named beside it, and take it in every method that touches the data.</td><td>protect some of the accesses to a piece of data.</td><td>one lock per piece of data, named beside it, and take it in every method that touches the data.</td></tr><tr><td>2 two locked steps are not one</td><td>release a lock in the middle of an operation whose invariant spans the data it protects.</td><td>the invariant first; then choose the critical section so that the invariant is true at its start and at its end, and hold every lock the invariant needs for the whole of it.</td><td>release a lock in the middle of an operation whose invariant spans the data it protects.</td><td>the invariant first; then choose the critical section so that the invariant is true at its start and at its end, and hold every lock the invariant needs for the whole of it.</td></tr><tr><td>3 the plain cell is not atomic</td><td>write <code>n++</code> on a shared field, volatile or not.</td><td>an atomic cell for a counter or a flag; a lock when more than one word must change together.</td><td><code>incr</code> a shared <code>ref</code>.</td><td>an atomic cell for a counter or a flag; a lock when more than one word must change together.</td></tr><tr><td>4 wait in a loop</td><td><code>if (cond) wait();</code></td><td><code>while (!ready) wait();</code></td><td><code>if cond then Condition.wait …</code></td><td><code>while not ready do Condition.wait c m done</code></td></tr><tr><td>5 wake everyone</td><td>wake one thread when more than one kind of thread waits on the same condition.</td><td><code>notifyAll</code> by default; one condition per kind of waiter and <code>notify</code> only with the argument written down.</td><td>wake one thread when more than one kind of thread waits on the same condition.</td><td><code>Condition.broadcast</code> by default; one condition per kind of waiter and <code>signal</code> only with the argument written down.</td></tr><tr><td>6 one lock order</td><td>take lock B while holding A in one place and A while holding B in another.</td><td>the order down, by an identifier or an address, and a helper that takes two locks in that order.</td><td>take lock B while holding A in one place and A while holding B in another.</td><td>the order down, by an identifier or an address, and a helper that takes two locks in that order.</td></tr><tr><td>7 compare what you read</td><td>pass a literal or a freshly built value as the expected argument of a compare-and-set.</td><td><code>Integer v = r.get(); r.compareAndSet(v, f(v))</code>, and loop on failure. <code>AtomicInteger</code> compares by value, because the number is the object.</td><td>pass a literal or a freshly built value as the expected argument of a compare-and-set.</td><td><code>let v = Atomic.get r in … Atomic.compare_and_set r v (f v)</code>, and loop on failure. <code>int Atomic.t</code> compares by value, because the number is the object.</td></tr><tr><td>8 a run proves nothing</td><td>conclude from a run, or from a hundred, that a shared structure is right.</td><td>the invariant and the point where each operation takes effect; then test with many threads, many operations, many runs, to catch what the argument missed.</td><td>conclude from a run, or from a hundred, that a shared structure is right.</td><td>the invariant and the point where each operation takes effect; then test with many threads, many operations, many runs, to catch what the argument missed.</td></tr><tr><td>9 a write another thread must see</td><td>pass a flag or a result between threads through a plain field.</td><td><code>volatile</code> or an atomic for a flag; a lock, a queue or a join for anything larger. A value published before a volatile write is visible after a volatile read of the same field.</td><td>pass a flag or a result between domains through a <code>ref</code>.</td><td>an atomic for a flag; a lock, a queue or a join for anything larger. A value published before an atomic write is visible after an atomic read of the same cell.</td></tr><tr><td>10 how many threads</td><td>assume a thread is free: ten thousand platform threads hold ten thousand stacks.</td><td>a pool, or virtual threads, for many small tasks.</td><td>spawn a domain per task.</td><td>one domain per core and a queue of tasks, or a library's pool.</td></tr></table><h2>Who checks</h2><table><tr><th>Rule</th><th>Java</th><th>OCaml 5</th></tr><tr><td>1 every access, or none</td><td>nobody. Rust ties the data to its lock, so that there is no way to reach it without holding it.</td><td>nobody. Rust ties the data to its lock, so that there is no way to reach it without holding it.</td></tr><tr><td>2 two locked steps are not one</td><td>nobody. Not Rust either: this program compiles in safe Rust and is wrong in the same way. A data race is what a compiler can rule out; an atomicity violation is ours.</td><td>nobody. Not Rust either: this program compiles in safe Rust and is wrong in the same way. A data race is what a compiler can rule out; an atomicity violation is ours.</td></tr><tr><td>3 the plain cell is not atomic</td><td>nobody. The cost is bounded: a wrong number, never a corrupted heap. In C and C++ the same program has no defined meaning.</td><td>nobody. The cost is bounded by the memory model: a wrong number, never a corrupted heap. In C and C++ the same program has no defined meaning.</td></tr><tr><td>4 wait in a loop</td><td>nobody. The bounded buffer of capacity one, two producers and two consumers, overflows under the <code>if</code>.</td><td>nobody. The bounded buffer of capacity one, two producers and two consumers, overflows under the <code>if</code>.</td></tr><tr><td>5 wake everyone</td><td>nobody. The same buffer, with the loop but <code>notify</code>, stops.</td><td>nobody. The same buffer, with the loop but <code>signal</code>, stops.</td></tr><tr><td>6 one lock order</td><td>nobody, and no compiler on the table: Rust compiles this deadlock too. A detector can find it after the fact.</td><td>nobody, and no compiler on the table: Rust compiles this deadlock too. A detector can find it after the fact.</td></tr><tr><td>7 compare what you read</td><td>nobody; the type checker accepts both calls.</td><td>nobody; the type checker accepts both calls.</td></tr><tr><td>8 a run proves nothing</td><td>nobody here. Go's race detector reports a race it saw in a run; Rust refuses the data race before any run; for the atomicity violations of rule 2, nobody.</td><td>nobody here. Go's race detector reports a race it saw in a run; Rust refuses the data race before any run; for the atomicity violations of rule 2, nobody.</td></tr><tr><td>9 a write another thread must see</td><td>nobody. The compiler is what makes the broken loop spin forever: read the language's contract before relying on a plain field.</td><td>nobody. The model bounds the race in time, which is why the loop ended here: read the contract before relying on it.</td></tr><tr><td>10 how many threads</td><td>nobody; the machine answers with memory.</td><td>the runtime, by failing.</td></tr></table><h2>The runs, side by side</h2><p>From <code>python3 compare.py</code> on this machine, Java 26 and OCaml 5.4.</p><table><tr><th>Rule</th><th>Java</th><th>OCaml 5</th><th>Same behavior</th></tr><tr><td>1 every access, or none</td><td>broken 754915 of 1000000; fixed 1000000 of 1000000</td><td>broken 775100 of 1000000; fixed 1000000 of 1000000</td><td>yes</td></tr><tr><td>2 two locked steps are not one</td><td>broken audits that saw a wrong total: 237619 of 250000; fixed audits that saw a wrong total: 0 of 250000</td><td>broken audits that saw a wrong total: 248764 of 250000; fixed audits that saw a wrong total: 0 of 250000</td><td>yes</td></tr><tr><td>3 the plain cell is not atomic</td><td>broken 265937 of 1000000; fixed 1000000 of 1000000</td><td>broken 559811 of 1000000; fixed 1000000 of 1000000</td><td>yes</td></tr><tr><td>4 wait in a loop</td><td>broken stuck at the deadline; overflows 13937, underflows 13940; fixed finished; overflows 0, underflows 0</td><td>broken stuck at the deadline; overflows 11803, underflows 11879; fixed finished; overflows 0, underflows 0</td><td>yes</td></tr><tr><td>5 wake everyone</td><td>broken stuck at the deadline; overflows 0, underflows 0; fixed finished; overflows 0, underflows 0</td><td>broken stuck at the deadline; overflows 0, underflows 0; fixed finished; overflows 0, underflows 0</td><td>yes</td></tr><tr><td>6 one lock order</td><td>broken stuck at the deadline: deadlock; fixed finished</td><td>broken stuck at the deadline: deadlock; fixed finished</td><td>yes</td></tr><tr><td>7 compare what you read</td><td>broken compareAndSet(1000, 1001) on a reference holding 1000: false; fixed compareAndSet(v, v + 1) with v the value read: true</td><td>broken compare_and_set r (Some 1000) (Some 1001) on an atomic holding Some 1000: false; fixed compare_and_set r v (Some 1001) with v the value read: true</td><td>yes</td></tr><tr><td>8 a run proves nothing</td><td>small 1000 increments per thread: wrong in 1 of 100 runs; large 250000 increments per thread, same program: wrong in 5 of 10 runs</td><td>small 1000 increments per domain: wrong in 3 of 100 runs; large 250000 increments per domain, same program: wrong in 10 of 10 runs</td><td>yes</td></tr><tr><td>9 a write another thread must see</td><td>broken the loop never saw the write: stuck at the deadline; fixed the loop ended</td><td>ref the loop ended: the racy read saw the write; atomic the loop ended</td><td>no</td></tr><tr><td>10 how many threads</td><td>fixed 10000 threads started and joined: true</td><td>broken Domain.spawn failed after 127 domains: failed to allocate domain; fixed Domain.recommended_domain_count () = 12: use that many, and a pool for the tasks</td><td>no</td></tr></table><h2>Where the two languages part</h2>
+<table><tr><th>Point</th><th>Java</th><th>OCaml 5</th></tr>
+<tr><td>The lock</td><td>the object's monitor, implicit, <code>synchronized</code></td><td>a value, <code>Mutex.t</code>; the section is a closure under <code>Mutex.protect</code></td></tr>
+<tr><td>The condition</td><td>one per monitor, <code>wait</code> and <code>notifyAll</code></td><td>as many as we make, <code>Condition.wait c m</code> and <code>broadcast</code></td></tr>
+<tr><td>A field read by one thread and written by another</td><td><code>volatile</code>, or an atomic class</td><td>an <code>Atomic.t</code>; a plain mutable field is a race</td></tr>
+<tr><td>What a racy spin loop does</td><td>may never end: the compiler keeps the field in a register</td><td>ends: the model bounds the race in time</td></tr>
+<tr><td>Empty</td><td><code>null</code>; the type does not say</td><td><code>None</code>; the type says</td></tr>
+<tr><td>Compare-and-set compares</td><td>identity; by value for <code>AtomicInteger</code></td><td>physical equality; by value for <code>int Atomic.t</code></td></tr>
+<tr><td>The parallel unit</td><td>a thread, thousands of them; virtual threads cheaper</td><td>a domain, one per core; <code>Thread</code> shares a domain</td></tr>
+<tr><td>Shipped structures</td><td><code>ConcurrentLinkedQueue</code>, <code>LongAdder</code>, <code>ConcurrentHashMap</code></td><td>none in the standard library; opam libraries such as Saturn</td></tr>
+<tr><td>What a race costs</td><td>a wrong value, never a corrupted heap</td><td>a wrong value, never a corrupted heap</td></tr>
+</table><h2 id=code>The code, side by side</h2><h2>1. A lock protects data only if every access takes it</h2><div class=pair><div><span class=tag>Java</span><pre><code>class Counter {
+  int n;
+  synchronized void inc() { n++; }
+  void add(int k) { n += k; }      // forgot the lock
+  synchronized int get() { return n; }
+}</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>let c = ref 0 and m = Mutex.create ()
+let inc () = Mutex.protect m (fun () -&gt; incr c)
+let add k = c := !c + k          (* forgot the lock *)
+let get () = Mutex.protect m (fun () -&gt; !c)</code></pre></div></div><h2>2. Two locked steps are not one locked operation</h2><div class=pair><div><span class=tag>Java</span><pre><code>// broken: each half under its own lock
+synchronized (from) { from.balance -= k; }
+synchronized (to)   { to.balance   += k; }
+
+// fixed: both locks, for the whole operation
+synchronized (a) { synchronized (b) {
+  from.balance -= k; to.balance += k;
+} }</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>(* broken *)
+Mutex.protect m_from (fun () -&gt; decr from);
+Mutex.protect m_to   (fun () -&gt; incr dest)
+
+(* fixed *)
+Mutex.protect ma (fun () -&gt; Mutex.protect mb (fun () -&gt;
+  decr from; incr dest))</code></pre></div></div><h2>3. The plain cell is not atomic</h2><div class=pair><div><span class=tag>Java</span><pre><code>static volatile int n;
+n++;                              // three steps, still a race
+
+AtomicInteger n = new AtomicInteger();
+n.incrementAndGet();              // one instruction</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>let r = ref 0 in
+incr r                            (* three steps, a race *)
+
+let a = Atomic.make 0 in
+Atomic.incr a                     (* one instruction *)</code></pre></div></div><h2>4. Wait in a loop, never in an <code>if</code></h2><div class=pair><div><span class=tag>Java</span><pre><code>synchronized void put() throws InterruptedException {
+  while (count == capacity) wait();   // never: if (...) wait();
+  count++;
+  notifyAll();
+}</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>let put b = Mutex.protect b.m (fun () -&gt;
+  while b.count = b.capacity do          (* never: if ... then *)
+    Condition.wait b.changed b.m
+  done;
+  b.count &lt;- b.count + 1;
+  Condition.broadcast b.changed)</code></pre></div></div><h2>5. Wake everyone, unless we can argue for one</h2><div class=pair><div><span class=tag>Java</span><pre><code>notify();      // wakes one; a producer may wake a producer
+notifyAll();   // wakes all; each re-tests its condition</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>Condition.signal b.changed     (* one *)
+Condition.broadcast b.changed  (* all *)</code></pre></div></div><h2>6. Take several locks in one order, everywhere</h2><div class=pair><div><span class=tag>Java</span><pre><code>// thread 1              // thread 2
+synchronized (a) {       synchronized (b) {
+  synchronized (b) {}      synchronized (a) {}
+}                        }
+// fixed: both take a, then b</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>(* domain 1 *)                        (* domain 2 *)
+Mutex.protect a (fun () -&gt;            Mutex.protect b (fun () -&gt;
+  Mutex.protect b (fun () -&gt; ()))       Mutex.protect a (fun () -&gt; ()))
+(* fixed: both take a, then b *)</code></pre></div></div><h2>7. Compare-and-set compares what we read, not a value we rebuilt</h2><div class=pair><div><span class=tag>Java</span><pre><code>AtomicReference&lt;Integer&gt; r = new AtomicReference&lt;&gt;(1000);
+r.compareAndSet(1000, 1001);     // false: a fresh Integer
+Integer v = r.get();
+r.compareAndSet(v, v + 1);       // true</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>let r = Atomic.make (Some 1000)
+Atomic.compare_and_set r (Some 1000) (Some 1001)  (* false *)
+let v = Atomic.get r in
+Atomic.compare_and_set r v (Some 1001)            (* true *)</code></pre></div></div><h2>8. A right answer in a run proves nothing</h2><div class=pair><div><span class=tag>Java</span><pre><code>int[] cell = new int[1];
+// four threads: for (…) cell[0]++;
+// 1000 each: right in most runs; 250000 each: wrong in most</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>let cell = ref 0
+(* four domains: for _ = 1 to per do incr cell done *)
+(* 1000 each: right in most runs; 250000 each: wrong in most *)</code></pre></div></div><h2>9. A write another thread must see goes through an atomic</h2><div class=pair><div><span class=tag>Java</span><pre><code>static boolean stop;              // broken: may spin forever
+static volatile boolean stop;     // fixed
+new Thread(() -&gt; { while (!stop) { } }).start();</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>let stop = ref false              (* a race; here it ends *)
+let stop = Atomic.make false      (* what to write *)
+Domain.spawn (fun () -&gt; while not (Atomic.get stop) do () done)</code></pre></div></div><h2>10. How many threads</h2><div class=pair><div><span class=tag>Java</span><pre><code>for (int i = 0; i &lt; 10_000; i++) new Thread(task).start();   // fine
+Thread.startVirtualThread(task);                             // cheaper still</code></pre></div><div><span class=tag>OCaml 5</span><pre><code>List.init 10_000 (fun _ -&gt; Domain.spawn task)   (* fails after ~127 *)
+Domain.recommended_domain_count ()               (* 12 on this machine *)</code></pre></div></div>
+</main></body></html>

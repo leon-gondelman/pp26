@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threads in Java: what to write, what never to write, and why</title><style>
+:root{--bg:#fbfaf7;--fg:#1f2328;--muted:#5a626b;--rule:#d9d5cc;--panel:#f1eee7;--code-bg:#f0ede6;
+  --bad:#8a1f1f;--bad-bg:#f9dfdf;--good:#17633a;--good-bg:#dff3e6;--who:#7a5200;--who-bg:#fbeecb}
+@media (prefers-color-scheme: dark){:root{--bg:#15181c;--fg:#e4e6ea;--muted:#a0a8b2;--rule:#343a42;--panel:#1d2126;--code-bg:#1f242a;
+  --bad:#f2a3a3;--bad-bg:#3d1b1b;--good:#8fd9a8;--good-bg:#173524;--who:#f0cd7a;--who-bg:#3a2e10}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;font-size:17px;line-height:1.55}
+main{max-width:62rem;margin:0 auto;padding:2.2rem 1.2rem 4rem}
+h1,h2,.lab,.meta,.tag,nav,table{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+h1{font-size:1.9rem;line-height:1.2;margin:0 0 .3rem}
+h2{font-size:1.25rem;margin:2.2rem 0 .4rem;padding-top:.8rem;border-top:1px solid var(--rule)}
+h2 small{color:var(--muted);font-weight:400;font-size:.85rem;margin-left:.5rem}
+p{margin:.6rem 0} .meta{color:var(--muted);font-size:.9rem}
+nav{font-size:.9rem;margin:.8rem 0 0;line-height:1.9} nav a{margin-right:1rem;white-space:nowrap}
+pre{margin:.6rem 0;background:var(--code-bg);padding:.6rem .8rem;border-radius:6px;overflow-x:auto;line-height:1.4}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem}
+p code,li code,td code,div code{background:var(--code-bg);padding:.06em .3em;border-radius:3px;font-size:.84em}
+pre code{background:none;padding:0;font-size:.78rem}
+.run{font-size:.9rem;color:var(--muted);margin:.5rem 0 0}
+.bad,.good,.who{border-left:4px solid;border-radius:0 6px 6px 0;padding:.4rem .8rem;margin:.6rem 0;font-size:.95rem}
+.bad{border-color:var(--bad);background:var(--bad-bg)} .good{border-color:var(--good);background:var(--good-bg)} .who{border-color:var(--who);background:var(--who-bg)}
+.lab{display:inline-block;font-weight:600;font-size:.8rem;margin-right:.4rem}
+.bad .lab{color:var(--bad)} .good .lab{color:var(--good)} .who .lab{color:var(--who)}
+table{border-collapse:collapse;width:100%;font-size:.88rem;margin:1rem 0}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .5rem;text-align:left;vertical-align:top} th{background:var(--panel)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:.9rem} .tag{display:block;font-size:.78rem;color:var(--muted);margin:.4rem 0 -.3rem}
+@media (max-width:860px){.pair{grid-template-columns:1fr}}
+@media print{body{font-size:11pt} main{max-width:none;padding:0} nav{display:none} pre{white-space:pre-wrap} h2{break-inside:avoid}}
+</style></head><body><main>
+<h1>Threads in Java: what to write, what never to write, and why</h1><p class="meta">Programming Paradigms, session 7. Ten rules. Each has a program that breaks it and one that keeps it, in <code>Rules.java</code>, and a line from a run. The run shows the failure; the argument says why. We run them ourselves: <code>java Rules &lt;rule&gt;</code>, or <code>all</code>.</p>
+<nav><a href=#r1>1 every access, or none</a><a href=#r2>2 two locked steps are not one</a><a href=#r3>3 the plain cell is not atomic</a><a href=#r4>4 wait in a loop</a><a href=#r5>5 wake everyone</a><a href=#r6>6 one lock order</a><a href=#r7>7 compare what you read</a><a href=#r8>8 a run proves nothing</a><a href=#r9>9 a write another thread must see</a><a href=#r10>10 how many threads</a></nav>
+<h2 id="r1">1. A lock protects data only if every access takes it<small>every-access</small></h2>
+<p>A lock is a rule we follow: every read and every write of the data it protects happens while we hold it. One access outside the rule is enough; the data is then shared with no protection at all, however careful the other accesses are.</p>
+<pre><code>class Counter {
+  int n;
+  synchronized void inc() { n++; }
+  void add(int k) { n += k; }      // forgot the lock
+  synchronized int get() { return n; }
+}</code></pre>
+<div class="bad"><span class="lab">Never</span>protect some of the accesses to a piece of data.</div>
+<div class="good"><span class="lab">Write</span>one lock per piece of data, named beside it, and take it in every method that touches the data.</div>
+<div class="who"><span class="lab">Who checks</span>nobody. Rust ties the data to its lock, so that there is no way to reach it without holding it.</div>
+<p class="run">One run: broken 754915 of 1000000; fixed 1000000 of 1000000</p>
+<h2 id="r2">2. Two locked steps are not one locked operation<small>two-steps</small></h2>
+<p>A transfer takes from one account and gives to another. If each step takes its own lock and releases it, there is no data race anywhere, and the program is still wrong: between the two steps the money is nowhere, and any thread that looks sees it. The invariant, the total is constant, spans both accounts, so the operation must hold both locks for its whole extent. This is an atomicity violation, and no lock discipline on single accesses removes it.</p>
+<pre><code>// broken: each half under its own lock
+synchronized (from) { from.balance -= k; }
+synchronized (to)   { to.balance   += k; }
+
+// fixed: both locks, for the whole operation
+synchronized (a) { synchronized (b) {
+  from.balance -= k; to.balance += k;
+} }</code></pre>
+<div class="bad"><span class="lab">Never</span>release a lock in the middle of an operation whose invariant spans the data it protects.</div>
+<div class="good"><span class="lab">Write</span>the invariant first; then choose the critical section so that the invariant is true at its start and at its end, and hold every lock the invariant needs for the whole of it.</div>
+<div class="who"><span class="lab">Who checks</span>nobody. Not Rust either: this program compiles in safe Rust and is wrong in the same way. A data race is what a compiler can rule out; an atomicity violation is ours.</div>
+<p class="run">One run: broken audits that saw a wrong total: 237619 of 250000; fixed audits that saw a wrong total: 0 of 250000</p>
+<h2 id="r3">3. The plain cell is not atomic<small>volatile</small></h2>
+<p>An increment is a read, an addition and a write. The atomic cell offers the three as one instruction; the plain cell offers nothing between threads. In Java, <code>volatile</code> makes each read and each write visible to other threads in order, and does nothing for the three together. <code>AtomicInteger</code> offers the whole read-modify-write as one instruction.</p>
+<pre><code>static volatile int n;
+n++;                              // three steps, still a race
+
+AtomicInteger n = new AtomicInteger();
+n.incrementAndGet();              // one instruction</code></pre>
+<div class="bad"><span class="lab">Never</span>write <code>n++</code> on a shared field, volatile or not.</div>
+<div class="good"><span class="lab">Write</span>an atomic cell for a counter or a flag; a lock when more than one word must change together.</div>
+<div class="who"><span class="lab">Who checks</span>nobody. The cost is bounded: a wrong number, never a corrupted heap. In C and C++ the same program has no defined meaning.</div>
+<p class="run">One run: broken 265937 of 1000000; fixed 1000000 of 1000000</p>
+<h2 id="r4">4. Wait in a loop, never in an <code>if</code><small>wait-while</small></h2>
+<p>A thread that waits for a condition gives up the lock while it waits and takes it back before it goes on. Between the wake-up and the lock, another thread may have taken the lock and made the condition false again. A wake-up with no cause is allowed too. So the condition is tested again after every wake-up, which a loop does and an <code>if</code> does not.</p>
+<pre><code>synchronized void put() throws InterruptedException {
+  while (count == capacity) wait();   // never: if (...) wait();
+  count++;
+  notifyAll();
+}</code></pre>
+<div class="bad"><span class="lab">Never</span><code>if (cond) wait();</code></div>
+<div class="good"><span class="lab">Write</span><code>while (!ready) wait();</code></div>
+<div class="who"><span class="lab">Who checks</span>nobody. The bounded buffer of capacity one, two producers and two consumers, overflows under the <code>if</code>.</div>
+<p class="run">One run: broken stuck at the deadline; overflows 13937, underflows 13940; fixed finished; overflows 0, underflows 0</p>
+<h2 id="r5">5. Wake everyone, unless we can argue for one<small>notify-all</small></h2>
+<p>A single wake-up rouses one waiting thread, chosen by the runtime. If the one woken cannot use the news, a producer woken by a producer, the news is lost, and every thread may end up waiting. Waking all costs a few useless wake-ups; each thread re-tests its condition by rule 4 and goes back to waiting if the news was not for it.</p>
+<pre><code>notify();      // wakes one; a producer may wake a producer
+notifyAll();   // wakes all; each re-tests its condition</code></pre>
+<div class="bad"><span class="lab">Never</span>wake one thread when more than one kind of thread waits on the same condition.</div>
+<div class="good"><span class="lab">Write</span><code>notifyAll</code> by default; one condition per kind of waiter and <code>notify</code> only with the argument written down.</div>
+<div class="who"><span class="lab">Who checks</span>nobody. The same buffer, with the loop but <code>notify</code>, stops.</div>
+<p class="run">One run: broken stuck at the deadline; overflows 0, underflows 0; fixed finished; overflows 0, underflows 0</p>
+<h2 id="r6">6. Take several locks in one order, everywhere<small>lock-order</small></h2>
+<p>Two threads, two locks, each holding one and waiting for the other: neither can move. Mutual exclusion still holds, nothing bad has happened, and nothing good will ever happen again. Deadlock is a failure of liveness. The classic cure is a total order on the locks, kept by every thread.</p>
+<pre><code>// thread 1              // thread 2
+synchronized (a) {       synchronized (b) {
+  synchronized (b) {}      synchronized (a) {}
+}                        }
+// fixed: both take a, then b</code></pre>
+<div class="bad"><span class="lab">Never</span>take lock B while holding A in one place and A while holding B in another.</div>
+<div class="good"><span class="lab">Write</span>the order down, by an identifier or an address, and a helper that takes two locks in that order.</div>
+<div class="who"><span class="lab">Who checks</span>nobody, and no compiler on the table: Rust compiles this deadlock too. A detector can find it after the fact.</div>
+<p class="run">One run: broken stuck at the deadline: deadlock; fixed finished</p>
+<h2 id="r7">7. Compare-and-set compares what we read, not a value we rebuilt<small>cas-identity</small></h2>
+<p>A compare-and-set succeeds when the cell still holds the very object we expect. A value rebuilt from the same number is another object, and the compare-and-set fails although the numbers agree. Every correct retry loop compares against the value it read. Java compares by identity: a fresh <code>Integer</code> is not the one inside the reference.</p>
+<pre><code>AtomicReference&lt;Integer&gt; r = new AtomicReference&lt;&gt;(1000);
+r.compareAndSet(1000, 1001);     // false: a fresh Integer
+Integer v = r.get();
+r.compareAndSet(v, v + 1);       // true</code></pre>
+<div class="bad"><span class="lab">Never</span>pass a literal or a freshly built value as the expected argument of a compare-and-set.</div>
+<div class="good"><span class="lab">Write</span><code>Integer v = r.get(); r.compareAndSet(v, f(v))</code>, and loop on failure. <code>AtomicInteger</code> compares by value, because the number is the object.</div>
+<div class="who"><span class="lab">Who checks</span>nobody; the type checker accepts both calls.</div>
+<p class="run">One run: broken compareAndSet(1000, 1001) on a reference holding 1000: false; fixed compareAndSet(v, v + 1) with v the value read: true</p>
+<h2 id="r8">8. A right answer in a run proves nothing<small>runs</small></h2>
+<p>The racy counter with a thousand increments per thread prints the right number in almost every run; the same program with more increments is wrong in most. The program did not change; the schedule did. Correct means: in every execution. A run can show a bug; only an argument shows there is none.</p>
+<pre><code>int[] cell = new int[1];
+// four threads: for (…) cell[0]++;
+// 1000 each: right in most runs; 250000 each: wrong in most</code></pre>
+<div class="bad"><span class="lab">Never</span>conclude from a run, or from a hundred, that a shared structure is right.</div>
+<div class="good"><span class="lab">Write</span>the invariant and the point where each operation takes effect; then test with many threads, many operations, many runs, to catch what the argument missed.</div>
+<div class="who"><span class="lab">Who checks</span>nobody here. Go's race detector reports a race it saw in a run; Rust refuses the data race before any run; for the atomicity violations of rule 2, nobody.</div>
+<p class="run">One run: small 1000 increments per thread: wrong in 1 of 100 runs; large 250000 increments per thread, same program: wrong in 5 of 10 runs</p>
+<h2 id="r9">9. A write another thread must see goes through a volatile or an atomic<small>visibility</small></h2>
+<p>A thread that spins on a plain cell written by another thread is a race, and what a race gives is the language's contract to state, not ours to guess. The Java compiler is allowed to read a plain field once and keep it in a register, and does: the loop never ends. <code>volatile</code> forbids that.</p>
+<pre><code>static boolean stop;              // broken: may spin forever
+static volatile boolean stop;     // fixed
+new Thread(() -&gt; { while (!stop) { } }).start();</code></pre>
+<div class="bad"><span class="lab">Never</span>pass a flag or a result between threads through a plain field.</div>
+<div class="good"><span class="lab">Write</span><code>volatile</code> or an atomic for a flag; a lock, a queue or a join for anything larger. A value published before a volatile write is visible after a volatile read of the same field.</div>
+<div class="who"><span class="lab">Who checks</span>nobody. The compiler is what makes the broken loop spin forever: read the language's contract before relying on a plain field.</div>
+<p class="run">One run: broken the loop never saw the write: stuck at the deadline; fixed the loop ended</p>
+<h2 id="r10">10. A Java thread is cheap<small>many-threads</small></h2>
+<p>The unit that runs in parallel is not the same thing in every language, and the number we may create follows from what it is. Java starts ten thousand platform threads and joins them; a virtual thread is cheaper still.</p>
+<pre><code>for (int i = 0; i &lt; 10_000; i++) new Thread(task).start();   // fine
+Thread.startVirtualThread(task);                             // cheaper still</code></pre>
+<div class="bad"><span class="lab">Never</span>assume a thread is free: ten thousand platform threads hold ten thousand stacks.</div>
+<div class="good"><span class="lab">Write</span>a pool, or virtual threads, for many small tasks.</div>
+<div class="who"><span class="lab">Who checks</span>nobody; the machine answers with memory.</div>
+<p class="run">One run: fixed 10000 threads started and joined: true</p>
+</main></body></html>
