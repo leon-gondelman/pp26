@@ -2,13 +2,13 @@
 
 *Programming Paradigms, session 7: multi-threading.*
 
-The lab's page is `index.html`. The **warm-up** writes four structures in Java, each with a
+The lab's page is `index.html`. The **warm-up** is four Java classes to finish, each with a
 contract and a check: `Counter` (three repairs of a racy counter), `Workers` (start, join,
 stop) and `BoundedBuffer` (a monitor); `Barrier` is an extension. The **quest**, *A Mini Ray
-Tracer*, makes a sequential ray tracer multi-threaded with those structures, in six parts:
-parts 1, 2, 3 and 6 are the path, parts 4 and 5 extensions. Ten questions on paper about the
-join and the visible write are on a separate sheet, `warmup/primitives.pdf`. The lab collects
-nothing.
+Tracer*, makes a sequential ray tracer multi-threaded with those classes, in six parts: parts
+1, 2, 3 and 6 are the path, parts 4 and 5 extensions. Ten questions on paper about the join
+and the visible write are on a separate sheet, `primitives.pdf`, not part of the warm-up. The
+lab collects nothing.
 
 The lab needs the JDK of session 1.
 
@@ -17,8 +17,8 @@ The lab needs the JDK of session 1.
 | file | what it is |
 |---|---|
 | `index.html` | the lab's page: the warm-up and the quest |
-| `warmup/primitives.pdf` | the sheet: ten questions on the join and the visible write |
-| `warmup/*.java` | the four structures with their holes, `TODO n`, and their checks: `CounterCheck`, `WorkersCheck`, `BufferCheck`, `BarrierCheck`; `Reorder.java` is question 9's program |
+| `primitives.pdf` | the sheet: ten questions on paper on the join and the visible write |
+| `warmup/*.java` | the four classes with their holes, `TODO n`, and their checks: `CounterCheck`, `WorkersCheck`, `BufferCheck`, `BarrierCheck`; `Reorder.java` is question 9's program |
 | `quest/*.java` | the quest's program, with the holes in `Render`, `Tiles`, `Explorer`, `Film`, `ToneMap`, `Video`; `Check n` checks part *n* |
 | `quest/structures/` | where the warm-up's four structures go, finished or not |
 | `quest/given/` | finished copies of the structures, taken with `--given`, so that an unfinished one blocks nothing |
