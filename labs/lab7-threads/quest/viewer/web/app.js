@@ -64,7 +64,7 @@ const INFO = {
   camera: "Part 6: while the explorer renders, <code>eye x y z</code> or <code>look x y z</code> and Enter move the camera. The old render stops; the new one starts.",
   output: "What the program prints: each run's command, its time, its counts.",
   line: "One station per hole. Filled: the solution is in. Hollow: the student's text. A click shows the task; its switch takes the solution out or puts it back.",
-  linestudent: "One station per hole. On every save the quest is compiled and the checks run, part by part: a station fills when its part's check no longer names its hole. A click shows the task, and what the check says.",
+  linestudent: "One station per hole. On every save the quest is compiled and the checks run, part by part: a station fills when its part's check passes on its hole, and waits, dotted, while the check stops at another hole or at a structure of <code>structures/</code> first. A click shows the task, and what the check says.",
 };
 
 // ---- the state ---------------------------------------------------------------------------
@@ -257,6 +257,7 @@ function description() {
   if (teacher()) status = `<div class="opens${done ? "" : " missing"}">${done ? "Opens: " : "Missing while hollow: "}${st[2]}.</div>`;
   else if (state === "done") status = `<div class="opens">Done: part ${p.n}'s check passes on it. Opens: ${st[2]}.</div>`;
   else if (state === "todo") status = `<div class="opens missing">To write. The check: ${esc(why)}</div>`;
+  else if (state === "wait") status = `<div class="opens">Waiting: it ${esc(why)}.</div>`;
   else status = `<div class="opens">Not checked yet: the checks run once the quest compiles.</div>`;
   if (!teacher() && selected > 0 && station(selected).stale && state !== "pending")
     status += `<div class="opens">Being checked again since the last save.</div>`;
@@ -284,7 +285,8 @@ function render() {
     for (const [n] of p.st) {
       const done = on(n);
       $("st" + n).className = "st " + (p.branch ? "ext" : "path") + (done ? " done" : "") + (n === selected ? " sel" : "")
-        + (n > 0 && station(n).s === "pending" ? " pending" : "") + (n > 0 && station(n).stale ? " stale" : "")
+        + (n > 0 && station(n).s === "pending" ? " pending" : "") + (n > 0 && station(n).s === "wait" ? " waiting" : "")
+        + (n > 0 && station(n).stale ? " stale" : "")
         + (S.checking === String(p.n) ? " checking" : "");
       $("task" + n).className = "task" + (done ? "" : " hollow") + (n === selected ? " sel" : "");
     }

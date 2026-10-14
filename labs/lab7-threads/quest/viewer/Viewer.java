@@ -90,6 +90,7 @@ public final class Viewer {
   // the student's mode: the files watched, and the round of checks under way
   final Map<Path, Long> seen = new HashMap<>();
   volatile int round = 0;
+  volatile boolean firstRound = true;
   Process checker;
   // the teacher's mode: the holes as the student first finds them, and the builds made
   final Set<Integer> given = new TreeSet<>();
@@ -185,7 +186,9 @@ public final class Viewer {
         return;
       }
       compile = "ok";
-      log("compiled; the checks run, part by part");
+      log(firstRound ? "compiled; the first round checks the quest as it stands: the parts not yet written fail, as expected"
+                     : "compiled; the checks run, part by part");
+      firstRound = false;
       state();
       for (int[] ph : PART_HOLES) {
         if (r != round) return;
@@ -257,38 +260,59 @@ public final class Viewer {
     return List.of();
   }
 
-  /** A part's stations from its check's lines: a hole is done when it is covered by some line and
-   *  every line covering it passes; else it is to write, with the sentence of the first line that
-   *  fails on it, the line naming it first. */
+  static final Pattern LATER = Pattern.compile("hole (\\d+) is checked once");
+
+  /** A part's stations from its check's lines. A hole is done when some line covers it and every
+   *  line covering it passes; to write when a failing line names it; waiting when a failing line
+   *  covering it names other holes only (the check stops at them first, or says it comes later). */
   void verdict(int[] ph, List<String> lines) {
+    for (String l : lines)                                   // the part's structures fail: every hole waits for them
+      if (!l.startsWith("pass") && l.contains("the structures this part runs on")) {
+        String why = l.replaceFirst("^.*the structures this part runs on\\s*\\(", "").replaceFirst("\\)$", "");
+        for (int i = 1; i < ph.length; i++) stations.put(ph[i], new String[] { "wait", "waits for its structures: " + why, "" });
+        state();
+        return;
+      }
     for (int i = 1; i < ph.length; i++) {
       int n = ph[i];
       boolean covered = false, ok = true;
-      String why = null, named = null;
+      String named = null, unnamed = null;
+      Set<Integer> before = new TreeSet<>();
       for (String l : lines) {
         String verdict = l.substring(0, 4), body = l.replaceFirst("^(pass|FAIL|todo) \\d+\\s+", "");
-        Set<Integer> mentions = new HashSet<>();
-        Matcher m = HOLES.matcher(l);
+        Set<Integer> mentions = new HashSet<>(), later = new HashSet<>();
+        Matcher m = LATER.matcher(l);
+        while (m.find()) later.add(Integer.parseInt(m.group(1)));
+        m = HOLES.matcher(l.replaceAll("hole \\d+ is checked once", ""));
         while (m.find()) for (String k : m.group(1).split(", | and ")) mentions.add(Integer.parseInt(k));
         m = TODO.matcher(l);
         while (m.find()) mentions.add(Integer.parseInt(m.group(1)));
         boolean covers = covers(body).contains(n);
-        if (!covers && !mentions.contains(n)) continue;
+        if (!covers && !mentions.contains(n) && !later.contains(n)) continue;
         covered |= covers;
-        if (!verdict.equals("pass")) {
-          ok = false;
-          if (mentions.contains(n) && named == null) named = body;
-          Set<Integer> others = new TreeSet<>(mentions);
-          others.remove(n);
-          if (why == null) why = mentions.contains(n) || others.isEmpty() ? body
-              : "the check stops at " + (others.size() == 1 ? "hole " : "holes ") + others.toString().replaceAll("[\\[\\]]", "")
-                + " first, before it reaches this one: " + body;
-        }
+        if (verdict.equals("pass")) continue;
+        ok = false;
+        if (mentions.contains(n)) { if (named == null) named = body; }
+        else if (!mentions.isEmpty()) before.addAll(mentions);
+        else if (unnamed == null) unnamed = body;
       }
-      String w = named != null ? named : why != null ? why : "the check of part " + ph[0] + " did not reach this hole";
-      stations.put(n, covered && ok ? new String[] { "done", "", "" } : new String[] { "todo", w, "" });
+      String[] st;
+      if (covered && ok) st = new String[] { "done", "", "" };
+      else if (named != null) st = new String[] { "todo", named, "" };
+      else if (!before.isEmpty() && unnamed == null)
+        st = new String[] { "wait", "waits for " + (before.size() == 1 ? "hole " : "holes ") + Viewer.list(before)
+            + ": part " + ph[0] + "'s check reaches this hole once " + (before.size() == 1 ? "it passes" : "they pass"), "" };
+      else st = new String[] { "todo", unnamed != null ? unnamed : "the check of part " + ph[0] + " did not reach this hole", "" };
+      stations.put(n, st);
     }
     state();
+  }
+
+  static String list(Set<Integer> ns) {
+    List<Integer> l = new ArrayList<>(ns);
+    StringBuilder b = new StringBuilder();
+    for (int k = 0; k < l.size(); k++) b.append(k == 0 ? "" : k == l.size() - 1 ? " and " : ", ").append(l.get(k));
+    return b.toString();
   }
 
   synchronized void stopChecks() {
@@ -441,7 +465,7 @@ public final class Viewer {
     for (int[] ph : PART_HOLES) if (String.valueOf(ph[0]).equals(part)) holes = ph;
     if (holes == null) return;
     List<Integer> open = new ArrayList<>();
-    for (int i = 1; i < holes.length; i++) if (stations.get(holes[i])[0].equals("todo")) open.add(holes[i]);
+    for (int i = 1; i < holes.length; i++) if (!stations.get(holes[i])[0].equals("done") && !stations.get(holes[i])[0].equals("pending")) open.add(holes[i]);
     if (open.isEmpty()) return;
     log("part " + part + (open.size() == 1 ? "'s hole " : "'s holes ") + open.toString().replaceAll("[\\[\\]]", "")
         + (open.size() == 1 ? " is" : " are") + " still to write; as given:");

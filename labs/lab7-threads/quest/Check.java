@@ -172,9 +172,145 @@ public final class Check {
     return true;
   }
 
+  // ---- the structures a part runs on ------------------------------------------------------
+  // A fault in structures/ shows in every part as a fault of a hole. So each part first tries
+  // the structures it runs on, and a fault there is named there, with its warm-up check, and the
+  // part's own checks wait for it.
+
+  static String workersFault;
+  static boolean workersTried = false;
+
+  /** Null when structures/Workers.java runs each index on a thread of its own and its join waits
+   *  for every one; else what it does wrong. Tried once per run. */
+  static String workersFault() {
+    if (workersTried) return workersFault;
+    workersTried = true;
+    final String where = " (structures/Workers.java; its warm-up check is WorkersCheck)";
+    try {
+      int n = 4;
+      Workers w = new Workers(n);
+      AtomicIntegerArray done = new AtomicIntegerArray(n);
+      ConcurrentHashMap<Thread, Boolean> ran = new ConcurrentHashMap<>();
+      Thread caller = Thread.currentThread();
+      w.start(i -> {
+        ran.put(Thread.currentThread(), true);
+        try { Thread.sleep(40L * (i + 1)); } catch (InterruptedException e) { }
+        done.set(i, 1);
+      });
+      w.join();
+      for (int i = 0; i < n; i++)
+        if (done.get(i) == 0)
+          return workersFault = "Workers.join returned while worker " + i + " was still running: does join wait for every worker?" + where;
+      if (ran.containsKey(caller))
+        return workersFault = "Workers.start ran the tasks on the caller's own thread: does start give each index a thread of its own?" + where;
+      if (ran.size() < n)
+        return workersFault = "Workers.start ran " + n + " indices on " + ran.size() + " threads: does start give each index a thread of its own?" + where;
+      return workersFault = null;
+    } catch (Throwable e) {
+      return workersFault = isTodo(e)
+          ? "structures/Workers.java is not finished (" + message(e) + "): finish it in the warm-up and copy it again, or run with --given workers"
+          : "Workers failed: " + e + where;
+    }
+  }
+
+  /** Null when structures/BoundedBuffer.java hands three producers' items to three consumers
+   *  through two slots, each item exactly once, without hanging; else what it does wrong. */
+  static String bufferFault() {
+    final String where = " (structures/BoundedBuffer.java; its warm-up check is BufferCheck)";
+    try {
+      int each = 2000, sides = 3;
+      BoundedBuffer<Integer> buf = new BoundedBuffer<>(2);
+      AtomicIntegerArray seen = new AtomicIntegerArray(each * sides);
+      AtomicInteger bad = new AtomicInteger(-1);
+      Throwable[] error = { null };
+      List<Thread> ts = new ArrayList<>();
+      for (int k = 0; k < sides; k++) {
+        final int base = k * each;
+        ts.add(new Thread(() -> {
+          try { for (int i = 0; i < each; i++) buf.put(base + i); } catch (Throwable e) { error[0] = e; }
+        }));
+        ts.add(new Thread(() -> {
+          try {
+            for (int i = 0; i < each; i++) {
+              Integer x = buf.take();
+              if (x == null || x < 0 || x >= each * sides) bad.compareAndSet(-1, -2);
+              else if (seen.incrementAndGet(x) > 1) bad.compareAndSet(-1, x);
+            }
+          } catch (Throwable e) { error[0] = e; }
+        }));
+      }
+      for (Thread t : ts) { t.setDaemon(true); t.start(); }
+      long deadline = System.nanoTime() + 10_000_000_000L;
+      for (Thread t : ts) t.join(Math.max(1, (deadline - System.nanoTime()) / 1_000_000));
+      if (error[0] != null && isTodo(error[0]))
+        return "structures/BoundedBuffer.java is not finished (" + message(error[0]) + "): finish it in the warm-up and copy it again, or run with --given buffer";
+      if (error[0] != null) return "BoundedBuffer failed: " + error[0] + where;
+      for (Thread t : ts)
+        if (t.isAlive()) return "three producers and three consumers through two slots hung: does every wait sit in a loop, and does each change wake every waiter (notifyAll)?" + where;
+      if (bad.get() == -2) return "a take returned an item that was never put: is every wait, for an item and for a free slot, in a loop, checked again after the wake-up?" + where;
+      if (bad.get() >= 0) return "item " + bad.get() + " was taken twice: is every wait, for an item and for a free slot, in a loop, checked again after the wake-up?" + where;
+      return null;
+    } catch (Throwable e) {
+      return "BoundedBuffer failed: " + e + where;
+    }
+  }
+
+  /** Null when structures/Barrier.java holds four parties through 2000 rounds, nobody released
+   *  before all four have arrived and the action run once per round before the release; else
+   *  what it does wrong. */
+  static String barrierFault() {
+    final String where = " (structures/Barrier.java; its warm-up check is BarrierCheck)";
+    try {
+      int parties = 4, rounds = 2000;
+      AtomicInteger actions = new AtomicInteger();
+      AtomicIntegerArray arrived = new AtomicIntegerArray(rounds);
+      AtomicInteger early = new AtomicInteger(-1), late = new AtomicInteger(-1);
+      Throwable[] error = { null };
+      Barrier b = new Barrier(parties, () -> actions.incrementAndGet());
+      List<Thread> ts = new ArrayList<>();
+      for (int k = 0; k < parties; k++)
+        ts.add(new Thread(() -> {
+          try {
+            for (int r = 0; r < rounds; r++) {
+              arrived.incrementAndGet(r);
+              b.await();
+              if (arrived.get(r) < parties) early.compareAndSet(-1, r);
+              if (actions.get() < r + 1) late.compareAndSet(-1, r);
+            }
+          } catch (Throwable e) { error[0] = e; }
+        }));
+      for (Thread t : ts) { t.setDaemon(true); t.start(); }
+      long deadline = System.nanoTime() + 10_000_000_000L;
+      for (Thread t : ts) t.join(Math.max(1, (deadline - System.nanoTime()) / 1_000_000));
+      if (error[0] != null && isTodo(error[0]))
+        return "structures/Barrier.java is not finished (" + message(error[0]) + "): finish it in the warm-up and copy it again, or run with --given barrier";
+      if (error[0] != null) return "Barrier failed: " + error[0] + where;
+      if (early.get() >= 0) return "in round " + early.get() + " a party left the barrier before all four had arrived: does the last arrival alone open it?" + where;
+      if (late.get() >= 0) return "in round " + late.get() + " a party left before the round's action had run: does the last arrival run the action before it wakes the others?" + where;
+      for (Thread t : ts)
+        if (t.isAlive()) return "four parties at the barrier hung: does the wait end when the round changes, not when a count goes back to zero?" + where;
+      if (actions.get() != rounds) return "the action ran " + actions.get() + " times in " + rounds + " rounds: does exactly one party, the last arrival, run it?" + where;
+      return null;
+    } catch (Throwable e) {
+      return "Barrier failed: " + e + where;
+    }
+  }
+
+  /** False when the part can go on; else its one line, a FAIL naming the structure. */
+  static boolean structuresFault(int part) {
+    String f = workersFault();
+    if (f == null && part == 5) f = bufferFault();
+    if (f == null && part == 5) f = barrierFault();
+    final String fault = f;
+    if (fault == null) return false;
+    check(part, "the structures this part runs on", () -> fault);
+    return true;
+  }
+
   // ---- part 1: workers over bands --------------------------------------------------------
 
   static void part1() {
+    if (structuresFault(1)) return;
     check(1, "the picture equals the sequential one, pixel for pixel", may(() -> {
       Picture p = new Picture(scene.width(), scene.height());
       Render.render(scene, 1, threads, new AtomicCounter(), p, null);
@@ -195,6 +331,7 @@ public final class Check {
   // ---- part 2: the bar's counter ---------------------------------------------------------
 
   static void part2() {
+    if (structuresFault(2)) return;
     for (String kind : new String[] { "racy", "locked", "atomic", "perworker" }) {
       final boolean info = kind.equals("racy");
       check(2, "--counter " + kind + (info ? " (for information: a run proves nothing)" : " keeps its contract"), may(() -> {
@@ -224,11 +361,11 @@ public final class Check {
           return null;
         }
         if (got != total)
-          return "`" + kind + "` counted " + got + " of " + total + ": an add was lost; which of the three steps of n++ did another thread run between? (structures/, the counter's add)";
+          return "`" + kind + "` counted " + got + " of " + total + ": an add was lost; which of the three steps of n++ did another thread run between? (structures/, the counter's add; its warm-up check is CounterCheck)";
         if (backwards.get() >= 0)
-          return "`" + kind + "` counted " + total + " but a read during the run went backwards, to " + backwards.get() + ": is get inside the lock, or reading the word the adds write?";
+          return "`" + kind + "` counted " + total + " but a read during the run went backwards, to " + backwards.get() + ": is get inside the lock, or reading the word the adds write? (structures/, the counter's get; its warm-up check is CounterCheck)";
         if (beyond.get() >= 0)
-          return "`" + kind + "` was read at " + beyond.get() + " during the run, more than the " + total + " adds begun: what did get read?";
+          return "`" + kind + "` was read at " + beyond.get() + " during the run, more than the " + total + " adds begun: what did get read? (structures/, the counter's get; its warm-up check is CounterCheck)";
         String diff = unrenderedRows(p);
         if (diff == null) diff = firstDifference(p, reference(scene, "small"));
         if (diff != null) return diff + ": the picture is not the sequential one (Render.java, holes 1 and 2)";
@@ -240,6 +377,7 @@ public final class Check {
   // ---- part 3: the dispenser and the tiles -----------------------------------------------
 
   static void part3() {
+    if (structuresFault(3)) return;
     check(3, "the dispenser hands out every index exactly once", may(() -> {
       final int n = 2_000_000;
       Tiles.Dispenser d = new Tiles.Dispenser();
@@ -283,6 +421,7 @@ public final class Check {
   // ---- part 4: the film and the fold -----------------------------------------------------
 
   static void part4() {
+    if (structuresFault(4)) return;
     final int samples = 6;
     Scene s = scene.withSamples(samples);
     Film[] ref = { null };
@@ -335,6 +474,7 @@ public final class Check {
   // ---- part 5: the video ---------------------------------------------------------------
 
   static void part5() {
+    if (structuresFault(5)) return;
     final int frames = 5;
     Scene s = scene.withFrames(frames);
     check(5, "the frames come in order, each equal to its sequential frame", may(() -> {
@@ -409,6 +549,7 @@ public final class Check {
   }
 
   static void part6() {
+    if (structuresFault(6)) return;
     Scene big = scene.resized(640, 360);
     Scene a = big, b = big.withCamera(new Vec(3, 2.2, -6), new Vec(0.5, 0.6, 0));
     check(6, "after a new camera, no tile of the old view in the picture, and no old worker writing on", may(() -> {
