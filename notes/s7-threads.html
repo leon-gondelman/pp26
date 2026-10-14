@@ -227,6 +227,7 @@ figure svg text.t{fill:var(--ink2);text-anchor:middle}
 .ntoc-sep{border:0;border-top:1px solid var(--line);margin:4rem 0 2.5rem}
 </style>
 <style>
+.nside-short{display:none}
 .nside{font:400 .9rem/1.4 var(--sans)}
 .nside ol{list-style:none;margin:0;padding:0}
 .nside li{margin:.1rem 0}
@@ -239,18 +240,31 @@ figure svg text.t{fill:var(--ink2);text-anchor:middle}
 
 .nside-page{position:fixed;top:0;left:0;bottom:0;width:16rem;overflow:auto;padding:1.6rem .8rem;
   border-right:1px solid var(--line);background:var(--bg);z-index:20}
-.nside-btn{display:none}
 @media (min-width:1180px){body{padding-left:16rem}}
+/* on a phone a wide table scrolls sideways in its own box instead of widening the page */
+@media (max-width:760px){table{display:block;overflow-x:auto;max-width:100%}}
 @media (max-width:1179px){
-  .nside-page{transform:translateX(-105%);transition:transform .2s;box-shadow:0 0 24px rgba(0,0,0,.18);padding-top:3.4rem}
-  .nside-page.open{transform:none}
-  .nside-btn{display:block;position:fixed;top:.7rem;left:.7rem;z-index:21;font:600 .8rem/1 var(--sans);
-    padding:.5rem .7rem;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}}
-</style>
+  .nside-page{position:sticky;top:0;bottom:auto;width:auto;padding:.45rem .7rem;border-right:0;
+    border-bottom:1px solid var(--line);background:var(--bg)}}
+@media (max-width:1179px){
+nav.nside-page{display:flex;flex-wrap:nowrap;align-items:center;gap:.25rem;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none}
+nav.nside-page::-webkit-scrollbar{display:none}
+nav.nside-page{display:flex;flex-wrap:nowrap;align-items:center;gap:.25rem;margin:0}
+nav.nside-page .nside-h{display:none}
+nav.nside-page .nside-parts{display:flex;align-items:center;gap:.7rem;columns:auto}
+nav.nside-page .nside-part{display:flex;align-items:center;gap:.1rem}
+nav.nside-page .nside-part>ol{display:flex;gap:.1rem;margin:0}
+nav.nside-page li{margin:0}
+nav.nside-page a{white-space:nowrap;padding:.3rem .5rem;border-left:0;border-bottom:2px solid transparent;border-radius:0;font-size:.84rem}
+nav.nside-page a.on{border-bottom-color:var(--acc)}
+nav.nside-page .nside-part>a{margin:0}
+nav.nside-page .nside-back{margin:0 .2rem 0 0;padding:.3rem .6rem}
+nav.nside-page .nside-full{display:none}
+nav.nside-page .nside-short{display:inline}
+}</style>
 </head>
 <body class="notes-body">
-<button class="nside-btn" type="button">Contents</button>
-<nav class="nside nside-page" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1">Block 1, Mutual&nbsp;exclusion</a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
+<nav class="nside nside-page" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1"><span class="nside-full">Block 1, Mutual&nbsp;exclusion</span><span class="nside-short">Block 1</span></a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
 <li><a href="#b1-counter">2. Race conditions</a></li>
 <li><a href="#b1-instruction">3. Atomic instructions</a></li>
 <li><a href="#b1-lock">4. Locks</a></li>
@@ -259,7 +273,7 @@ figure svg text.t{fill:var(--ink2);text-anchor:middle}
 <li><a href="#b1-waiting">7. Condition synchronization</a></li>
 <li><a href="#b1-closing">8. Summary</a></li>
 <li><a href="#b1-priority-inversion">Appendix. Priority inversion</a></li></ol></div>
-<div class="nside-part"><a href="#block2">Block 2, Atomics; independence of the&nbsp;order</a><ol><li><a href="#b2-standards">1. Linearizability and&nbsp;progress</a></li>
+<div class="nside-part"><a href="#block2"><span class="nside-full">Block 2, Atomics; independence of the&nbsp;order</span><span class="nside-short">Block 2</span></a><ol><li><a href="#b2-standards">1. Linearizability and&nbsp;progress</a></li>
 <li><a href="#b2-cas">2. Compare-and-set</a></li>
 <li><a href="#b2-treiber">3. Treiber&#x27;s stack</a></li>
 <li><a href="#b2-cost">4. Contention</a></li>
@@ -3030,17 +3044,12 @@ the reader: 109518919 readings, 2611258 with a sum other than 200
     var io=new IntersectionObserver(function(es){es.forEach(function(e){
       if(!e.isIntersecting)return; var a=map[e.target.id]; if(!a)return;
       links.forEach(function(l){l.classList.remove('on');}); a.classList.add('on');
-      if(a.scrollIntoView&&nav.scrollHeight>nav.clientHeight)a.scrollIntoView({block:'nearest'});
+      var box=nav.closest('aside.rail')||nav;
+      if(box.scrollWidth>box.clientWidth+2)box.scrollLeft=a.offsetLeft-box.clientWidth/3;
+      else if(nav.scrollHeight>nav.clientHeight)a.scrollIntoView({block:'nearest'});
     });},{rootMargin:'-15% 0px -75% 0px'});
     Object.keys(map).forEach(function(id){var t=document.getElementById(id); if(t)io.observe(t);});
   });
-})();
-
-(function(){
-  var nav=document.querySelector('nav.nside-page'), b=document.querySelector('.nside-btn');
-  if(!nav||!b)return;
-  b.addEventListener('click',function(){nav.classList.toggle('open');});
-  nav.addEventListener('click',function(e){if(e.target.closest('a'))nav.classList.remove('open');});
 })();
 </script>
 </body>
