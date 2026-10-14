@@ -287,7 +287,10 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 .notes-host>.nside{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk);margin:0 0 2.5rem}
 .notes-host>.nside .nside-parts{columns:2 15rem;column-gap:2rem}
 .notes-host>.nside .nside-part{break-inside:avoid}
-.notes-embed{background:none}
+.notes-embed{background:none;max-width:46rem;margin:0;padding:0}
+/* a page that carries notes starts its column at the rail, not centred in the window, so that the text
+   reads beside the contents with no empty band between them */
+.inner:has(#notes-host){margin-inline:0 auto}
 /* the site's own heading style (small capitals, sans) stays out of the notes */
 .notes-embed h1,.notes-embed h2,.notes-embed h3{text-transform:none;letter-spacing:normal;color:var(--ink);padding:0;border:0}
 .notes-embed h3{font:600 1.15rem/1.3 var(--serif);margin:1.8rem 0 .7rem}
