@@ -596,7 +596,7 @@ got      2000000</code></pre>
 <section id="b1-checker">
 <h2>5. Race detection and&nbsp;prevention</h2>
 
-<p class="notes-lede">The obligation of the lock is a rule about every access in the program. In Java and OCaml nothing verifies it by default; in Go and C++ a tool detects its violations in the runs that are made; in Rust the compiler verifies it, for data races&nbsp;only.</p>
+<p class="notes-lede">The obligation of the lock is a rule about every access in the program. By default nothing verifies it; in Java a static checker verifies it at compile time when the rule is written as an annotation; in OCaml&nbsp;5, Go, C and C++ a tool detects its violations in the runs that are made; in Rust the compiler verifies it, for data races&nbsp;only.</p>
 
 <p>The program of this section and of section&nbsp;6 is one program with two accounts. An account is an object with a name, an id (A has id 1, B has id 2), and a balance, a plain <code>int</code> field; each account's own lock is the one Java gives to every object, so <code>synchronized (from)</code> takes the lock of the account <code>from</code>. Both balances start at 100. A transfer takes an amount from one account and adds it to the other, and every transfer of the program moves an amount of 1; two threads, t1 and t2, transfer in opposite directions, a million times each. The program has four modes, chosen by a command-line argument, <code>java Accounts a</code> to <code>d</code>; this section shows mode d, the transfer in its correct form of section&nbsp;6, both locks taken in a fixed order (section&nbsp;6 says why), with a third thread added that reads both balances and takes no&nbsp;lock.</p>
 
@@ -660,8 +660,9 @@ the reader: 109518919 readings, 2611258 with a sum other than 200
 
 <table>&nbsp;<thead class="notes-table-head"><tr><th>Language</th><th>Who checks that every access is under the&nbsp;lock</th></tr></thead>
 <tbody>
-<tr><td>Java, OCaml&nbsp;5</td><td>Nobody by default. The program above compiles and runs with no warning, and a comment beside the field, <code>// guarded by lock</code>, is the only record of the rule. In Java an annotation, <code>@GuardedBy("lock")</code>, can record it instead, and static analysis tools such as Error Prone check the annotation before any&nbsp;run.</td></tr>
-<tr><td>Go; C and&nbsp;C++</td><td>Nobody by default; a detector at run time when the program is built and run with Go's <code>-race</code> flag or with ThreadSanitizer, a race detector that the C and C++ compilers clang and gcc include and that a compiler flag turns on. The detector reports two unordered accesses that the run made, even when the run's timing kept them apart and the answer was right, as far as its record of each location's recent accesses reaches; a path the run did not take is not checked. OCaml&nbsp;5.2 and later can be compiled with ThreadSanitizer too; the standard compiler is&nbsp;not.</td></tr>&nbsp;<tr><td>Rust</td><td>The compiler, before any run, for data races&nbsp;only.</td></tr>
+<tr><td>Java</td><td>Nobody by default. The program above compiles and runs with no warning, and a comment beside the field, <code>// guarded by lock</code>, records the rule. Written as the annotation <code>@GuardedBy("lock")</code>, the rule is read by Error Prone, a static checker, which reports every access made without the lock, at compile&nbsp;time.</td></tr>
+<tr><td>OCaml&nbsp;5; Go; C and&nbsp;C++</td><td>Nobody by default; a detector at run time when the program is built and run with Go's <code>-race</code> flag or with ThreadSanitizer, a race detector that the C and C++ compilers clang and gcc include and that a compiler flag turns on. The detector reports two unordered accesses that the run made, even when the run's timing kept them apart and the answer was right, as far as its record of each location's recent accesses reaches; a path the run did not take is not checked. OCaml&nbsp;5.2 and later can be built with ThreadSanitizer too; the standard compiler is&nbsp;not.</td></tr>
+<tr><td>Rust</td><td>The compiler, before any run, for data races&nbsp;only.</td></tr>
 </tbody>
 </table>
 
@@ -904,7 +905,7 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 <tr><td>The&nbsp;guarantee</td><td>Operations are atomic by exclusion: under the lock they happen one after another, and each appears to the other threads to happen at one instant inside its critical&nbsp;section.</td></tr>
 <tr><td>The&nbsp;obligation</td><td>Every access to the protected state, read or write, under the lock; every lock the operation's invariant needs, held for the whole operation; one global order of the&nbsp;locks. The appendix on condition synchronization adds a fourth part for a thread that waits: every wait in a loop that checks its condition&nbsp;again.</td></tr>
 <tr><td>The progress&nbsp;risk</td><td>A stopped holder stops every thread that needs its lock: deadlock when the holders wait in a cycle, a missed deadline when the holder is not scheduled. And starvation, when the lock keeps changing hands but one thread is passed over for&nbsp;ever.</td></tr>
-<tr><td>Who&nbsp;checks</td><td>Nobody by default, in Java, OCaml&nbsp;5, Go, C and C++; a detector at run time when the run is made with Go's <code>-race</code> or ThreadSanitizer, for the accesses that run made; the compiler, in Rust, for data races only, never for the lock order or for&nbsp;atomicity.</td></tr>
+<tr><td>Who&nbsp;checks</td><td>Nobody by default, in Java, OCaml&nbsp;5, Go, C and C++; in Java a static checker, Error Prone, at compile time, for the fields annotated <code>@GuardedBy</code>; a detector at run time when the run is made with Go's <code>-race</code> or ThreadSanitizer, for the accesses that run made; the compiler, in Rust, for data races only, never for the lock order or for&nbsp;atomicity.</td></tr>
 </tbody>
 </table>
 
