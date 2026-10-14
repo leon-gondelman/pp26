@@ -908,6 +908,9 @@ table.mp-table td:first-child{width:auto;white-space:nowrap}
 table.mp-table td:first-child .tnum{vertical-align:middle;text-align:right;margin-right:.55rem}
 table.mp-table td:first-child svg{display:inline-block;vertical-align:middle}
 article.topic h3 .tnum{min-width:0;margin-right:.45rem;padding:.2rem .45rem;border-radius:6px;background:var(--lec-b);font-size:.85rem;vertical-align:.18em}
+article.topic p.tback{margin:.2rem 0 0;font-size:.85rem}
+article.topic p.tback a{color:var(--lec);text-decoration:none}
+article.topic p.tback a:hover{text-decoration:underline}
 
 /* ---------------------------------------------------------------- the phone strip */
 /* Under 980 px the rail is a strip across the top that scrolls sideways (14 October): the
@@ -920,7 +923,7 @@ article.topic h3 .tnum{min-width:0;margin-right:.45rem;padding:.2rem .45rem;bord
   aside.rail{position:sticky;top:0;left:auto;bottom:auto;width:auto;height:var(--sh);z-index:63;
     box-sizing:border-box;visibility:visible;transform:none;transition:none;box-shadow:none;
     display:flex;flex-wrap:nowrap;align-items:center;gap:.25rem;overflow-x:auto;overflow-y:hidden;white-space:nowrap;
-    padding:0 .7rem;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none}
+    padding:0 .7rem;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none;background:var(--line-soft)}
   aside.rail::-webkit-scrollbar{display:none}
   aside.rail .brand,aside.rail .brand-sub,aside.rail .railhead,aside.rail .railfoot{display:none}
   aside.rail nav{display:block;flex:none}
