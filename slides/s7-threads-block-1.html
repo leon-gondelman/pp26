@@ -2501,7 +2501,7 @@ first wrong: A = -5811, B = 6012</pre>
   <h2>Who checks the&nbsp;obligation</h2>
   <table class="b1-check">
 <tr><th>Language</th><th>Who checks that every access is under the&nbsp;lock</th></tr>
-    <tr><td>Java</td><td>Nobody by default. A comment beside the field, <code>// guarded by lock</code>, records the rule; Error Prone, a static checker, checks every access at compile time when the rule is written as the annotation <code>@GuardedBy("lock")</code>.</td></tr>
+    <tr><td>Java</td><td>Nobody by default. A comment beside the field, <code>// guarded by lock</code>, records the rule; Error Prone, a static checker, checks every access at compile time when the rule is written as the annotation&nbsp;<code>@GuardedBy("lock")</code>.</td></tr>
     <tr class="fragment" data-fragment-index="0"><td>OCaml&nbsp;5; Go; C&nbsp;and&nbsp;C++</td><td>Nobody by default; a detector at run time when run with Go's <code>-race</code> or ThreadSanitizer, a race detector in clang, gcc and OCaml&nbsp;5.2 and later: it reports two unordered accesses the run made, even when the timing kept them apart and the answer was right, as far as its record of recent accesses reaches; a path the run did not take is not&nbsp;checked.</td></tr>
 <tr class="fragment" data-fragment-index="1"><td>Rust</td><td>The compiler, before any run, for data races&nbsp;only.</td></tr>
   </table>

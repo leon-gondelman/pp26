@@ -1709,7 +1709,7 @@ fetch-and-add: got 2000000 in both</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The progress risk.</b> A compare-and-set fails only because another succeeded, so operations keep completing: lock-free. Not wait-free, which would bound every thread's own steps: a thread may fail at every attempt while the others keep completing operations. Fetch-and-add takes no expected value, so it never fails: wait-free, each call one&nbsp;step.</p>
+    <p><b>The progress risk.</b> A compare-and-set fails only because another succeeded, so operations keep completing: lock-free. Not wait-free: a thread may retry without end while the others keep completing operations. Fetch-and-add takes no expected value, so it never fails: wait-free, each call one&nbsp;step.</p>
     <p class="fragment" data-fragment-index="0"><b>Who checks.</b> Nobody but the programmer, by proof; Java and OCaml accept a loop that keeps an old value, or two atomic steps meant to be&nbsp;one.</p>
   </div>
   
@@ -2792,7 +2792,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
   </svg>
   <div class="claims">
     <p><b>The garbage collector.</b> A node any thread still holds is never freed, so its address is never reused, and every push allocates a fresh node: a different node at the same address cannot&nbsp;arise.</p>
-    <p class="fragment" data-fragment-index="0"><b>Without a collector.</b> In C or C++ a popped node may be freed and its memory reused; a pop that read the old node follows a <code>next</code> into freed memory and corrupts the stack. Hazard pointers and epochs delay the freeing of a node until no thread can still hold&nbsp;it.</p>
+    <p class="fragment" data-fragment-index="0"><b>Without a collector.</b> In C or C++ a popped node may be freed and its memory reused. A stale pop may read <code>next</code> from freed memory, a use after free, or, as here, install a freed node as the top. Hazard pointers and epochs delay the freeing of a node until no thread can still hold&nbsp;it.</p>
   </div>
   <a class="apx back" href="#/proof-2">back</a>
   

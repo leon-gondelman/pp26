@@ -122,6 +122,7 @@ public class WorkersCheck {
       return;
     }
     boolean visible = isVisible(flag);
+    String kind = Modifier.isVolatile(flag.getModifiers()) ? "volatile" : "atomic";
     boolean[] left = new boolean[N];        // left[i]: worker i left its loop
     thrown = null;
     Workers w = new Workers(N);
@@ -153,9 +154,9 @@ public class WorkersCheck {
       System.out.println("FAIL  stop  the flag is a plain field, and the language permits a worker never to see a plain write (rule 9); "
           + "observed: " + observed + ", which " + (spinning.length() == 0 ? "proves nothing (rule 8)" : "is that permission taken") + "; is the flag volatile?");
     } else if (spinning.length() == 0) {
-      System.out.println("pass  stop  the flag is volatile, so every worker is guaranteed to see the write; observed: " + observed);
+      System.out.println("pass  stop  the flag is " + kind + ", so every worker is guaranteed to see the write; observed: " + observed);
     } else {
-      System.out.println("FAIL  stop  the flag is volatile, and still " + observed + ": does stop() write that flag, and does the loop ask stopped()?");
+      System.out.println("FAIL  stop  the flag is " + kind + ", and still " + observed + ": does stop() write that flag, and does the loop ask stopped()?");
     }
   }
 }
