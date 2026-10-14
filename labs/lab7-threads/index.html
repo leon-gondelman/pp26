@@ -36,6 +36,13 @@ aside.rail{position:sticky;top:0;height:100vh;overflow-y:auto;overscroll-behavio
 .railtoc a{display:block;padding:5px 9px;border-radius:6px;text-decoration:none;color:var(--ink-2);line-height:1.35}
 .railtoc ol ol a{font-size:13.5px;padding:4px 9px}
 .railtoc a:hover{background:var(--surface);color:var(--ink)}
+.railtoc a.walklink{color:#6d28d9}
+.railtoc a.walklink:hover{color:#5b21b6}
+.walkdot{display:inline-block;width:14px;height:14px;margin:0 7px -2px 0;border-radius:50%;background:#7c3aed;position:relative}
+.walkdot::after{content:"";position:absolute;left:5px;top:3.5px;border:3.5px solid transparent;border-left:5px solid #fff;border-right:0}
+.walklen{color:var(--ink-2);font-weight:400}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .railtoc a.walklink{color:#b9a2fb}}
+:root[data-theme="dark"] .railtoc a.walklink{color:#b9a2fb}
 .railtoc a[aria-current]{background:var(--accent-soft);color:var(--accent);font-weight:600}
 .viewerhead{margin-top:26px}
 .viewerlink{display:block;margin:0 0 4px;padding:8px 11px;border-radius:8px;background:var(--accent);color:#fff;
@@ -117,7 +124,7 @@ h3.end{margin-top:36px}
   <a class="brand" href="https://leon-gondelman.github.io/pp26/index.html"><span class="monogram" aria-hidden="true">PP</span><b>Programming<br>Paradigms</b></a>
   <p class="brand-sub"><a href="https://leon-gondelman.github.io/pp26/s7.html">Session 7</a> · Lab&nbsp;7</p>
   <p class="railhead">This&nbsp;lab</p>
-  <nav class="railtoc" aria-label="This lab"><ol><li><a href="#files">The&nbsp;files</a></li><li><a href="#warmup">Warm-up: four Java classes</a><ol><li><a href="#counter">Part 1: The counter, three&nbsp;ways</a></li><li><a href="#workers">Part 2: Workers: start, join,&nbsp;stop</a></li><li><a href="#buffer">Part 3: The bounded buffer as a&nbsp;monitor</a></li><li><a href="#barrier">Part 4: The barrier&nbsp;(extension)</a></li></ol></li><li><a href="#quest">Quest: A Mini Ray Tracer</a><ol><li><a href="#part0">Part 0: The sequential&nbsp;render</a></li><li><a href="#part1">Part 1:&nbsp;Workers</a></li><li><a href="#part2">Part 2: The progress&nbsp;bar</a></li><li><a href="#part3">Part 3: Load&nbsp;balancing</a></li><li><a href="#part6">Part 6: The&nbsp;explorer</a></li><li><a href="#part4">Part 4: Supersampling and tone mapping&nbsp;(extension)</a></li><li><a href="#part5">Part 5: The video&nbsp;(extension)</a></li></ol></li><li><a href="#paper">Questions on&nbsp;paper</a></li></ol></nav>
+  <nav class="railtoc" aria-label="This lab"><ol><li><a href="#files">The&nbsp;files</a></li><li><a href="#warmup">Warm-up: four Java classes</a><ol><li><a class="walklink" href="video/warmup.html" target="_blank" rel="noopener"><span class="walkdot" aria-hidden="true"></span>Walkthrough&nbsp;<span class="walklen">2:40</span></a></li><li><a href="#counter">Part 1: The counter, three&nbsp;ways</a></li><li><a href="#workers">Part 2: Workers: start, join,&nbsp;stop</a></li><li><a href="#buffer">Part 3: The bounded buffer as a&nbsp;monitor</a></li><li><a href="#barrier">Part 4: The barrier&nbsp;(extension)</a></li></ol></li><li><a href="#quest">Quest: A Mini Ray Tracer</a><ol><li><a class="walklink" href="video/quest.html" target="_blank" rel="noopener"><span class="walkdot" aria-hidden="true"></span>Walkthrough&nbsp;<span class="walklen">2:15</span></a></li><li><a href="#part0">Part 0: The sequential&nbsp;render</a></li><li><a href="#part1">Part 1:&nbsp;Workers</a></li><li><a href="#part2">Part 2: The progress&nbsp;bar</a></li><li><a href="#part3">Part 3: Load&nbsp;balancing</a></li><li><a href="#part6">Part 6: The&nbsp;explorer</a></li><li><a href="#part4">Part 4: Supersampling and tone mapping&nbsp;(extension)</a></li><li><a href="#part5">Part 5: The video&nbsp;(extension)</a></li></ol></li><li><a href="#paper">Questions on&nbsp;paper</a></li></ol></nav>
   <p class="railhead viewerhead">The&nbsp;viewer</p>
   <a class="viewerlink" href="http://localhost:8190/" target="lab7-viewer">Open the viewer <span>↗</span></a>
   <p class="viewernote">once it runs: from <code>quest/</code>, <code>javac -d out/viewer viewer/Viewer.java</code>,
@@ -641,7 +648,7 @@ java -cp out Check <span class="nu">5</span></code></pre></figure>
 </article></section><h3 class="end">The last question and the&nbsp;mini-project</h3><p>For every piece of shared state in the program, the preview's read included, say which technique protects it: ownership, a lock or an atomic word, or a copy per thread. For every hand-over between threads or phases, say which mechanism orders it: a join, a barrier, a monitor's wait or a volatile flag, and why that one. The sentence holes of the parts answer it piece by&nbsp;piece.</p><p>The mini-project rebuilds <code>BoundedBuffer</code> as a queue, three ways: first the warm-up's class as the one-lock queue, with its point of effect named; then a two-lock queue with a dummy node; then a lock-free queue with a lagging&nbsp;tail.</p></section><section id="paper"><h2>Questions on&nbsp;paper</h2><p>Ten questions on the two primitives of the lecture that are not classes, the join and the visible write, for the week after the lab: <a href="https://leon-gondelman.github.io/pp26/labs/lab7-threads/primitives.pdf">primitives.pdf</a>. They are not part of the warm-up. The lab collects&nbsp;nothing.</p></section>
 </main>
 </div>
-<script>(function(){var links=[].slice.call(document.querySelectorAll('.railtoc a'));
+<script>(function(){var links=[].slice.call(document.querySelectorAll('.railtoc a[href^="#"]'));
 var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
 function spy(){var y=innerHeight/5,cur=-1;targets.forEach(function(t,i){if(t&&t.getBoundingClientRect().top<y)cur=i;});
 links.forEach(function(a,i){if(i===cur)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});}
