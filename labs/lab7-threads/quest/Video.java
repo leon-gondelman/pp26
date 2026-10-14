@@ -1,5 +1,6 @@
 // Part 5: a video of the scene, frame by frame, the cubes turning by their spin; the workers
-// live for the whole video, and a barrier ends each frame.
+// live for the whole video, and a barrier ends each frame. The frames are half the picture's
+// width and height, a quarter of its work each.
 //
 //   java -cp out Video scene.txt [--threads n] [--frames n] [--out frames]
 //
@@ -113,6 +114,7 @@ public final class Video {
     }
     if (file == null) throw new IllegalArgumentException("usage: java -cp out Video scene.txt [--threads n] [--frames n] [--out dir]");
     Scene scene = Scene.read(file);
+    scene = scene.resized(scene.width() / 2, scene.height() / 2);
     if (frames > 0) scene = scene.withFrames(frames);
     File dir = new File(out);
     final Scene s = scene;

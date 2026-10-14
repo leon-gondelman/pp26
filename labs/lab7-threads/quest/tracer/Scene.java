@@ -1,14 +1,20 @@
 // A scene: its size, camera, lights and objects, read from a text file. An immutable value:
 // at(k), resized(w, h) and withCamera(eye, look) return new scenes and change nothing.
 //
-//   settings  size 960 540    samples 24     frames 60
+//   settings  size 2560 1440  samples 16     frames 60
 //   camera    eye 0 1.6 -7    look 0 0.6 0   fov 40
 //   light     at -4 6 -3      colour 1.4 1.4 1.4   radius 0.8
 //   plane     y 0             checker 0.85 0.85 0.85 / 0.15 0.15 0.15
 //   sphere    at -1.8 1 0.5   radius 1       colour 0.9 0.3 0.2   mirror 0.3
 //   cube      at  1.2 0.75 0  size 1.5       colour 0.2 0.4 0.9   mirror 0.6   yaw 20   spin 3
+//   marbles   count 300       radius 0.08 0.22   x -10 10   z -1 18   seed 7
 //
 // One object per line, a keyword then key-value pairs; a line starting with # is a comment.
+// marbles is many small spheres in one line: count spheres resting on the floor, their radii,
+// x and z drawn at random from the ranges, each clear of every other object, their colours
+// and mirrors drawn from a few; the seed fixes the draw, so the scene is the same at every
+// read. The tracer has no index of the objects: every ray is tested against every sphere,
+// so the count sets the cost of a ray.
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -89,6 +95,7 @@ public final class Scene {
     List<Sphere> spheres = new ArrayList<>();
     List<Cube> cubes = new ArrayList<>();
     Plane plane = null;
+    List<Map<String, double[]>> marbles = new ArrayList<>();
     int n = 0;
     for (String raw : lines) {
       n++;
@@ -113,10 +120,53 @@ public final class Scene {
         case "cube" -> cubes.add(new Cube(vec(kv, "at", new Vec(0, .5, 0)), num(kv, "size", 1),
                                           colour(kv, "colour", new Colour(.9, .9, .9)), num(kv, "mirror", 0),
                                           num(kv, "yaw", 0), num(kv, "spin", 0)));
+        case "marbles" -> marbles.add(kv);
         default -> throw new IllegalArgumentException(file + ", line " + n + ": unknown object '" + t[0] + "'");
       }
     }
+    for (Map<String, double[]> kv : marbles) scatter(kv, spheres, cubes);   // after every other object, clear of each
     return new Scene(width, height, samples, frames, camera, lights, spheres, cubes, plane);
+  }
+
+  private static final Colour[] MARBLE_COLOURS = {
+      new Colour(.9, .3, .2), new Colour(.2, .4, .9), new Colour(.95, .8, .2), new Colour(.3, .8, .4),
+      new Colour(.6, .3, .8), new Colour(.9, .9, .9), new Colour(.9, .5, .1) };
+  private static final double[] MARBLE_MIRRORS = { 0, 0.2, 0.5, 0.8 };
+
+  /** Adds the marbles of one line to the spheres: drawn from the line's seed, each resting on
+   *  the floor and clear of every sphere and cube placed before it. */
+  private static void scatter(Map<String, double[]> kv, List<Sphere> spheres, List<Cube> cubes) {
+    int count = (int) num(kv, "count", 100);
+    double[] r = range(kv, "radius", 0.08, 0.22), x = range(kv, "x", -10, 10), z = range(kv, "z", -1, 18);
+    java.util.Random rng = new java.util.Random((long) num(kv, "seed", 1));
+    int placed = 0;
+    for (int tries = 0; placed < count && tries < 100 * count; tries++) {
+      double rad = draw(rng, r), px = draw(rng, x), pz = draw(rng, z);
+      Colour colour = MARBLE_COLOURS[rng.nextInt(MARBLE_COLOURS.length)];
+      double mirror = MARBLE_MIRRORS[rng.nextInt(MARBLE_MIRRORS.length)];
+      if (clear(px, pz, rad, spheres, cubes)) {
+        spheres.add(new Sphere(new Vec(px, rad, pz), rad, colour, mirror));
+        placed++;
+      }
+    }
+  }
+
+  /** True when a ball of radius rad on the floor at (x, z) overlaps no sphere and no cube. */
+  private static boolean clear(double x, double z, double rad, List<Sphere> spheres, List<Cube> cubes) {
+    for (Sphere s : spheres)
+      if (Math.hypot(x - s.at.x(), z - s.at.z()) < rad + s.radius + 0.05) return false;
+    for (Cube c : cubes)
+      if (Math.hypot(x - c.at.x(), z - c.at.z()) < rad + c.size * Math.sqrt(0.5) + 0.05) return false;
+    return true;
+  }
+
+  private static double[] range(Map<String, double[]> kv, String key, double lo, double hi) {
+    double[] v = kv.get(key);
+    return v == null ? new double[] { lo, hi } : new double[] { v[0], v.length > 1 ? v[1] : v[0] };
+  }
+
+  private static double draw(java.util.Random rng, double[] range) {
+    return range[0] + (range[1] - range[0]) * rng.nextDouble();
   }
 
   // "at -4 6 -3 colour 1 1 1 radius 0.8" -> {at: [-4, 6, -3], colour: [1, 1, 1], radius: [0.8]}

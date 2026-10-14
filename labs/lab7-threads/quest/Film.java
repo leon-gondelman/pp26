@@ -73,7 +73,7 @@ final class Film {
     for (int s = 0; s < samples; s++) passes[s] = new Tiles.Dispenser();
     Film[] films = new Film[threads];
     for (int i = 0; i < threads; i++) films[i] = new Film(scene.width(), scene.height());
-    if (bar != null) bar.preview(() -> ToneMap.map(merge(films), picture));   // the picture so far, from the films as they are
+    if (bar != null) bar.beforePreview(() -> ToneMap.map(merge(films), picture));   // the picture so far, from the films as they are
     Workers w = new Workers(threads);
     w.start(i -> {
       Film mine = films[i];

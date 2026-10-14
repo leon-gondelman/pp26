@@ -177,7 +177,13 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 <span class="k">val</span> enqueue : &#x27;a -&gt; &#x27;a t -&gt; &#x27;a t
 <span class="k">val</span> dequeue : &#x27;a t -&gt; (&#x27;a * &#x27;a t) option</pre></figure><figure class="gslide"><div class="gimg"><img src="gallery/editor.jpg" alt="A text editor built on a rope"></div><figcaption>A text editor built on a rope <span>&middot; Lab 5</span></figcaption><pre class="gcode"><span class="gf">rope.ml</span><span class="k">type</span> &#x27;a rope =
   | Leaf <span class="k">of</span> &#x27;a
-  | Cat <span class="k">of</span> &#x27;a rope * &#x27;a rope</pre></figure><figure class="gslide"><div class="gimg"><img src="gallery/insulin.svg" alt="The insulin game"></div><figcaption>The insulin game <span>&middot; A mini-project</span></figcaption></figure></div><button class="garrow prev" type="button" aria-label="Previous">&#8249;</button><button class="garrow next" type="button" aria-label="Next">&#8250;</button></div><div class="gdots"><button type="button" aria-label="Bach in a little music language" class=on></button><button type="button" aria-label="A maze searched with a persistent queue"></button><button type="button" aria-label="A text editor built on a rope"></button><button type="button" aria-label="The insulin game"></button></div></aside>
+  | Cat <span class="k">of</span> &#x27;a rope * &#x27;a rope</pre></figure><figure class="gslide"><div class="gimg"><img src="gallery/raytracer.jpg" alt="A ray tracer on twelve threads"></div><figcaption>A ray tracer on twelve threads <span>&middot; Lab 7</span></figcaption><pre class="gcode"><span class="gf">Workers.java</span><span class="k">final</span> <span class="k">class</span> Workers {
+  Workers(<span class="k">int</span> n)
+  <span class="k">void</span> start(IntConsumer task)
+  <span class="k">void</span> join()
+  <span class="k">void</span> stop()
+  <span class="k">boolean</span> stopped()
+}</pre></figure><figure class="gslide"><div class="gimg"><img src="gallery/insulin.svg" alt="The insulin game"></div><figcaption>The insulin game <span>&middot; A mini-project</span></figcaption></figure></div><button class="garrow prev" type="button" aria-label="Previous">&#8249;</button><button class="garrow next" type="button" aria-label="Next">&#8250;</button></div><div class="gdots"><button type="button" aria-label="Bach in a little music language" class=on></button><button type="button" aria-label="A maze searched with a persistent queue"></button><button type="button" aria-label="A text editor built on a rope"></button><button type="button" aria-label="A ray tracer on twelve threads"></button><button type="button" aria-label="The insulin game"></button></div></aside>
 </div>
 </div>
 </div>

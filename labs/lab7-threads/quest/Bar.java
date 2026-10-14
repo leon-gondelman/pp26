@@ -5,7 +5,8 @@
 public final class Bar extends Thread {
   private final Counter counter;
   private final long total;
-  private volatile Runnable preview;
+  private final Runnable preview;
+  private volatile Runnable before = () -> { };
   private volatile boolean done = false;
 
   public Bar(Counter counter, long total, Runnable preview) {
@@ -15,12 +16,13 @@ public final class Bar extends Thread {
     setDaemon(true);
   }
 
-  /** Another way to write the preview (part 4: from the films). */
-  public void preview(Runnable p) { preview = p; }
+  /** A step run before each preview is written (part 4: the picture mapped from the films). */
+  public void beforePreview(Runnable p) { before = p; }
 
   @Override public void run() {
     while (!done) {
       show(counter.get());
+      before.run();
       preview.run();
       try { Thread.sleep(100); } catch (InterruptedException e) { return; }
     }

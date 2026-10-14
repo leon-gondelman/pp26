@@ -1,8 +1,10 @@
 # The scene of the quest. One object per line: a keyword, then key-value pairs.
 # yaw is the rotation about the vertical axis in degrees, spin the degrees per frame;
 # radius on a light gives soft shadows from part 4; a light's colour above 1 is what makes
-# the tone map of part 4 needed. samples is read from part 4, frames from part 5.
-settings  size 1280 720   samples 24     frames 60
+# the tone map of part 4 needed. samples is read from part 4, frames from part 5. marbles is
+# count small spheres strewn on the floor, drawn from the seed; every ray is tested against
+# each of them, so the count sets how long a render takes.
+settings  size 2560 1440  samples 16     frames 60
 camera    eye 0 1.6 -7    look 0 0.6 0   fov 40
 light     at -4 6 -3      colour 1.4 1.4 1.4   radius 0.8
 light     at  5 4 -2      colour 0.4 0.4 0.5
@@ -16,3 +18,4 @@ sphere    at -3.2 0.4 4.5 radius 0.4     colour 0.3 0.8 0.4   mirror 0.5
 sphere    at -0.6 0.35 3  radius 0.35    colour 0.9 0.9 0.9   mirror 0.9
 sphere    at  5.5 0.6 6   radius 0.6     colour 0.6 0.3 0.8   mirror 0.4
 sphere    at  1.5 0.3 -2.2 radius 0.3    colour 0.2 0.7 0.9   mirror 0.7
+marbles   count 300       radius 0.08 0.22   x -10 10   z -1 18   seed 7
