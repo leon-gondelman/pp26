@@ -40,8 +40,8 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
     <a class="tbbrand" href="index.html">Programming Paradigms</a>
     <span class="where"><b>Session 4</b> &middot; Wed 23 September 2026</span>
     <nav><a href="https://github.com/leon-gondelman/pp26">Repository</a><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle</a>
-      <button class="theme" type="button" aria-label="Colour theme">
-        <span data-t="auto">Auto</span><span data-t="light">Light</span><span data-t="dark">Dark</span>
+      <button class="theme" type="button" aria-label="Colour theme: Auto" title="Colour theme: Auto">
+        <span data-t="auto"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 3.4a6.6 6.6 0 0 1 0 13.2z" fill="currentColor"/></svg></span><span data-t="light"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></g></svg></span><span data-t="dark"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.2 12.6A6.8 6.8 0 0 1 7.4 3.8a6.8 6.8 0 1 0 8.8 8.8z" fill="currentColor"/></svg></span>
       </button>
     </nav>
   </div>
@@ -341,13 +341,46 @@ addEventListener("resize",function(){if(innerWidth>980)set(false);});})();</scri
 if(c&&rl.scrollWidth>rl.clientWidth)rl.scrollLeft=c.offsetLeft-rl.clientWidth/3;})();</script>
 <script>/* Auto follows the phone or laptop; Light and Dark override it. */
 (function(){var r=document.documentElement,b=document.querySelector(".theme");
-function show(){var t=r.dataset.theme||"auto";b.dataset.mode=t;}
+function show(){var t=r.dataset.theme||"auto",l="Colour theme: "+{auto:"Auto",light:"Light",dark:"Dark"}[t];b.dataset.mode=t;b.setAttribute("aria-label",l);b.title=l;}
 b.addEventListener("click",function(){
   var next={auto:"light",light:"dark",dark:"auto"}[r.dataset.theme||"auto"];
   if(next==="auto"){delete r.dataset.theme;try{localStorage.removeItem("pp-theme")}catch(e){}}
   else{r.dataset.theme=next;try{localStorage.setItem("pp-theme",next)}catch(e){}}
   show();});
 show();})();</script>
+<script>
+(function(){var K="pp-pos:"+location.pathname,s=null;
+function bars(){var b=0;document.querySelectorAll(".topbar,aside.rail,nav.nside-pane").forEach(function(e){
+  if(getComputedStyle(e).display==="none")return;var r=e.getBoundingClientRect();
+  if(r.top<=b+2&&r.bottom>b&&r.height<innerHeight/2)b=r.bottom;});return b;}
+/* the place is the last heading above the reading line and the distance below it, so that it
+   holds when the text reflows (a phone turned, a wider window); the heading is found again by its name */
+function heads(){return [].slice.call(document.querySelectorAll("main .inner :is(h2,h3)"));}
+function name(e){return e.textContent.replace(/\s+/g," ").trim();}
+function here(){var t=bars()+24,hs=heads(),h=null;hs.forEach(function(e){if(e.offsetParent!==null&&e.getBoundingClientRect().top<=t)h=e;});
+  if(!h)return {l:"",k:0,d:0};var l=name(h),k=hs.filter(function(e){return name(e)===l;}).indexOf(h);
+  return {l:l,k:k,d:Math.round(scrollY-(h.getBoundingClientRect().top+scrollY))};}
+function save(){if(scrollY<innerHeight*.8)return;var p=here();
+  try{localStorage.setItem(K,JSON.stringify({y:Math.round(scrollY),l:p.l,k:p.k,d:p.d,t:Date.now()}))}catch(e){}}
+/* the heading of the same name, the same one of its namesakes (two blocks may each have a summary) */
+function where(){var h=heads().filter(function(e){return name(e)===s.l;})[s.k||0];
+  return h&&h.offsetParent!==null?h.getBoundingClientRect().top+scrollY+s.d:s.y;}
+var q;addEventListener("scroll",function(){clearTimeout(q);q=setTimeout(save,400);},{passive:true});
+addEventListener("pagehide",save);
+var nv=((performance.getEntriesByType&&performance.getEntriesByType("navigation")[0])||{}).type;
+if(location.hash||nv==="back_forward"||nv==="reload")return;
+try{s=JSON.parse(localStorage.getItem(K)||"null")}catch(e){}
+if(!s||!(s.y>innerHeight)||Date.now()-s.t>60*864e5)return;
+var n=document.createElement("div");n.className="resume";n.setAttribute("role","status");
+var go=document.createElement("button");go.type="button";go.className="go";
+go.textContent=s.l?"Continue at "+s.l.slice(0,70):"Continue reading";
+var no=document.createElement("button");no.type="button";no.className="no";no.textContent="From the top";
+n.appendChild(go);n.appendChild(no);document.body.appendChild(n);
+function off(){if(n.parentNode)n.remove();}
+go.addEventListener("click",function(){off();scrollTo(0,Math.min(where(),document.documentElement.scrollHeight-innerHeight));});
+no.addEventListener("click",function(){off();try{localStorage.removeItem(K)}catch(e){}});
+setTimeout(off,20000);})();
+</script>
 <script>// Opens a link marked data-applet in a box over the page instead of navigating to it:
 //   <a href="test_yourself.html" data-applet>Test yourself</a>
 // The page is loaded in an iframe with ?embed; it closes the box by posting {applet: "close"}.
@@ -735,7 +768,11 @@ var g=document.querySelector(".gallery");if(g){var tr=g.querySelector(".gtrack")
   dt.forEach(function(b,i){b.addEventListener("click",function(){show(i);run();});});
   g.querySelector(".prev").addEventListener("click",function(){show(c-1);run();});
   g.querySelector(".next").addEventListener("click",function(){show(c+1);run();});
-  g.addEventListener("mouseenter",function(){clearInterval(timer);});g.addEventListener("mouseleave",run);run();}
+  g.addEventListener("mouseenter",function(){clearInterval(timer);});g.addEventListener("mouseleave",run);
+  /* on a touch screen a swipe sideways turns the gallery */
+  var x0=null,y0=0;g.addEventListener("touchstart",function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  g.addEventListener("touchend",function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){show(c+(dx<0?1:-1));run();}},{passive:true});run();}
 })();</script>
 </body>
 </html>

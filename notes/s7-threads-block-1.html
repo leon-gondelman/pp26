@@ -91,7 +91,80 @@ figure svg path.sa{stroke:#2A6F97}figure svg path.sb{stroke:var(--acc)}
 figure svg path.halo{fill:none;stroke:var(--sunk);stroke-width:11;stroke-linecap:butt}
 figure svg text.sa,figure svg text.la{fill:#2A6F97}figure svg text.sb,figure svg text.lb{fill:var(--acc)}
 figure svg text.t{fill:var(--ink2);text-anchor:middle}
+/* the deck's figures that step, carried here by deck/figures/notes_steppers.py */
+.notes-steps svg{fill:var(--ink);overflow:visible}
+.notes-steps svg text{fill:inherit}
+.notes-steps svg .f-ink{fill:var(--ink)}
+.notes-steps svg .s-ink{stroke:var(--ink)}
+.notes-steps svg .f-acc{fill:var(--orange)}
+.notes-steps svg .s-acc{stroke:var(--orange)}
+.notes-steps svg .f-accb{fill:var(--hw-b)}
+.notes-steps svg .s-accb{stroke:var(--hw-b)}
+.notes-steps svg .f-box{fill:var(--line)}
+.notes-steps svg .s-box{stroke:var(--line)}
+.notes-steps svg .f-bg{fill:var(--bg)}
+.notes-steps svg .s-bg{stroke:var(--bg)}
+.notes-steps svg .f-rule{fill:var(--ink3)}
+.notes-steps svg .s-rule{stroke:var(--ink3)}
+.notes-steps svg .s-rule{stroke-opacity:.45}
+.notes-steps svg [data-on]{transition:opacity .25s}
+.notes-steps svg .ns-off{opacity:0;visibility:hidden}
+.notes-stepbar{display:flex;align-items:center;justify-content:center;gap:.9rem;margin:.8rem 0 .2rem;font:500 .85rem/1 var(--sans);color:var(--ink2);font-variant-numeric:tabular-nums}
+.notes-stepbar button{font:500 1.05rem/1 var(--sans);width:2rem;height:2rem;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.notes-stepbar button:hover:not(:disabled){border-color:var(--acc)}
+.notes-stepbar button:disabled{opacity:.35;cursor:default}
+.notes-steps figcaption p{margin:0 0 .5rem}
+.notes-steplist{margin:0;padding-left:1.5rem}
+.notes-steplist li{margin:0 0 .25rem;padding:.2rem .55rem;border-left:3px solid transparent;border-radius:0 6px 6px 0;font-size:inherit}
+.notes-steps.ready .notes-steplist li{cursor:pointer}
+.notes-steplist li.on{border-left-color:var(--orange);background:var(--bg);color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.notes-steps svg [data-on]{transition:none}}
+.notes-steps-print{display:none}
+@media print{.notes-stepbar,.notes-steps>svg{display:none}
+  .notes-steps-print{display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1.2rem;margin:0 0 .6rem;break-inside:avoid}
+  .notes-steps-print .ns-n{display:block;font:600 .8rem/1 var(--sans);color:var(--ink);margin:0 0 .25rem}
+  .notes-steplist li.on{border-left-color:transparent;background:none;color:var(--ink2)}}
+#b1-fig-tas svg text { font-family: var(--sans); font-size: 19px; fill: var(--ink); text-anchor: middle; }
+#b1-fig-tas svg text.lbl { text-anchor: start; }
+#b1-fig-tas svg text.time { text-anchor: end; }
+#b1-fig-tas svg .mono { font-family: var(--mono); }
+#b1-fig-tas svg rect { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+#b1-fig-tas svg line { stroke: var(--ink); stroke-width: 1.5; }
+#b1-fig-tas svg .flag rect { fill: var(--line); }
+#b1-fig-tas svg .hb line { stroke-width: 2.5; }
+#b1-fig-tas svg .spin line { stroke-dasharray: 5 6; }
+#b1-fig-tas svg[data-step="0"] .tas-a rect,
+#b1-fig-tas svg[data-step="2"] .rel-a rect,
+#b1-fig-tas svg[data-step="2"] .tas-b rect,
+#b1-fig-tas svg[data-step="1"] .spin-b rect { fill: var(--hw-b); stroke: var(--orange); stroke-width: 3; }
+#b1-fig-tas svg[data-step="0"] .tas-a line,
+#b1-fig-tas svg[data-step="2"] .tas-b line,
+#b1-fig-tas svg[data-step="1"] .spin-b line { stroke: var(--orange); }
+#b1-fig-tas svg[data-step="1"] .spin line { stroke: var(--orange); stroke-width: 3; }
+#b1-fig-coffman svg text { font-family: var(--sans); font-size: 23px; fill: var(--ink); }
+#b1-fig-coffman svg text.mono { font-family: var(--mono); }
+#b1-fig-coffman svg .nodes > * { fill: var(--bg); stroke: var(--ink); stroke-width: 1.5; }
+#b1-fig-coffman svg{max-width:27rem;margin:0 auto}
+#b1-fig-monitor svg[data-step="2"] .d-acquire line,
+#b1-fig-monitor svg[data-step="4"] .d-acquire line,
+#b1-fig-monitor svg[data-step="1"] .d-wait line,
+#b1-fig-monitor svg[data-step="4"] .d-release line,
+#b1-fig-monitor svg[data-step="3"] .d-notify path { stroke: var(--orange); stroke-width: 3; marker-end: url(#n-b1mon-acc); }
+#b1-fig-monitor svg[data-step="2"] .d-acquire text,
+#b1-fig-monitor svg[data-step="4"] .d-acquire text,
+#b1-fig-monitor svg[data-step="1"] .d-wait text,
+#b1-fig-monitor svg[data-step="4"] .d-release text,
+#b1-fig-monitor svg[data-step="3"] .d-notify text { fill: var(--orange); }
+#b1-fig-monitor svg[data-step="2"] .mem rect,
+#b1-fig-monitor svg[data-step="1"] .t-C850 circle,
+#b1-fig-monitor svg[data-step="2"] .t-P410 circle { fill: var(--hw-b); stroke: var(--orange); stroke-width: 3; }
+#b1-fig-pathfinder svg[data-step="0"] .b-high-run,
+#b1-fig-pathfinder svg[data-step="0"] .w-high-1,
+#b1-fig-pathfinder svg[data-step="1"] .b-med-run { stroke: var(--orange); stroke-width: 3; }
+/* end of the figures that step */
 </style>
+<script>(function(){try{var t=localStorage.getItem("pp-theme");
+if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})();</script>
 <style>
 .nside-short{display:none}
 .nside{font:400 .9rem/1.4 var(--sans)}
@@ -240,8 +313,6 @@ nav.nside-page .nside-short{display:inline}
 <figcaption>The same lost-update interleaving as a braid: thread A in blue, thread B in the accent, time running down; at each crossing the strand in front is the thread whose instruction runs, so the crossings read top to bottom are the&nbsp;interleaving.</figcaption>
 </figure>
 
-
-
 <figure id="b1-fig-model">
 <svg viewBox="0 -10 720 240" role="img" aria-label="Two threads as two lanes of instructions, one memory box between them, and the scheduler stopping the upper lane">
   <g font-size="15">
@@ -349,7 +420,6 @@ n = v;          // write</code></pre>
 <figcaption>The printed value lies between 2 and 2<i>N</i>: no run prints more than 2<i>N</i>, the run with no overlap prints exactly 2<i>N</i>, and the interleaving of the table below prints&nbsp;2.</figcaption>
 </figure>
 
-
 <p>The harder question is the smallest value the program can print in the model of section&nbsp;1, sequential consistency, and the answer is 2, for every <i>N</i> of at least two: the interleaving of the table below prints 2, and the argument that follows excludes 1. The value 1 is excluded: the printed value is the one stored by the last write, which is one more than the value its thread read just before it. No write stores 0, since every write stores one more than a value read. The thread that makes the last write has at least two increments, so it wrote <code>n</code> once before its last read; that read therefore returns the value of some write, at least 1, and the last write stores at least&nbsp;2.</p>
 
 <table class="notes-interleaving">&nbsp;<thead class="notes-table-head"><tr><th>Step</th><th>Thread&nbsp;A</th><th>Thread&nbsp;B</th><th>n</th></tr></thead>
@@ -403,7 +473,6 @@ got      1056147</code></pre>
 <figcaption>A write of <code>n</code> by A and a read of <code>n</code> by B with nothing of the program between them on either lane: no lock, join or atomic orders one before the other, so the two accesses are a data&nbsp;race.</figcaption>
 </figure>
 
-
 <p>To avoid the race, the two threads must coordinate: the program must put something between the two accesses that orders one before the other. The order that the program can impose is called <b>synchronization</b>. In this session it comes from three sources, each of which block&nbsp;1 meets. First, a lock's release is ordered before the acquire that follows it (sections 3 and 4). Second, the call of <code>start</code> by the thread that creates a new thread is ordered before the new thread's first instruction, and the new thread's last instruction is ordered before the return of the <code>join</code> that waits for it. Third, a write to an atomic variable (section&nbsp;3) or a volatile variable (section&nbsp;5) is ordered before the read that sees it. In Java every access to a volatile field provides such an order, and so do the methods <code>get</code>, <code>set</code>, <code>getAndSet</code> and <code>compareAndSet</code> of the atomic classes. The atomic classes also offer weaker access modes, such as <code>getPlain</code>, that provide no such order. In OCaml&nbsp;5 every operation of the <code>Atomic</code> module provides such an order, and every one of them is sequentially consistent. In C, C++ and Rust an atomic access provides it only when its named ordering requires it, and the sequentially consistent ordering of section&nbsp;1 does. In each case, the second thread, after its own ordering operation, sees whatever the first thread wrote before its ordering operation. The orders also chain: what is ordered before an operation of the second thread is ordered before what the second thread then orders before a third. The Java Language Specification calls this order <i>happens-before</i>. C++, Rust and OCaml define a data race with it: two accesses to one location, at least one a write and at least one not atomic, with neither ordered before the other by it. The specifications of Java and Go state their definitions in their own terms, and they classify the programs of this session the same way.<sup><a href="#b1-src-jls">2</a></sup> The last part of block&nbsp;2 shows why the fourth assumption's condition is about this&nbsp;order.</p>
 <figure id="b1-fig-sync">
 <svg viewBox="0 0 1000 300" width="1420" role="img" aria-label="Two lanes; A writes n, starts B, writes x atomically, locks, runs its critical section, unlocks and joins B; B reads n, reads x atomically, locks, runs its critical section and unlocks; arrows order steps of one thread before steps of the other" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor">
@@ -430,7 +499,6 @@ got      1056147</code></pre>
   </svg>
 <figcaption>The three sources of synchronization as arrows from one thread to the other: a release before the acquire that follows it, a <code>start</code> before the new thread's first step and its last step before the <code>join</code>, an atomic write before the read that sees it. The dotted block between lock and unlock is the thread's critical&nbsp;section.</figcaption>
 </figure>
-
 
 <p>An operation is <b>atomic</b> when every other thread sees either all of it or none of it: to the other threads it appears to happen at one instant. An instruction of the model of section&nbsp;1, a read of one location, a write of one location or an operation on registers, is atomic by definition. An instruction of a real processor need not be: on x86, <code>inc</code> applied to a memory location is one instruction that reads the location and writes it, and another processor's write can fall between the two unless the instruction carries the <code>lock</code> prefix. An operation of several instructions is atomic only if the program makes it&nbsp;so.</p>
 
@@ -497,11 +565,39 @@ got      1056147</code></pre>
 <p class="notes-def"><b>Definition.</b> A <b>spin lock</b> is a lock made of one <b>flag</b>, a boolean location, and a loop. To <b>acquire</b> it, a thread executes test-and-set on the flag, writing <code>true</code>, until the old value it returns is <code>false</code>; it then holds the lock. To <b>release</b> it, the thread writes <code>false</code>. A thread that finds the flag <code>true</code> repeats the instruction, which is called&nbsp;spinning.</p>
 
 <p>Test-and-set gives two guarantees. The first is <b>indivisibility</b>: it reads the old value and writes the new one as one step, so no thread sees the location between the two. The second is <b>synchronization</b>: the write of <code>false</code> that releases the flag is ordered before the test-and-set that reads it, and with it everything the releasing thread did before; so what one thread did before releasing is ordered before what the next thread does after acquiring. The first guarantee makes the lock below exclusive; the second makes the plain variable inside it, one that is neither atomic nor volatile,&nbsp;race-free.</p>
-<figure id="b1-fig-tas">
-<svg viewBox="0 0 1000 295" width="1420" role="img" aria-label="Two threads as lanes, the memory box holding the flag, test-and-set as one fused read and write" font-family="'Fira Sans', sans-serif" font-size="19" xmlns="http://www.w3.org/2000/svg"><defs><marker id="n-tas-m13-3-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs><text class="lane lbl" x="0" y="87" text-anchor="start" fill="currentColor">thread A</text><text class="lane lbl" x="0" y="239" text-anchor="start" fill="currentColor">thread B</text><g class="mem"><rect x="110" y="130" width="200" height="62" rx="7" fill="var(--sunk)" stroke="currentColor" stroke-width="1.5"/><text x="210" y="155" text-anchor="middle" fill="currentColor">shared memory</text><text x="210" y="182" text-anchor="middle" fill="currentColor" font-family="'Fira Mono', monospace">flag</text></g><g class="tas-a"><rect x="110" y="60" width="200" height="40" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="210" y1="60" x2="210" y2="100" stroke="currentColor" stroke-width="1"/><text x="160.0" y="87" text-anchor="middle" fill="currentColor">read flag</text><text x="260.0" y="87" text-anchor="middle" fill="currentColor">write true</text></g><g class="tas-a-mem"><line x1="160" y1="100" x2="160" y2="130" stroke="currentColor" stroke-width="1.5"/><line x1="260" y1="100" x2="260" y2="130" stroke="currentColor" stroke-width="1.5"/></g><text class="tas-a-lbl" x="210" y="46" text-anchor="middle" fill="currentColor">one indivisible step</text><text class="tas-a-res" x="318" y="87" text-anchor="start" fill="currentColor" font-family="'Fira Mono', monospace">returns false</text><g class="rel-a"><rect x="520" y="60" width="110" height="40" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="575.0" y="87" text-anchor="middle" fill="currentColor">write false</text></g><g class="tas-b"><rect x="660" y="212" width="200" height="40" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="760" y1="212" x2="760" y2="252" stroke="currentColor" stroke-width="1"/><text x="710.0" y="239" text-anchor="middle" fill="currentColor">read flag</text><text x="810.0" y="239" text-anchor="middle" fill="currentColor">write true</text></g><text class="tas-b-res" x="868" y="239" text-anchor="start" fill="currentColor" font-family="'Fira Mono', monospace">returns false</text><g class="hb"><line x1="582" y1="104" x2="694" y2="206" stroke="currentColor" stroke-width="2.5" marker-end="url(#n-tas-m13-3-arr)"/><text x="690" y="150" text-anchor="start" fill="currentColor"><tspan x="690">ordered before, with</tspan><tspan x="690" dy="25">everything A wrote earlier</tspan></text></g><g class="spin-b"><rect x="320" y="212" width="200" height="40" rx="5" fill="var(--acc-l)" stroke="var(--acc)" stroke-width="3"/><line x1="420" y1="212" x2="420" y2="252" stroke="var(--acc)" stroke-width="1"/><text x="370.0" y="239" text-anchor="middle" fill="currentColor">read flag</text><text x="470.0" y="239" text-anchor="middle" fill="currentColor">write true</text></g><text class="spin-b-res" x="528" y="239" text-anchor="start" fill="currentColor" font-family="'Fira Mono', monospace">returns true</text><g class="spin"><line x1="604" y1="232" x2="652" y2="232" stroke="var(--acc)" stroke-width="3" stroke-dasharray="5 6"/><text x="628" y="276" text-anchor="middle" fill="currentColor">spins</text></g><defs><marker id="n-tas-m13ax" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="currentColor"/></marker></defs><line x1="700" y1="275" x2="920" y2="275" stroke="currentColor" stroke-width="1.5" marker-end="url(#n-tas-m13ax)"/><text x="942" y="281" font-size="19" fill="currentColor">time</text></svg>
-<figcaption>The two guarantees of test-and-set. A's call reads the flag and writes <code>true</code> as one step and returns <code>false</code>; B's first call returns <code>true</code> and B spins; A's write of <code>false</code> is ordered before B's call that reads it, with everything A did before, and that call returns&nbsp;<code>false</code>.</figcaption>
+<figure class="notes-steps" id="b1-fig-tas" data-first="0" data-last="2">
+<svg viewBox="0 0 1000 268" role="img" aria-label="The flag in shared memory as a row of values over time, false, then true from A's test-and-set, false from A's release, true from B's successful test-and-set; A's test-and-set as one fused read and write returning false; A's write of false ordered before B's test-and-set that returns false; before it, B's test-and-set returning true while A holds the flag, and B spinning" data-step="0">
+    <defs><marker id="n-b1tas-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="f-ink" /></marker></defs>
+    <text class="lbl mono" x="0" y="31">flag</text>
+    <text class="lbl" x="0" y="101">thread A</text><text class="lbl" x="0" y="219">thread B</text>
+    <text class="time" x="996" y="101">time</text><text class="time" x="996" y="219">time</text>
+    <g class="flag"><rect x="110" y="4" width="830" height="40" rx="5" /><text class="lbl mono" x="122" y="31">false</text></g>
+    <g>
+      <g class="flag"><line x1="210" y1="4" x2="210" y2="44" /><text class="lbl mono" x="222" y="31">true</text></g>
+      <g class="tas tas-a"><rect x="110" y="74" width="200" height="40" rx="5" /><line x1="210" y1="74" x2="210" y2="114" /><text x="160" y="101">read flag</text><text x="260" y="101">write true</text></g>
+      <text class="lbl" x="320" y="101">returns <tspan class="mono">false</tspan></text>
+      <text x="210" y="142">one indivisible step</text>
+    </g>
+    <g class="ns-off" data-on="2">
+      <g class="flag"><line x1="560" y1="4" x2="560" y2="44" /><text class="lbl mono" x="572" y="31">false</text><line x1="790" y1="4" x2="790" y2="44" /><text class="lbl mono" x="802" y="31">true</text></g>
+      <g class="rel-a"><rect x="560" y="74" width="110" height="40" rx="5" /><text x="615" y="101">write false</text></g>
+      <g class="tas tas-b"><rect x="690" y="192" width="200" height="40" rx="5" /><line x1="790" y1="192" x2="790" y2="232" /><text x="740" y="219">read flag</text><text x="840" y="219">write true</text></g>
+      <text x="790" y="260">returns <tspan class="mono">false</tspan></text>
+      <g class="hb"><line x1="615" y1="122" x2="738" y2="186" marker-end="url(#n-b1tas-arr)" /><text class="lbl" x="730" y="142">ordered before,</text><text class="lbl" x="730" y="167">with everything A did before</text></g>
+    </g>
+    <g class="ns-off" data-on="1 2">
+      <g class="tas spin-b"><rect x="330" y="192" width="200" height="40" rx="5" /><line x1="430" y1="192" x2="430" y2="232" /><text x="380" y="219">read flag</text><text x="480" y="219">write true</text></g>
+      <text x="430" y="260">returns <tspan class="mono">true</tspan></text>
+      <g class="spin"><line x1="538" y1="212" x2="682" y2="212" /><text x="610" y="260">spins</text></g>
+    </g>
+  </svg>
+<figcaption><p>The two guarantees of test-and-set, the flag's value over time in the top row: indivisibility in the first two steps, synchronization in the&nbsp;third.</p>
+<ol class="notes-steplist">
+<li>A's call reads the flag and writes <code>true</code> as one indivisible step and returns <code>false</code>: A holds the lock, and no instruction of B falls between the read and the&nbsp;write.</li>
+<li>While A holds the flag, B's call reads <code>true</code>, writes <code>true</code> and returns <code>true</code>, and B spins, calling again until the flag is&nbsp;<code>false</code>.</li>
+<li>A releases the lock by writing <code>false</code>; B's next call reads this <code>false</code> and returns <code>false</code>, and B holds the lock. The write is ordered before that call, and with it everything A did&nbsp;before.</li>
+</ol></figcaption>
 </figure>
-
 
 <p>Java provides the instruction as <code>AtomicBoolean.getAndSet(true)</code>, a method with the instruction's two guarantees, which the runtime carries out with the processor's own atomic instruction where the processor has one; it returns the old value and writes <code>true</code> in one step, and its read and write are synchronization, like those of a <code>volatile</code> field (section&nbsp;5). OCaml&nbsp;5 provides it as <code>Atomic.exchange flag true</code>, and its atomic operations are synchronization for the plain accesses before and after&nbsp;them.</p>
 
@@ -540,7 +636,6 @@ got      2000000</code></pre>
 
 <p>The lock is the instruction with a loop around it, and the counter under it is exact, for two reasons that are the two guarantees. By indivisibility, between a <code>getAndSet</code> that returned <code>false</code> and the <code>set(false)</code> that follows it in the same thread, no other thread's <code>getAndSet</code> returns <code>false</code>: the flag is <code>true</code> throughout, and each test-and-set that runs meanwhile reads <code>true</code> and writes <code>true</code>. So at most one thread at a time is between its <code>lock()</code> and its <code>unlock()</code>, and the three steps of <code>n++</code> are never interleaved with another thread's. By synchronization, the write of <code>n</code> by the thread that releases the flag is ordered before the read of <code>n</code> by the thread whose test-and-set next returns <code>false</code>; that order is exactly what the definition of a data race requires, so the accesses to <code>n</code> are not a data race, and the fourth assumption applies to the program: each read of <code>n</code> returns the latest&nbsp;write.</p>
 
-<p>In words, the picture of the lock: the flag is one box, <code>false</code> or <code>true</code>; a thread that finds it <code>false</code> flips it and enters; a thread that finds it <code>true</code> loops on the same instruction until the first thread writes&nbsp;<code>false</code>.</p>
 
 <p>Two relatives of the instruction, in one line each. <b>Fetch-and-add</b> reads a location, adds a value to it, writes the sum and returns the old value, as one indivisible step. A <b>ticket lock</b> is made of two counters: an arriving thread takes a number from the first by fetch-and-add, then waits until the second counter, the number now being served, equals its number; a thread that releases the lock adds one to the second counter. So the threads enter in the order of their numbers, and no thread is passed by a later one; a thread still enters only when every earlier holder has released. Both return in block&nbsp;2, where the instruction is used without the lock around&nbsp;it.</p>
 </section>
@@ -601,7 +696,6 @@ got      2000000</code></pre>
 <figcaption>The critical section as a band on A's lane, from its acquire to its release; B, which asked for the lock meanwhile, waits at the edge of its own until A releases, and the tag on the memory names the&nbsp;holder.</figcaption>
 </figure>
 
-
 <p>The session presents three ways of dealing with the interleavings of a program: <b>mutual exclusion</b>, which forbids the interleaving with a lock and is the subject of this block; the <b>atomic instruction with retry</b>, which lets the interleaving happen, detects it and redoes the operation; and <b>independence of the order</b>, which arranges the work so that the result is the same in every interleaving. The last two are block&nbsp;2. Each way has a <b>contract</b>, what the way guarantees when it is used correctly; an <b>obligation</b>, what the program must establish for the contract to hold; a <b>progress risk</b>, the way in which a correct program can still fail to go forward; and someone, or nobody, who checks the obligation. For mutual&nbsp;exclusion:</p>
 
 <p class="notes-def"><b>The contract.</b> Operations are atomic by exclusion. Under the lock, operations happen one after another, and each appears to the other threads to happen at one instant inside its critical section. Block&nbsp;2 gives this property its name, linearizability, and its definition; the instant holds here by construction, provided the obligation is met, and what remains is that each operation, run alone, does what its specification&nbsp;says.</p>
@@ -612,7 +706,6 @@ got      2000000</code></pre>
 <figcaption>The contract and the obligation on the lanes: each increment appears to the other thread to happen at one instant inside its band; a read of <code>n</code> outside any band, marked, breaks the obligation, since nothing orders it against the writes inside the&nbsp;bands.</figcaption>
 </figure>
 <p>The second part of the obligation has a breach of its own, the lock released before the last step: an increment whose critical section ends after its addition writes <code>n</code> outside the lock, and another thread's increment can then fall between its read and its&nbsp;write.</p>
-
 
 <p class="notes-def"><b>The progress risk.</b> It has two sources. The first is a stopped holder: a thread that holds a lock and is stopped, by a cycle of waiting, by the scheduler or for good, stops every thread that needs the lock; stopped in a cycle, it is deadlock, section&nbsp;6; not scheduled, a missed deadline, the appendix on priority inversion. The second is starvation: a lock that keeps changing hands may never reach one particular thread; an order among the waiters removes it, and block&nbsp;2's wait-freedom rules it&nbsp;out.</p>
 <figure id="b1-fig-stopped">
@@ -637,7 +730,6 @@ got      2000000</code></pre>
 </table>
 
 <p>Suspension saves processor time; it removes neither source of the risk. Only an order among the waiters removes starvation: a ticket lock, section&nbsp;3, spins in turn, and a fair lock, such as Java's <code>new ReentrantLock(true)</code>, suspends in turn and costs&nbsp;throughput.</p>
-
 
 <p>Who checks the obligation is the subject of section&nbsp;5. One consequence of the obligation can be stated now, and question&nbsp;3 of the entry test asks it: a lock protects only against the threads that take it. A new lock created for each call of the increment, <code>synchronized (new Object()) { n++; }</code>, is held by one thread and never taken by any other, so it forbids nothing, and the program is section&nbsp;2's; the lock that works is one lock shared by every thread that touches <code>n</code>. The obligation is then the programmer's discipline: the lock enforces none of&nbsp;it. Two other changes of the same question leave the count wrong as well. A <code>volatile</code> field orders each write before the read that sees it, but <code>n++</code> on it is still a read, an addition and a write, and another thread's increment can fall between the read and the write. An atomic integer read with <code>get</code> and then written with <code>set</code>, <code>n.set(n.get() + 1)</code>, makes each of the two calls atomic but not the pair, so another thread's <code>set</code> can fall between them and an update is lost, as in section&nbsp;2. The same question's fourth change, a local count per thread that the main thread adds up after <code>join</code>, makes the count exact, by the third way of the session, independence of the order, which block&nbsp;2&nbsp;presents.</p>
 </section>
@@ -849,7 +941,6 @@ after the transfers: A = 100, B = 100, sum = 200</code></pre>
 <figcaption>The transfer's two steps, each under its own lock, and the reader's step falling between them under both locks: the money is in neither account, and the reader finds the sum short. An atomicity violation with no data race, since every access is under a&nbsp;lock.</figcaption>
 </figure>
 
-
 <p>In OCaml&nbsp;5 the same transfer, <code>transfer_split</code>, with the same reader, gave a first wrong reading of A&nbsp;=&nbsp;234 and B&nbsp;=&nbsp;−35, sum 199, and wrong readings in every one of ten further&nbsp;runs.</p>
 
 <p>The repair is to hold both locks for the whole transfer. The first attempt takes the source's lock first, then the destination's. The lines after the transfer are the deadlock detector that Java ships, <code>ThreadMXBean.findDeadlockedThreads</code>, which the main thread calls until it finds threads waiting for each other's locks in a cycle; it then prints which lock each of them holds and waits&nbsp;for.</p>
@@ -874,39 +965,6 @@ main ends; the two threads stay blocked until the JVM exits</code></pre>
 
 <p class="notes-def"><b>Definition.</b> A <b>deadlock</b> is a state in which every thread of a set waits for a lock held by another thread of the set, so that none of them can ever&nbsp;proceed.</p>
 
-<figure id="b1-fig-cycle">
-<svg viewBox="0 0 720 240" role="img" aria-label="Two threads and two locks: t1 holds A and waits for B, t2 holds B and waits for A, the four arrows forming a cycle">
-  <g fill="none" stroke="currentColor" stroke-width="1.5">
-    <rect x="60" y="40" width="150" height="56" rx="8"/>
-    <rect x="510" y="40" width="150" height="56" rx="8"/>
-    <rect x="60" y="150" width="150" height="56" rx="8"/>
-    <rect x="510" y="150" width="150" height="56" rx="8"/>
-  </g>
-  <g font-size="16" text-anchor="middle">
-    <text x="135" y="74">thread t1</text>
-    <text x="585" y="74">thread t2</text>
-    <text x="135" y="184">lock of A</text>
-    <text x="585" y="184">lock of B</text>
-  </g>
-  <defs>
-    <marker id="b1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
-  </defs>
-  <g fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#b1-arrow)">
-    <line x1="120" y1="150" x2="120" y2="100"/>
-    <line x1="600" y1="150" x2="600" y2="100"/>
-    <line x1="215" y1="56" x2="505" y2="56" stroke="var(--orange)"/>
-    <line x1="505" y1="190" x2="215" y2="190" stroke="var(--orange)"/>
-  </g>
-  <g font-size="14">
-    <text x="130" y="130">held by</text>
-    <text x="610" y="130">held by</text>
-    <text x="360" y="48" text-anchor="middle" fill="var(--orange)">t1 waits for the lock of B</text>
-    <text x="360" y="214" text-anchor="middle" fill="var(--orange)">t2 waits for the lock of A</text>
-  </g>
-</svg>
-<figcaption>The state the detector found. Each thread holds one lock and waits for the one the other holds; the arrows of holding and waiting form a cycle, and no thread in the cycle can&nbsp;move.</figcaption>
-</figure>
-
 <p>Nothing was corrupted: mutual exclusion holds, and every balance is right. Nothing will ever happen again: no transfer completes. To say which of these two statements is the failure, two kinds of property are needed, defined by Lamport (1977) and made exact by Alpern and Schneider&nbsp;(1985).<sup><a href="#b1-src-lamport1977">4</a></sup></p>
 
 <p class="notes-def"><b>Definition.</b> A <b>safety property</b> says that something bad never happens; a violation of it is a finite run, one that reaches the bad state. A <b>liveness property</b> says that something good eventually happens; no finite run can show a violation, since the good thing may still&nbsp;come.</p>
@@ -914,30 +972,36 @@ main ends; the two threads stay blocked until the JVM exits</code></pre>
 <p>The deadlock violates both kinds, and the lecture says each time which of the two it means. That the two threads hold one lock each and wait for the other's is a state, and the detector finds it, which is why "never deadlocked" is a safety property. That no transfer will ever complete is the liveness property it ruins, and no detector can see "ever". The lock order below removes the state, and with it the failure of&nbsp;progress.</p>
 
 <p>Coffman, Elphick and Shoshani (1971) list four conditions that are all necessary for a deadlock: mutual exclusion; holding a resource while waiting for another; no <b>preemption</b>, that is, a held resource cannot be taken away from its holder; and <b>circular wait</b>, a cycle of threads each waiting for a resource the next holds.<sup><a href="#b1-src-coffman1971">5</a></sup> A lock provides the first by design, a nested critical section the second, and a lock cannot be taken from its holder. The condition this session removes is the fourth, by taking the locks in one order everywhere; the second can be removed by acquiring all the locks at once, and the third by a <code>tryLock</code> that gives back what it holds when it cannot get the&nbsp;rest.</p>
-<figure id="b1-fig-order">
-<svg viewBox="0 0 1000 310" width="1420" role="img" aria-label="A resource graph: threads t1 and t2 as circles, locks A and B as squares; solid edges for holds, dashed arrows for wants">
-    <defs><marker id="n-order-m28-f5-a" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker><marker id="n-order-m28-f5-aa" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--acc)"/></marker></defs>
-    <line class="e-holds e-h1" x1="330" y1="102" x2="330" y2="198" stroke="currentColor" stroke-width="2.5"/>
-    <line class="e-wants e-w1" x1="359" y1="84" x2="636" y2="214" stroke="currentColor" stroke-width="2.5" stroke-dasharray="5 6" marker-end="url(#n-order-m28-f5-a)"/>
-    <line class="e-wants e-w2" x1="641" y1="84" x2="364" y2="214" stroke="var(--acc)" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#n-order-m28-f5-aa)"/>
-    <circle class="n-thread n-t1" cx="330" cy="70" r="32" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
-    <circle class="n-thread n-t2" cx="670" cy="70" r="32" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
-    <rect class="n-lock n-a" x="298" y="198" width="64" height="64" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
-    <rect class="n-lock n-b" x="638" y="198" width="64" height="64" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
-    <text class="n-lbl" x="330" y="77" font-family="'Fira Mono', monospace" font-size="19" fill="currentColor" text-anchor="middle">t1</text>
-    <text class="n-lbl" x="670" y="77" font-family="'Fira Mono', monospace" font-size="19" fill="currentColor" text-anchor="middle">t2</text>
-    <text class="n-lbl" x="330" y="237" font-family="'Fira Mono', monospace" font-size="19" fill="currentColor" text-anchor="middle">A</text>
-    <text class="n-lbl" x="670" y="237" font-family="'Fira Mono', monospace" font-size="19" fill="currentColor" text-anchor="middle">B</text>
-    <text class="kind-lbl" x="280" y="77" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="end">thread</text>
-    <text class="kind-lbl" x="280" y="237" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="end">lock</text>
-    <text class="e-lbl e-lbl-h1" x="316" y="135" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="end">holds</text>
-    <text class="e-lbl e-lbl-w1" x="560" y="230" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="middle">wants</text>
-    <text class="e-lbl e-lbl-w2" x="440" y="230" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="middle">wants</text>
-    <text class="c-order" x="690" y="157" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="start">both take A first: no cycle</text>
-  </svg>
-<figcaption>The resource graph under the lock order: both threads take A first, so t2 no longer holds B while it waits for A, and no cycle can&nbsp;form.</figcaption>
+<figure class="notes-steps" id="b1-fig-coffman" data-first="-1" data-last="4">
+<svg viewBox="100 20 680 375" role="img" aria-label="A resource graph of the deadlock: threads t1 and t2 as circles, locks A and B as squares, an edge from each thread to the lock it holds and a dashed arrow to the lock it waits for; each step lights the part of the graph of one condition, and the last removes the edge from t2 to B" data-step="-1">
+    <defs><marker id="n-b1-coff-a" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="f-ink" /></marker><marker id="n-b1-coff-aa" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="f-acc" /></marker></defs>
+    <line class="e-h1 s-ink" x1="300" y1="110" x2="300" y2="260" stroke-width="2.5" />
+    <g class="e-h2" data-on="-1 0 1 2 3"><line class="s-ink" x1="640" y1="110" x2="640" y2="260" stroke-width="2.5" /><text x="654" y="194" text-anchor="start">holds</text></g>
+    <line class="e-w1 s-ink" x1="333" y1="93" x2="598" y2="279" stroke-width="2.5" stroke-dasharray="5 6" marker-end="url(#n-b1-coff-a)" />
+    <line class="e-w2 s-ink" x1="607" y1="93" x2="342" y2="279" stroke-width="2.5" stroke-dasharray="5 6" marker-end="url(#n-b1-coff-a)" />
+    <g class="c1 ns-off" data-on="0"><line class="s-acc" x1="300" y1="110" x2="300" y2="260" stroke-width="3" /><line class="s-acc" x1="640" y1="110" x2="640" y2="260" stroke-width="3" /></g>
+    <g class="c2 ns-off" data-on="1"><line class="s-acc" x1="640" y1="110" x2="640" y2="260" stroke-width="3" /><line class="s-acc" x1="607" y1="93" x2="342" y2="279" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#n-b1-coff-aa)" /></g>
+    <g class="c3 ns-off" data-on="2"><line class="s-acc" x1="300" y1="110" x2="300" y2="260" stroke-width="3" /></g>
+    <g class="c4 ns-off" data-on="3"><line class="s-acc" x1="300" y1="110" x2="300" y2="260" stroke-width="3" /><line class="s-acc" x1="640" y1="110" x2="640" y2="260" stroke-width="3" /><line class="s-acc" x1="333" y1="93" x2="598" y2="279" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#n-b1-coff-aa)" /><line class="s-acc" x1="607" y1="93" x2="342" y2="279" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#n-b1-coff-aa)" /></g>
+    <g class="c5 ns-off" data-on="4"><line class="s-acc" x1="607" y1="93" x2="342" y2="279" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#n-b1-coff-aa)" /></g>
+    <g class="nodes"><circle cx="300" cy="70" r="40" /><circle cx="640" cy="70" r="40" /><rect x="260" y="260" width="80" height="80" rx="5" /><rect x="600" y="260" width="80" height="80" rx="5" /></g>
+    <g class="names"><text class="mono" x="300" y="79" text-anchor="middle">t1</text><text class="mono" x="640" y="79" text-anchor="middle">t2</text><text class="mono" x="300" y="309" text-anchor="middle">A</text><text class="mono" x="640" y="309" text-anchor="middle">B</text></g>
+    <g class="kinds"><text x="240" y="79" text-anchor="end">thread</text><text x="240" y="309" text-anchor="end">lock</text></g>
+    <g class="elbl"><text x="286" y="194" text-anchor="end">holds</text><text x="348" y="330" text-anchor="start">waits for</text><text x="592" y="330" text-anchor="end">waits for</text></g>
+    <g class="c1 ns-off" data-on="0"><text x="300" y="384" text-anchor="middle">one holder</text><text x="640" y="384" text-anchor="middle">one holder</text></g>
+    <g class="c3 ns-off" data-on="2"><rect x="286" y="206" width="28" height="44" stroke="none" class="f-bg" /><path d="M292 226 V218 A8 8 0 0 1 308 218 V226" fill="none" stroke-width="3" class="s-acc" /><rect x="289" y="226" width="22" height="18" rx="2" stroke-width="3" class="f-accb s-acc" /><text x="300" y="384" text-anchor="middle">cannot be taken away</text></g>
+    <g class="c5 ns-off" data-on="4"><text x="470" y="384" text-anchor="middle">both take A first: no cycle</text></g>
+      </svg>
+<figcaption><p>The resource graph of the deadlock: threads as circles, locks as squares, a solid edge for holding a lock and a dashed arrow for waiting for one; each of the four conditions lit on the part of the graph that makes it true, and last the lock order, which breaks the&nbsp;cycle.</p>
+<ol class="notes-steplist">
+<li>The state the detector found: t1 holds A and waits for B, and t2 holds B and waits for&nbsp;A.</li>
+<li>Mutual exclusion: each lock has one&nbsp;holder.</li>
+<li>Hold and wait: t2 holds B while it waits for&nbsp;A.</li>
+<li>No preemption: A cannot be taken away from&nbsp;t1.</li>
+<li>Circular wait: the edges of holding and the arrows of waiting form a&nbsp;cycle.</li>
+<li>The lock order: both threads take A first, so t2 waits for A while holding nothing, t1 can take B, which is free, and no cycle can&nbsp;form.</li>
+</ol></figcaption>
 </figure>
-
 
 <span class="notes-file">Accounts.java, mode c, the lines shown on the slide</span>
 <pre><code>// (c) the locks always taken in the order of the ids
@@ -972,16 +1036,51 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 <p class="notes-def"><b>Definition.</b> A <b>monitor</b> (Brinch Hansen, 1973; Hoare, 1974) is a module that packages some shared state, one lock that every operation on the state holds, and <b>condition variables</b>.<sup><a href="#b1-src-hoare1974">7</a></sup> A condition variable has two operations for a thread that holds the lock: <b>wait</b>, which releases the lock, sleeps until it is woken, and acquires the lock again before returning; and <b>signal</b>, called <code>notify</code> in Java, which wakes a thread waiting on it, or all of them,&nbsp;<code>notifyAll</code>.</p>
 
 <p>The condition variable is a waiting device, not an exclusion device: a take sleeps until a put has signalled. The order of memory, that the take sees what the put wrote, comes from the lock that <code>wait</code> releases and takes again, as in section&nbsp;4. In Java every object has a lock and one wait set, and Java calls the pair the object's monitor: a method declared <code>synchronized</code> holds the object's lock for its whole body, and <code>wait()</code> and <code>notifyAll()</code>, which may be called only by a thread holding the lock, are the object's one condition variable. In OCaml&nbsp;5 a monitor is a record with a <code>Mutex.t</code> and as many values of type <code>Condition.t</code> as there are things to wait for, and <code>Condition.wait c m</code> releases <code>m</code>, sleeps and takes <code>m</code> again before it&nbsp;returns.</p>
-<figure id="b1-fig-wait">
-<svg viewBox="0 0 1000 320" width="1420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The monitor as three rooms: the entry set, the owner holding the lock and the shared state, and the wait set, with the doors acquire, release, wait and notifyAll" font-family="&quot;Fira Sans&quot;, sans-serif" font-size="19"><defs><marker id="n-wait-gd34-2-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" markerUnits="strokeWidth" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker><marker id="n-wait-gd34-2-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" markerUnits="strokeWidth" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--acc)"/></marker></defs><g class="monitor" stroke-linecap="square"><line x1="10" y1="40" x2="990" y2="40" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="40" x2="10" y2="290" stroke="currentColor" stroke-width="1.5"/><line x1="990" y1="40" x2="990" y2="290" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="290" x2="388" y2="290" stroke="currentColor" stroke-width="1.5"/><line x1="432" y1="290" x2="990" y2="290" stroke="currentColor" stroke-width="1.5"/></g><text class="lbl" x="24" y="276" text-anchor="start" fill="currentColor">monitor</text><g class="room entry" stroke-linecap="square"><line x1="40" y1="110" x2="40" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="260" y1="110" x2="260" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="260" y1="215" x2="260" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="110" x2="53" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="87" y1="110" x2="260" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="250" x2="260" y2="250" stroke="currentColor" stroke-width="1.5"/></g><g class="room owner" stroke-linecap="square"><line x1="350" y1="110" x2="350" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="350" y1="215" x2="350" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="650" y1="110" x2="650" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="650" y1="215" x2="650" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="350" y1="110" x2="650" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="350" y1="250" x2="388" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="432" y1="250" x2="650" y2="250" stroke="currentColor" stroke-width="1.5"/></g><g class="room wait" stroke-linecap="square"><line x1="740" y1="110" x2="740" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="740" y1="215" x2="740" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="960" y1="110" x2="960" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="740" y1="110" x2="883" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="917" y1="110" x2="960" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="740" y1="250" x2="960" y2="250" stroke="currentColor" stroke-width="1.5"/></g><text class="room-lbl" x="150.0" y="140" text-anchor="middle" fill="currentColor">entry set</text><text class="room-lbl" x="500.0" y="140" text-anchor="middle" fill="currentColor">the owner</text><text class="room-lbl" x="850.0" y="140" text-anchor="middle" fill="currentColor">wait set</text><g class="mem"><rect x="470" y="158" width="160" height="62" rx="5" fill="var(--sunk)" stroke="currentColor" stroke-width="1.5"/><text x="550" y="183" text-anchor="middle" fill="currentColor" font-family="&quot;Fira Mono&quot;, monospace">slots</text><text class="val" x="550" y="209" text-anchor="middle" fill="currentColor" font-family="&quot;Fira Mono&quot;, monospace">count = 0</text></g><g class="door acquire"><line x1="272" y1="195" x2="340" y2="195" stroke="currentColor" stroke-width="2.5" marker-end="url(#n-wait-gd34-2-ink)"/><text x="305" y="180" text-anchor="middle" fill="currentColor">acquire</text></g><g class="door wait"><line x1="662" y1="195" x2="730" y2="195" stroke="var(--acc)" stroke-width="3" marker-end="url(#n-wait-gd34-2-acc)"/><text x="695" y="180" text-anchor="middle" fill="var(--acc)" font-family="&quot;Fira Mono&quot;, monospace">wait</text></g><g class="door release"><line x1="410" y1="232" x2="410" y2="312" stroke="currentColor" stroke-width="2.5" marker-end="url(#n-wait-gd34-2-ink)"/><text x="426" y="276" text-anchor="start" fill="currentColor">release</text></g><g class="door notifyAll"><path d="M900 122 V 92 H 70 V 122" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#n-wait-gd34-2-ink)"/><text x="500" y="80" text-anchor="middle" fill="currentColor" font-family="&quot;Fira Mono&quot;, monospace">notifyAll</text></g><g class="thread t-P"><circle cx="120" cy="195" r="15" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/><text x="120" y="202" text-anchor="middle" fill="currentColor">P</text></g><g class="thread t-C"><circle cx="850" cy="195" r="15" fill="var(--acc-l)" stroke="var(--acc)" stroke-width="3"/><text x="850" y="202" text-anchor="middle" fill="currentColor">C</text></g><text class="step" x="990" y="24" text-anchor="end" fill="var(--acc)">wait: releases the lock, sleeps</text></svg>
-<figcaption>The monitor as three rooms. The consumer C, holding the lock, finds the buffer empty and calls <code>wait</code>: it moves to the wait set and releases the lock, which the producer P, in the entry set, can now&nbsp;acquire.</figcaption>
+<figure class="notes-steps" id="b1-fig-monitor" data-first="-1" data-last="4">
+<svg viewBox="0 0 1000 320" role="img" aria-label="The monitor as three rooms, the entry set, the owner holding the lock and the shared state, and the wait set, with a consumer C and a producer P passing through the doors acquire, wait, notifyAll and release" font-size="19" data-step="-1">
+    <defs>
+      <marker id="n-b1mon-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" markerUnits="strokeWidth" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="f-ink" /></marker>
+      <marker id="n-b1mon-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" markerUnits="strokeWidth" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="f-acc" /></marker>
+    </defs>
+    <g class="walls s-ink" stroke-width="1.5" stroke-linecap="square">
+      <line x1="10" y1="40" x2="990" y2="40" /><line x1="10" y1="40" x2="10" y2="290" /><line x1="990" y1="40" x2="990" y2="290" /><line x1="10" y1="290" x2="388" y2="290" /><line x1="432" y1="290" x2="990" y2="290" />
+      <line x1="40" y1="110" x2="40" y2="250" /><line x1="260" y1="110" x2="260" y2="175" /><line x1="260" y1="215" x2="260" y2="250" /><line x1="40" y1="110" x2="53" y2="110" /><line x1="87" y1="110" x2="260" y2="110" /><line x1="40" y1="250" x2="260" y2="250" />
+      <line x1="350" y1="110" x2="350" y2="175" /><line x1="350" y1="215" x2="350" y2="250" /><line x1="650" y1="110" x2="650" y2="175" /><line x1="650" y1="215" x2="650" y2="250" /><line x1="350" y1="110" x2="650" y2="110" /><line x1="350" y1="250" x2="388" y2="250" /><line x1="432" y1="250" x2="650" y2="250" />
+      <line x1="740" y1="110" x2="740" y2="175" /><line x1="740" y1="215" x2="740" y2="250" /><line x1="960" y1="110" x2="960" y2="250" /><line x1="740" y1="110" x2="883" y2="110" /><line x1="917" y1="110" x2="960" y2="110" /><line x1="740" y1="250" x2="960" y2="250" />
+    </g>
+    <g class="lbls f-ink" text-anchor="middle">
+      <text x="24" y="276" text-anchor="start">monitor</text>
+      <text x="150" y="140">entry set</text><text x="500" y="140">the owner</text><text x="850" y="140">wait set</text>
+    </g>
+    <g class="mem">
+      <rect x="470" y="158" width="160" height="62" rx="5" stroke-width="1.5" class="f-box s-ink" />
+      <text x="550" y="183" text-anchor="middle" class="f-ink mono">slots</text>
+      <text class="f-ink mono" x="550" y="209" text-anchor="middle" data-on="-1 0 1">count = 0</text>
+      <text class="ns-off f-ink mono" x="550" y="209" text-anchor="middle" data-on="2 3 4">count = 1</text>
+    </g>
+    <g class="door d-acquire"><line x1="272" y1="195" x2="340" y2="195" stroke-width="2.5" marker-end="url(#n-b1mon-ink)" class="s-ink" /><text x="305" y="180" text-anchor="middle" class="f-ink">acquire</text></g>
+    <g class="door d-wait"><line x1="662" y1="195" x2="730" y2="195" stroke-width="2.5" marker-end="url(#n-b1mon-ink)" class="s-ink" /><text x="695" y="180" text-anchor="middle" class="f-ink mono">wait</text></g>
+    <g class="door d-release"><line x1="410" y1="232" x2="410" y2="312" stroke-width="2.5" marker-end="url(#n-b1mon-ink)" class="s-ink" /><text x="426" y="276" text-anchor="start" class="f-ink">release</text></g>
+    <g class="door d-notify"><path d="M900 122 V 92 H 70 V 122" fill="none" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#n-b1mon-ink)" class="s-ink" /><text x="500" y="80" text-anchor="middle" class="f-ink mono">notifyAll</text></g>
+    
+    <g data-on="-1 0 1"><g class="thread t-P120 ns-off" data-on="0 1 2 3 4"><circle cx="120" cy="195" r="15" stroke-width="1.5" class="f-bg s-ink" /><text x="120" y="202" text-anchor="middle" class="f-ink">P</text></g></g>
+    <g class="thread t-C410a ns-off" data-on="0"><circle cx="410" cy="195" r="15" stroke-width="3" class="f-accb s-acc" /><text x="410" y="202" text-anchor="middle" class="f-ink">C</text></g>
+    <g data-on="-1 0 1 2"><g class="thread t-C850 ns-off" data-on="1 2 3 4"><circle cx="850" cy="195" r="15" stroke-width="1.5" class="f-bg s-ink" /><text x="850" y="202" text-anchor="middle" class="f-ink">C</text></g></g>
+    <g data-on="-1 0 1 2 3"><g class="thread t-P410 ns-off" data-on="2 3 4"><circle cx="410" cy="195" r="15" stroke-width="1.5" class="f-bg s-ink" /><text x="410" y="202" text-anchor="middle" class="f-ink">P</text></g></g>
+    <g class="thread t-C190 ns-off" data-on="3"><circle cx="190" cy="195" r="15" stroke-width="3" class="f-accb s-acc" /><text x="190" y="202" text-anchor="middle" class="f-ink">C</text></g>
+    <g class="thread t-C410b ns-off" data-on="4"><circle cx="410" cy="195" r="15" stroke-width="3" class="f-accb s-acc" /><text x="410" y="202" text-anchor="middle" class="f-ink">C</text></g>
+    
+    </svg>
+<figcaption><p>The monitor as three rooms: the entry set, where threads wait to acquire the lock; the owner, the one thread that holds it and works on the shared state; the wait set, where threads sleep in <code>wait</code>. The consumer C and the producer P share a buffer that starts&nbsp;empty.</p>
+<ol class="notes-steplist">
+<li>No thread holds the lock, and the buffer's count is&nbsp;0.</li>
+<li>C has acquired the lock and is the owner; P, in the entry set, waits to acquire&nbsp;it.</li>
+<li>C finds the buffer empty and calls <code>wait</code>: C moves to the wait set and releases the&nbsp;lock.</li>
+<li>P acquires the lock and puts an item, which makes the count&nbsp;1.</li>
+<li>P calls <code>notifyAll</code>, which moves C from the wait set back to the entry set; P still holds the lock, so C must acquire it again before <code>wait</code>&nbsp;returns.</li>
+<li>P releases the lock; C acquires it, and its call of <code>wait</code> returns with the lock&nbsp;held.</li>
+</ol></figcaption>
 </figure>
-
-<figure id="b1-fig-notify">
-<svg viewBox="0 0 1000 320" width="1420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The monitor as three rooms: the entry set, the owner holding the lock and the shared state, and the wait set, with the doors acquire, release, wait and notifyAll" font-family="&quot;Fira Sans&quot;, sans-serif" font-size="19"><defs><marker id="n-notify-gd34-4-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" markerUnits="strokeWidth" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker><marker id="n-notify-gd34-4-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" markerUnits="strokeWidth" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--acc)"/></marker></defs><g class="monitor" stroke-linecap="square"><line x1="10" y1="40" x2="990" y2="40" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="40" x2="10" y2="290" stroke="currentColor" stroke-width="1.5"/><line x1="990" y1="40" x2="990" y2="290" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="290" x2="388" y2="290" stroke="currentColor" stroke-width="1.5"/><line x1="432" y1="290" x2="990" y2="290" stroke="currentColor" stroke-width="1.5"/></g><text class="lbl" x="24" y="276" text-anchor="start" fill="currentColor">monitor</text><g class="room entry" stroke-linecap="square"><line x1="40" y1="110" x2="40" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="260" y1="110" x2="260" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="260" y1="215" x2="260" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="110" x2="53" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="87" y1="110" x2="260" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="250" x2="260" y2="250" stroke="currentColor" stroke-width="1.5"/></g><g class="room owner" stroke-linecap="square"><line x1="350" y1="110" x2="350" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="350" y1="215" x2="350" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="650" y1="110" x2="650" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="650" y1="215" x2="650" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="350" y1="110" x2="650" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="350" y1="250" x2="388" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="432" y1="250" x2="650" y2="250" stroke="currentColor" stroke-width="1.5"/></g><g class="room wait" stroke-linecap="square"><line x1="740" y1="110" x2="740" y2="175" stroke="currentColor" stroke-width="1.5"/><line x1="740" y1="215" x2="740" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="960" y1="110" x2="960" y2="250" stroke="currentColor" stroke-width="1.5"/><line x1="740" y1="110" x2="883" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="917" y1="110" x2="960" y2="110" stroke="currentColor" stroke-width="1.5"/><line x1="740" y1="250" x2="960" y2="250" stroke="currentColor" stroke-width="1.5"/></g><text class="room-lbl" x="150.0" y="140" text-anchor="middle" fill="currentColor">entry set</text><text class="room-lbl" x="500.0" y="140" text-anchor="middle" fill="currentColor">the owner</text><text class="room-lbl" x="850.0" y="140" text-anchor="middle" fill="currentColor">wait set</text><g class="mem"><rect x="470" y="158" width="160" height="62" rx="5" fill="var(--sunk)" stroke="currentColor" stroke-width="1.5"/><text x="550" y="183" text-anchor="middle" fill="currentColor" font-family="&quot;Fira Mono&quot;, monospace">slots</text><text class="val" x="550" y="209" text-anchor="middle" fill="currentColor" font-family="&quot;Fira Mono&quot;, monospace">count = 1</text></g><g class="door acquire"><line x1="272" y1="195" x2="340" y2="195" stroke="currentColor" stroke-width="2.5" marker-end="url(#n-notify-gd34-4-ink)"/><text x="305" y="180" text-anchor="middle" fill="currentColor">acquire</text></g><g class="door wait"><line x1="662" y1="195" x2="730" y2="195" stroke="currentColor" stroke-width="2.5" marker-end="url(#n-notify-gd34-4-ink)"/><text x="695" y="180" text-anchor="middle" fill="currentColor" font-family="&quot;Fira Mono&quot;, monospace">wait</text></g><g class="door release"><line x1="410" y1="232" x2="410" y2="312" stroke="currentColor" stroke-width="2.5" marker-end="url(#n-notify-gd34-4-ink)"/><text x="426" y="276" text-anchor="start" fill="currentColor">release</text></g><g class="door notifyAll"><path d="M900 122 V 92 H 70 V 122" fill="none" stroke="var(--acc)" stroke-width="3" stroke-linejoin="round" marker-end="url(#n-notify-gd34-4-acc)"/><text x="500" y="80" text-anchor="middle" fill="var(--acc)" font-family="&quot;Fira Mono&quot;, monospace">notifyAll</text></g><g class="thread t-P"><circle cx="410" cy="195" r="15" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/><text x="410" y="202" text-anchor="middle" fill="currentColor">P</text></g><g class="thread t-C"><circle cx="190" cy="195" r="15" fill="var(--acc-l)" stroke="var(--acc)" stroke-width="3"/><text x="190" y="202" text-anchor="middle" fill="currentColor">C</text></g><text class="step" x="990" y="24" text-anchor="end" fill="var(--acc)">woken, must acquire again</text></svg>
-<figcaption>P has put an item and called <code>notifyAll</code>: C moves from the wait set back to the entry set, woken but not yet holding the lock, which it must acquire again before <code>wait</code>&nbsp;returns.</figcaption>
-</figure>
-
 
 <p>The buffer below is a ring of <i>K</i> slots with a count of the items in it: <code>put</code> stores an item at the position <code>tail</code> and <code>take</code> removes the oldest, at <code>head</code>, both positions moving round the ring. A thread that finds the ring full, or empty, releases the lock and waits, and is woken by the next take, or&nbsp;put.</p>
 
@@ -1047,7 +1146,6 @@ taken: sum 25476</code></pre>
 <figcaption>Mesa's monitor, the one of Java and OCaml: the signaller keeps the lock and goes on, the woken thread gets the lock back later, and another thread may take the slot in between; so the condition is checked again, in a <code>while</code>, which also handles a wake-up with no signal at&nbsp;all.</figcaption>
 </figure>
 
-
 <p>The sentence to keep: a condition is checked again after every wake-up, because another thread may have taken the slot first. Its companion is the choice of <code>notifyAll</code> over <code>notify</code>: Java's object has one waiting set, so producers and consumers wait on the same condition, and waking one thread may wake one of the wrong kind; waking all costs a few useless wake-ups, each of which re-tests its condition by the rule above and goes back to waiting. A design with one condition variable per kind of waiter, as the OCaml program below has, may wake one thread, with the argument written&nbsp;down.</p>
 
 <p>The same monitor in OCaml&nbsp;5, with two condition variables, <code>not_full</code> and <code>not_empty</code>, and the wait in a&nbsp;<code>while</code>:</p>
@@ -1096,7 +1194,6 @@ consumer 1 took from an empty slot, after 8 items
 
 <p>The counter has been exact twice, under the spin lock of section&nbsp;3 and under the language's lock of section&nbsp;4, both by exclusion: one thread at a time between the acquire and the release. The spin lock was built from one instruction that is itself atomic, test-and-set, and the question that block&nbsp;2 opens on is whether the lock around it was needed at all. Block&nbsp;2 first states what an operation must guarantee to the threads that call it at once, with a stack under one lock as the reference. Its first program without a lock is the counter written as a loop around compare-and-set, an atomic instruction: the loop reads <code>n</code> and retries until the instruction&nbsp;succeeds.</p>
 
-
 <figure id="b1-fig-bridge">
 <svg viewBox="0 0 1000 220" width="1420" role="img" aria-label="Thread A's increment of n: three steps in a critical section with the lock held by A, then one instruction with no lock" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor">
     
@@ -1120,34 +1217,53 @@ consumer 1 took from an empty slot, after 8 items
 <p class="notes-lede">Not presented in the lecture: the appendix of the slides of block&nbsp;1, reached from the slide of the global order of the locks. Progress lost with one lock and no&nbsp;cycle.</p>
 
 <p>One failure of progress happened without any cycle, on another planet, and it is the contrast to keep beside the deadlock of section&nbsp;6.<sup><a href="#b1-src-reeves1997">9</a></sup> A spacecraft's software is a set of <b>tasks</b>, threads each with a <b>priority</b>, a number by which the scheduler chooses, among the tasks ready to run, the one with the highest. In July 1997, days after landing, Mars Pathfinder's computer began to reset itself, each reset stopping the day's work. The cause was a <b>priority inversion</b>: a high-priority task waited for a lock held by a low-priority task, and medium-priority tasks, ready to run and preferred by the scheduler, kept the low-priority one from running and so from releasing the lock. The lock was a mutual-exclusion semaphore, a lock in the sense of section&nbsp;4 (section&nbsp;7 defines the semaphore), inside a service of the operating system that both tasks used to pass data to each other. The lock did its job: one task at a time held it. What failed was progress: the high-priority task did not finish before a deadline that had to be met, the next cycle of the spacecraft's internal bus, and the system reset itself. It was not a deadlock: one lock, no cycle of tasks waiting for each other. It was an unbounded priority inversion: the task holding the lock was ready to run, and the scheduler kept choosing the medium-priority&nbsp;tasks. The remedy was <b>priority inheritance</b>: a task holding a lock runs at the priority of the highest task waiting for it. JPL turned it on for these semaphores by a patch sent from Earth. The problem was described by Lampson and Redell in 1980 for monitors; Sha, Rajkumar and Lehoczky gave the inheritance protocols and their analysis in&nbsp;1990.<sup><a href="#b1-src-sha1990">10</a></sup></p>
-
-<p>The link to two locks: inheritance alone does not prevent deadlock on two locks taken in opposite order; a fixed order does, on any machine, and on one processor so does the <b>priority ceiling protocol</b> of Sha, Rajkumar and Lehoczky (1990), a rule by which each lock has a ceiling, the highest priority of the tasks that use it, and a task may take a lock only if its priority is above the ceilings of all locks held by other tasks. The lesson Pathfinder adds to the deadlock slide is that the progress risk of exclusion is wider than the cycle: a stopped holder stops everyone who needs its lock, whether it is stopped by a cycle, by the scheduler, or for good. The other source of the risk is <b>starvation</b>: a lock that keeps changing hands, no holder stopped, and one thread that waits for it for ever while others keep acquiring and releasing it; the ticket lock of section&nbsp;3 is one answer to&nbsp;it.</p>
-<figure id="b1-fig-pathfinder">
-<svg viewBox="0 0 1000 320" width="1420" role="img" aria-label="Gantt rows for a high, a medium and a low priority task over time; tinted blocks hold the lock, a dotted stretch is a task blocked">
-    <defs><marker id="n-pathfinder-m30-f3-a" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker><marker id="n-pathfinder-m30-f3-aa" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--acc)"/></marker></defs>
-    <text class="row-lbl row-high" x="0" y="67" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="start">high priority task</text>
-    <line class="row-line row-high" x1="230" y1="80" x2="930" y2="80" stroke="var(--line)" stroke-width="1.5"/>
-    <text class="row-lbl row-medium" x="0" y="157" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="start">medium priority task</text>
-    <line class="row-line row-medium" x1="230" y1="170" x2="930" y2="170" stroke="var(--line)" stroke-width="1.5"/>
-    <text class="row-lbl row-low" x="0" y="247" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="start">low priority task</text>
-    <line class="row-line row-low" x1="230" y1="260" x2="930" y2="260" stroke="var(--line)" stroke-width="1.5"/>
-    <rect class="b-low-run" x="230" y="220" width="50" height="40" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
-    <rect class="b-low-cs" x="280" y="220" width="120" height="40" rx="5" fill="var(--acc-l)" stroke="currentColor" stroke-width="1.5"/>
-    <text class="b-cs-lbl" x="340" y="247" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="middle">holds lock</text>
-    <rect class="b-high-run" x="400" y="40" width="60" height="40" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
-    <line class="w-high" x1="460" y1="60" x2="930" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 6"/>
-    <text class="lbl-blocked" x="480" y="28" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="middle">blocked on the lock held by low</text>
-    <rect class="b-med-run" x="460" y="130" width="440" height="40" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
-    <text class="lbl-low-ready" x="680" y="247" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="middle">ready, not running</text>
-    <line class="deadline" x1="800" y1="40" x2="800" y2="290" stroke="currentColor" stroke-width="1.5" stroke-dasharray="12 8"/>
-    <text class="deadline-lbl" x="800" y="313" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="middle">deadline</text>
-    <circle class="fault" cx="800" cy="60" r="13" fill="var(--bg)" stroke="var(--acc)" stroke-width="3"/>
-    <path class="fault-x" d="M794.5 54.5 L805.5 65.5 M805.5 54.5 L794.5 65.5" stroke="var(--acc)" stroke-width="3" fill="none"/>
-    <text class="lbl-missed" x="830" y="28" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="middle">deadline missed: the system reset</text>
-    <line class="axis" x1="230" y1="290" x2="940" y2="290" stroke="currentColor" stroke-width="1.5" marker-end="url(#n-pathfinder-m30-f3-a)"/>
-    <text class="axis-lbl" x="1000" y="297" font-family="'Fira Sans', sans-serif" font-size="19" fill="currentColor" text-anchor="end">time</text>
+<figure class="notes-steps" id="b1-fig-pathfinder" data-first="-1" data-last="2">
+<svg viewBox="0 0 1000 320" role="img" aria-label="Gantt rows for a high, a medium and a low priority task over time: the low task takes the lock; the high task preempts it and blocks on that lock; the medium task runs while the low task is ready but not chosen; the deadline passes with the high task still blocked, and the system resets" font-size="19" data-step="-1">
+    <defs>
+      <marker id="n-b1pf-ink" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="f-ink" /></marker>
+    </defs>
+    
+    <g class="f-ink">
+      <text class="row-lbl row-high" x="0" y="67">high priority task</text>
+      <text class="row-lbl row-medium" x="0" y="157">medium priority task</text>
+      <text class="row-lbl row-low" x="0" y="247">low priority task</text>
+      <text class="axis-lbl" x="1000" y="297" text-anchor="end">time</text>
+    </g>
+    <line class="row-line row-high s-rule" x1="230" y1="80" x2="930" y2="80" stroke-width="1.5" />
+    <line class="row-line row-medium s-rule" x1="230" y1="170" x2="930" y2="170" stroke-width="1.5" />
+    <line class="row-line row-low s-rule" x1="230" y1="260" x2="930" y2="260" stroke-width="1.5" />
+    <rect class="b-low-run f-bg s-ink" x="230" y="220" width="50" height="40" rx="5" stroke-width="1.5" />
+    <rect class="b-low-cs f-accb s-ink" x="280" y="220" width="120" height="40" rx="5" stroke-width="1.5" />
+    <text class="b-cs-lbl f-ink" x="340" y="247" text-anchor="middle">holds lock</text>
+    <line class="axis s-ink" x1="230" y1="290" x2="940" y2="290" stroke-width="1.5" marker-end="url(#n-b1pf-ink)" />
+    
+    <g class="ns-off" data-on="0 1 2">
+      <rect class="b-high-run f-bg s-ink" x="400" y="40" width="60" height="40" rx="5" stroke-width="1.5" />
+      <line class="w-high w-high-1 s-ink" x1="460" y1="60" x2="580" y2="60" stroke-width="1.5" stroke-dasharray="5 6" />
+      <text class="lbl-blocked f-ink" x="480" y="28" text-anchor="middle">blocked on the lock held by low</text>
+    </g>
+    
+    <g class="ns-off" data-on="1 2">
+      <line class="w-high w-high-2 s-ink" x1="460" y1="60" x2="930" y2="60" stroke-width="1.5" stroke-dasharray="5 6" />
+      <rect class="b-med-run f-bg s-ink" x="460" y="130" width="440" height="40" rx="5" stroke-width="1.5" />
+      <text class="lbl-low-ready f-ink" x="680" y="247" text-anchor="middle">ready, not running</text>
+    </g>
+    
+    <g class="ns-off" data-on="2">
+      <line class="deadline s-ink" x1="800" y1="40" x2="800" y2="290" stroke-width="1.5" stroke-dasharray="12 8" />
+      <text class="deadline-lbl f-ink" x="800" y="313" text-anchor="middle">deadline</text>
+      <circle class="fault f-bg s-acc" cx="800" cy="60" r="13" stroke-width="3" />
+      <path class="fault-x s-acc" d="M794.5 54.5 L805.5 65.5 M805.5 54.5 L794.5 65.5" stroke-width="3" fill="none" />
+      <text class="lbl-missed f-ink" x="830" y="28" text-anchor="middle">deadline missed: the system reset</text>
+    </g>
   </svg>
-<figcaption>Pathfinder as three rows, one per priority: the low task takes the lock; the high task preempts it and blocks on the lock; the medium task runs, so the low task cannot run and release; the deadline passes while the high task is still&nbsp;blocked.</figcaption>
+<figcaption><p>Pathfinder as three rows, one per priority, time running to the right: a tinted block is a task running while it holds the lock, a dashed line a task&nbsp;blocked.</p>
+<ol class="notes-steplist">
+<li>The low task runs and takes the&nbsp;lock.</li>
+<li>The high task preempts it and blocks on the lock that the low task&nbsp;holds.</li>
+<li>The medium task runs, preferred by the scheduler to the low task, which is ready but not running and so cannot release the&nbsp;lock.</li>
+<li>The deadline passes while the high task is still blocked, and the system resets&nbsp;itself.</li>
+</ol></figcaption>
 </figure>
 
 <figure id="b1-fig-inheritance">
@@ -1181,6 +1297,8 @@ consumer 1 took from an empty slot, after 8 items
 <figcaption>The same rows with priority inheritance: the low task, holding the lock a higher task waits for, runs at that task's priority, releases, and the high task takes the lock and finishes before the&nbsp;deadline.</figcaption>
 </figure>
 
+<p>The link to two locks: inheritance alone does not prevent deadlock on two locks taken in opposite order; a fixed order does, on any machine, and on one processor so does the <b>priority ceiling protocol</b> of Sha, Rajkumar and Lehoczky (1990), a rule by which each lock has a ceiling, the highest priority of the tasks that use it, and a task may take a lock only if its priority is above the ceilings of all locks held by other tasks. The lesson Pathfinder adds to the deadlock of section&nbsp;6 is that the progress risk of exclusion is wider than the cycle: a stopped holder stops everyone who needs its lock, whether it is stopped by a cycle, by the scheduler, or for good. The other source of the risk is <b>starvation</b>: a lock that keeps changing hands, no holder stopped, and one thread that waits for it for ever while others keep acquiring and releasing it; the ticket lock of section&nbsp;3 is one answer to&nbsp;it.</p>
+
 </section>
 
 <section id="b1-sources">
@@ -1202,6 +1320,46 @@ consumer 1 took from an empty slot, after 8 items
 </section>
 
 </article>
+<script id="notes-steps-js">
+/* The figures that step (deck/figures/notes_steppers.py): an element of the figure's svg with data-on is shown at
+   the steps listed there, and the svg's data-step drives the rules carried from the slide; a bar under the figure
+   steps forward and back, and the caption's list marks the step shown and moves to a step clicked. The figure
+   opens at its first step. For the print, every step is drawn once, small and numbered, in a grid that only the
+   print shows. */
+document.querySelectorAll('figure.notes-steps').forEach(function (fig) {
+  var a = +fig.dataset.first, b = +fig.dataset.last, svg = fig.querySelector('svg'), cur = a;
+  var items = [].slice.call(fig.querySelectorAll('ol.notes-steplist > li'));
+  function paint(el, s) {
+    el.dataset.step = s;
+    el.querySelectorAll('[data-on]').forEach(function (e) { e.classList.toggle('ns-off', e.dataset.on.split(' ').indexOf(String(s)) < 0); });
+  }
+  var grid = document.createElement('div'); grid.className = 'notes-steps-print'; grid.setAttribute('aria-hidden', 'true');
+  for (var s = a; s <= b; s++) {
+    var cell = document.createElement('div'), n = document.createElement('span'), c = svg.cloneNode(true);
+    n.className = 'ns-n'; n.textContent = s - a + 1; c.removeAttribute('role'); c.removeAttribute('aria-label');
+    paint(c, s); cell.appendChild(n); cell.appendChild(c); grid.appendChild(cell);
+  }
+  var bar = document.createElement('div'); bar.className = 'notes-stepbar';
+  bar.innerHTML = '<button type="button" aria-label="previous step">&lsaquo;</button><span aria-live="polite"></span><button type="button" aria-label="next step">&rsaquo;</button>';
+  var prev = bar.children[0], no = bar.children[1], next = bar.children[2];
+  function go(s) {
+    cur = Math.max(a, Math.min(b, s)); paint(svg, cur);
+    items.forEach(function (li, k) { li.classList.toggle('on', k === cur - a); if (k === cur - a) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
+    no.textContent = 'step ' + (cur - a + 1) + ' of ' + (b - a + 1); prev.disabled = cur === a; next.disabled = cur === b;
+  }
+  prev.onclick = function () { go(cur - 1); };
+  next.onclick = function () { go(cur + 1); };
+  items.forEach(function (li, k) {
+    li.tabIndex = 0; li.onclick = function () { go(a + k); };
+    li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(a + k); } };
+  });
+  fig.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(cur + (e.key === 'ArrowRight' ? 1 : -1)); }
+  });
+  svg.insertAdjacentElement('afterend', bar); bar.insertAdjacentElement('afterend', grid);
+  fig.classList.add('ready'); go(a);
+});
+</script>
 </main>
 <script>
 (function(){

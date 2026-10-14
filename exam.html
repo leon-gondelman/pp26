@@ -40,8 +40,8 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
     <a class="tbbrand" href="index.html">Programming Paradigms</a>
     <span class="where"><b>Exam format</b></span>
     <nav><a href="https://github.com/leon-gondelman/pp26">Repository</a><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle</a>
-      <button class="theme" type="button" aria-label="Colour theme">
-        <span data-t="auto">Auto</span><span data-t="light">Light</span><span data-t="dark">Dark</span>
+      <button class="theme" type="button" aria-label="Colour theme: Auto" title="Colour theme: Auto">
+        <span data-t="auto"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 3.4a6.6 6.6 0 0 1 0 13.2z" fill="currentColor"/></svg></span><span data-t="light"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></g></svg></span><span data-t="dark"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.2 12.6A6.8 6.8 0 0 1 7.4 3.8a6.8 6.8 0 1 0 8.8 8.8z" fill="currentColor"/></svg></span>
       </button>
     </nav>
   </div>
@@ -146,13 +146,14 @@ addEventListener("resize",function(){if(innerWidth>980)set(false);});})();</scri
 if(c&&rl.scrollWidth>rl.clientWidth)rl.scrollLeft=c.offsetLeft-rl.clientWidth/3;})();</script>
 <script>/* Auto follows the phone or laptop; Light and Dark override it. */
 (function(){var r=document.documentElement,b=document.querySelector(".theme");
-function show(){var t=r.dataset.theme||"auto";b.dataset.mode=t;}
+function show(){var t=r.dataset.theme||"auto",l="Colour theme: "+{auto:"Auto",light:"Light",dark:"Dark"}[t];b.dataset.mode=t;b.setAttribute("aria-label",l);b.title=l;}
 b.addEventListener("click",function(){
   var next={auto:"light",light:"dark",dark:"auto"}[r.dataset.theme||"auto"];
   if(next==="auto"){delete r.dataset.theme;try{localStorage.removeItem("pp-theme")}catch(e){}}
   else{r.dataset.theme=next;try{localStorage.setItem("pp-theme",next)}catch(e){}}
   show();});
 show();})();</script>
+
 <script>// Opens a link marked data-applet in a box over the page instead of navigating to it:
 //   <a href="test_yourself.html" data-applet>Test yourself</a>
 // The page is loaded in an iframe with ?embed; it closes the box by posting {applet: "close"}.
@@ -540,7 +541,11 @@ var g=document.querySelector(".gallery");if(g){var tr=g.querySelector(".gtrack")
   dt.forEach(function(b,i){b.addEventListener("click",function(){show(i);run();});});
   g.querySelector(".prev").addEventListener("click",function(){show(c-1);run();});
   g.querySelector(".next").addEventListener("click",function(){show(c+1);run();});
-  g.addEventListener("mouseenter",function(){clearInterval(timer);});g.addEventListener("mouseleave",run);run();}
+  g.addEventListener("mouseenter",function(){clearInterval(timer);});g.addEventListener("mouseleave",run);
+  /* on a touch screen a swipe sideways turns the gallery */
+  var x0=null,y0=0;g.addEventListener("touchstart",function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  g.addEventListener("touchend",function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){show(c+(dx<0?1:-1));run();}},{passive:true});run();}
 })();</script>
 </body>
 </html>

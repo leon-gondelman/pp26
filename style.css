@@ -116,13 +116,15 @@ main{min-width:0;display:flex;flex-direction:column}
 .topbar nav{margin-left:auto;display:flex;gap:1.35rem;font-size:.86rem}
 .topbar nav a{color:var(--ink2);text-decoration:none}
 .topbar nav a:hover{color:var(--acc)}
-.topbar .theme{font:500 .86rem/1 var(--sans);color:var(--ink2);background:none;
-  border:1px solid var(--line);border-radius:7px;padding:.36rem .6rem;cursor:pointer}
+/* the color theme: a square with the drawing of the current choice (Auto, Light, Dark) */
+.topbar .theme{flex:none;box-sizing:border-box;width:2.1rem;height:2.1rem;padding:0;display:grid;place-items:center;
+  color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:8px;cursor:pointer}
 .topbar .theme:hover{color:var(--acc);border-color:var(--acc)}
 .topbar .theme span{display:none}
+.topbar .theme svg{width:1.15rem;height:1.15rem;display:block}
 .topbar .theme[data-mode="auto"] [data-t="auto"],
 .topbar .theme[data-mode="light"] [data-t="light"],
-.topbar .theme[data-mode="dark"] [data-t="dark"]{display:inline}
+.topbar .theme[data-mode="dark"] [data-t="dark"]{display:block}
 .inner{padding:2.6rem 3rem 4.5rem;max-width:64rem;flex:1;width:100%;box-sizing:border-box;margin-inline:auto}
 /* The schedule carries four columns of chips and is the one block that wants
    more room than the reading measure; let it use the width the rail leaves. */
@@ -529,6 +531,7 @@ ul.early .n{font:400 .88rem/1 var(--mono);color:var(--ink3);margin-right:.35rem}
   background:color-mix(in srgb,var(--bg) 88%,transparent);color:var(--ink2);font:400 1.4rem/1 var(--sans);cursor:pointer;
   display:grid;place-items:center;padding-bottom:.15rem;opacity:0;transition:opacity .2s ease}
 .gallery:hover .garrow,.garrow:focus-visible{opacity:1}
+@media (hover:none){.garrow{opacity:1}}
 .garrow.prev{left:.5rem} .garrow.next{right:.5rem}
 .gdots{display:flex;gap:.45rem;margin-top:.7rem}
 .gdots button{width:.55rem;height:.55rem;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
@@ -740,6 +743,12 @@ table.sessions td.ttl{padding-right:.8rem}
   /* the course and its first session: the name is on the painting, the gallery waits for a wider screen */
   .screen.home{scroll-snap-align:start;min-height:calc(100svh - var(--tbh));box-sizing:border-box;padding-top:1rem}
   .screen.home figure.masthead,.screen.home .hero h1,.screen.home .hero .sub,.homeside,.nextscreen{display:none}
+  /* the gallery: a stop of its own, one screen high, after the course and its first sessions */
+  .screen.home .hero{min-height:calc(100svh - var(--tbh) - var(--sh,0px) - 1rem);box-sizing:border-box}
+  .screen.home .homeside{display:flex;flex-direction:column;justify-content:center;scroll-snap-align:start;
+    min-height:calc(100svh - var(--tbh) - var(--sh,0px));box-sizing:border-box;padding:1rem 0 1.4rem;margin:0}
+  .homeside .gallery .glabel{margin-bottom:.8rem}
+  .homeside .gcode{font-size:.72rem}
   .screen.home .hero p{font-size:.93rem;line-height:1.52;margin-bottom:.8rem}
   .screen.home .hero p.lead{font-size:1.02rem;line-height:1.48}
   .hero .introrow{margin-top:.9rem}
@@ -941,3 +950,15 @@ article.topic p.tback a:hover{text-decoration:underline}
 @media (max-width:760px){
   .mcover{height:calc(100svh - var(--tbh) - var(--sh))}
 }
+
+/* ---------------------------------------------------------------- continue reading */
+/* a session page opened again later offers, at the bottom of the window, to continue where it
+   was left: the section's name in the course's navy, and the choice of the top */
+.resume{position:fixed;z-index:70;left:50%;bottom:1.1rem;transform:translateX(-50%);display:flex;align-items:center;gap:.3rem;
+  width:max-content;max-width:calc(100vw - 2rem);box-sizing:border-box;padding:.35rem;border:1px solid var(--line);border-radius:12px;
+  background:var(--bg);box-shadow:0 10px 30px rgba(15,17,21,.18);font:500 .88rem/1.25 var(--sans)}
+.resume button{font:inherit;border:0;border-radius:8px;padding:.6rem .8rem;cursor:pointer}
+.resume .go{min-width:0;background:var(--acc);color:var(--bg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.resume .no{flex:none;background:none;color:var(--ink2)}
+.resume .no:hover{color:var(--ink)}
+@media (min-width:981px){.resume{left:calc(var(--rail) + (100vw - var(--rail) - var(--pw,0px)) / 2)}}
