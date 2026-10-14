@@ -273,7 +273,7 @@ public final class Check {
       Tiles tiles = new Tiles(scene.width(), scene.height());
       long sum = 0;
       for (String s : line.substring(line.indexOf(':') + 1, line.indexOf('(')).trim().split("\\s+")) sum += Long.parseLong(s);
-      System.out.println("      " + line + ": the balance observed, which proves nothing about coverage");
+      System.out.println("      " + line + ": the balance observed, which proves nothing about coverage (the dispenser's check, above, is the one about it)");
       if (sum != tiles.count)
         return "the tiles per worker add up to " + sum + " of " + tiles.count + ": does each worker count its tile on tilesDone? (Tiles.java, hole 5)";
       return null;

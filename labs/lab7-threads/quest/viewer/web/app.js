@@ -289,6 +289,10 @@ function render() {
       $("task" + n).className = "task" + (done ? "" : " hollow") + (n === selected ? " sel" : "");
     }
   }
+  // the first hollow station along the line, path then branch: where to go next
+  const next = PARTS.flatMap(p => p.st.map(st => st[0])).filter(n => n > 0).find(n => station(n).s === "todo");
+  document.querySelectorAll(".st.next").forEach(e => e.classList.remove("next"));
+  if (next !== undefined) $("st" + next).classList.add("next");
   const voidCounter = !on(3);
   $("counter").classList.toggle("void", voidCounter || !reached(PARTS[2]));
   $("counter-note").textContent = voidCounter ? "Station 3 is hollow: as given, every choice is the racy counter." : "";
