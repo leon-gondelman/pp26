@@ -92,8 +92,39 @@ figure svg path.halo{fill:none;stroke:var(--sunk);stroke-width:11;stroke-linecap
 figure svg text.sa,figure svg text.la{fill:#2A6F97}figure svg text.sb,figure svg text.lb{fill:var(--acc)}
 figure svg text.t{fill:var(--ink2);text-anchor:middle}
 </style>
+<style>
+.nside{font:400 .9rem/1.4 var(--sans)}
+.nside ol{list-style:none;margin:0;padding:0}
+.nside li{margin:.1rem 0}
+.nside a{display:block;padding:.18rem .55rem;border-left:2px solid transparent;color:var(--ink2);text-decoration:none}
+.nside a:hover{color:var(--ink)}
+.nside a.on{color:var(--acc);border-left-color:var(--acc)}
+.nside-part>a{font-weight:600;color:var(--ink)}
+.nside-part>ol{margin:.15rem 0 .9rem .7rem}
+.nside-h{font:600 .72rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .6rem .55rem}
+
+.nside-page{position:fixed;top:0;left:0;bottom:0;width:16rem;overflow:auto;padding:1.6rem .8rem;
+  border-right:1px solid var(--line);background:var(--bg);z-index:20}
+.nside-btn{display:none}
+@media (min-width:1180px){body{padding-left:16rem}}
+@media (max-width:1179px){
+  .nside-page{transform:translateX(-105%);transition:transform .2s;box-shadow:0 0 24px rgba(0,0,0,.18);padding-top:3.4rem}
+  .nside-page.open{transform:none}
+  .nside-btn{display:block;position:fixed;top:.7rem;left:.7rem;z-index:21;font:600 .8rem/1 var(--sans);
+    padding:.5rem .7rem;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}}
+</style>
 </head>
 <body>
+<button class="nside-btn" type="button">Contents</button>
+<nav class="nside nside-page" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1">Block 1, Mutual&nbsp;exclusion</a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
+<li><a href="#b1-counter">2. Race&nbsp;conditions</a></li>
+<li><a href="#b1-instruction">3. Atomic&nbsp;instructions</a></li>
+<li><a href="#b1-lock">4.&nbsp;Locks</a></li>
+<li><a href="#b1-checker">5. Race detection and&nbsp;prevention</a></li>
+<li><a href="#b1-two-locks">6.&nbsp;Deadlock</a></li>
+<li><a href="#b1-waiting">7. Condition&nbsp;synchronization</a></li>
+<li><a href="#b1-closing">8.&nbsp;Summary</a></li>
+<li><a href="#b1-priority-inversion">Appendix. Priority&nbsp;inversion</a></li></ol></div></div></nav>
 <main>
 
 <p class="notes-kicker">Programming Paradigms · Session 7 · Multi-threading · Block&nbsp;1</p>
@@ -1157,5 +1188,26 @@ consumer 1 took from an empty slot, after 8 items
 
 </article>
 </main>
+<script>
+(function(){
+  document.querySelectorAll('nav.nside').forEach(function(nav){
+    var links=[].slice.call(nav.querySelectorAll('a')), map={};
+    links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return; var a=map[e.target.id]; if(!a)return;
+      links.forEach(function(l){l.classList.remove('on');}); a.classList.add('on');
+      if(a.scrollIntoView&&nav.scrollHeight>nav.clientHeight)a.scrollIntoView({block:'nearest'});
+    });},{rootMargin:'-15% 0px -75% 0px'});
+    Object.keys(map).forEach(function(id){var t=document.getElementById(id); if(t)io.observe(t);});
+  });
+})();
+
+(function(){
+  var nav=document.querySelector('nav.nside-page'), b=document.querySelector('.nside-btn');
+  if(!nav||!b)return;
+  b.addEventListener('click',function(){nav.classList.toggle('open');});
+  nav.addEventListener('click',function(e){if(e.target.closest('a'))nav.classList.remove('open');});
+})();
+</script>
 </body>
 </html>
