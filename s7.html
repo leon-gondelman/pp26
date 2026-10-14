@@ -75,7 +75,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 
 <section id="notes">
   <h2>Notes</h2>
-  <p>Both blocks written out, with their figures, programs and sources. The contents open each section in place; the notes unfold under the&nbsp;contents.</p>
+  <p>Both blocks written out, with their figures, programs and sources. While the notes are read, their contents take the place of the course's links on the&nbsp;left.</p>
   <style>.notes-embed{
   --bg:#ffffff; --sunk:#f7f8fa;
   --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
@@ -284,13 +284,9 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 .nside-h{font:600 .72rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .6rem .55rem}
 
 .notes-host{margin-top:1rem}
-.notes-host .nside{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk)}
-.notes-host .nside-parts{columns:2 15rem;column-gap:2rem}
-.notes-host .nside-part{break-inside:avoid}
-.notes-host .nside-back{display:none}
-.notes-fold>summary{cursor:pointer;font:600 1rem/1.4 var(--sans);color:var(--acc);margin:1.2rem 0;list-style:none}
-.notes-fold>summary::before{content:"\25B8\00A0"}
-.notes-fold[open]>summary::before{content:"\25BE\00A0"}
+.notes-host>.nside{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk);margin:0 0 2.5rem}
+.notes-host>.nside .nside-parts{columns:2 15rem;column-gap:2rem}
+.notes-host>.nside .nside-part{break-inside:avoid}
 .notes-embed{background:none}
 /* the site's own heading style (small capitals, sans) stays out of the notes */
 .notes-embed h1,.notes-embed h2,.notes-embed h3{text-transform:none;letter-spacing:normal;color:var(--ink);padding:0;border:0}
@@ -300,8 +296,10 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 .notes-embed .notes-sep{border:0;border-top:1px solid var(--line);margin:3.5rem 0 2.5rem}
 /* on a phone a wide table scrolls sideways in its own box instead of widening the page */
 @media (max-width:760px){.notes-embed table{display:block;overflow-x:auto;max-width:100%}}
-/* the notes open: their contents take the place of the course's links and sessions in the rail */
+/* while the notes are being read, their contents take the place of the course's links and sessions in the rail */
+aside.rail .nside-rail{display:none}
 .notes-mode aside.rail>nav:not(.nside),.notes-mode aside.rail>.railhead{display:none}
+.notes-mode aside.rail .nside-rail{display:block}
 aside.rail .nside{margin:0 0 1.5rem}
 aside.rail .nside-parts{columns:auto}
 aside.rail .nside a{padding:.22rem .6rem;border-radius:0;font-size:.9rem;color:var(--ink2)}
@@ -324,8 +322,11 @@ aside.rail .nside .nside-part>a{margin:0}
 aside.rail .nside .nside-back{margin:0 .2rem 0 0;padding:.3rem .6rem}
 aside.rail .nside .nside-full{display:none}
 aside.rail .nside .nside-short{display:inline}
-}</style>
-<div class="notes-host" id="notes-host"><nav class="nside" aria-label="Contents"><a class="nside-back" href="#notes"><span class="nside-full">&larr; Back to the&nbsp;course</span><span class="nside-short">&larr; Course</span></a><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1"><span class="nside-full">Block 1, Mutual&nbsp;exclusion</span><span class="nside-short">Block 1</span></a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
+
+  .notes-embed [id]{scroll-margin-top:6.5rem}
+  aside.rail .nside-rail{display:none}
+  .notes-mode aside.rail .nside-rail{display:flex}}</style>
+<div class="notes-host" id="notes-host"><nav class="nside" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1"><span class="nside-full">Block 1, Mutual&nbsp;exclusion</span><span class="nside-short">Block 1</span></a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
 <li><a href="#b1-counter">2. Race conditions</a></li>
 <li><a href="#b1-instruction">3. Atomic instructions</a></li>
 <li><a href="#b1-lock">4. Locks</a></li>
@@ -343,7 +344,24 @@ aside.rail .nside .nside-short{display:inline}
 <li><a href="#b2-discovery">7. Memory models</a></li>
 <li><a href="#b2-closing">8. Summary</a></li>
 <li><a href="#b2-appendix">Appendix</a></li></ol></div></div></nav>
-<details class="notes-fold" id="notes-fold"><summary>The notes of both blocks, on this page</summary>
+<nav class="nside nside-rail" aria-label="Contents"><a class="nside-back" href="#top"><span class="nside-full">&larr; Back to the&nbsp;course</span><span class="nside-short">&larr; Course</span></a><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1"><span class="nside-full">Block 1, Mutual&nbsp;exclusion</span><span class="nside-short">Block 1</span></a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
+<li><a href="#b1-counter">2. Race conditions</a></li>
+<li><a href="#b1-instruction">3. Atomic instructions</a></li>
+<li><a href="#b1-lock">4. Locks</a></li>
+<li><a href="#b1-checker">5. Race detection and&nbsp;prevention</a></li>
+<li><a href="#b1-two-locks">6. Deadlock</a></li>
+<li><a href="#b1-waiting">7. Condition synchronization</a></li>
+<li><a href="#b1-closing">8. Summary</a></li>
+<li><a href="#b1-priority-inversion">Appendix. Priority inversion</a></li></ol></div>
+<div class="nside-part"><a href="#block2"><span class="nside-full">Block 2, Atomics; independence of the&nbsp;order</span><span class="nside-short">Block 2</span></a><ol><li><a href="#b2-standards">1. Linearizability and&nbsp;progress</a></li>
+<li><a href="#b2-cas">2. Compare-and-set</a></li>
+<li><a href="#b2-treiber">3. Treiber&#x27;s stack</a></li>
+<li><a href="#b2-cost">4. Contention</a></li>
+<li><a href="#b2-independence">5. Deterministic parallelism</a></li>
+<li><a href="#b2-composition">6. Composition</a></li>
+<li><a href="#b2-discovery">7. Memory models</a></li>
+<li><a href="#b2-closing">8. Summary</a></li>
+<li><a href="#b2-appendix">Appendix</a></li></ol></div></div></nav>
 <div class="notes-embed">
 <p class="notes-kicker">Programming Paradigms · Session 7 · Multi-threading · Block&nbsp;1</p>
 <h1>Mutual&nbsp;exclusion</h1>
@@ -3095,7 +3113,6 @@ the reader: 109518919 readings, 2611258 with a sum other than 200
 
 </article>
 </div>
-</details>
 </div>
 <script>
 (function(){
@@ -3114,30 +3131,26 @@ the reader: 109518919 readings, 2611258 with a sum other than 200
 })();
 
 (function(){
-  var w=document.getElementById('notes-host'), d=document.getElementById('notes-fold'),
-      rail=document.getElementById('rail'), root=document.documentElement;
-  if(!w||!d)return;
-  var nav=w.querySelector('nav.nside'), back=nav.querySelector('.nside-back');
-  /* open: the contents move into the rail, under the course's name; folded: back in the page */
-  function sync(){
-    var open=d.open;
-    root.classList.toggle('notes-mode',open);
-    if(!rail)return;
-    if(open&&nav.parentNode!==rail){var at=rail.querySelector('.brand-sub'); rail.insertBefore(nav,at?at.nextSibling:rail.firstChild);}
-    if(!open&&nav.parentNode!==w){w.insertBefore(nav,w.firstChild);}
-  }
-  d.addEventListener('toggle',sync);
-  /* scroll the page itself, below the bars that stay at the top (the top bar; on a phone the strip too) */
+  var host=document.getElementById('notes-host'), rail=document.getElementById('rail'), root=document.documentElement;
+  if(!host||!rail)return;
+  var embed=host.querySelector('.notes-embed'), copy=host.querySelector('nav.nside-rail');
+  /* the rail's copy of the contents sits under the course's name */
+  var at=rail.querySelector('.brand-sub'); rail.insertBefore(copy,at?at.nextSibling:rail.firstChild);
+  /* the notes are being read when their top has passed the upper third of the window and their end has not */
+  var on=null;
+  function sync(){var r=embed.getBoundingClientRect(), mode=r.top<innerHeight/3&&r.bottom>innerHeight/3;
+    if(mode!==on){on=mode; root.classList.toggle('notes-mode',mode);}}
+  var queued=false;
+  addEventListener('scroll',function(){if(!queued){queued=true;requestAnimationFrame(function(){queued=false;sync();});}},{passive:true});
+  addEventListener('resize',sync); sync();
+  /* links land below the bars that stay at the top (the top bar; on a phone the strip too) */
   function to(t){var tb=document.querySelector('.topbar'), top=tb?Math.max(0,tb.getBoundingClientRect().bottom):0;
     window.scrollTo(0, t.getBoundingClientRect().top + window.scrollY - top - 12);}
-  function go(id){var t=document.getElementById(id); if(!t||!d.contains(t))return false;
-    if(!d.open){d.open=true; sync();} requestAnimationFrame(function(){to(t);}); return true;}
-  nav.querySelectorAll('a:not(.nside-back)').forEach(function(a){a.addEventListener('click',function(e){
+  document.querySelectorAll('nav.nside a').forEach(function(a){a.addEventListener('click',function(e){
     var id=a.getAttribute('href').slice(1);
-    if(go(id)){e.preventDefault(); history.replaceState(null,'','#'+id);}});});
-  back.addEventListener('click',function(e){e.preventDefault(); d.open=false; sync();
-    history.replaceState(null,'','#notes'); to(document.getElementById('notes'));});
-  if(location.hash)go(location.hash.slice(1));
+    if(a.classList.contains('nside-back')){e.preventDefault(); window.scrollTo(0,0); history.replaceState(null,'',location.pathname); return;}
+    var t=document.getElementById(id); if(!t)return; e.preventDefault(); to(t); history.replaceState(null,'','#'+id);});});
+  if(location.hash){var t=document.getElementById(location.hash.slice(1)); if(t&&embed.contains(t))requestAnimationFrame(function(){to(t);});}
 })();
 </script>
 </section>
