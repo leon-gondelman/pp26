@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 7 viewer</title>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="lab">Lab 7</span><span class="name">A Mini Ray Tracer</span><span class="tag" id="tag">the quest's viewer</span></div>
+  <div class="topright">
+    <a class="ghost labpage" href="/lab/index.html" target="lab7-page">The lab's page <span>↗</span></a>
+    <button class="help" id="help" aria-pressed="false" aria-label="Every note at once" title="every note at once">?</button>
+    <div class="status" id="status"><span class="dot"></span><span id="status-text">connecting</span></div>
+  </div>
+</header>
+
+<main class="grid">
+  <section class="card stage-card" style="grid-area:stage">
+    <div class="stage" id="stage" data-note="picture">
+      <img id="picture" alt="The picture as the program renders it">
+      <div class="empty" id="empty">The picture appears here at the first run.</div>
+      <div class="caption" id="caption"></div>
+      <div class="progress"><div class="fill" id="fill"></div></div>
+    </div>
+  </section>
+
+  <section class="card" style="grid-area:scene">
+    <div class="head"><h2>The scene</h2><button class="info" data-info="scene" aria-label="What the scene is for">i</button></div>
+    <div class="scene-row">
+      <select id="scene-choice" aria-label="The scene"></select>
+      <button class="ghost" id="as-chosen">As chosen</button>
+    </div>
+    <div class="editor">
+      <pre aria-hidden="true" id="scene-hl"></pre>
+      <textarea id="scene" spellcheck="false" aria-label="The scene's text"></textarea>
+    </div>
+  </section>
+
+  <section class="card parts-card" style="grid-area:parts">
+    <div class="head"><h2>The parts</h2><button class="info" data-info="parts" aria-label="What the parts are for">i</button></div>
+    <div class="parts" id="parts"></div>
+    <div class="parts-foot">
+      <label class="threads">Threads <input type="number" id="threads" min="1" max="64" value="12"></label>
+      <span class="hint" id="threads-hint">the processors of this machine</span>
+      <label class="threads" id="given-switch"><input type="checkbox" id="given"> Given structures
+        <button class="info" data-info="given" aria-label="What the given structures are">i</button></label>
+      <button class="ghost stop" id="stop">Stop</button>
+    </div>
+  </section>
+
+  <section class="card out-card" style="grid-area:out">
+    <div class="head"><h2>The program's output</h2><button class="info" data-info="output" aria-label="What the output is">i</button></div>
+    <pre class="out" id="out"></pre>
+  </section>
+
+  <section class="card line-card" style="grid-area:line">
+    <div class="head"><h2>The line of the quest</h2><button class="info" data-info="line" aria-label="What the line is for">i</button>
+      <button class="ghost recheck" id="recheck">Check again</button></div>
+    <div class="map" id="map">
+      <svg class="tracks" id="tracks" aria-hidden="true"></svg>
+    </div>
+  </section>
+</main>
+
+<div class="popover" id="popover" hidden></div>
+<script src="/app.js"></script>
+</body>
+</html>

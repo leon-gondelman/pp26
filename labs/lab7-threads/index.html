@@ -18,7 +18,35 @@
 --rule:#2a2f39;--accent:#62b8ee;--accent-soft:#14283a;--ans:#52c283;--ans-soft:#13281b;--kw:#7cc4f0;
 --st:#6fd394;--cm:#97a0ad;--nu:#e3ab55;--con:#e2b36a;--con-soft:#2d2415}
 *{box-sizing:border-box}
-body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.62 "IBM Plex Sans",-apple-system,"Segoe UI",sans-serif}
+body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.62 "IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+  display:grid;grid-template-columns:16.5rem minmax(0,1fr);min-height:100vh}
+.page{min-width:0}
+aside.rail{position:sticky;top:0;height:100vh;overflow-y:auto;overscroll-behavior:contain;background:var(--sunken);
+  border-right:1px solid var(--rule);padding:26px 18px 32px;font-size:14.5px}
+.rail .brand{display:flex;gap:11px;align-items:center;text-decoration:none;color:var(--ink)}
+.rail .monogram{flex:none;width:34px;height:34px;border-radius:9px;background:var(--accent);color:#fff;
+  font:600 12px/34px "IBM Plex Mono",monospace;text-align:center;letter-spacing:.04em}
+.rail .brand b{font-weight:600;font-size:15.5px;line-height:1.24}
+.rail .brand-sub{margin:7px 0 26px 45px;font-size:13px;color:var(--ink-2)}
+.rail .brand-sub a{color:var(--accent);text-decoration:none}
+.rail .brand-sub a:hover{text-decoration:underline}
+.railhead{font-weight:600;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);margin:0 0 8px 9px}
+.railtoc ol{list-style:none;margin:0;padding:0}
+.railtoc ol ol{margin:2px 0 8px 12px;border-left:1px solid var(--rule);padding-left:6px}
+.railtoc a{display:block;padding:5px 9px;border-radius:6px;text-decoration:none;color:var(--ink-2);line-height:1.35}
+.railtoc ol ol a{font-size:13.5px;padding:4px 9px}
+.railtoc a:hover{background:var(--surface);color:var(--ink)}
+.railtoc a[aria-current]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.viewerhead{margin-top:26px}
+.viewerlink{display:block;margin:0 0 4px;padding:8px 11px;border-radius:8px;background:var(--accent);color:#fff;
+  font-weight:600;text-decoration:none}
+.viewerlink span{float:right}
+.viewerlink:hover{filter:brightness(1.1)}
+.viewerlink.off{background:var(--surface);color:var(--ink-2);border:1px solid var(--rule)}
+.viewernote{margin:0 0 0 9px;font-size:12.5px;color:var(--ink-2)}
+.viewernote code{font-size:12px}
+.viewernote a{color:var(--accent)}
+@media (max-width:900px){body{display:block}aside.rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--rule)}}
 .wrap{max-width:820px;margin:0 auto;padding:0 16px}
 main.wrap{padding-bottom:96px}
 .masthead{background:var(--surface);border-bottom:1px solid var(--rule);padding:28px 0 22px;margin-bottom:28px}
@@ -31,9 +59,6 @@ h4{margin:0 0 6px;font-size:17px}
 .num{color:var(--accent)}
 code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;background:var(--sunken);padding:1px 4px;border-radius:3px}
 a{color:var(--accent)}
-.toc{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:10px 18px;margin:20px 0}
-.toc ol{margin:0;padding-left:20px}
-.toc ol ol{margin:2px 0 4px}
 table.overview{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px;background:var(--surface);border:1px solid var(--rule)}
 table.overview th,table.overview td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--rule)}
 table.overview th{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
@@ -79,6 +104,17 @@ h3.end{margin-top:36px}
 </style>
 </head>
 <body>
+<aside class="rail">
+  <a class="brand" href="https://leon-gondelman.github.io/pp26/index.html"><span class="monogram" aria-hidden="true">PP</span><b>Programming<br>Paradigms</b></a>
+  <p class="brand-sub"><a href="https://leon-gondelman.github.io/pp26/s7.html">Session 7</a> · Lab&nbsp;7</p>
+  <p class="railhead">This&nbsp;lab</p>
+  <nav class="railtoc" aria-label="This lab"><ol><li><a href="#files">The&nbsp;files</a></li><li><a href="#warmup">Warm-up: four Java classes</a><ol><li><a href="#counter">Part 1: The counter, three&nbsp;ways</a></li><li><a href="#workers">Part 2: Workers: start, join,&nbsp;stop</a></li><li><a href="#buffer">Part 3: The bounded buffer as a&nbsp;monitor</a></li><li><a href="#barrier">Part 4: The barrier&nbsp;(extension)</a></li></ol></li><li><a href="#quest">Quest: A Mini Ray Tracer</a><ol><li><a href="#part0">Part 0: The sequential&nbsp;render</a></li><li><a href="#part1">Part 1:&nbsp;Workers</a></li><li><a href="#part2">Part 2: The progress&nbsp;bar</a></li><li><a href="#part3">Part 3: Load&nbsp;balancing</a></li><li><a href="#part6">Part 6: The&nbsp;explorer</a></li><li><a href="#part4">Part 4: Supersampling and tone mapping&nbsp;(extension)</a></li><li><a href="#part5">Part 5: The video&nbsp;(extension)</a></li></ol></li><li><a href="#paper">Questions on&nbsp;paper</a></li></ol></nav>
+  <p class="railhead viewerhead">The&nbsp;viewer</p>
+  <a class="viewerlink" href="http://localhost:8190/" target="lab7-viewer">Open the viewer <span>↗</span></a>
+  <p class="viewernote">once it runs: from <code>quest/</code>, <code>javac -d out/viewer viewer/Viewer.java</code>,
+  then <code>java -cp out/viewer Viewer</code>;&nbsp;<a href="#viewer">how</a></p>
+</aside>
+<div class="page">
 <header class="masthead"><div class="wrap">
 <p class="kicker">Programming Paradigms · Lab 7 · session 7:&nbsp;multi-threading</p>
 <h1>Threads: Four Structures and a Mini Ray&nbsp;Tracer</h1>
@@ -86,7 +122,6 @@ h3.end{margin-top:36px}
 <main class="wrap">
 
 <p>The lab has two halves. The <strong>warm-up</strong> is four Java classes to finish: a counter, a group of worker threads, a bounded buffer and a barrier. Each class is a file with holes, a contract that says what the class must do, and a check program that tests it. The <strong>quest</strong> is a mini ray tracer, made multi-threaded with those four&nbsp;classes.</p><p>Three properties recur. <strong>Mutual exclusion</strong>: no two threads are inside the code that changes shared data at the same time. <strong>Ordering</strong>: a thread acts only after another has acted. <strong>Visibility</strong>: a write on one thread is seen by a read on another. A lock, an atomic instruction and a copy per thread give mutual exclusion. A join, a barrier and a monitor's wait give ordering, and visibility with it. A volatile write gives visibility&nbsp;only.</p>
-<nav class="toc"><ol><li><a href="#files">The&nbsp;files</a></li><li><a href="#warmup">Warm-up: four Java classes</a><ol><li><a href="#counter">Part 1: The counter, three&nbsp;ways</a></li><li><a href="#workers">Part 2: Workers: start, join,&nbsp;stop</a></li><li><a href="#buffer">Part 3: The bounded buffer as a&nbsp;monitor</a></li><li><a href="#barrier">Part 4: The barrier&nbsp;(extension)</a></li></ol></li><li><a href="#quest">Quest: A Mini Ray&nbsp;Tracer</a></li><li><a href="#paper">Questions on&nbsp;paper</a></li></ol></nav>
 <section id="files"><h2>The&nbsp;files</h2><p>The lab's files are in the course's repository on GitHub, <a href="https://github.com/leon-gondelman/pp26">leon-gondelman/pp26</a>, in the folder <a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab7-threads">labs/lab7-threads</a>. The first time, <code>git clone</code> copies the whole repository; afterwards, <code>git pull</code> inside the copy brings each new lab. The lab needs the JDK of session&nbsp;1.</p><figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>git clone https://github.com/leon-gondelman/pp26.git     # the first time
 cd pp26
 git pull                                                   <span class="cm"># every later time</span>
@@ -297,7 +332,8 @@ javac -d out *.java tracer/*.java structures/*.java
 javac -d out/given given/*.java
 java -cp out Render scene.txt
 java -cp out Render scene.txt --part <span class="nu">1</span> --counter racy
-java -cp out Check <span class="nu">1</span></code></pre></figure><p><code>Render</code> writes <code>render.png</code>. Its options: <code>--part n</code>, how far the program goes; <code>--counter racy|locked|atomic|perworker</code>, the counter the bar reads; <code>--threads n</code>; <code>--out file</code>; <code>--given workers</code> or <code>--given counter,buffer</code>, the finished copies in <code>given/</code> in place of unfinished structures. <code>Check n</code> runs the check of part <em>n</em>. Each line says <em>pass</em>, <em>FAIL</em> or <em>todo</em>, and a <em>FAIL</em> names the file, the hole and the question to ask. As in the warm-up, a check can show a bug, never prove there is none (rule&nbsp;8).</p><p>The parts accumulate in one <code>Render.java</code>; each part says which lines it replaces. The program rewrites the PNG at intervals during the render, and an image viewer that reloads a changed file (Preview on macOS, most viewers elsewhere) shows the picture&nbsp;grow.</p><section class="part" id="part0"><h3>Part 0: The sequential&nbsp;render</h3>
+java -cp out Check <span class="nu">1</span></code></pre></figure><p><code>Render</code> writes <code>render.png</code>. Its options: <code>--part n</code>, how far the program goes; <code>--counter racy|locked|atomic|perworker</code>, the counter the bar reads; <code>--threads n</code>; <code>--out file</code>; <code>--given workers</code> or <code>--given counter,buffer</code>, the finished copies in <code>given/</code> in place of unfinished structures. <code>Check n</code> runs the check of part <em>n</em>. Each line says <em>pass</em>, <em>FAIL</em> or <em>todo</em>, and a <em>FAIL</em> names the file, the hole and the question to ask. As in the warm-up, a check can show a bug, never prove there is none (rule&nbsp;8).</p><p>The parts accumulate in one <code>Render.java</code>; each part says which lines it replaces. The program rewrites the PNG at intervals during the render, and an image viewer that reloads a changed file (Preview on macOS, most viewers elsewhere) shows the picture&nbsp;grow.</p><h3 class="end" id="viewer">The&nbsp;viewer</h3><p>The viewer is the quest in one page of the browser: the picture as the program renders it, each part one click away, and the quest's holes as stations on a line. It compiles the quest's files on every save and runs the six checks, and a station fills when its part's check passes on it; a part opens when the line reaches it, its own holes still hollow, so their failure is seen first. A click on a station gives its task, what the check says, and a link back to this page. It runs the same programs as the terminal, nothing more. From&nbsp;<a class="file" href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab7-threads/quest"><code>quest/</code></a>:</p><figure class="code commands"><figcaption><span class="lang">Shell</span></figcaption><pre><code>javac -d out/viewer viewer/Viewer.java
+java -cp out/viewer Viewer</code></pre></figure><p>The page opens at <code>http://localhost:8190/</code>; Ctrl-C in the terminal ends the viewer. With <code>--given</code>, or the switch on the page, the checks and the parts take the finished copies of the structures in&nbsp;<code>given/</code>.</p><section class="part" id="part0"><h3>Part 0: The sequential&nbsp;render</h3>
 <article class="item">
 <p class="need"><span>The need:</span> <code>java -cp out Render scene.txt</code> renders on one thread: one sample per pixel, jagged edges, hard shadows, one front moving down the&nbsp;picture.</p>
 <p>Given the program and <code>scene.txt</code>, change a colour or move a sphere and render again; this part has no hole. The scene file has one object per line: a keyword, then key-value pairs. <code>yaw</code> is the rotation about the vertical axis in degrees, <code>spin</code> the rotation per frame. Part 4 reads <code>samples</code> and a light's <code>radius</code> (soft shadows), and needs tone mapping because light colours exceed 1; part 5 reads <code>frames</code>. The line <code>marbles</code> puts <code>count</code> small spheres on the floor, drawn from the <code>seed</code>, the same at every run. The tracer has no index of the objects: every ray is tested against every sphere, so the count sets how long a render takes, and a smaller count makes every part faster on a slower&nbsp;machine.</p>
@@ -585,5 +621,11 @@ java -cp out Check <span class="nu">5</span></code></pre></figure>
 <p class="gives"><span>Gives:</span> The barrier in its place, and without it a frame torn between two rotations: a fast worker starts frame <em>k</em> + 1 on the advanced scene while a slow one still renders frame <em>k</em>. State shared between phases (scene, frame, dispenser) is changed by one thread inside the barrier. The buffer with its waits in loops and <code>notifyAll</code> (rules 4 and 5), and the hang when the end marker is missing. Ordering of results as a separate concern: settled here by the phases, elsewhere by a sequence&nbsp;number.</p>
 </article></section><h3 class="end">The last question and the&nbsp;mini-project</h3><p>For every piece of shared state in the program, the preview's read included, say which technique protects it: ownership, a lock or an atomic word, or a copy per thread. For every hand-over between threads or phases, say which mechanism orders it: a join, a barrier, a monitor's wait or a volatile flag, and why that one. The sentence holes of the parts answer it piece by&nbsp;piece.</p><p>The mini-project rebuilds <code>BoundedBuffer</code> as a queue, three ways: first the warm-up's class as the one-lock queue, with its point of effect named; then a two-lock queue with a dummy node; then a lock-free queue with a lagging&nbsp;tail.</p></section><section id="paper"><h2>Questions on&nbsp;paper</h2><p>Ten questions on the two primitives of the lecture that are not classes, the join and the visible write, for the week after the lab: <a href="https://leon-gondelman.github.io/pp26/labs/lab7-threads/primitives.pdf">primitives.pdf</a>. They are not part of the warm-up. The lab collects&nbsp;nothing.</p></section>
 </main>
+</div>
+<script>(function(){var links=[].slice.call(document.querySelectorAll('.railtoc a'));
+var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+function spy(){var y=innerHeight/5,cur=-1;targets.forEach(function(t,i){if(t&&t.getBoundingClientRect().top<y)cur=i;});
+links.forEach(function(a,i){if(i===cur)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});}
+addEventListener('scroll',spy,{passive:true});addEventListener('resize',spy);spy();})();</script>
 </body>
 </html>

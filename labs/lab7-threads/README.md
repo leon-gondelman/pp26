@@ -24,7 +24,20 @@ The lab needs the JDK of session 1.
 | `quest/given/` | finished copies of the structures, taken with `--given`, so that an unfinished one blocks nothing |
 | `quest/tracer/` | the tracer, sealed, used through the interface listed on the page |
 | `quest/scene.txt` | the scene: spheres, cubes, a floor, lights, a camera |
+| `quest/viewer/` | the viewer: the quest in a page of the browser, the picture live, the parts one click away, the holes as stations that fill as the checks pass |
 | `rules/` | the rules sheet cited by number on the page, ten rules in Java and OCaml 5 |
+
+## The viewer
+
+From `quest/`:
+
+    javac -d out/viewer viewer/Viewer.java
+    java -cp out/viewer Viewer
+
+The page opens at `http://localhost:8190/`. On every save the viewer compiles the quest and
+runs `Check 1` to `Check 6`; a station of the line fills when its part's check passes on its
+hole, and a part opens when the line reaches it. `--given` takes the finished structures of
+`given/`. It runs the same programs as the terminal; Ctrl-C ends it.
 
 The mini-project starts from the warm-up's `BoundedBuffer` as the one-lock queue, then replaces
 it by a two-lock and a lock-free version.
