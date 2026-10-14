@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mini-projects - PP26</title>
+<meta name="description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
+<meta name="theme-color" content="#211a52">
+<meta property="og:title" content="Mini-projects - PP26">
+<meta property="og:description" content="This course examines key design decisions and major differences between programming languages, focusing on characteristics such as state, control flow, process communication, data ">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://homes.cs.aau.dk/~lego/pp26/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23211a52'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' font-weight='700' fill='white' text-anchor='middle'%3EPP%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/inter-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+<script>/* before paint: a stored choice wins, otherwise the system decides */
+(function(){try{var t=localStorage.getItem("pp-theme");
+if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}
+if(/[?&]palette=old/.test(location.search))document.documentElement.classList.add("pal-old")})();</script>
+<body>
+<aside class="rail" id="rail">
+  <a class="brand" href="index.html">
+    <span class="monogram" aria-hidden="true">PP</span>
+    <b>Programming<br>Paradigms</b>
+  </a>
+  <p class="brand-sub">SW7 &middot; Autumn 2026 &middot; AAU Copenhagen</p>
+  <nav aria-label="Course"><ul><li><a href="index.html">Overview</a></li><li><a href="index.html#sessions">Schedule</a></li><li><a href="exam.html">Exam format</a></li><li><a href="miniprojects.html" aria-current='page'>Mini-projects</a></li><li><a href="index.html#materials">Materials</a></li><li><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle ↗</a></li><li><a href="https://github.com/leon-gondelman/pp26">Repository ↗</a></li></ul></nav>
+  <p class="railhead">Sessions</p>
+  <nav aria-label="Sessions"><ol class="railsessions"><li><a href="s1.html"><span class="n">01</span><span>Intro</span></a></li><li><a href="s2.html"><span class="n">02</span><span>Persistent and Ephemeral Data Structures</span></a></li><li><a href="s3.html"><span class="n">03</span><span>Algebraic Data Types and Objects</span></a></li><li><a href="s4.html"><span class="n">04</span><span>Functional Programming and Control</span></a></li><li><a href="s5.html"><span class="n">05</span><span>Functions as Values: Iterators and Streams</span></a></li><li><a href="s6.html"><span class="n">06</span><span>Asynchronous Programming</span></a></li><li><a href="s7.html"><span class="n">07</span><span>Multi-Threading</span></a></li><li><a href="s8.html"><span class="n">08</span><span>Message Passing</span></a></li><li><a href="s9.html"><span class="n">09</span><span>Failure and Recovery</span></a></li><li><a href="s10.html"><span class="n">10</span><span>Static Type Systems</span></a></li><li><a href="s11.html"><span class="n">11</span><span>Polymorphism</span></a></li><li><a href="s12.html"><span class="n">12</span><span>Data Abstraction</span></a></li><li><a href="s13.html"><span class="n">13</span><span>Declarative Programming and Conclusion</span></a></li></ol></nav>
+  <div class="railfoot">
+    <a class="aaumark" href="https://www.en.aau.dk/">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aalborg University" focusable="false"><path d="M56.913 45.79c-1.532-.698-3.072-.989-5.688-2.844-6.654-4.72-9.649-10.186-5.388-21.751 2.459-6.671 3.464-11.579 3.319-18.053-.082-.064-.406-.277-.483-.341-1.326 8.045-3.543 12.011-8.535 20.115-11.296 18.345-.675 29.574 4.344 33.605 4.99-2.878 9.253-7.061 12.431-12.222a29.9 29.9 0 0 1-.0-.0Z"/><path d="M44.807 3.108a44 44 0 0 0-.586-.312c-2.86 7.061-6.717 10.696-13.34 16.028-14.096 11.348-12.242 24.428-6.037 34.673a29.9 29.9 0 0 0 9.219.219c-5.916-9.028-8.436-19.409 1.243-31.63 5.75-7.262 8.16-11.708 9.501-18.978Z"/><path d="M42.83 2.093A30 30 0 0 0 30.001 0C13.432 0 0 13.432 0 30c0 7.61 2.834 14.558 7.503 19.845.363-14.55 4.184-21.62 17.203-28.462 8.876-4.665 14.2-8.256 18.124-19.29Z"/></svg><span>Aalborg University Copenhagen</span>
+    </a>
+    A.&nbsp;C. Meyers V&aelig;nge 15, 2450 Copenhagen SV<br>Room 2.2.120
+  </div>
+</aside>
+<main>
+  <div class="topbar">
+    <button class="menu" type="button" aria-label="Menu" aria-controls="rail" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a class="tbbrand" href="index.html">Programming Paradigms</a>
+    <span class="where"><b>Mini-projects</b></span>
+    <nav><a href="https://github.com/leon-gondelman/pp26">Repository</a><a href="https://www.moodle.aau.dk/course/view.php?id=60967">Moodle</a>
+      <button class="theme" type="button" aria-label="Colour theme">
+        <span data-t="auto">Auto</span><span data-t="light">Light</span><span data-t="dark">Dark</span>
+      </button>
+    </nav>
+  </div>
+  <div class="inner">
+<!-- The top of the mini-project page, above its title: the pictures of the topics (the symbols, used again in the table) and the band of ten. Not editable in the editor. -->
+<svg class="mp-sprite" aria-hidden="true" width="0" height="0">
+<symbol id="ic-insulin" viewBox="0 0 48 48"><polyline class="mp-l" points="7,29 15,19 23,29 31,19 39,29"/><circle class="mp-l mp-f" cx="7" cy="29" r="3"/><circle class="mp-l mp-f" cx="15" cy="19" r="3"/><circle class="mp-l mp-f" cx="23" cy="29" r="3"/><circle class="mp-l mp-f" cx="31" cy="19" r="3"/><rect class="mp-af" x="36" y="26" width="6" height="6" rx="1"/></symbol>
+<symbol id="ic-git" viewBox="0 0 48 48"><path class="mp-l" d="M8 32H36M20 32C26 32 26 16 32 16H38"/><circle class="mp-l mp-f" cx="8" cy="32" r="3.5"/><circle class="mp-l mp-f" cx="20" cy="32" r="3.5"/><circle class="mp-l mp-f" cx="36" cy="32" r="3.5"/><circle class="mp-af" cx="38" cy="16" r="3.5"/></symbol>
+<symbol id="ic-point" viewBox="0 0 48 48"><path class="mp-d" d="M16 7V41M28 7V41"/><path class="mp-l" d="M6 15L42 21M6 37L42 27"/><circle class="mp-af" cx="22" cy="25" r="3"/></symbol>
+<symbol id="ic-rope" viewBox="0 0 48 48"><path class="mp-l" d="M24 10L14 22M24 10L34 22M14 22L10 34M14 22L19 34"/><circle class="mp-l mp-f" cx="24" cy="10" r="3"/><circle class="mp-l mp-f" cx="14" cy="22" r="3"/><rect class="mp-l mp-f" x="6" y="34" width="8" height="6" rx="1"/><rect class="mp-l mp-f" x="16" y="34" width="8" height="6" rx="1"/><rect class="mp-a mp-al" x="28" y="22" width="12" height="6" rx="1"/></symbol>
+<symbol id="ic-regex" viewBox="0 0 48 48"><path class="mp-l" d="M15 26H19M29 26H33M20.5 22C17 10 31 10 27.5 22"/><path class="mp-l" d="M25.5 20.5L27.5 22.5L29.8 20.6"/><circle class="mp-l mp-f" cx="10" cy="26" r="5"/><circle class="mp-l mp-f" cx="24" cy="26" r="5"/><circle class="mp-a mp-f" cx="38" cy="26" r="5"/><circle class="mp-af" cx="38" cy="26" r="2.5"/></symbol>
+<symbol id="ic-maze" viewBox="0 0 48 48"><path class="mp-l" d="M8 16V40H40V34M40 28V8H8M18 8V24M30 40V22"/><path class="mp-a" d="M3 12H13V32H24V15H35V31H45"/></symbol>
+<symbol id="ic-await" viewBox="0 0 48 48"><path class="mp-l" d="M6 38H42"/><rect class="mp-l mp-f" x="7" y="10" width="12" height="6" rx="1.5"/><rect class="mp-af" x="19" y="19" width="10" height="6" rx="1.5"/><rect class="mp-l mp-f" x="29" y="28" width="12" height="6" rx="1.5"/><path class="mp-d" d="M19 16V19M29 25V28"/></symbol>
+<symbol id="ic-queue" viewBox="0 0 48 48"><rect class="mp-l mp-f" x="5" y="20" width="9" height="9" rx="1.5"/><rect class="mp-l mp-f" x="19.5" y="20" width="9" height="9" rx="1.5"/><rect class="mp-a mp-al" x="34" y="20" width="9" height="9" rx="1.5"/><path class="mp-l" d="M14 24.5H19M28.5 24.5H33"/><path class="mp-a" d="M24 19C24 12 38.5 12 38.5 19"/></symbol>
+<symbol id="ic-race" viewBox="0 0 48 48"><path class="mp-l" d="M10 8V40M38 8V40M10 16L20 22M38 32L28 26"/><rect class="mp-af" x="19" y="19" width="10" height="10" rx="1.5"/></symbol>
+<symbol id="ic-channel" viewBox="0 0 48 48"><circle class="mp-l mp-f" cx="8" cy="24" r="4"/><circle class="mp-l mp-f" cx="40" cy="24" r="4"/><path class="mp-l" d="M12 24H15M33 24H36"/><rect class="mp-l mp-f" x="15" y="19" width="18" height="10" rx="2"/><rect class="mp-af" x="27" y="21" width="4" height="6" rx="1"/><path class="mp-l" d="M21 19V29M27 19V29"/></symbol>
+<symbol id="ic-actors" viewBox="0 0 48 48"><path class="mp-l" d="M15 17L21 33M33 17L27 33M17 13H31"/><circle class="mp-l mp-f" cx="12" cy="13" r="5"/><circle class="mp-l mp-f" cx="36" cy="13" r="5"/><circle class="mp-l mp-f" cx="24" cy="37" r="5"/><circle class="mp-af" cx="18" cy="25" r="2.5"/></symbol>
+<symbol id="ic-interleave" viewBox="0 0 48 48"><path class="mp-l" d="M24 9L14 22M24 9L34 22M14 22L8 36M14 22L20 36M34 22L28 36M34 22L40 36"/><circle class="mp-l mp-f" cx="24" cy="9" r="2.5"/><circle class="mp-l mp-f" cx="14" cy="22" r="2.5"/><circle class="mp-l mp-f" cx="34" cy="22" r="2.5"/><circle class="mp-l mp-f" cx="8" cy="37" r="2.5"/><circle class="mp-l mp-f" cx="20" cy="37" r="2.5"/><circle class="mp-af" cx="28" cy="37" r="3"/><circle class="mp-l mp-f" cx="40" cy="37" r="2.5"/></symbol>
+<symbol id="ic-local" viewBox="0 0 48 48"><rect class="mp-l mp-f" x="5" y="8" width="15" height="18" rx="2"/><rect class="mp-l mp-f" x="28" y="8" width="15" height="18" rx="2"/><path class="mp-l" d="M5 13H20M28 13H43M12.5 26V30C12.5 34 24 33 24 36M35.5 26V30C35.5 34 24 33 24 36"/><circle class="mp-af" cx="24" cy="38" r="3"/></symbol>
+<symbol id="ic-sheet" viewBox="0 0 48 48"><rect class="mp-l mp-f" x="7" y="9" width="34" height="30" rx="2"/><path class="mp-l" d="M7 19H41M7 29H41M18 9V39M30 9V39"/><rect class="mp-af" x="30" y="29" width="11" height="10"/><path class="mp-a" d="M12 14C12 34 24 34 30 34"/></symbol>
+<symbol id="ic-types" viewBox="0 0 48 48"><text class="mp-t" x="6" y="31">λ</text><path class="mp-l" d="M22 16V32M22 24H30"/><text class="mp-t mp-ta" x="33" y="31">τ</text></symbol>
+<symbol id="ic-datalog" viewBox="0 0 48 48"><path class="mp-l" d="M14 10L24 24M34 10L24 24M24 24V38"/><circle class="mp-l mp-f" cx="14" cy="10" r="3.5"/><circle class="mp-l mp-f" cx="34" cy="10" r="3.5"/><circle class="mp-l mp-f" cx="24" cy="24" r="3.5"/><circle class="mp-af" cx="24" cy="38" r="3.5"/><path class="mp-a mp-dash" d="M10 13C4 26 12 38 20 38"/></symbol>
+<symbol id="ic-cover" viewBox="0 0 48 48"><rect class="mp-l mp-f" x="7" y="7" width="34" height="34" rx="2"/><path class="mp-d" d="M15.5 7V41M24 7V41M32.5 7V41M7 15.5H41M7 24H41M7 32.5H41"/><path class="mp-a" d="M11.25 11.25H28.25M19.75 28.75H36.75"/><circle class="mp-af" cx="11.25" cy="11.25" r="2.6"/><circle class="mp-af" cx="28.25" cy="11.25" r="2.6"/><circle class="mp-l mp-f" cx="19.75" cy="19.75" r="2.4"/><circle class="mp-l mp-f" cx="28.25" cy="19.75" r="2.4"/><circle class="mp-af" cx="19.75" cy="28.75" r="2.6"/><circle class="mp-af" cx="36.75" cy="28.75" r="2.6"/><circle class="mp-l mp-f" cx="11.25" cy="36.75" r="2.4"/><circle class="mp-l mp-f" cx="36.75" cy="36.75" r="2.4"/></symbol>
+<symbol id="ic-bdd" viewBox="0 0 48 48"><path class="mp-l mp-dash" d="M24 9L14 22M14 22L11 39M34 22L24 33M24 33L11 39"/><path class="mp-l" d="M24 9L34 22M14 22L24 33M34 22L37 39M24 33L37 39"/><circle class="mp-l mp-f" cx="24" cy="9" r="3.5"/><circle class="mp-l mp-f" cx="14" cy="22" r="3.5"/><circle class="mp-l mp-f" cx="34" cy="22" r="3.5"/><circle class="mp-af" cx="24" cy="33" r="3.5"/><rect class="mp-l mp-f" x="7.5" y="37" width="7" height="6" rx="1"/><rect class="mp-l mp-f" x="33.5" y="37" width="7" height="6" rx="1"/></symbol>
+</svg>
+<div class="mp-band" role="list" aria-label="Ten of the topics">
+<a role="listitem" href="#insulin-game" title="The insulin game" aria-label="The insulin game"><svg class="mp-ic"><use href="#ic-insulin"/></svg></a>
+<a role="listitem" href="#mini-git" title="Mini-git" aria-label="Mini-git"><svg class="mp-ic"><use href="#ic-git"/></svg></a>
+<a role="listitem" href="#point-location" title="Planar point location" aria-label="Planar point location"><svg class="mp-ic"><use href="#ic-point"/></svg></a>
+<a role="listitem" href="#text-buffers" title="Rope, piece table, gap buffer" aria-label="Rope, piece table, gap buffer"><svg class="mp-ic"><use href="#ic-rope"/></svg></a>
+<a role="listitem" href="#lock-free-queue" title="Lock-free queue" aria-label="Lock-free queue"><svg class="mp-ic"><use href="#ic-queue"/></svg></a>
+<a role="listitem" href="#channels" title="Channels on shared memory" aria-label="Channels on shared memory"><svg class="mp-ic"><use href="#ic-channel"/></svg></a>
+<a role="listitem" href="#actors" title="Actors on threads" aria-label="Actors on threads"><svg class="mp-ic"><use href="#ic-actors"/></svg></a>
+<a role="listitem" href="#local-first" title="A local-first editor" aria-label="A local-first editor"><svg class="mp-ic"><use href="#ic-local"/></svg></a>
+<a role="listitem" href="#spreadsheet" title="A spreadsheet engine" aria-label="A spreadsheet engine"><svg class="mp-ic"><use href="#ic-sheet"/></svg></a>
+<a role="listitem" href="#type-checker" title="A type checker" aria-label="A type checker"><svg class="mp-ic"><use href="#ic-types"/></svg></a>
+</div>
+<p class="crumb"><a href="index.html">&larr; all sessions</a></p>
+<section class="hero">
+  <h1>Mini-projects</h1>
+</section>
+<section id="miniprojects" class="single">
+  <p class="lead">This page presents the mini-projects of Programming Paradigms: the suggested topics of the project (on which the oral exam will be held), and the common modalities and deadlines for projects, mandatory reports, and the expected amount of work. Each topic revolves around a research question and a program to build that will apply design decisions studied in the course; its core can be adjusted by a group, on the terms below. The topics are listed in a table, each presented below in more detail. A topic from this list is option (b) of the <a href="exam.html">exam format</a>; an extension of the semester project, option (a), and a topic of the group’s own, option (c), remain possible on the terms of that&nbsp;page.</p>
+
+<nav class="toc" aria-labelledby="toc-h">
+<p class="toc-h" id="toc-h">Contents</p>
+<ol>
+<li><a href="#description">Description</a>
+<ol><li><a href="#shape">Each mini-project description&nbsp;contains</a></li><li><a href="#work">The amount of&nbsp;work</a></li><li><a href="#requirements">Formal&nbsp;requirements</a></li><li><a href="#report">The&nbsp;report</a></li><li><a href="#dates">Deadlines</a></li></ol></li>
+<li><a href="#topics">Topics</a>
+<ol><li><a href="#topics">The table of&nbsp;topics</a></li><li><a href="#details">The topics in&nbsp;detail</a></li></ol></li>
+</ol>
+</nav>
+
+<h2 id="description">Description</h2>
+
+<h3 id="shape">Each mini-project description&nbsp;contains</h3>
+<ul>
+<li><strong>The question</strong>: the design decision of the course that the project applies; the examiners assess the project against&nbsp;it.</li>
+<li><strong>The core</strong>: the smallest project every group builds, in a few steps; its last step is the <em>evidence</em>, a test, a trace or a measurement that the report shows and&nbsp;explains.</li>
+<li><strong>Directions</strong>: extensions and open questions, each applying another decision of the course; typically, a group takes on one of them or&nbsp;more.</li>
+<li><strong>Before starting</strong>, where a topic needs it: a skill the course has not taught by then, and the reading that covers&nbsp;it.</li>
+</ul>
+<p>Three things are left to the&nbsp;group:</p>
+<ul>
+<li data-note-reply="Rewritten. The problem is not part of the description: the group writes it. It now stands apart from the list, under &#39;Two things are left to the group&#39;, with an example."><strong>The problem</strong>: within the chosen topic, the group states the concrete problem its project answers, in half a page sent with the registration on 11 November: for whom the problem matters, what is not known or does not work, and what result would answer it; and, if the core is adjusted, how. For example, within Mini-git: whether a history of ten thousand commits fits in memory once the versions share their nodes, and how much the sharing saves against a copy per commit. Two groups on the same topic thus answer two different&nbsp;problems.</li>
+<li><strong>The language</strong>: free, with at least one part in a language of the course (OCaml, Python, JavaScript, Java, Go, Rust, Erlang, Haskell); a comparison across two languages is always&nbsp;welcome.</li>
+<li><strong>The core, within limits</strong>: a group may adjust its core: replace a step by another of the same weight, change the language or the data, or trade a step for a direction, as long as the question stays and the core still ends with its evidence. The half page sent at registration states the adjustment, and the lecturer&rsquo;s reply confirms it. A larger change, to the question itself, is possible as well: the project then becomes a topic of the group&rsquo;s own, option (c), which needs the lecturer&rsquo;s agreement and is proposed by 4&nbsp;November.</li>
+</ul>
+<p>A longer description of a topic, with a specification and a worked small version, is written on request for a group that is considering it; a message to the lecturer is&nbsp;enough.</p>
+
+<h3 id="work">The amount of&nbsp;work</h3>
+<p>A mini-project is sized as the preparation for the oral exam, a share of the self-study of the course, and two to four lab sessions; at least two lab sessions are dedicated to help with the&nbsp;projects.</p>
+<!-- The core is sized for two students; a single student completes it alone in about 35 to 40 hours. A larger group can add one or more directions; the core stays the same, and the report stays within the page limit of the exam&nbsp;format. -->
+
+<h3 id="requirements">Formal&nbsp;requirements</h3>
+<p>The formal requirements are those of the <a href="exam.html">exam format</a>, and only&nbsp;those:</p>
+<ul>
+<li>a report in PDF, in English, of at most 10 pages for a group and at most 5 pages for an individual student, excluding front page, references and&nbsp;appendices;</li>
+<li>the code as a link to a repository with a tag or commit hash, or as an archive uploaded with the report, and the report says how to build and run&nbsp;it;</li>
+<li>the report is the group&rsquo;s joint work and does not state who wrote which&nbsp;part;</li>
+<li>all aids are allowed in the written part, including generative AI, under the AAU rules: the use is declared in the report, and reused text and code are&nbsp;referenced;</li>
+<li>submission in Digital Exam by the deadline set by the study secretariat, in early January&nbsp;2027.</li>
+</ul>
+
+<h3 id="report">The&nbsp;report</h3>
+<p>A recommended structure, not a&nbsp;requirement:</p>
+<ol>
+<li><strong>The problem</strong>, half a page to a page: the group&rsquo;s formulation and the question of the course it is an instance&nbsp;of.</li>
+<li><strong>The decision and its alternatives</strong>, one to two pages: the design decision applied, the alternatives, and the reasons for the choice, in the terms of the&nbsp;course.</li>
+<li><strong>What was built</strong>, two to three pages: the design, the key types and signatures, and the ten to thirty lines of code that carry the&nbsp;decision.</li>
+<li><strong>Evidence</strong>, one to two pages: tests, measurements, runs, the counter-example found; a claim that could have come out false and was&nbsp;checked.</li>
+<li><strong>Reflection</strong>, one page: what the paradigm gave and what it cost, what would be done differently, and the use of&nbsp;AI.</li>
+<li><strong>How to build and run</strong>, a quarter of a&nbsp;page.</li>
+</ol>
+<p>On AI: the report declares its use, ideally with three to five examples, each giving the request, the generated output, and the change the group made to&nbsp;it. At the oral every student explains any part of the work, so generated code that the group cannot explain is a&nbsp;risk.</p>
+
+<h3 id="dates">Deadlines</h3>
+<ul>
+<li><strong>4 November (S9)</strong> &mdash; proposals for an own topic, option (c), sent to the&nbsp;lecturer</li>
+<li><strong>11 November (S10)</strong> &mdash; registration of groups (or individual work), topics and the half-page problem formulation, through the form on&nbsp;Moodle</li>
+<li><strong>Early January 2027</strong> &mdash; report and code submitted in Digital Exam (date set by the study&nbsp;secretariat)</li>
+<li><strong>January 2027</strong> &mdash; oral&nbsp;exams</li>
+</ul>
+<p>Several groups may choose the same topic. The list may grow until the deadline for own proposals; a topic added later is announced on&nbsp;Moodle.</p>
+
+<h2 id="topics">Topics</h2>
+<p class="mp-hint">A click on a column heading with arrows orders the table, and the descriptions below follow the same&nbsp;order.</p>
+<p class="mp-orderby">Order by <button type="button" data-sort="order">number</button> <button type="button" data-sort="name">topic</button> <button type="button" data-sort="part">part</button> <button type="button" data-sort="session">session</button>&nbsp;<button type="button" data-sort="concepts">concepts</button></p>
+<div class="tablewrap">
+<table class="mp-table" id="mp-table">
+<thead><tr><th aria-sort="none"><button type="button" data-sort="order">No.<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="none"><button type="button" data-sort="name">Topic<span class="arr" aria-hidden="true"></span></button></th><th>Question</th><th aria-sort="none"><button type="button" data-sort="part">Part<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="none"><button type="button" data-sort="session">Sessions<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="none"><button type="button" data-sort="concepts">Concepts<span class="arr" aria-hidden="true"></span></button></th></tr></thead>
+<tbody>
+<tr data-id="insulin-game" data-order="0" data-name="insulin game" data-part="1" data-session="04" data-concepts="higher-order functions"><td><span class="tnum">1</span><svg class="mp-ic"><use href="#ic-insulin"/></svg></td><td><a href="#insulin-game">The insulin&nbsp;game</a></td><td>What does a traversal need in order to stop&nbsp;early?</td><td>1</td><td>4,&nbsp;5</td><td>higher-order functions, closures, folds,&nbsp;iterators</td></tr>
+<tr data-id="mini-git" data-order="1" data-name="mini-git" data-part="1" data-session="02" data-concepts="persistence"><td><span class="tnum">2</span><svg class="mp-ic"><use href="#ic-git"/></svg></td><td><a href="#mini-git">Mini-git</a></td><td>What does never overwriting buy a version-control system, and what does it&nbsp;cost?</td><td>1</td><td>2</td><td>persistence, structural sharing, abstract&nbsp;types</td></tr>
+<tr data-id="point-location" data-order="2" data-name="planar point location" data-part="1" data-session="02" data-concepts="partial and full persistence"><td><span class="tnum">3</span><svg class="mp-ic"><use href="#ic-point"/></svg></td><td><a href="#point-location">Planar point&nbsp;location</a></td><td>How little space can a structure use that keeps every past&nbsp;version?</td><td>1</td><td>2</td><td>partial and full persistence, path copying, plane&nbsp;sweep</td></tr>
+<tr data-id="text-buffers" data-order="3" data-name="rope, piece table, gap buffer" data-part="1" data-session="02" data-concepts="data abstraction"><td><span class="tnum">4</span><svg class="mp-ic"><use href="#ic-rope"/></svg></td><td><a href="#text-buffers">Rope, piece table, gap&nbsp;buffer</a></td><td>Which representation of text makes an editor&rsquo;s operations&nbsp;cheap?</td><td>1</td><td>2,&nbsp;5</td><td>data abstraction, persistence, measured&nbsp;cost</td></tr>
+<tr data-id="regex-continuations" data-order="4" data-name="regular expressions with continuations" data-part="1" data-session="04" data-concepts="continuations"><td><span class="tnum">5</span><svg class="mp-ic"><use href="#ic-regex"/></svg></td><td><a href="#regex-continuations">Regular expressions with&nbsp;continuations</a></td><td>How far does a matcher on success and failure continuations go, against an&nbsp;automaton?</td><td>1</td><td>4,&nbsp;5</td><td>continuations, backtracking,&nbsp;automata</td></tr>
+<tr data-id="union-find-mazes" data-order="5" data-name="persistent union-find" data-part="1" data-session="02" data-concepts="persistence"><td><span class="tnum">6</span><svg class="mp-ic"><use href="#ic-maze"/></svg></td><td><a href="#union-find-mazes">Persistent&nbsp;union-find</a></td><td>Can union-find stay fast once it is made&nbsp;persistent?</td><td>1</td><td>2</td><td>persistence, hidden mutation, amortised&nbsp;cost</td></tr>
+<tr data-id="exact-cover" data-order="6" data-name="exact cover, three ways" data-part="1" data-session="02" data-concepts="backtracking"><td><span class="tnum">7</span><svg class="mp-ic"><use href="#ic-cover"/></svg></td><td><a href="#exact-cover">Exact cover, three&nbsp;ways</a></td><td>How is a backtracking search best undone: by mutation, by persistence, or by its&nbsp;control?</td><td>1</td><td>2, 4,&nbsp;5</td><td>backtracking, persistence, mutation and&nbsp;undo</td></tr>
+<tr data-id="scheduler-await" data-order="7" data-name="scheduler on a hand-made await" data-part="2" data-session="06" data-concepts="event loop"><td><span class="tnum">8</span><svg class="mp-ic"><use href="#ic-await"/></svg></td><td><a href="#scheduler-await">A scheduler on a hand-made&nbsp;<code>await</code></a></td><td>On one thread, what decides which continuation runs&nbsp;next?</td><td>2</td><td>6</td><td>event loop, generators,&nbsp;cancellation</td></tr>
+<tr data-id="lock-free-queue" data-order="8" data-name="lock-free queue" data-part="2" data-session="07" data-concepts="compare-and-swap"><td><span class="tnum">9</span><svg class="mp-ic"><use href="#ic-queue"/></svg></td><td><a href="#lock-free-queue">Lock-free&nbsp;queue</a></td><td>What does an operation on a shared queue need to be atomic without a&nbsp;lock?</td><td>2</td><td>7</td><td>compare-and-swap, linearisability,&nbsp;helping</td></tr>
+<tr data-id="race-three-languages" data-order="9" data-name="race, in three languages" data-part="2" data-session="07" data-concepts="data races"><td><span class="tnum">10</span><svg class="mp-ic"><use href="#ic-race"/></svg></td><td><a href="#race-three-languages">The race, in three&nbsp;languages</a></td><td>Where does each of Java, Go and Rust catch a data race: never, at run time, or at compile&nbsp;time?</td><td>2</td><td>7</td><td>data races, mutual exclusion,&nbsp;ownership</td></tr>
+<tr data-id="channels" data-order="10" data-name="channels on shared memory" data-part="2" data-session="07" data-concepts="channels"><td><span class="tnum">11</span><svg class="mp-ic"><use href="#ic-channel"/></svg></td><td><a href="#channels">Channels on shared&nbsp;memory</a></td><td>What does it take to build Go&rsquo;s channels from locks and condition&nbsp;variables?</td><td>2</td><td>7,&nbsp;8</td><td>channels, rendezvous, <code>select</code>, memory&nbsp;model</td></tr>
+<tr data-id="actors" data-order="11" data-name="actors on threads" data-part="2" data-session="07" data-concepts="actors"><td><span class="tnum">12</span><svg class="mp-ic"><use href="#ic-actors"/></svg></td><td><a href="#actors">Actors on&nbsp;threads</a></td><td>Once every variable is private to an actor, what race condition&nbsp;remains?</td><td>2</td><td>7,&nbsp;8</td><td>actors, mailboxes, race&nbsp;conditions</td></tr>
+<tr data-id="every-interleaving" data-order="12" data-name="every interleaving" data-part="2" data-session="06" data-concepts="nondeterminism"><td><span class="tnum">13</span><svg class="mp-ic"><use href="#ic-interleave"/></svg></td><td><a href="#every-interleaving">Every&nbsp;interleaving</a></td><td>Can every schedule of a small concurrent program be run, so that the rare bug is&nbsp;found?</td><td>2</td><td>6,&nbsp;8</td><td>nondeterminism, schedules, model&nbsp;checking</td></tr>
+<tr data-id="local-first" data-order="13" data-name="local-first editor" data-part="2" data-session="08" data-concepts="replication"><td><span class="tnum">14</span><svg class="mp-ic"><use href="#ic-local"/></svg></td><td><a href="#local-first">A local-first&nbsp;editor</a></td><td>What must a merge satisfy for two offline copies to&nbsp;agree?</td><td>2</td><td>8,&nbsp;9</td><td>replication, conflict-free replicated data types,&nbsp;idempotence</td></tr>
+<tr data-id="spreadsheet" data-order="14" data-name="spreadsheet engine" data-part="3" data-session="03" data-concepts="dataflow"><td><span class="tnum">15</span><svg class="mp-ic"><use href="#ic-sheet"/></svg></td><td><a href="#spreadsheet">A spreadsheet&nbsp;engine</a></td><td>When a cell changes, what is recomputed, in which order, and how is a cycle&nbsp;reported?</td><td>3</td><td>3,&nbsp;13</td><td>dataflow, algebraic data types, declarative&nbsp;programming</td></tr>
+<tr data-id="type-checker" data-order="15" data-name="type checker" data-part="3" data-session="04" data-concepts="type checking"><td><span class="tnum">16</span><svg class="mp-ic"><use href="#ic-types"/></svg></td><td><a href="#type-checker">A type&nbsp;checker</a></td><td>Which terms does a checker reject before evaluation, and which further programs does let-polymorphism&nbsp;accept?</td><td>3</td><td>4, 10,&nbsp;11</td><td>type checking, unification,&nbsp;let&#8209;polymorphism</td></tr>
+<tr data-id="bdd" data-order="16" data-name="binary decision diagrams" data-part="3" data-session="02" data-concepts="data abstraction"><td><span class="tnum">17</span><svg class="mp-ic"><use href="#ic-bdd"/></svg></td><td><a href="#bdd">Binary decision&nbsp;diagrams</a></td><td>What must an abstract type hide so that two equal functions are the same&nbsp;node?</td><td>3</td><td>2, 5,&nbsp;12</td><td>data abstraction, hash-consing,&nbsp;memoisation</td></tr>
+<tr data-id="datalog" data-order="17" data-name="datalog engine" data-part="3" data-session="10" data-concepts="logic programming"><td><span class="tnum">18</span><svg class="mp-ic"><use href="#ic-datalog"/></svg></td><td><a href="#datalog">A Datalog&nbsp;engine</a></td><td>How does an engine answer a query from rules, and know that it has&nbsp;finished?</td><td>3</td><td>10,&nbsp;13</td><td>logic programming, matching, fixed&nbsp;points</td></tr>
+</tbody>
+</table>
+</div>
+<p class="mp-note">The parts of the course: 1, data and control (sessions 2 to 5); 2, coordination and communication (sessions 6 to 9); 3, types and abstraction (sessions 10 to&nbsp;13).</p>
+
+<h2 id="details">The topics in&nbsp;detail</h2>
+<div id="mp-list">
+<article class="topic" id="insulin-game">
+<h3><span class="tnum">1</span> The insulin&nbsp;game</h3>
+<p class="tmeta">Part 1 &middot; Sessions 4 and 5, lab&nbsp;5</p>
+<p><strong>The question.</strong> Where do higher-order functions, closures and state appear when a cell makes a protein, and what does a traversal need in order to stop? Molecular biology lends itself to this kind of model: the cell&rsquo;s machinery reads one sequence and writes another (DNA into RNA, RNA into protein), so each stage is a function over a list, the stages compose into a pipeline, and the higher-order functions of the course (<code>map</code>, folds, composition) describe them directly. The path from the insulin gene to glucose entering a muscle cell has ten steps, and each is a list operation: transcription is a <code>map</code>; translation reads codons until the stop codon, which a plain fold cannot do, since a fold visits the whole list; the trigger is a closure over the cell&rsquo;s state. The decision is control: who drives the loop, and what a fold cannot&nbsp;do.</p>
+<p><strong>The core.</strong> A programming game in which each step of the pathway is a level: the player first writes a list tool, then uses it on the biology. Another pathway may replace insulin&rsquo;s, with four levels of the same&nbsp;kinds.</p>
+<ol class="steps">
+<li>The biology of the four steps that the levels play, as a tested library: transcription, translation to the 110 residues of human preproinsulin (UniProt&rsquo;s entry P01308, with the standard genetic code), the stop codon, and the&nbsp;trigger.</li>
+<li>Four levels as data (task, stub, tests as closures, hints): transcription with <code>map</code>, translation, the stop codon, where the traversal must stop, and the trigger, a&nbsp;closure.</li>
+<li>An engine that is a fold over the levels, and a command-line game that runs a player&rsquo;s file against a level&rsquo;s tests and unlocks the next&nbsp;level.</li>
+<li><em>Evidence</em>: a test that translation stops at the stop codon, and the report&rsquo;s account of whether the chosen traversal reads any codon after&nbsp;it.</li>
+</ol>
+<p><strong>Directions.</strong> The six remaining steps of the pathway, with their biology, as levels; a sandbox that hides <code>List.map</code> and <code>List.fold_left</code> until the level that defines them; the game in the browser, with OCaml compiled to JavaScript; translation as an external iterator that can be paused; compiler error messages rewritten for beginners; undo for the player as persistent state; a second pathway on the same&nbsp;engine.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://pdb101.rcsb.org/motm/14">PDB-101, &ldquo;Molecule of the Month: Insulin&rdquo;</a>; <a href="https://xavierleroy.org/control-structures/book/main007.html">X. Leroy, <em>Control structures in programming languages</em>, chapter 4, &ldquo;Control inversion&rdquo;</a>; <a href="https://dev.realworldocaml.org/lists-and-patterns.html"><em>Real World OCaml</em>, &ldquo;Lists and&nbsp;Patterns&rdquo;</a>.</p>
+</article>
+
+<article class="topic" id="mini-git">
+<h3><span class="tnum">2</span> Mini-git: a repository as a persistent&nbsp;map</h3>
+<p class="tmeta">Part 1 &middot; Session 2, lab&nbsp;2</p>
+<p><strong>The question.</strong> What does a data structure buy when no operation ever overwrites, and what does it cost? Git keeps every version of a project because stored data is never overwritten: a commit adds new immutable objects and reuses the unchanged ones, and a branch is only a name for a commit. The project builds that design on a persistent map. The decision is state: ephemeral or persistent, with sharing between versions as the consequence of never&nbsp;mutating.</p>
+<p><strong>The core.</strong> A small repository on a persistent&nbsp;map.</p>
+<ol class="steps">
+<li>A balanced persistent map (AVL or red-black) from paths to contents, behind an abstract signature, with its laws as tests on random sequences of&nbsp;operations.</li>
+<li>A repository on the map: a commit is a new root, a branch is a name for a root, checkout selects a branch, and a log lists the&nbsp;commits.</li>
+<li>A diff that stops at the subtrees two versions share (the same node in memory, not merely&nbsp;equal).</li>
+<li><em>Evidence</em>: on a generated history of a thousand commits, the memory held by all the versions against one full copy per commit, and the number of nodes the diff visits, in one table that the report&nbsp;explains.</li>
+</ol>
+<p><strong>Directions.</strong> A real history replayed from git; content addressing by hashes; a three-way merge; a second representation (a hash array mapped trie) behind the same signature; readers that take a snapshot without a lock while one thread&nbsp;commits.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"><em>Pro Git</em>, chapter 10, &ldquo;Git Internals&rdquo;</a>; C. Okasaki, <em>Purely Functional Data Structures</em> (1998), chapter 2, on persistence and path&nbsp;copying.</p>
+</article>
+
+<article class="topic" id="point-location">
+<h3><span class="tnum">3</span> Planar point location: slabs that&nbsp;share</h3>
+<p class="tmeta">Part 1 &middot; Session 2 (the sweep with a persistent&nbsp;tree)</p>
+<p><strong>The question.</strong> What does keeping earlier versions of a structure cost when an algorithm queries every intermediate state? Given segments in the plane that do not cross, which two segments lie just below and just above a query point? Sorting the segments within vertical slabs answers a query in O(log&nbsp;<em>n</em>) but stores O(<em>n</em>&sup2;); a sweep that keeps the segments in a persistent balanced set, one version per slab, shares nodes between consecutive slabs. This is the problem that gave persistent data structures their name (Sarnak and Tarjan,&nbsp;1986).</p>
+<p><strong>The core.</strong> The slabs, then the sweep with a persistent&nbsp;set.</p>
+<ol class="steps">
+<li>The brute force as the oracle, and the slabs with sorted&nbsp;arrays.</li>
+<li>The sweep: each segment added at its left endpoint and removed at its right one, in a persistent balanced set ordered by height at the current position of the sweep, and the version after each event kept. A persistent set from the language&rsquo;s library is allowed (OCaml&rsquo;s <code>Set</code> is one); writing the tree is a direction. Where the set fixes its comparison when it is created, as OCaml&rsquo;s does, the comparison reads the position of the sweep from a reference that the sweep advances: between two events the order of the segments present does not change, which is why this is&nbsp;sound.</li>
+<li>Queries by two binary searches, checked against the oracle on generated inputs whose assumptions (no vertical segment, distinct abscissae) the report&nbsp;states.</li>
+<li><em>Evidence</em>: memory and query time of the slabs and of the sweep as <em>n</em> grows, in one table, and the report&rsquo;s account of why the order of the segments stays valid between two&nbsp;events.</li>
+</ol>
+<p><strong>Directions.</strong> The persistent AVL tree written by the group, with its nodes counted; fat nodes, an imperative tree made persistent, which bring the space to O(<em>n</em>) and a query to O(log&sup2;&nbsp;<em>n</em>); bounded histories, which restore O(log&nbsp;<em>n</em>) queries; a real map with the assumptions lifted; a picture of the shared&nbsp;nodes.</p>
+<p class="tsrc"><strong>To start.</strong> N. Sarnak and R. E. Tarjan, &ldquo;Planar point location using persistent search trees&rdquo;, <em>Communications of the ACM</em>, 1986; <a href="https://courses.csail.mit.edu/6.851/spring21/lectures/">E. Demaine, MIT 6.851 <em>Advanced Data Structures</em>, lecture 1, &ldquo;Persistent data structures&rdquo; (video and&nbsp;notes)</a>.</p>
+</article>
+
+<article class="topic" id="text-buffers">
+<h3><span class="tnum">4</span> Rope, piece table, gap&nbsp;buffer</h3>
+<p class="tmeta">Part 1 &middot; Sessions 2 and 5, lab&nbsp;5</p>
+<p><strong>The question.</strong> Lab 5&rsquo;s editor stands on a persistent rope. Other editors use a piece table (VS Code keeps one in a balanced tree) or a gap buffer (Emacs). What does each representation make cheap, what does it make expensive, and which keeps old versions at no cost? The decision is state and data abstraction: three representations behind one&nbsp;contract.</p>
+<p><strong>The core.</strong> Two representations beside the lab&rsquo;s rope, behind one contract; another representation, such as an array of lines, may replace one of the&nbsp;two.</p>
+<ol class="steps">
+<li>A piece table and a gap buffer behind one contract with the rope: an editor&rsquo;s operations on the current document (insert, delete, the character at a position, a traversal of a range), with undo kept as a history beside it. The rope keeps its old versions at no cost; the piece table and the gap buffer record what undo needs, and the report says&nbsp;how.</li>
+<li>One test suite run against the three&nbsp;representations.</li>
+<li><em>Evidence</em>: the cost of typing in one place, typing in many places, and undoing, measured on a generated file of several megabytes, with the workload and the undo policy&nbsp;stated.</li>
+</ol>
+<p><strong>Directions.</strong> The lab&rsquo;s editor run on each representation; files of a hundred megabytes; a balanced rope, and when to rebalance; several cursors at once; the piece table in a language without a garbage&nbsp;collector.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation">VS Code blog, &ldquo;Text Buffer Reimplementation&rdquo;, 2018</a>; <a href="https://www.cs.unm.edu/~crowley/papers/sds.pdf">C. Crowley, &ldquo;Data Structures for Text Sequences&rdquo;, 1998</a>; H.-J. Boehm, R. Atkinson and M. Plass, &ldquo;Ropes: an alternative to strings&rdquo;, <em>Software: Practice and Experience</em>,&nbsp;1995.</p>
+</article>
+
+<article class="topic" id="regex-continuations">
+<h3><span class="tnum">5</span> Regular expressions with&nbsp;continuations</h3>
+<p class="tmeta">Part 1 &middot; Sessions 4 and 5, lab 5 (part&nbsp;C)</p>
+<p><strong>The question.</strong> Lab 5&rsquo;s matcher handles <code>?</code> and <code>*</code> with two continuations: <code>succ</code> for what follows a match, and <code>fail</code> for where to go back. How far does that design reach, and what does it cost against a matcher compiled to an automaton? The decision is control: backtracking as continuations, against a state&nbsp;machine.</p>
+<p><strong>The core.</strong> Two matchers for one small pattern&nbsp;language.</p>
+<ol class="steps">
+<li>Patterns as values of a datatype: literals, any character, concatenation, alternation, <code>*</code> and&nbsp;<code>+</code>.</li>
+<li>The continuation matcher of lab 5 extended to these patterns, answering whether the whole text&nbsp;matches.</li>
+<li>The same patterns compiled to a nondeterministic automaton (Thompson&rsquo;s construction) and simulated without&nbsp;backtracking.</li>
+<li><em>Evidence</em>: the two matchers agree on generated patterns and texts; on the pattern <code>a?</code><sup><em>n</em></sup><code>a</code><sup><em>n</em></sup> against the text <code>a</code><sup><em>n</em></sup>, the work of the backtracking matcher grows exponentially with <em>n</em> and that of the automaton polynomially,&nbsp;measured.</li>
+</ol>
+<p><strong>Directions.</strong> A parser for the usual syntax; character classes and anchors; all the matches in a text; capture groups in both designs; backreferences, which can describe languages that no finite automaton recognises; a deterministic automaton built lazily while&nbsp;matching.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://swtch.com/~rsc/regexp/regexp1.html">R. Cox, &ldquo;Regular Expression Matching Can Be Simple And Fast&rdquo;, 2007</a>; R. Harper, &ldquo;Proof-directed debugging&rdquo;, <em>Journal of Functional Programming</em>, 1999 (the matcher with&nbsp;continuations).</p>
+</article>
+
+<article class="topic" id="union-find-mazes">
+<h3><span class="tnum">6</span> Persistent union-find generates the&nbsp;mazes</h3>
+<p class="tmeta">Part 1 &middot; Session 2, lab&nbsp;2</p>
+<p><strong>The question.</strong> Union-find is the classic imperative structure: path compression rewrites the parent links along each search, so the usual implementation mutates even when it only answers a question. Can it be made persistent without losing its speed? The mazes that lab 2 solves can be generated by a union-find over the cells (Kruskal&rsquo;s algorithm). The decision is state: persistence where the efficient algorithm&nbsp;mutates.</p>
+<p><strong>The core.</strong> Two union-finds, one maze&nbsp;generator.</p>
+<ol class="steps">
+<li>The imperative union-find, with union by rank and path&nbsp;compression.</li>
+<li>A persistent union-find on a persistent map, behind the same&nbsp;signature.</li>
+<li>A maze generator by Kruskal&rsquo;s algorithm on either, whose mazes lab 2&rsquo;s solver&nbsp;solves.</li>
+<li><em>Evidence</em>: the cost of the two as the grid grows, and a query on an old version repeated after later unions, with the report&rsquo;s account of what path compression does to&nbsp;each.</li>
+</ol>
+<p><strong>Directions.</strong> The persistent union-find of Conchon and Filli&acirc;tre (2007), with the mutation hidden behind a persistent interface; a generator that backtracks to old versions, for example to obtain a long path; mazes on other grids; the generator run in&nbsp;parallel.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://algs4.cs.princeton.edu/15uf/">R. Sedgewick and K. Wayne, <em>Algorithms</em>, section 1.5, &ldquo;Union-Find&rdquo;</a>; <a href="https://weblog.jamisbuck.org/2011/1/3/maze-generation-kruskal-s-algorithm">J. Buck, &ldquo;Maze Generation: Kruskal&rsquo;s Algorithm&rdquo;</a>; S. Conchon and J.-C. Filli&acirc;tre, &ldquo;A persistent union-find data structure&rdquo;, ML Workshop,&nbsp;2007.</p>
+</article>
+
+<article class="topic" id="exact-cover">
+<h3><span class="tnum">7</span> Exact cover, three ways:&nbsp;backtracking</h3>
+<p class="tmeta">Part 1 &middot; Sessions 2, 4 and 5, lab 5 (part&nbsp;C)</p>
+<p><strong>The question.</strong> Sudoku and the tiling of a board by polyominoes are exact cover problems: choose rows of a 0&ndash;1 matrix so that every column is covered exactly once (the N-queens problem too, with columns that may stay uncovered). The search for a cover is backtracking: a choice is made, its consequences are applied, and at a dead end they are undone. How is the undo done best: by mutating the matrix and restoring it, by keeping the previous version, or by leaving it to the structure of the search? The decision is state and control: undo by mutation, by persistence, or by&nbsp;continuations.</p>
+<p><strong>The core.</strong> One problem, two solvers, the same&nbsp;solutions.</p>
+<ol class="steps">
+<li>Exact cover as a datatype, and Sudoku encoded in it: 729 rows (a value in a cell) and 324 columns (each cell filled, and each value once in each row, column and&nbsp;box).</li>
+<li>Knuth&rsquo;s Algorithm X on persistent sets: each choice gives a new version of the matrix, and backtracking returns to the previous version at no&nbsp;cost.</li>
+<li>Algorithm X with dancing links: a doubly linked matrix that a choice mutates by unlinking columns and rows, and that backtracking restores by relinking them in reverse&nbsp;order.</li>
+<li><em>Evidence</em>: both solvers find the same solutions on a set of puzzles, and the same number of solutions on a puzzle that has several; the time and memory of each are measured, and the report explains why relinking in reverse order restores the matrix&nbsp;exactly.</li>
+</ol>
+<p><strong>Directions.</strong> The solutions as a lazy sequence, so that a client takes the first or counts them all (session 5); the search written with success and failure continuations, as lab 5&rsquo;s matcher (session 4); the N-queens problem with columns that may stay uncovered; the choice of the column with the fewest rows, measured against the first column; a search split in parallel over the first&nbsp;choice.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://arxiv.org/abs/cs/0011047">D. E. Knuth, &ldquo;Dancing links&rdquo;, 2000</a>; <a href="https://norvig.com/sudoku.html">P. Norvig, &ldquo;Solving Every Sudoku&nbsp;Puzzle&rdquo;</a>.</p>
+</article>
+
+<article class="topic" id="scheduler-await">
+<h3><span class="tnum">8</span> A scheduler on a hand-made&nbsp;<code>await</code></h3>
+<p class="tmeta">Part 2 &middot; Session 6, lab&nbsp;6</p>
+<p><strong>The question.</strong> When a program waits without threads, what decides which continuation runs next, and what does the programmer owe? The quest of lab 6 builds a loop that runs queued continuations in the order they arrive. A user interface needs its clicks before its network replies, a server needs a request abandoned after a second, and a test needs a run that is the same every time. The decision is control and concurrency on one&nbsp;thread.</p>
+<p><strong>The core.</strong> Lab 6&rsquo;s loop, given priorities and a&nbsp;clock.</p>
+<ol class="steps">
+<li>The loop of lab 6&rsquo;s quest extended with priorities: a ready continuation of higher priority runs&nbsp;first.</li>
+<li>A virtual clock: timers fire in the order of their deadlines, so that a test of the loop gives the same result every&nbsp;time.</li>
+<li><code>timeout(p, ms)</code> on that clock: it settles with the value of <code>p</code>, or rejects when <code>ms</code> have passed&nbsp;first.</li>
+<li><em>Evidence</em>: three traces of the order of events, each explained from the loop&rsquo;s rules, one of them showing a priority that changes the&nbsp;order.</li>
+</ol>
+<p><strong>Directions.</strong> Cancellation that reaches a generator suspended at a <code>yield</code> and runs its <code>finally</code>; structured concurrency, a scope that cancels its children when one fails; the same traces on Node, in the browser and on Python&rsquo;s <code>asyncio</code>, each explained from that runtime&rsquo;s rules; a lock held across an <code>await</code>; the loop in OCaml 5 with effect handlers; the cost of a thousand&nbsp;waits.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/">J. Archibald, &ldquo;Tasks, microtasks, queues and schedules&rdquo;</a>; <a href="https://vorpus.org/blog/notes-on-structured-concurrency-or-go-statement-considered-harmful/">N. J. Smith, &ldquo;Notes on structured concurrency, or: Go statement considered&nbsp;harmful&rdquo;</a>.</p>
+</article>
+
+<article class="topic" id="lock-free-queue">
+<h3><span class="tnum">9</span> Lock-free: one queue, three&nbsp;disciplines</h3>
+<p class="tmeta">Part 2 &middot; Session 7, lab&nbsp;7</p>
+<p><strong>The question.</strong> What does an operation on a shared structure need in order to be atomic without a lock, what does the language guarantee about it (atomic operations, a memory model, garbage collection), and what is left to the programmer? A shared queue sits inside every scheduler, logger and message broker; Java&rsquo;s <code>ConcurrentLinkedQueue</code> is based on the lock-free queue of Michael and Scott&nbsp;(1996).</p>
+<p><strong>Before starting.</strong> Session 7 introduces compare-and-swap; the algorithm and the terms linearisable, linearisation point and helping are in the paper of Michael and Scott and in chapter 10 of Herlihy and Shavit, both&nbsp;below.</p>
+<p><strong>The core.</strong> One queue under a lock and without one, checked and measured; the third discipline, two locks, is a&nbsp;direction.</p>
+<ol class="steps">
+<li>Two queues behind one signature, in Java or Go: under one lock (lab 7&rsquo;s bounded buffer is its first version), and without a lock, head and tail advanced by compare-and-swap with the helping&nbsp;step.</li>
+<li>A checker that decides whether a history of at most eight operations is linearisable, by trying every order that the instants of call and return&nbsp;allow.</li>
+<li>A harness that measures the throughput of the two queues from one to sixteen&nbsp;threads.</li>
+<li><em>Evidence</em>: the linearisation point of each operation named in the code, and a version with one check removed whose history the checker&nbsp;rejects.</li>
+</ol>
+<p><strong>Directions.</strong> Two locks and a dummy node, the third discipline; the queue without a garbage collector, in Rust or C, with the ABA problem and the freeing of nodes; explicit memory orderings; a bounded queue; the broken version searched by a model&nbsp;checker.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://preshing.com/20120612/an-introduction-to-lock-free-programming/">J. Preshing, &ldquo;An Introduction to Lock-Free Programming&rdquo;</a>; M. Michael and M. Scott, &ldquo;Simple, fast, and practical non-blocking and blocking concurrent queue algorithms&rdquo;, PODC 1996; M. Herlihy and N. Shavit, <em>The Art of Multiprocessor Programming</em>, chapter 10, on&nbsp;queues.</p>
+</article>
+
+<article class="topic" id="race-three-languages">
+<h3><span class="tnum">10</span> The race, in three&nbsp;languages</h3>
+<p class="tmeta">Part 2 &middot; Session 7, lab&nbsp;7</p>
+<p><strong>The question.</strong> The same shared bank account under two threads in Java, Go and Rust. Java and Go compile the unsynchronised program; Go&rsquo;s race detector reports the race when a run executes it; safe Rust rejects the unsynchronised shared mutation at compile time. What does each language guarantee about data races, and what does each repair cost? The decision is state and communication: shared memory, mutual exclusion,&nbsp;ownership.</p>
+<p><strong>Before starting.</strong> The course writes neither Go nor Rust before this point: chapter 16 of the Rust book and A Tour of Go cover what the core&nbsp;needs.</p>
+<p><strong>The core.</strong> One race, three languages, two&nbsp;repairs.</p>
+<ol class="steps">
+<li>The deposit on two threads in Java and Go, with a barrier that forces the interleaving that loses a deposit, so that the loss is reproducible; a stress run as well, counting the losses over many&nbsp;runs.</li>
+<li>The same program in Rust, with the compile error explained by the rule of ownership it breaks, and the repair with&nbsp;<code>Mutex</code>.</li>
+<li>Two repairs from session 7, a lock and confinement, in Java and Go, each&nbsp;measured.</li>
+<li><em>Evidence</em>: Go&rsquo;s race detector run on the broken version, with what it reports, and the report&rsquo;s distinction between a data race and a race condition (a check followed by an act, which a lock around each access does not&nbsp;prevent).</li>
+</ol>
+<p><strong>Directions.</strong> A counter on compare-and-set, and when it beats a lock; the account as an actor, and the race that remains; a deadlock between two accounts produced on purpose, and the lock order that removes it; Rust&rsquo;s <code>Mutex&lt;T&gt;</code> imitated in the type system of another&nbsp;language.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://doc.rust-lang.org/book/ch16-00-concurrency.html"><em>The Rust Programming Language</em>, chapter 16, &ldquo;Fearless Concurrency&rdquo;</a>; <a href="https://go.dev/blog/race-detector">The Go Blog, &ldquo;Introducing the Go Race Detector&rdquo;</a>; B. Goetz and others, <em>Java Concurrency in Practice</em>, chapter 2, on thread&nbsp;safety.</p>
+</article>
+
+<article class="topic" id="channels">
+<h3><span class="tnum">11</span> Channels on shared&nbsp;memory</h3>
+<p class="tmeta">Part 2 &middot; Sessions 7 and 8, lab&nbsp;7</p>
+<p><strong>The question.</strong> Go&rsquo;s channels are values of the language, implemented by its runtime from a lock, a ring buffer and queues of waiting senders and receivers. What does it take to build them in a language that has only threads, locks and condition variables, and where does the result differ from Go&rsquo;s? The decision is communication: message passing as a discipline over shared&nbsp;memory.</p>
+<p><strong>Before starting.</strong> Session 8 introduces channels on 28 October; A Tour of Go is enough to start before&nbsp;it.</p>
+<p><strong>The core.</strong> Go&rsquo;s channels, rebuilt in Java or OCaml&nbsp;5.</p>
+<ol class="steps">
+<li>A buffered channel of capacity <em>n</em>, starting from lab 7&rsquo;s bounded&nbsp;buffer.</li>
+<li>The unbuffered channel, where sender and receiver wait for each other (a&nbsp;rendezvous).</li>
+<li><code>close</code>, with Go&rsquo;s rules: a receive on a closed channel returns the values still buffered, then a zero value at once; a send on it is an error; closing it twice is an&nbsp;error.</li>
+<li>A non-blocking <code>select</code> over several channels: the first ready case, or else the default&nbsp;branch.</li>
+<li><em>Evidence</em>: tests of a drain after <code>close</code>, a send after <code>close</code>, a blocked rendezvous, and a <code>select</code> with no, one and several ready cases, compared with small Go programs on values and blocking only, since Go chooses among ready cases at&nbsp;random.</li>
+</ol>
+<p><strong>Directions.</strong> A blocking <code>select</code>, which must wait on several channels at once without missing a wake-up; a fair <code>select</code>; the happens-before edges that Go&rsquo;s memory model gives channels; the deadlock that Go reports as &ldquo;all goroutines are asleep&rdquo;, detected; the same channels on one OCaml domain with effect&nbsp;handlers.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://go.dev/tour/concurrency/1"><em>A Tour of Go</em>, &ldquo;Concurrency&rdquo;</a>; <a href="https://go.dev/ref/mem">&ldquo;The Go Memory Model&rdquo;</a>; Kavya Joshi, &ldquo;Understanding Channels&rdquo;, GopherCon 2017 (a talk on&nbsp;<code>runtime/chan.go</code>).</p>
+</article>
+
+<article class="topic" id="actors">
+<h3><span class="tnum">12</span> Actors on threads: a mailbox&nbsp;each</h3>
+<p class="tmeta">Part 2 &middot; Sessions 7 and&nbsp;8</p>
+<p><strong>The question.</strong> An Erlang actor has one mailbox, selective receive, and no shared state. What does it take to build that on threads, and which race condition remains once every variable is private to an actor? No data race is possible, yet an invariant can still break between two&nbsp;messages.</p>
+<p><strong>Before starting.</strong> Session 8 introduces actors on 28 October; the chapter of &ldquo;Learn You Some Erlang&rdquo; below is enough to start before&nbsp;it.</p>
+<p><strong>The core.</strong> An actor runtime on threads, in Java or OCaml 5, and the race it&nbsp;leaves.</p>
+<ol class="steps">
+<li>An actor as a thread with a mailbox, with <code>spawn</code>, <code>send</code> and&nbsp;<code>receive</code>.</li>
+<li>Selective receive: <code>receive</code> takes the first message that matches a pattern and leaves the others in the mailbox, in&nbsp;order.</li>
+<li>The bank account as an actor, and a transfer written as two messages (read the balance, then write it), which loses an update under a test that orders the&nbsp;messages.</li>
+<li><em>Evidence</em>: the same test with the transfer as one message, handled in one turn of the actor, and the report&rsquo;s statement of the invariant (the total amount of money) that the repair&nbsp;keeps.</li>
+</ol>
+<p><strong>Directions.</strong> The same program in Erlang, Elixir or Akka, side by side; a link between two actors, and what the failure of one does to the other (session 9); bounded mailboxes and backpressure; the dining philosophers as five actors and a&nbsp;waiter.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://learnyousomeerlang.com/the-hitchhikers-guide-to-concurrency">F. H&eacute;bert, &ldquo;Learn You Some Erlang for Great Good!&rdquo;, the chapter &ldquo;The Hitchhiker&rsquo;s Guide to Concurrency&rdquo;</a>; J. Armstrong, &ldquo;Making reliable distributed systems in the presence of software errors&rdquo;, PhD thesis,&nbsp;2003.</p>
+</article>
+
+<article class="topic" id="every-interleaving">
+<h3><span class="tnum">13</span> A scheduler that tries every&nbsp;interleaving</h3>
+<p class="tmeta">Part 2 &middot; Sessions 6 and 8, lab&nbsp;6</p>
+<p><strong>The question.</strong> The output of a concurrent program depends on the schedule. Can every schedule of a small program be run, up to a stated number of steps, so that a bug seen once in a thousand runs is found every time and printed with the schedule that causes it? The decision is control: non-determinism made into a schedule that a program chooses, enumerates and&nbsp;replays.</p>
+<p><strong>The core.</strong> A scheduler that explores, on one&nbsp;thread.</p>
+<ol class="steps">
+<li>Tasks as generators on one thread, on lab 6&rsquo;s loop, switching only at a <code>yield</code>: the yields are the scheduling points. The tasks share variables, a read and a write being separate steps, and a lock is a primitive that a task waits for until it is&nbsp;released.</li>
+<li>A scheduler whose choice of the next task is recorded, so that a run can be&nbsp;replayed.</li>
+<li>A depth-first search over these choices that enumerates every schedule up to a bound on the number of&nbsp;steps.</li>
+<li><em>Evidence</em>: two small programs with a known bug each, a lost update and a deadlock, each bug found, its schedule printed and replayed, the number of schedules explored given, and the report&rsquo;s statement of what the bound and the scheduling points leave&nbsp;out.</li>
+</ol>
+<p><strong>Directions.</strong> Channels on the loop, and a program that waits for a message that never comes; partial-order reduction, with the number of schedules before and after; random schedules from a seed, replayable; the same programs checked with a model checker (TLA+),&nbsp;compared.</p>
+<p class="tsrc"><strong>To start.</strong> M. Musuvathi and others, &ldquo;Finding and reproducing Heisenbugs in concurrent programs&rdquo;, OSDI 2008 (the CHESS tool); W. Wilson, &ldquo;Testing Distributed Systems w/ Deterministic Simulation&rdquo;, Strange Loop 2014 (a talk on FoundationDB); <a href="https://learntla.com/">H. Wayne, <em>Learn&nbsp;TLA+</em></a>.</p>
+</article>
+
+<article class="topic" id="local-first">
+<h3><span class="tnum">14</span> Two tabs, one document: a local-first&nbsp;editor</h3>
+<p class="tmeta">Part 2 &middot; Sessions 8 and 9, lab 5; the core needs session 8 only, and session 9, on failure and retries, feeds the&nbsp;directions</p>
+<p><strong>The question.</strong> Two copies of a document are edited at once, offline, and later merged, with no server deciding which edit wins. Each copy sends its whole state, and the receiver merges it into its own. What must the merge satisfy so that the two copies agree once every update has arrived, whatever the order and however often each arrives? The decision is state and communication: replicated data, and a merge that is commutative (the order of messages does not matter), associative (their grouping does not matter) and idempotent (a message received twice changes&nbsp;nothing).</p>
+<p><strong>The core.</strong> Two replicas, two replicated&nbsp;types.</p>
+<ol class="steps">
+<li>Two replicas, each a running process, and between them a relay of about thirty lines, written by the group first, that delays, duplicates and reorders messages and delivers every one in the end; for one trace of the evidence, it can be set to drop a message for good. The language is the group&rsquo;s choice: two instances of lab 5&rsquo;s editor server in OCaml, each shown in its own browser tab, or two browser tabs in JavaScript&nbsp;alone.</li>
+<li>A <em>counter</em>: each replica counts its own increments under its own identifier; the merge takes the maximum for each replica, and the value is the&nbsp;sum.</li>
+<li>A <em>set with removal</em> (an observed-remove set): each addition carries a tag unique across the replicas, and a removal records the tags it has seen; the merge is the union of the additions and the union of the removals, and an element is present when one of its tags is added and not removed. An element added on one replica while the other removes it thus&nbsp;survives.</li>
+<li><em>Evidence</em>: property-based tests of the three laws for each merge; a trace in which a naive set loses an addition that the observed-remove set keeps; a trace in which one update is lost for ever, and the report&rsquo;s account of why the replicas then&nbsp;disagree.</li>
+</ol>
+<p><strong>Directions.</strong> A replicated sequence of characters behind the signature of lab 5&rsquo;s rope (each character with a unique identifier and the identifier of the character it follows), so that the lab&rsquo;s editor merges two people&rsquo;s typing; retries that resend lost updates (session 9); a central server with operational transformation, compared on what each needs from the network; the size of the metadata per character after an editing session,&nbsp;measured.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://jakelazaroff.com/words/an-interactive-intro-to-crdts/">J. Lazaroff, &ldquo;An Interactive Intro to CRDTs&rdquo;</a>; M. Shapiro, N. Pregui&ccedil;a, C. Baquero and M. Zawirski, &ldquo;Conflict-free replicated data types&rdquo;, SSS 2011; <a href="https://www.inkandswitch.com/essay/local-first/">M. Kleppmann and others, &ldquo;Local-first software&rdquo;,&nbsp;2019</a>.</p>
+</article>
+
+<article class="topic" id="spreadsheet">
+<h3><span class="tnum">15</span> A spreadsheet&nbsp;engine</h3>
+<p class="tmeta">Part 3 &middot; Sessions 3 and&nbsp;13</p>
+<p><strong>The question.</strong> A spreadsheet stores formulas whose references to other cells determine the order of evaluation; the user never states that order. When one cell changes, what does the engine recompute, how does it find a cycle, and what does it report? The decision is declarative programming: dataflow, the formula as a datatype, minimal&nbsp;recomputation.</p>
+<p><strong>The core.</strong> A small engine, with a text&nbsp;interface.</p>
+<ol class="steps">
+<li>Formulas as an algebraic datatype (numbers, references, <code>+</code>, <code>*</code>, and <code>SUM</code> over a range), and a parser for that small&nbsp;grammar.</li>
+<li>The dependency graph, and a cycle reported as an error value in each cell it&nbsp;involves.</li>
+<li>Recomputation of only the cells that depend on a change, in topological&nbsp;order.</li>
+<li><em>Evidence</em>: on generated sheets and random edits, one of which creates a cycle, the incremental engine agrees with an engine that recomputes every&nbsp;cell.</li>
+</ol>
+<p><strong>Directions.</strong> A grid in the browser; lazy against eager recomputation, measured on ten thousand cells; undo with persistent sheets; a type checker for formulas that tells numbers, text and dates apart; independent cells recomputed in parallel; <code>LET</code> and user-defined functions, which make the formulas a functional&nbsp;language.</p>
+<p class="tsrc"><strong>To start.</strong> A. Mokhov, N. Mitchell and S. Peyton Jones, &ldquo;Build systems &agrave; la carte&rdquo;, ICFP 2018 (spreadsheets as build systems); <a href="https://blog.janestreet.com/introducing-incremental/">Jane Street, &ldquo;Introducing&nbsp;Incremental&rdquo;</a>.</p>
+</article>
+
+<article class="topic" id="type-checker">
+<h3><span class="tnum">16</span> A type checker for lab 4&rsquo;s&nbsp;interpreter</h3>
+<p class="tmeta">Part 3 &middot; Sessions 4, 10 and 11, lab 4; the labs of sessions 10 and 11, on paper, work the typing rules and unification by&nbsp;hand</p>
+<p><strong>The question.</strong> Which terms does a checker reject before evaluation, which well-behaved terms does it still reject, and which further programs does let-polymorphism accept? Lab 4 runs any term. Once integers and booleans join the language, a term such as adding a function to a number gets stuck: the evaluator has no rule for it. The decision is types: what is checked, and&nbsp;when.</p>
+<p><strong>Before starting.</strong> The typing rules arrive in session 10 (11 November); the extended evaluator can be written&nbsp;before.</p>
+<p><strong>The core.</strong> Lab 4&rsquo;s small ML, given&nbsp;types.</p>
+<ol class="steps">
+<li>Lab 4&rsquo;s language extended with integers, booleans, <code>if</code> and <code>let</code>, as in the lab&rsquo;s extension &ldquo;a small&nbsp;ML&rdquo;.</li>
+<li>Type inference by unification with let-polymorphism (Hindley&ndash;Milner, Algorithm W), the rules and the algorithm being those worked on paper in the labs of sessions 10 and 11; the unification itself may be taken from a reading, the report saying&nbsp;which.</li>
+<li>Error messages that name the expression at&nbsp;fault.</li>
+<li><em>Evidence</em>: one inferred polymorphic type explained step by step, and generated well-typed terms that the evaluator runs without getting&nbsp;stuck.</li>
+</ol>
+<p><strong>Directions.</strong> Pairs and records; variants and pattern matching, with a check that every case is covered; references, and the value restriction that keeps them sound; self-application, which runs and is still rejected, explained; a simply typed checker as a baseline; a second language checked by the same engine, such as the formulas of the spreadsheet&nbsp;topic.</p>
+<p class="tsrc"><strong>To start.</strong> L. Cardelli, &ldquo;Basic polymorphic typechecking&rdquo;, <em>Science of Computer Programming</em>, 1987; B. C. Pierce, <em>Types and Programming Languages</em> (2002), chapters 9 and&nbsp;22.</p>
+</article>
+
+<article class="topic" id="bdd">
+<h3><span class="tnum">17</span> Binary decision diagrams: a canonical form behind a&nbsp;signature</h3>
+<p class="tmeta">Part 3 &middot; Sessions 2, 5 and&nbsp;12</p>
+<p><strong>The question.</strong> A boolean function has many decision diagrams but only one that is reduced and ordered: the variables tested in a fixed order, no node with two equal children, and no two equal nodes. When every node is built through one constructor that returns the existing node whenever an equal one exists (hash-consing), two diagrams of the same function are the same node in memory, and the equality of two functions is one pointer comparison. What must an abstract type hide so that no client can build a diagram that breaks this, and what does the client gain from it? The decision is data abstraction: an invariant kept by a&nbsp;signature.</p>
+<p><strong>Before starting.</strong> Session 12 introduces data abstraction on 25 November; the lecture notes of Andersen below explain the diagrams from the&nbsp;beginning.</p>
+<p><strong>The core.</strong> A small library of diagrams behind an abstract&nbsp;type.</p>
+<ol class="steps">
+<li>An abstract type of diagrams whose only constructor goes through a table of unique nodes, so that equal nodes are shared and no node has two equal&nbsp;children.</li>
+<li>Negation, conjunction and disjunction by Bryant&rsquo;s <code>apply</code>, with a table of the results already&nbsp;computed.</li>
+<li>The number of assignments of the variables that satisfy a&nbsp;diagram.</li>
+<li><em>Evidence</em>: two circuits for the same function, such as two adders built differently, shown equal by one pointer comparison; the size of one diagram under two orders of the variables, measured; and the report&rsquo;s account of what the type prevents a client from&nbsp;doing.</li>
+</ol>
+<p><strong>Directions.</strong> The N-queens problem as one diagram, and its solutions counted; the reordering of variables; zero-suppressed diagrams, for sets of combinations; a table of unique nodes whose unused nodes the garbage collector can reclaim (weak references); the same library in a language without abstract types, and the invariant broken by a client on&nbsp;purpose.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="https://www.cmi.ac.in/~madhavan/courses/verification-2011/andersen-bdd.pdf">H. R. Andersen, &ldquo;An Introduction to Binary Decision Diagrams&rdquo;, lecture notes</a>; R. E. Bryant, &ldquo;Graph-based algorithms for Boolean function manipulation&rdquo;, <em>IEEE Transactions on Computers</em>, 1986; J.-C. Filli&acirc;tre and S. Conchon, &ldquo;Type-safe modular hash-consing&rdquo;, ML Workshop&nbsp;2006.</p>
+</article>
+
+<article class="topic" id="datalog">
+<h3><span class="tnum">18</span> A Datalog&nbsp;engine</h3>
+<p class="tmeta">Part 3 &middot; Sessions 10 and 13, lab&nbsp;2</p>
+<p><strong>The question.</strong> A Datalog program states facts and rules; an engine chooses how to evaluate them to answer a query. What does an engine need, how does it know it has finished, and what does it cost against a search written by hand? The decision is declarative programming: rules as data, matching, and evaluation to a fixed&nbsp;point.</p>
+<p><strong>The core.</strong> Positive Datalog, evaluated&nbsp;bottom-up.</p>
+<ol class="steps">
+<li>Facts and rules as a datatype: positive rules without function symbols, each variable of a rule&rsquo;s head appearing in its&nbsp;body.</li>
+<li>The matching of a rule&rsquo;s body against the known facts, binding its&nbsp;variables.</li>
+<li>Naive bottom-up evaluation: every rule applied to all the facts, again and again, until no new fact appears (the fixed&nbsp;point).</li>
+<li><em>Evidence</em>: an ancestor query on a family tree traced through the successive sets of facts to the fixed point, and lab 2&rsquo;s maze written as a <code>path</code> relation, its answers compared with the lab&rsquo;s&nbsp;solver.</li>
+</ol>
+<p><strong>Directions.</strong> Semi-naive evaluation, which joins only the new facts, and its saving measured; a parser for the usual syntax; stratified negation; top-down evaluation with memoisation, compared; indexes on the relations; the same queries in SQL with recursive common table&nbsp;expressions.</p>
+<p class="tsrc"><strong>To start.</strong> <a href="http://webdam.inria.fr/Alice/">S. Abiteboul, R. Hull and V. Vianu, <em>Foundations of Databases</em>, chapters 12 and 13 (free online)</a>; S. Ceri, G. Gottlob and L. Tanca, &ldquo;What you always wanted to know about Datalog (and never dared to ask)&rdquo;, <em>IEEE Transactions on Knowledge and Data Engineering</em>,&nbsp;1989.</p>
+</article>
+</div>
+
+<script>
+(function(){
+  var tb=document.querySelector('#mp-table tbody'), list=document.getElementById('mp-list');
+  if(!tb||!list) return;
+  var state={key:null,dir:1};
+  function sort(key){
+    state.dir=(state.key===key)?-state.dir:1; state.key=key;
+    var rows=[].slice.call(tb.rows);
+    rows.sort(function(a,b){
+      var x=a.dataset[key], y=b.dataset[key];
+      var c=(key==='part'||key==='session'||key==='order')?(+x)-(+y):x.localeCompare(y);
+      return c*state.dir || (+a.dataset.order)-(+b.dataset.order);
+    });
+    rows.forEach(function(r){
+      tb.appendChild(r);
+      var art=document.getElementById(r.dataset.id); if(art) list.appendChild(art);
+    });
+    document.querySelectorAll('#mp-table th[aria-sort]').forEach(function(th){
+      var k=th.querySelector('button').dataset.sort;
+      th.setAttribute('aria-sort',k===key?(state.dir>0?'ascending':'descending'):'none');
+    });
+    document.querySelectorAll('.mp-orderby button').forEach(function(bt){
+      bt.classList.toggle('on',bt.dataset.sort===key);
+    });
+  }
+  document.querySelectorAll('button[data-sort]').forEach(function(bt){
+    bt.addEventListener('click',function(){sort(bt.dataset.sort);});
+  });
+})();
+</script>
+
+</section>
+  </div>
+  <footer class="site">
+    <div class="colophon">
+      <span class="aaulogo"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aalborg University" focusable="false"><path d="M56.913 45.79c-1.532-.698-3.072-.989-5.688-2.844-6.654-4.72-9.649-10.186-5.388-21.751 2.459-6.671 3.464-11.579 3.319-18.053-.082-.064-.406-.277-.483-.341-1.326 8.045-3.543 12.011-8.535 20.115-11.296 18.345-.675 29.574 4.344 33.605 4.99-2.878 9.253-7.061 12.431-12.222a29.9 29.9 0 0 1-.0-.0Z"/><path d="M44.807 3.108a44 44 0 0 0-.586-.312c-2.86 7.061-6.717 10.696-13.34 16.028-14.096 11.348-12.242 24.428-6.037 34.673a29.9 29.9 0 0 0 9.219.219c-5.916-9.028-8.436-19.409 1.243-31.63 5.75-7.262 8.16-11.708 9.501-18.978Z"/><path d="M42.83 2.093A30 30 0 0 0 30.001 0C13.432 0 0 13.432 0 30c0 7.61 2.834 14.558 7.503 19.845.363-14.55 4.184-21.62 17.203-28.462 8.876-4.665 14.2-8.256 18.124-19.29Z"/></svg></span>
+      <span class="who"><b>Aalborg University Copenhagen</b>A.&nbsp;C. Meyers V&aelig;nge 15, 2450 Copenhagen SV<br>Room 2.2.120</span>
+    </div>
+    <p class="meta">Programming Paradigms (PP), SW7, autumn 2026. Course material: <a href="https://github.com/leon-gondelman/pp26">GitHub</a>.</p>
+  </footer>
+</main>
+<div class="scrim" aria-hidden="true"></div>
+<script>/* On a phone the rail is a drawer: the square with three lines opens it under the
+   top bar, and the same square, a tap beside it, a link or Escape closes it. */
+(function(){var r=document.documentElement,m=document.querySelector(".topbar .menu"),
+  sc=document.querySelector(".scrim"),rl=document.getElementById("rail");if(!m)return;
+function set(o){r.classList.toggle("navopen",o);m.setAttribute("aria-expanded",o?"true":"false");}
+m.addEventListener("click",function(){set(!r.classList.contains("navopen"));});
+sc.addEventListener("click",function(){set(false);});
+rl.addEventListener("click",function(e){if(e.target.closest("a"))set(false);});
+addEventListener("keydown",function(e){if(e.key==="Escape")set(false);});
+addEventListener("resize",function(){if(innerWidth>980)set(false);});})();</script>
+<script>/* Auto follows the phone or laptop; Light and Dark override it. */
+(function(){var r=document.documentElement,b=document.querySelector(".theme");
+function show(){var t=r.dataset.theme||"auto";b.dataset.mode=t;}
+b.addEventListener("click",function(){
+  var next={auto:"light",light:"dark",dark:"auto"}[r.dataset.theme||"auto"];
+  if(next==="auto"){delete r.dataset.theme;try{localStorage.removeItem("pp-theme")}catch(e){}}
+  else{r.dataset.theme=next;try{localStorage.setItem("pp-theme",next)}catch(e){}}
+  show();});
+show();})();</script>
+<script>// Opens a link marked data-applet in a box over the page instead of navigating to it:
+//   <a href="test_yourself.html" data-applet>Test yourself</a>
+// The page is loaded in an iframe with ?embed; it closes the box by posting {applet: "close"}.
+// Escape and a click on the backdrop close it too. Without JavaScript the link still opens the page.
+(() => {
+  const css = `
+  dialog.applet{padding:0;border:0;background:transparent;width:min(980px,100vw);height:min(690px,100vh);max-width:100vw;max-height:100vh;overflow:visible}
+  dialog.applet::backdrop{background:rgba(15,17,21,.45);backdrop-filter:blur(2px)}
+  dialog.applet iframe{width:100%;height:100%;border:0;border-radius:16px;background:#fff;box-shadow:0 20px 60px rgba(15,17,21,.3)}
+  dialog.applet[open]{animation:applet-in .25s ease-out}
+  @keyframes applet-in{from{transform:translateY(12px);opacity:0}}
+  @media (max-width:760px){dialog.applet{width:100vw;height:100vh}dialog.applet iframe{border-radius:0}}`;
+  const style = document.createElement("style"); style.textContent = css; document.head.appendChild(style);
+
+  let dlg = null;
+  function close() { if (dlg) { dlg.close(); dlg.remove(); dlg = null; } }
+  function open(href) {
+    close();
+    dlg = document.createElement("dialog"); dlg.className = "applet";
+    const f = document.createElement("iframe");
+    f.src = href + (href.includes("?") ? "&" : "?") + "embed";
+    f.title = "Applet";
+    dlg.appendChild(f); document.body.appendChild(dlg);
+    dlg.addEventListener("click", e => { if (e.target === dlg) close(); });
+    dlg.addEventListener("cancel", e => { e.preventDefault(); close(); });
+    dlg.showModal(); f.focus();
+  }
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a[data-applet]");
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault(); open(a.getAttribute("href"));
+  });
+  window.addEventListener("message", e => { if (e.data && e.data.applet === "close") close(); });
+})();
+</script>
+<script>/* The opening's wave. Two thin arcs of the painting, the outer one with its dark
+   dot and its gold dot, the inner one with its small dot and its blue dot, come
+   alive: they lift off the picture and unspiral like a spring, or a dried flower
+   opening in water, while they drift down above the gallery; then each line breaks
+   from its leading end, and every piece that leaves it is a drop that flows down
+   onto one note of the melody, the outer arc onto the upper voice, the inner arc
+   onto the lower one. There is one object throughout: the line is only what has
+   not broken yet. The dots ride on their arcs and fall as the drops nearest them.
+   ppWave(scale, offsetX, offsetY) is called by the opening with the painting's
+   cover fit (picture pixel p is at offset + scale * p on the screen) and returns
+   how long it lasts, in milliseconds. */
+(function () {
+  // the two arcs, in pixels of the 1400 by 1050 painting, traced on a grid at three times the size
+  var OUTER = [[520.7,307.7],[525,300],[536.7,276.7],[553.3,256.7],[573.3,240],[593.3,228.3],[612.7,221.7],[633.3,215],
+               [656.7,212.3],[680,212.7],[700,214.3],[726.7,221.7],[746.7,231.7],[766.7,243.3],[780,251.7]];
+  var INNER = [[570.7,355],[576.7,341.7],[583.3,328.3],[592.3,314.7],[600,303.3],[613.3,288.3],[633.3,270],[653.3,258.3],
+               [673.3,251.7],[700,249.3],[726.7,250.7],[746.7,255],[766.7,261.7],[780,268.3]];
+  // their dots: where they sit on the picture, their radius, their colour
+  var OUTER_DOTS = [{ at: [520.7,307.7], r: 9, c: "#3b3532" }, { at: [612.7,221.7], r: 5.3, c: "#c69240" }];
+  var INNER_DOTS = [{ at: [576.7,341.7], r: 2.7, c: "#48433f" }, { at: [592.3,314.7], r: 4, c: "#5f7489" }];
+  var NS = "http://www.w3.org/2000/svg";
+
+  function resample(p, n) {
+    var d = [0];
+    for (var i = 1; i < p.length; i++) d.push(d[i - 1] + Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]));
+    var L = d[d.length - 1], out = [], j = 0;
+    for (var k = 0; k < n; k++) {
+      var s = L * k / (n - 1);
+      while (j < p.length - 2 && d[j + 1] < s) j++;
+      var t = (s - d[j]) / ((d[j + 1] - d[j]) || 1);
+      out.push([p[j][0] + (p[j + 1][0] - p[j][0]) * t, p[j][1] + (p[j + 1][1] - p[j][1]) * t]);
+    }
+    return { pts: out, len: L };
+  }
+  // the direction of each segment of a polyline, unwrapped so that it varies continuously
+  function polar(pts) {
+    var a = [], prev = null;
+    for (var i = 1; i < pts.length; i++) {
+      var t = Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0]);
+      if (prev !== null) { while (t - prev > Math.PI) t -= 2 * Math.PI; while (t - prev < -Math.PI) t += 2 * Math.PI; }
+      a.push(t); prev = t;
+    }
+    return a;
+  }
+  function build(start, step, angles) {
+    var out = [start.slice()], x = start[0], y = start[1];
+    for (var i = 0; i < angles.length; i++) { x += step * Math.cos(angles[i]); y += step * Math.sin(angles[i]); out.push([x, y]); }
+    return out;
+  }
+  function path(pts, a, b) {
+    if (b - a < 1) return "";
+    var s = "M" + pts[a][0].toFixed(1) + "," + pts[a][1].toFixed(1);
+    for (var i = a + 1; i <= b; i++) s += "L" + pts[i][0].toFixed(1) + "," + pts[i][1].toFixed(1);
+    return s;
+  }
+  function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function spring(t) { var c1 = 1.25, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); }
+  function clamp(t) { return Math.max(0, Math.min(1, t)); }
+  function hex(c) { return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
+  function mix(a, b, t) { var A = hex(a), B = hex(b); return "rgb(" + A.map(function (x, i) { return Math.round(x + (B[i] - x) * t); }).join(",") + ")"; }
+
+  window.ppWave = function (cs, ox, oy) {
+    var sheet = document.querySelector(".gallery .gslide:first-child svg");
+    if (!sheet) return 0;
+    var frame = sheet.closest(".gimg").getBoundingClientRect();
+    if (frame.bottom < 0 || frame.top > innerHeight) return 0;   // the gallery is not on screen: no wave
+    var notes = [].slice.call(sheet.querySelectorAll("rect[rx]"));
+    function voice(c) {
+      return notes.filter(function (n) { return n.getAttribute("fill") === c; })
+                  .sort(function (a, b) { return a.getBoundingClientRect().left - b.getBoundingClientRect().left; });
+    }
+    var V1 = voice("#1f4e8c"), V2 = voice("#a2540a");
+    if (!V1.length) return 0;
+    notes.forEach(function (n) { n.style.opacity = 0; });
+
+    // the timeline: lift, unspiral while drifting (UNF), break from the leading end (from TB, over SPREAD), flow down (FLY)
+    var N = 160, LIFT = 200, UNF = 1350, TB = 180, SPREAD = 900, FLY = 640, END = TB + SPREAD + FLY + 80;
+    var ov = document.createElementNS(NS, "svg");
+    ov.setAttribute("class", "waves");
+    ov.setAttribute("width", innerWidth); ov.setAttribute("height", innerHeight);
+    ov.style.cssText = "position:fixed;left:0;top:0;z-index:52;pointer-events:none;overflow:visible";
+    document.body.appendChild(ov);
+
+    function screen(p) { return [ox + p[0] * cs, oy + p[1] * cs]; }
+    var x0 = frame.left - frame.width * .5, x1 = frame.right - frame.width * .04;
+    // where each arc has opened to when it breaks: a long gentle arch above the frame
+    var strokes = [
+      { src: OUTER, dots: OUTER_DOTS, color: "#5a4c42", w: 1.35 * cs, notes: V1, land: "#1f4e8c",
+        start: [x0, frame.top - 44], span: x1 - x0, arch: .17, delay: 0 },
+      { src: INNER, dots: INNER_DOTS, color: "#7f8186", w: 1.1 * cs, notes: V2, land: "#a2540a",
+        start: [x0 + 50, frame.top - 16], span: x1 - x0 - 70, arch: .13, delay: 90 }
+    ];
+    strokes.forEach(function (s) {
+      var r = resample(s.src.map(screen), N);
+      s.from = r.pts;
+      s.ang = polar(s.from);
+      s.step0 = r.len / (N - 1); s.step1 = s.span / (N - 1);
+      var mean = s.ang.reduce(function (a, b) { return a + b; }, 0) / s.ang.length;
+      s.goal = s.ang.map(function (_, i) {
+        var g = -s.arch + 2 * s.arch * i / (s.ang.length - 1);
+        return g + 2 * Math.PI * Math.round((mean - g) / (2 * Math.PI));   // unwind the short way
+      });
+      s.mid = Math.floor(N / 2);
+      s.a0 = s.from[s.mid];
+      s.a1 = build(s.start, s.step1, s.goal)[s.mid];
+      s.line = document.createElementNS(NS, "path");    // the part not yet broken
+      s.bead = document.createElementNS(NS, "path");    // the short stretch at the front, breaking
+      [s.line, s.bead].forEach(function (el) {
+        el.setAttribute("fill", "none"); el.setAttribute("stroke", s.color); el.setAttribute("stroke-width", s.w);
+        el.setAttribute("stroke-linecap", "round"); el.setAttribute("stroke-linejoin", "round");
+        ov.appendChild(el);
+      });
+      s.bead.setAttribute("stroke-dasharray", (1.2 * s.w).toFixed(1) + " " + (2.6 * s.w).toFixed(1));
+      // the dots, placed on the arc where they sit in the picture
+      s.dotEls = s.dots.map(function (d) {
+        var p = screen(d.at), best = 0, bd = 1e9;
+        s.from.forEach(function (q, i) { var dd = Math.hypot(q[0] - p[0], q[1] - p[1]); if (dd < bd) { bd = dd; best = i; } });
+        var c = document.createElementNS(NS, "circle");
+        c.setAttribute("r", d.r * cs); c.setAttribute("fill", d.c);
+        ov.appendChild(c);
+        return { el: c, i: best, r: d.r * cs, color: d.c };
+      });
+      // one drop per note; drop k is the piece of line at k/(count-1) of its length
+      s.drops = s.notes.map(function (n, k) {
+        var u = s.notes.length > 1 ? k / (s.notes.length - 1) : 0, rr = n.getBoundingClientRect();
+        return { note: n, u: u, i: Math.round(u * (N - 1)), to: [rr.left + rr.width / 2, rr.top + rr.height / 2] };
+      });
+      s.dotEls.forEach(function (d) {
+        var best = null, bd = 1e9;
+        s.drops.forEach(function (q) { var dd = Math.abs(q.i - d.i); if (!q.dot && dd < bd) { bd = dd; best = q; } });
+        if (best) { best.dot = d; best.i = d.i; }
+      });
+      s.drops.forEach(function (q) {
+        if (q.dot) { q.el = q.dot.el; q.r0 = q.dot.r; q.c0 = q.dot.color; }
+        else {
+          q.el = document.createElementNS(NS, "circle"); q.el.style.display = "none";
+          q.r0 = Math.max(1.8, s.w * 1.3); q.c0 = s.color; q.el.setAttribute("r", q.r0);
+          ov.appendChild(q.el);
+        }
+      });
+    });
+
+    var dropR = 2.6, t0 = null, live = true;
+    function step(now) {
+      if (t0 === null) t0 = now;
+      var t = now - t0;
+      // lift: a soft shadow comes up under the arcs, as if they rose off the paper
+      var lift = clamp(t / LIFT);
+      ov.style.filter = "drop-shadow(0 " + (5 * lift).toFixed(1) + "px " + (7 * lift).toFixed(1) + "px rgba(15,17,21," + (.2 * lift).toFixed(2) + "))";
+      strokes.forEach(function (s) {
+        var tt = t - s.delay, p = clamp((tt - LIFT * .5) / UNF);
+        // unspiral: the bends relax one after another, from the tip back to the root, with a spring's overshoot
+        var M = s.ang.length;
+        var ang = s.ang.map(function (a, i) {
+          var d = (1 - i / (M - 1)) * .42, r = clamp((p - d) / .58);
+          return a + (s.goal[i] - a) * (r > 0 ? spring(r) : 0);
+        });
+        var shape = build([0, 0], s.step0 + (s.step1 - s.step0) * ease(p), ang);
+        // drift: the middle of the arc floats down along a sagging path to its place above the frame
+        var e = ease(p), sag = 26 * Math.sin(Math.PI * e);
+        var cx = s.a0[0] + (s.a1[0] - s.a0[0]) * e, cy = s.a0[1] + (s.a1[1] - s.a0[1]) * e + sag;
+        var dx = cx - shape[s.mid][0], dy = cy - shape[s.mid][1];
+        var pts = shape.map(function (q) { return [q[0] + dx, q[1] + dy]; });
+        // break: a front runs along the line; behind it the line is gone, just ahead of it it beads
+        var f = clamp((tt - TB) / SPREAD), front = Math.round(f * (N - 1)), beadTo = Math.min(N - 1, front + 10);
+        if (f > 0) {
+          s.bead.setAttribute("d", path(pts, front, beadTo));
+          s.line.setAttribute("d", path(pts, beadTo, N - 1));
+        } else {
+          s.bead.setAttribute("d", "");
+          s.line.setAttribute("d", path(pts, 0, N - 1));
+        }
+        // the dots ride on the line until they leave it
+        s.dotEls.forEach(function (d) {
+          if (d.gone) return;
+          d.el.setAttribute("cx", pts[d.i][0].toFixed(1)); d.el.setAttribute("cy", pts[d.i][1].toFixed(1));
+        });
+        // each drop leaves the line when the front reaches it, then flows down onto its note
+        s.drops.forEach(function (q) {
+          if (q.landed) return;
+          if (!q.from) {
+            if (f * (N - 1) < q.i || f === 0) return;
+            q.from = pts[q.i].slice(); q.t0 = tt; q.el.style.display = "";
+            if (q.dot) q.dot.gone = true;
+          }
+          var k = (tt - q.t0) / FLY;
+          if (k >= 1) {
+            q.landed = true; q.el.remove();
+            q.note.style.transformBox = "fill-box"; q.note.style.transformOrigin = "center";
+            q.note.animate([{ opacity: 0, transform: "scaleY(.2)" }, { opacity: 1, transform: "none" }],
+                           { duration: 240, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
+            return;
+          }
+          var sx = 1 - Math.pow(1 - k, 2), sy = k * k, rise = 10 * 4 * k * (1 - k);
+          q.el.setAttribute("cx", (q.from[0] + (q.to[0] - q.from[0]) * sx).toFixed(1));
+          q.el.setAttribute("cy", (q.from[1] + (q.to[1] - q.from[1]) * sy - rise).toFixed(1));
+          q.el.setAttribute("r", (q.r0 + (dropR - q.r0) * Math.min(1, k * 1.8)).toFixed(2));
+          q.el.setAttribute("fill", mix(q.c0, s.land, Math.min(1, k * 1.5)));
+        });
+      });
+      if (!live) return;
+      if (t < END) requestAnimationFrame(step);
+      else finish();
+    }
+    function finish() {
+      if (!ov.parentNode) return;
+      notes.forEach(function (n) { n.style.opacity = 1; });
+      ov.remove();
+    }
+    // ?wavet=<ms> in the address freezes the wave at that moment, for checking it by eye
+    var frozen = /[?&]wavet=(\d+)/.exec(location.search);
+    if (frozen) {
+      live = false;
+      var target = +frozen[1];
+      for (var tt = 0; tt <= target; tt += 16) step(tt === 0 ? 0 : tt);   // walk up to the moment, so drops leave in order
+      return END;
+    }
+    requestAnimationFrame(step);
+    setTimeout(finish, END + 400);   // a page in the background never stays half drawn
+    return END;
+  };
+})();
+
+// with ?wavet=<ms>, draw the wave at that moment over the page as it is, for checking
+(function () {
+  if (!/[?&]wavet=\d+/.test(location.search)) return;
+  addEventListener("load", function () {
+    scrollTo(0, 0);
+    var W0 = 1400, H0 = 1050, cs = Math.max(innerWidth / W0, innerHeight / H0);
+    window.ppWave(cs, (innerWidth - W0 * cs) / 2, (innerHeight - H0 * cs) / 2);
+  });
+})();
+</script>
+<script>/* The index's screens, on a desktop: the wheel, the arrows, Page Up and Down, the
+   space bar and the round button move a whole screen, eased in and out; a screen
+   taller than the window is scaled to fit it; the page opens at the last screen seen.
+   The gallery turns every six seconds. */
+(function(){var s=[].slice.call(document.querySelectorAll(".screen"));if(!s.length)return;
+var K="pp-screen",bar=document.querySelector(".topbar"),busy=false,lock=0;
+function desk(){return innerWidth>980;}
+function barH(){return bar?bar.offsetHeight:0;}
+function topOf(x){return x.getBoundingClientRect().top+scrollY-barH();}
+function idx(){var i=0;s.forEach(function(x,k){if(x.getBoundingClientRect().top-barH()<=innerHeight*.35)i=k;});return i;}
+function fit(){var room=innerHeight-barH();s.forEach(function(x){var f=x.querySelector(".fit");if(!f)return;f.style.zoom=1;
+  if(!desk())return;var cs=getComputedStyle(x),h=f.scrollHeight,r=room-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  /* scaled down only as far as letters of 14.5 px; past that the screen keeps its size */
+  var px=parseFloat(getComputedStyle(document.documentElement).fontSize);
+  if(h>r)f.style.zoom=r/h*px>=14.5?r/h:1;});}
+/* a screen still taller than the window scrolls inside, up to its edge and no further;
+   the next gesture or key then moves to the next screen */
+function room(){return innerHeight-barH();}
+function cur(){var c=0,b=barH();s.forEach(function(x,k){if(x.getBoundingClientRect().top<=b+2)c=k;});return c;}
+function inside(dir){var r=s[cur()].getBoundingClientRect();if(r.height<=room()+2)return false;
+  return dir>0?r.bottom>innerHeight+2:r.top<barH()-2;}
+function within(d){var r=s[cur()].getBoundingClientRect();
+  scrollBy(0,d>0?Math.min(d,r.bottom-innerHeight):Math.max(d,r.top-barH()));}
+var still=matchMedia("(prefers-reduced-motion: reduce)");
+function ease(t){return 1-Math.pow(1-t,3.2);}
+function go(k,dir){k=Math.max(0,Math.min(s.length-1,k));var from=scrollY,to=Math.round(topOf(s[k]));
+  /* moving up onto a screen taller than the window shows its end, the part next to where we were */
+  var hk=s[k].getBoundingClientRect().height;if(dir<0&&hk>room()+2)to=Math.round(to+hk-room());
+  if(Math.abs(to-from)<2)return;busy=true;
+  if(still.matches){scrollTo(0,to);busy=false;remember();return;}
+  var d=Math.min(720,Math.max(430,Math.abs(to-from)*.5)),t0=null;
+  function step(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/d);scrollTo(0,from+(to-from)*ease(p));
+    if(p<1)requestAnimationFrame(step);else{busy=false;lock=Date.now()+140;remember();}}
+  requestAnimationFrame(step);}
+function remember(){try{localStorage.setItem(K,s[idx()].id)}catch(e){}}
+/* inside the last screen, longer than the window, the page scrolls as usual */
+function free(dir){var i=idx(),last=s.length-1;if(i<last)return false;var t=topOf(s[last]);
+  return dir>0||scrollY>t+2;}
+/* one gesture moves one screen. A trackpad or a Magic Mouse starts with steps of a pixel or two
+   and goes on sending events for a second after the fingers leave (inertia): the gesture's
+   movement is added up and the screen moves once it passes 40 px, a wheel's click at once.
+   A gesture ends after 200 ms without events, or when the fingers push again (inertia only
+   slows down: a step half as large again as the one before is a new swipe); one that has
+   scrolled inside a tall screen up to its edge stops there and does not move on */
+var lastW=0,acc=0,done=false,stepped=false,stepAt=0,lastD=0;
+/* a box that scrolls by itself (the rail of sessions in a short window, a long code box) keeps
+   the wheel while the pointer is over it */
+function scroller(el){for(;el&&el!==document.body&&el.nodeType===1;el=el.parentElement){var cs=getComputedStyle(el);
+  if(/auto|scroll/.test(cs.overflowY)&&el.scrollHeight>el.clientHeight+1)return el;}return null;}
+addEventListener("wheel",function(e){if(!desk()||e.ctrlKey||R.classList.contains("splashing"))return;
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)||scroller(e.target))return;
+  var dir=e.deltaY>0?1:-1,d=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?room():1),now=Date.now(),a=Math.abs(d);
+  if(now-lastW>200||(done||stepped)&&now-stepAt>300&&a>=10&&a>lastD*1.5){acc=0;done=stepped=false;}lastW=now;lastD=a;
+  if(stepped||busy){e.preventDefault();return;}   /* the screen has moved: the rest of the gesture is spent */
+  if(free(dir))return;e.preventDefault();
+  if(inside(dir)){within(d);done=true;stepAt=now;return;}
+  if(done||now<lock)return;
+  if(acc*dir<0)acc=0;acc+=d;if(Math.abs(acc)<40)return;
+  stepped=true;stepAt=now;acc=0;go(idx()+dir,dir);},{passive:false});
+addEventListener("keydown",function(e){if(!desk()||e.altKey||e.ctrlKey||e.metaKey||R.classList.contains("splashing"))return;
+  var tg=e.target;if(tg&&(tg.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName)))return;
+  var k=e.key,dir=0;if(k==="ArrowDown"||k==="PageDown"||(k===" "&&!e.shiftKey))dir=1;
+  else if(k==="ArrowUp"||k==="PageUp"||(k===" "&&e.shiftKey))dir=-1;
+  else if(k==="Home"){e.preventDefault();go(0);return;}else if(k==="End"){e.preventDefault();go(s.length-1);return;}
+  if(!dir)return;if(free(dir)&&k!=="PageUp"&&k!=="PageDown")return;e.preventDefault();
+  if(inside(dir)&&!busy){within(dir*(/^Arrow/.test(k)?60:room()*.85));return;}if(!busy)go(idx()+dir,dir);});
+document.querySelectorAll(".nextscreen").forEach(function(b){b.addEventListener("click",function(){
+  go(s.indexOf(b.closest(".screen"))+1);});});
+var t;addEventListener("scroll",function(){if(busy)return;clearTimeout(t);t=setTimeout(remember,250);},{passive:true});
+function back(){if(!desk()||location.hash||document.documentElement.classList.contains("splashing"))return;try{var id=localStorage.getItem(K),el=id&&document.getElementById(id);
+  if(el&&el!==s[0])scrollTo(0,Math.round(topOf(el)));}catch(e){}}
+function align(){var h=s[0],b=h.querySelector(".nextscreen"),row=h.querySelector("ul.early li");if(!b)return;
+  if(!row||!desk()){b.style.top="";b.style.bottom="";return;}
+  var r=row.getBoundingClientRect(),z=h.getBoundingClientRect();b.style.bottom="auto";
+  b.style.top=Math.round(r.top+r.height/2-z.top-b.offsetHeight/2)+"px";}
+var fit0=fit;fit=function(){fit0();align();};
+/* the opening: the painting, then the zoom into the first screen */
+var R=document.documentElement,sp=document.querySelector(".splash");
+function opening(){if(!R.classList.contains("splashing")||!sp)return;
+  var img=sp.querySelector("img"),tt=sp.querySelector(".splash-t"),
+      mh=document.querySelector("#top figure.masthead img"),h1=document.querySelector("#top .hero h1"),gone=false;
+  scrollTo(0,0);
+  function go(){if(gone)return;gone=true;removeEventListener("wheel",stop,{passive:false});removeEventListener("keydown",go);
+    scrollTo(0,0);   /* measured from the top, whatever the browser restored */
+    /* each text travels from where its letters are to where the page's letters are:
+       measured on the text itself, scaled by the ratio of the two widths */
+    function txt(el){var r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect();}
+    function fly(from,to,E,D){var s0=from.getBoundingClientRect(),a0=txt(from),b0=txt(to),k=b0.width/a0.width,
+        tx=b0.left-s0.left-k*(a0.left-s0.left),ty=b0.top-s0.top-k*(a0.top-s0.top);
+      from.animate([{transform:"none"},{transform:"translate("+tx+"px,"+ty+"px) scale("+k+")",
+        color:getComputedStyle(to).color,textShadow:"0 0 0 transparent"}],{duration:D,easing:E,fill:"forwards"});}
+    var a=mh.getBoundingClientRect(),E="cubic-bezier(.65,0,.25,1)",D=1300,sub=document.querySelector("#top .hero .sub");
+    img.animate([{left:"0px",top:"0px",width:innerWidth+"px",height:innerHeight+"px",borderRadius:"0px"},
+                 {left:a.left+"px",top:a.top+"px",width:a.width+"px",height:a.height+"px",borderRadius:"12px"}],
+                {duration:D,easing:E,fill:"forwards"});
+    var vl=sp.querySelector(".veil");if(vl)vl.animate([{opacity:1},{opacity:0}],{duration:D*.45,fill:"forwards"});
+    fly(tt.querySelector("h1"),h1,E,D);
+    /* the wave: the spiral's two blue strokes unroll and break into the melody's notes (waves.js) */
+    if(window.ppWave){var W0=1400,H0=1050,cs=Math.max(innerWidth/W0,innerHeight/H0);
+      ppWave(cs,(innerWidth-W0*cs)/2,(innerHeight-H0*cs)/2);
+      /* while the painting is there the strokes lie in it, under the veil and the name */
+      var wv=document.querySelector("svg.waves");if(wv){wv.style.zIndex="auto";sp.insertBefore(wv,sp.querySelector(".veil"));}}
+
+    if(sub)fly(tt.querySelector("p"),sub,E,D);
+    function done(){if(!sp.parentNode)return;var wv=sp.querySelector("svg.waves");
+      if(wv){wv.style.zIndex="52";document.body.appendChild(wv);}R.classList.remove("splashing");sp.remove();}
+    setTimeout(done,D+80);
+    try{localStorage.setItem("pp-intro","1")}catch(e){}}
+  function stop(e){e.preventDefault();go();}
+  addEventListener("wheel",stop,{passive:false});addEventListener("keydown",go);sp.addEventListener("click",go);
+  setTimeout(go,900);}
+fit();back();opening();addEventListener("resize",fit);addEventListener("load",function(){fit();back();});
+/* the gallery: a carousel that slides; arrows, dots, every seven seconds */
+var g=document.querySelector(".gallery");if(g){var tr=g.querySelector(".gtrack"),n=tr.children.length,dt=g.querySelectorAll(".gdots button"),c=0,timer;
+  function show(k){c=(k+n)%n;tr.style.transform="translateX("+(-100*c)+"%)";dt.forEach(function(x,i){x.classList.toggle("on",i===c);});}
+  function run(){clearInterval(timer);if(!still.matches)timer=setInterval(function(){show(c+1);},7000);}
+  dt.forEach(function(b,i){b.addEventListener("click",function(){show(i);run();});});
+  g.querySelector(".prev").addEventListener("click",function(){show(c-1);run();});
+  g.querySelector(".next").addEventListener("click",function(){show(c+1);run();});
+  g.addEventListener("mouseenter",function(){clearInterval(timer);});g.addEventListener("mouseleave",run);run();}
+})();</script>
+</body>
+</html>

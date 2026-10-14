@@ -199,8 +199,9 @@ readback : value -> term
   conversion from named terms and the new `subst`.
 - **A small ML.** Add `Int of int`, `Add of term * term`, `If of term * term * term` and
   `Let of string * term * term` to the type; extend `eval` with `VInt of int`. The evaluator
-  is now a language, and session 10 gives it a type checker. This is the seed of one of the
-  mini-project topics.
+  is now a language. The mini-project *A type checker for lab 4's interpreter* gives it a type
+  checker and then type inference; the labs of sessions 10 and 11 work the typing rules on
+  paper.
 - **A meta-circular evaluator.** Replace `Closure` by `VFun of (value -> value)`: a λ becomes
   an OCaml function. Session 3's ladder promised a constructor carrying a function; this is
   it. What did we lose (try `readback`)?

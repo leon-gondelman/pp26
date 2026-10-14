@@ -7,7 +7,7 @@
 // n, name, what a run shows, the holes the part waits for, on the branch, its stations [hole, task, opens]
 const PARTS = [
   { n: 0, name: "One thread", shows: "one front moving down the picture", after: [], branch: false,
-    st: [[0, "Run it as given", "the baseline and its time"]] },
+    st: [[0, "Run it as given: no hole, no check", "the baseline and its time"]] },
   { n: 1, name: "Workers", run: "Bands", shows: "a band of rows per worker, all at once", after: [], branch: false,
     st: [[1, "Write the band's bounds from the worker's index", "each worker renders its own rows"],
          [2, "Join the workers before the PNG", "a whole picture, not grey bands"]] },
@@ -30,7 +30,7 @@ const PARTS = [
 ];
 
 const TASKS = {
-  0: ["Render.java", "Part 0 has no hole: the program as given, on one thread. Its time is the baseline the other parts are measured against."],
+  0: ["Render.java", "Part 0 has no hole and no check: the program as given, on one thread. Its picture and its time are the baseline the other parts are measured against; a run of it is all there is to do."],
   1: ["Render.java, hole 1", "Worker i's band of rows, computed from i: the bands cover every row and the last band takes the remainder; each row is rendered by row(scene, y, picture, counter, i). Then a sentence: why no two workers write the same pixel."],
   2: ["Render.java, hole 2", "The join, w.join(), before the PNG is written. Without it the PNG holds whatever the workers have finished at that moment."],
   3: ["Render.java, hole 3", "Render.counter returns the counter the --counter flag names: the racy one or one of the warm-up's three. Then a sentence: which one the bar keeps, and why, from the contract."],
@@ -294,7 +294,8 @@ function render() {
   const st = $("status"), p = PARTS.find(q => String(q.n) === S.part);
   const cp = PARTS.find(q => String(q.n) === S.checking);
   $("status-text").textContent = S.building ? "building the quest …"
-    : S.exploring ? "the explorer: a camera line restarts the view"
+    : S.exploring && S.rendering ? "the explorer: rendering the view"
+    : S.exploring ? "the explorer: the view is done, waiting for a camera line"
     : S.running && p ? `part ${p.n}, ${p.run || p.name}, running`
     : S.compile === "compiling" ? "compiling the quest …"
     : S.compile === "error" ? "the quest does not compile: see the output"

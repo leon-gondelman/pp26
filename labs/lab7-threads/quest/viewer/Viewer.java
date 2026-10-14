@@ -79,7 +79,7 @@ public final class Viewer {
   final List<OutputStream> listeners = new CopyOnWriteArrayList<>();
   Process engine;
   PrintWriter toEngine;
-  volatile boolean building, running, exploring, filmReady, useGiven;
+  volatile boolean building, running, exploring, rendering, filmReady, useGiven;
   volatile String part = "", checking = "", compile = "";
   volatile int bar = 0;
   volatile boolean noted = true;                       // the run's note on its holes is said
@@ -275,7 +275,11 @@ public final class Viewer {
         if (!verdict.equals("pass")) {
           ok = false;
           if (mentions.contains(n) && named == null) named = body;
-          if (why == null) why = body;
+          Set<Integer> others = new TreeSet<>(mentions);
+          others.remove(n);
+          if (why == null) why = mentions.contains(n) || others.isEmpty() ? body
+              : "the check stops at " + (others.size() == 1 ? "hole " : "holes ") + others.toString().replaceAll("[\\[\\]]", "")
+                + " first, before it reaches this one: " + body;
         }
       }
       String w = named != null ? named : why != null ? why : "the check of part " + ph[0] + " did not reach this hole";
@@ -411,7 +415,7 @@ public final class Viewer {
       case "ready" -> { }
       case "bar" -> { bar = Integer.parseInt(rest.trim()); event("bar", String.valueOf(bar)); }
       case "log" -> log(rest);
-      case "explorer" -> { exploring = true; log("the camera takes eye x y z or look x y z, while the view renders"); holesNote(); state(); }
+      case "explorer" -> { exploring = true; rendering = true; log("the camera takes eye x y z or look x y z, while the view renders"); holesNote(); state(); }
       case "done" -> {
         log(rest);
         bar = 100;
@@ -442,6 +446,8 @@ public final class Viewer {
   }
 
   void log(String s) {
+    if (exploring && s.startsWith("eye ")) rendering = true;          // the explorer's restart: a view under way
+    if (exploring && s.startsWith("the view rendered")) { rendering = false; state(); }
     String line = s.replace(session + File.separator, "").replace(quest + File.separator, "");
     synchronized (history) {
       history.add(line);
@@ -479,7 +485,7 @@ public final class Viewer {
           .append(json(e.getValue()[0])).append(",\"why\":").append(json(e.getValue()[1])).append("}");
     }
     return "{\"mode\":\"" + (teacher ? "teacher" : "student") + "\",\"stations\":{" + st + "},\"building\":" + building
-        + ",\"running\":" + running + ",\"exploring\":" + exploring + ",\"film\":" + filmReady + ",\"part\":\"" + part
+        + ",\"running\":" + running + ",\"exploring\":" + exploring + ",\"rendering\":" + rendering + ",\"film\":" + filmReady + ",\"part\":\"" + part
         + "\",\"bar\":" + bar + ",\"checking\":\"" + checking + "\",\"compile\":\"" + compile + "\",\"given\":" + useGiven
         + ",\"threads\":" + Runtime.getRuntime().availableProcessors() + "}";
   }

@@ -801,9 +801,110 @@ table.sessions td.ttl{padding-right:.8rem}
   table.sessions tbody.ses:hover td.ttl>a:hover{text-decoration-color:var(--acc)}
 }
 
+/* The mini-project page: one article per topic, its title, then a line naming its sessions. */
+article.topic{max-width:38rem;margin:0;padding:2rem 0 .4rem;border-top:1px solid var(--line-soft)}
+article.topic h3{font:500 1.3rem/1.3 var(--serif);color:var(--ink);margin:0 0 .4rem}
+article.topic p{color:var(--ink2)}
+article.topic p.tmeta{font-size:.92rem;color:var(--ink3);margin:0 0 1rem}
+/* the pictures of the topics: one 48-unit grid, ink lines, one accent mark each */
+.mp-sprite{position:absolute;width:0;height:0;overflow:hidden}
+.mp-l{fill:none;stroke:var(--ink2);stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.mp-f{fill:var(--bg)}
+.mp-a{fill:none;stroke:var(--lec);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mp-al{fill:var(--lec-b)}
+.mp-af{fill:var(--lec);stroke:none}
+.mp-d{fill:none;stroke:var(--faint);stroke-width:1.25;stroke-dasharray:2 3}
+.mp-dash{stroke-dasharray:3 3}
+.mp-t{font:400 22px/1 var(--serif);fill:var(--ink2)}
+.mp-ta{fill:var(--lec)}
+svg.mp-ic{display:block;width:100%;height:100%}
+/* the band: ten squares, each a link to its topic */
+.mp-band{display:grid;grid-template-columns:repeat(10,minmax(64px,90px));gap:8px;margin:0 0 1.8rem;overflow-x:auto}
+.mp-band a{display:block;aspect-ratio:1;padding:14%;box-sizing:border-box;border:1px solid var(--line);
+  border-radius:12px;background:var(--sunk);transition:border-color .15s,background .15s}
+.mp-band a:hover{border-color:var(--lec);background:var(--bg)}
+/* the contents: a framed box, numbered, two columns on a wide screen */
+nav.toc{margin:1.8rem 0 0;padding:1.1rem 1.4rem 1.2rem;border:1px solid var(--line);border-radius:12px;
+  background:var(--sunk);max-width:38rem;font-size:.95rem;counter-reset:toc}
+nav.toc .toc-h{font:600 .72rem/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .8rem}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc>ol{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 2rem}
+nav.toc>ol>li{counter-increment:toc}
+nav.toc>ol>li>a{font-weight:600;color:var(--ink)}
+nav.toc>ol>li>a::before{content:counter(toc) "  ";color:var(--lec);font-variant-numeric:tabular-nums}
+nav.toc ol ol{margin:.35rem 0 0 1.1rem;counter-reset:sub}
+nav.toc ol ol li{margin:.2rem 0;counter-increment:sub}
+nav.toc ol ol a::before{content:counter(toc) "." counter(sub) "  ";color:var(--ink3);font-size:.85em;font-variant-numeric:tabular-nums}
+nav.toc a{color:var(--ink2);text-decoration:none}
+nav.toc a:hover{color:var(--lec);text-decoration:underline}
+@media (max-width:560px){nav.toc>ol{grid-template-columns:1fr}}
+/* the table of the topics: no rules between rows, the pictures give the rhythm */
+table.mp-table{border-collapse:collapse;width:100%;font-size:.93rem;margin:.6rem 0 1rem}
+table.mp-table th{font:600 .72rem/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);
+  text-align:left;padding:0 .9rem .7rem 0;border-bottom:1px solid var(--line)}
+table.mp-table td{padding:.45rem .9rem .45rem 0;vertical-align:middle;color:var(--ink2)}
+table.mp-table td:first-child{width:40px;padding-right:1rem}
+table.mp-table td:first-child svg{width:40px;height:40px;border-radius:9px;background:var(--sunk);
+  border:1px solid var(--line-soft);padding:4px;box-sizing:border-box}
+table.mp-table td:nth-child(2){font-weight:500;min-width:10rem}
+table.mp-table td:nth-child(2) a{color:var(--ink);text-decoration:none}
+table.mp-table td:nth-child(2) a:hover{color:var(--acc);text-decoration:underline}
+table.mp-table td:nth-child(4),table.mp-table td:nth-child(5){white-space:nowrap;color:var(--ink3)}
+table.mp-table td:nth-child(6){color:var(--ink3);font-size:.88rem;min-width:11rem}
+table.mp-table th button{white-space:nowrap;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink2);
+  background:none;border:1px solid transparent;border-radius:6px;padding:.3rem .45rem;margin:-.3rem 0 -.3rem -.45rem;cursor:pointer;
+  display:inline-flex;align-items:center;gap:.35rem}
+table.mp-table th button:hover{background:var(--lec-b);color:var(--lec)}
+table.mp-table th .arr{display:inline-block;width:.9em;text-align:center;font:600 1rem/1 var(--sans);letter-spacing:0;color:var(--lec)}
+table.mp-table th .arr::after{content:"\21C5"}
+table.mp-table th[aria-sort="ascending"] button,table.mp-table th[aria-sort="descending"] button{color:var(--lec);border-color:var(--lec);background:var(--lec-b)}
+table.mp-table th[aria-sort="ascending"] .arr::after{content:"\2191"}
+table.mp-table th[aria-sort="descending"] .arr::after{content:"\2193"}
+p.mp-hint{font-size:.9rem;color:var(--ink3);margin:.2rem 0 .4rem}
+p.mp-orderby{display:none;font-size:.9rem;color:var(--ink3);margin:.4rem 0 .2rem}
+p.mp-orderby button{font:inherit;color:var(--ink2);background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:.2rem .7rem;margin:.15rem .1rem;cursor:pointer}
+p.mp-orderby button.on{border-color:var(--lec);color:var(--lec)}
+p.mp-note{font-size:.88rem;color:var(--ink3)}
+#mp-list>article.topic:first-child{border-top:0;padding-top:.6rem}
+table.mp-table tr.mp-part td{width:auto;font:600 .8rem/1.2 var(--sans);color:var(--acc-t);padding:1.3rem 0 .4rem}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:700px){
+  table.mp-table thead{display:none}
+  p.mp-orderby{display:block}
+  table.mp-table tr{display:grid;grid-template-columns:40px auto 1fr;column-gap:.9rem;padding:.55rem 0}
+  table.mp-table td{padding:0}
+  table.mp-table td:first-child{grid-row:1 / span 4}
+  table.mp-table td:nth-child(2),table.mp-table td:nth-child(3),table.mp-table td:nth-child(6){grid-column:2 / -1;min-width:0}
+  table.mp-table td:nth-child(4){grid-column:2;grid-row:3}
+  table.mp-table td:nth-child(5){grid-column:3;grid-row:3}
+  table.mp-table td:nth-child(2){grid-row:1}
+  table.mp-table td:nth-child(3){grid-row:2}
+  table.mp-table td:nth-child(6){grid-row:4}
+  table.mp-table td:nth-child(4)::before{content:"Part "}
+  table.mp-table td:nth-child(5)::before{content:"Sessions "}
+  .mp-band{grid-template-columns:repeat(10,72px)}
+}
+}
+h2+article.topic{border-top:0;padding-top:.6rem}
+/* the mini-project page: its sections headed large, as the title is */
+#miniprojects h2{font:500 clamp(1.7rem,3vw,2.2rem)/1.15 var(--serif);letter-spacing:-.01em;text-transform:none;
+  color:var(--ink);margin:4rem 0 1.4rem;padding-bottom:.7rem}
+article.topic p.tsrc{font-size:.9rem;color:var(--ink3)}
+article.topic p.tsrc a{color:var(--ink2)}
+
 /* the table of contents of a session's notes page (tools/joint_notes.py), on the session's page */
 .ntoc{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1.2rem 2rem;padding:1.2rem 1.4rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk);margin-top:1rem}
 .ntoc-label{font:600 1rem/1.3 var(--serif);color:var(--ink);margin:0 0 .5rem}
 .ntoc ol{list-style:none;padding:0;margin:0}
 .ntoc li{margin:0 0 .3rem;font-size:.95rem}
 .ntoc a{text-decoration:none}.ntoc a:hover{text-decoration:underline}
+article.topic ol.steps{max-width:38rem;margin:-.4rem 0 1rem;padding-left:1.4rem;color:var(--ink2)}
+article.topic ol.steps li{margin:.3rem 0;padding-left:.2rem}
+/* lists on the mini-project page keep the measure of its paragraphs */
+#miniprojects>ul,#miniprojects>ol{max-width:38rem;box-sizing:border-box}
+/* the number of a topic: in the table, beside its picture, and on its heading */
+.tnum{display:inline-block;min-width:1.7em;font:600 .8rem/1 var(--sans);font-variant-numeric:tabular-nums;color:var(--lec)}
+table.mp-table td:first-child{width:auto;white-space:nowrap}
+table.mp-table td:first-child .tnum{vertical-align:middle;text-align:right;margin-right:.55rem}
+table.mp-table td:first-child svg{display:inline-block;vertical-align:middle}
+article.topic h3 .tnum{min-width:0;margin-right:.45rem;padding:.2rem .45rem;border-radius:6px;background:var(--lec-b);font-size:.85rem;vertical-align:.18em}
