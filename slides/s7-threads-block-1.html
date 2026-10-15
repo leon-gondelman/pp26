@@ -1648,8 +1648,8 @@ html.print-pdf .reveal #b1-bridge .b1-defs, html.reveal-print .reveal #b1-bridge
 /* == end b1-bridge == */
 /* == b1-tas == */
 /* "Test-and-set and its guarantees": the flag's value over time above the two lanes; click 1 A's fused
-   test-and-set, click 2 A's release ordered before B's successful test-and-set, click 3 B's failed call
-   and its spin, each lit in accent on its click and in ink after it. Under the definition one block whose
+   test-and-set, click 2 B's failed call and its spin, click 3 A's release ordered before B's successful
+   test-and-set, in the order of time, each lit in accent on its click and in ink after it. Under the definition one block whose
    text changes on each click; the callout last, in its place. */
 .reveal #b1-tas svg.b1-fig2 { display: block; width: 100%; height: auto; margin: 0 0 48px 0; overflow: visible; }
 .reveal #b1-tas svg.b1-fig2 text { font-family: "Fira Sans", sans-serif; font-size: 19px; fill: var(--fg); text-anchor: middle; }
@@ -1662,12 +1662,12 @@ html.print-pdf .reveal #b1-bridge .b1-defs, html.reveal-print .reveal #b1-bridge
 .reveal #b1-tas svg.b1-fig2 .hb line { stroke-width: 2.5; }
 .reveal #b1-tas svg.b1-fig2 .spin line { stroke-dasharray: 5 6; }
 .reveal #b1-tas[data-step="0"] svg.b1-fig2 .tas-a rect,
-.reveal #b1-tas[data-step="1"] svg.b1-fig2 :is(.rel-a, .tas-b) rect,
-.reveal #b1-tas[data-step="2"] svg.b1-fig2 .spin-b rect { fill: var(--box); stroke: var(--accent); stroke-width: 3; }
+.reveal #b1-tas[data-step="2"] svg.b1-fig2 :is(.rel-a, .tas-b) rect,
+.reveal #b1-tas[data-step="1"] svg.b1-fig2 .spin-b rect { fill: var(--box); stroke: var(--accent); stroke-width: 3; }
 .reveal #b1-tas[data-step="0"] svg.b1-fig2 .tas-a line,
-.reveal #b1-tas[data-step="1"] svg.b1-fig2 .tas-b line,
-.reveal #b1-tas[data-step="2"] svg.b1-fig2 .spin-b line { stroke: var(--accent); }
-.reveal #b1-tas[data-step="2"] svg.b1-fig2 .spin line { stroke: var(--accent); stroke-width: 3; }
+.reveal #b1-tas[data-step="2"] svg.b1-fig2 .tas-b line,
+.reveal #b1-tas[data-step="1"] svg.b1-fig2 .spin-b line { stroke: var(--accent); }
+.reveal #b1-tas[data-step="1"] svg.b1-fig2 .spin line { stroke: var(--accent); stroke-width: 3; }
 .reveal #b1-tas .b1-stack { display: grid; }
 /* before the first click, the naive lock: the figure's .naive group and the .b1-naive boxes, in place of
    the definition of test-and-set; from the first click on, the reverse */
@@ -2225,14 +2225,14 @@ n := v             (* write *)</code></pre></div>
       <text class="lbl" x="320" y="101">returns <tspan class="mono">false</tspan></text>
       <text x="210" y="142">one indivisible step</text>
     </g>
-    <g class="fragment" data-fragment-index="1">
+    <g class="fragment" data-fragment-index="2">
       <g class="flag"><line x1="560" y1="4" x2="560" y2="44"/><text class="lbl mono" x="572" y="31">false</text><line x1="790" y1="4" x2="790" y2="44"/><text class="lbl mono" x="802" y="31">true</text></g>
       <g class="rel-a"><rect x="560" y="74" width="110" height="40" rx="5"/><text x="615" y="101">write false</text></g>
       <g class="tas tas-b"><rect x="690" y="192" width="200" height="40" rx="5"/><line x1="790" y1="192" x2="790" y2="232"/><text x="740" y="219">read flag</text><text x="840" y="219">write true</text></g>
       <text x="790" y="260">returns <tspan class="mono">false</tspan></text>
       <g class="hb"><line x1="615" y1="122" x2="738" y2="186" marker-end="url(#b1tas-arr)"/><text class="lbl" x="730" y="142">ordered before,</text><text class="lbl" x="730" y="167">with everything A did before</text></g>
     </g>
-    <g class="fragment" data-fragment-index="2">
+    <g class="fragment" data-fragment-index="1">
       <g class="tas spin-b"><rect x="330" y="192" width="200" height="40" rx="5"/><line x1="430" y1="192" x2="430" y2="232"/><text x="380" y="219">read flag</text><text x="480" y="219">write true</text></g>
       <text x="430" y="260">returns <tspan class="mono">true</tspan></text>
       <g class="spin"><line x1="538" y1="212" x2="682" y2="212"/><text x="610" y="260">spins</text></g>
@@ -2245,8 +2245,8 @@ n := v             (* write *)</code></pre></div>
   <p class="def b1-tas-def"><b>Test-and-set.</b> An instruction that reads the old value of one memory location and writes a new value to it as one indivisible step: no instruction of any other thread falls between the read and the&nbsp;write.</p>
   <div class="b1-stack">
     <p class="b1-sentence fragment current-visible" data-fragment-index="0"><b>Indivisibility.</b> It reads the old value and writes the new one as one step: no thread sees the location&nbsp;between.</p>
-    <p class="b1-sentence fragment current-visible" data-fragment-index="1"><b>Synchronization.</b> The write of <code>false</code> that releases the flag is ordered before the test-and-set that reads it, and with it everything the releasing thread did&nbsp;before.</p>
-    <p class="def fragment current-visible" data-fragment-index="2"><b>Spin lock.</b> A <b>flag</b>, a boolean location, and a loop: to acquire, a thread repeats test-and-set on the flag until the old value is <code>false</code>, <b>spinning</b> while it finds <code>true</code>; to release, it writes&nbsp;<code>false</code>.</p>
+    <p class="b1-sentence fragment current-visible" data-fragment-index="2"><b>Synchronization.</b> The write of <code>false</code> that releases the flag is ordered before the test-and-set that reads it, and with it everything the releasing thread did&nbsp;before.</p>
+    <p class="def fragment current-visible" data-fragment-index="1"><b>Spin lock.</b> A <b>flag</b>, a boolean location, and a loop: to acquire, a thread repeats test-and-set on the flag until the old value is <code>false</code>, <b>spinning</b> while it finds <code>true</code>; to release, it writes&nbsp;<code>false</code>.</p>
     <div class="box fragment" data-fragment-index="3">The first guarantee makes the lock exclusive; the second makes the plain variable inside it&nbsp;race-free.</div>
   </div>
   
@@ -2729,7 +2729,7 @@ deadlock: 2 threads blocked for ever
   <h2>The Coffman conditions&nbsp;(1971)</h2>
   <div class="cols b1-coff-cols">
     <div>
-      <svg class="b1-fig2" viewBox="100 20 680 375" role="img" aria-label="A resource graph of the deadlock: threads t1 and t2 as circles, locks A and B as squares, holds edges from each thread to its lock and dashed wants arrows to the other lock; each click lights the part of the graph of one condition, the last removes the edge from t2 to B">
+      <svg class="b1-fig2" viewBox="100 20 680 375" role="img" aria-label="A resource graph of the deadlock: threads t1 and t2 as circles, locks A and B as squares, an edge from each thread to the lock it holds and a dashed arrow to the lock it waits for; each click lights the part of the graph of one condition, the last removes the edge from t2 to B">
     <defs><marker id="b1-coff-a" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#23373B"/></marker><marker id="b1-coff-aa" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#EB811B"/></marker></defs>
     <line class="e-h1" x1="300" y1="110" x2="300" y2="260" stroke="#23373B" stroke-width="2.5"/>
     <g class="e-h2 fragment fade-out" data-fragment-index="4"><line class="" x1="640" y1="110" x2="640" y2="260" stroke="#23373B" stroke-width="2.5"/><text x="654" y="194" text-anchor="start">holds</text></g>
@@ -2743,7 +2743,7 @@ deadlock: 2 threads blocked for ever
     <g class="nodes"><circle cx="300" cy="70" r="40"/><circle cx="640" cy="70" r="40"/><rect x="260" y="260" width="80" height="80" rx="5"/><rect x="600" y="260" width="80" height="80" rx="5"/></g>
     <g class="names"><text class="mono" x="300" y="79" text-anchor="middle">t1</text><text class="mono" x="640" y="79" text-anchor="middle">t2</text><text class="mono" x="300" y="309" text-anchor="middle">A</text><text class="mono" x="640" y="309" text-anchor="middle">B</text></g>
     <g class="kinds"><text x="240" y="79" text-anchor="end">thread</text><text x="240" y="309" text-anchor="end">lock</text></g>
-    <g class="elbl"><text x="286" y="194" text-anchor="end">holds</text><text x="410" y="330" text-anchor="middle">wants</text><text x="530" y="330" text-anchor="middle">wants</text></g>
+    <g class="elbl"><text x="286" y="194" text-anchor="end">holds</text><text x="348" y="330" text-anchor="start">waits for</text><text x="592" y="330" text-anchor="end">waits for</text></g>
     <g class="c1 fragment current-visible" data-fragment-index="0"><text x="300" y="384" text-anchor="middle">one holder</text><text x="640" y="384" text-anchor="middle">one holder</text></g>
     <g class="c3 fragment current-visible" data-fragment-index="2"><rect x="286" y="206" width="28" height="44" fill="#FFFFFF" stroke="none"/><path d="M292 226 V218 A8 8 0 0 1 308 218 V226" fill="none" stroke="#EB811B" stroke-width="3"/><rect x="289" y="226" width="22" height="18" rx="2" fill="#FFF4EA" stroke="#EB811B" stroke-width="3"/><text x="300" y="384" text-anchor="middle">cannot be taken away</text></g>
     <g class="c5 fragment" data-fragment-index="4"><text x="470" y="384" text-anchor="middle">both take A first: no cycle</text></g>

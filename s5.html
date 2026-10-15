@@ -48,7 +48,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
   <div class="inner">
 
 <p class="crumb"><a href="index.html">&larr; all sessions</a></p>
-<section class="hero with-art">
+<section class="hero with-art" id="top">
   <div class="text">
   <p class="dim">Session 5</p>
   <h1>Functions as Values: Iterators and Streams</h1>
@@ -57,11 +57,18 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
   <figure class="art"><img src="art/steps.jpg" width="640" height="640" alt=""></figure>
 </section>
 
-<section>
-  <h2>Materials</h2>
-  <ul class="materials"><li class="group" id="lecture"><span class="glabel">Lecture</span><ul><li class="blockhead"><span class="blk">Block 1</span> Iterators</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-1.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-1.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blockhead"><span class="blk">Block 2</span> Thunks and streams</li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-2.html">Slides (opens in the browser; → and ← to move, T lists the parts)</a></span></li><li class="m-slides c-lecture"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-2.pdf">Slides as PDF (one page per slide; the demos and animations are on the web version)</a></span></li><li class="blocknote">The two decks and their PDFs are a first version, published on the day of the lecture: their content might change.</li></ul></li><li class="group" id="warmup"><span class="glabel">Warm-up</span><ul><li class="m-paper c-warmup"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/handouts/s5-warmup.pdf">Warm-up — on paper, then at the keyboard: lists, then Pascal&#x27;s triangle as a sequence</a></span></li></ul></li><li class="group" id="quest"><span class="glabel">Quest</span><ul><li class="m-lab c-quest"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab5-rope/index.html">Quest — making a mini text editor</a></span></li><li class="m-lab c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab5-rope/README.md">Lab README — what to do, level by level</a></span></li><li class="m-code c-quest"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab5-rope">The lab folder — rope.ml, stream.ml, next.ml, the editor</a></span></li></ul></li><li class="group" id="solutions"><span class="glabel">Solutions</span><ul><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s5/index.html">Quest — every level explained, as a page</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/rope.ml">rope.ml — part A, every hole filled, commented</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/stream.ml">stream.ml — part B, every hole filled</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/next.ml">next.ml — part C, every hole filled</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/checks.ml">checks.ml — the 55 checks</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/solutions/s5/s5-warmup-solutions.pdf">Warm-up — the sheet, worked, with its homework</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/warmup.ml">warmup.ml — the warm-up&#x27;s exercises at the keyboard, solved</a></span></li><li class="m-solution c-solutions"><span class="mi"><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/queue.ml">queue.ml — the homework: lab 2&#x27;s queue, with its reversal kept</a></span></li></ul></li><li class="group" id="homework"><span class="glabel">Homework</span><ul><li class="m-reading c-homework"><span class="mi"><a href="https://cs3110.github.io/textbook/chapters/ds/sequence.html">CS3110, chapter 9 — section 9.4, sequences</a></span></li><li class="m-homework c-homework"><span class="mi"><a href="https://leon-gondelman.github.io/pp26/labs/lab5-rope/index.html#homework">What to finish at home — on the lab page</a></span></li></ul></li></ul>
+<section id="lecture">
+  <h2>Lecture</h2>
+  <div class="mgrid"><div class="mcard"><span class="ic"><span class="num">1</span></span><span class="mid"><b><a href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-1.html">Iterators</a></b></span><span class="ft"><span class="chips"><a class="chipb" href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-1.pdf">PDF</a></span><span class="go">Slides &rarr;</span></span></div><div class="mcard"><span class="ic"><span class="num">2</span></span><span class="mid"><b><a href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-2.html">Thunks and streams</a></b></span><span class="ft"><span class="chips"><a class="chipb" href="https://leon-gondelman.github.io/pp26/slides/s5-functions-block-2.pdf">PDF</a></span><span class="go">Slides &rarr;</span></span></div></div>
+  <p class="mnote">The two decks and their PDFs are a first version, published on the day of the lecture: their content might change.</p>
 </section>
-<section class="story">
+
+<section id="lab">
+  <h2>Lab</h2>
+  <div class="mgrid"><div class="mcard"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/></svg></span><span class="mid"><b><a href="https://leon-gondelman.github.io/pp26/handouts/s5-warmup.pdf">Warm-up</a></b><span class="tx">Lists, then Pascal&#x27;s triangle</span></span><span class="ft"><span class="chips"><a class="chipb sol" href="https://leon-gondelman.github.io/pp26/solutions/s5/s5-warmup-solutions.pdf">Solutions</a></span><span class="go">PDF &rarr;</span></span></div><div class="mcard"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span><span class="mid"><b><a href="https://leon-gondelman.github.io/pp26/labs/lab5-rope/index.html">Quest</a></b><span class="tx">Making a mini text editor</span></span><span class="ft"><span class="chips"><a class="chipb" href="https://github.com/leon-gondelman/pp26/blob/main/labs/lab5-rope/README.md">README</a><a class="chipb" href="https://github.com/leon-gondelman/pp26/tree/main/labs/lab5-rope">Files</a><a class="chipb sol" href="https://leon-gondelman.github.io/pp26/solutions/s5/index.html">Solutions</a></span><span class="go">Lab page &rarr;</span></span></div><div class="mcard wide many" id="homework"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/></svg></span><span class="mid"><b>Homework</b><span class="tx"><span class="mlist"><a href="https://cs3110.github.io/textbook/chapters/ds/sequence.html">CS3110, chapter 9 — section 9.4, sequences</a><a href="https://leon-gondelman.github.io/pp26/labs/lab5-rope/index.html#homework">What to finish at home — on the lab page</a></span></span></span></div><div class="mcard wide many" id="solutions"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg></span><span class="mid"><b>Solutions</b><span class="tx"><span class="mlist"><a href="https://leon-gondelman.github.io/pp26/solutions/s5/index.html">Quest — every level explained, as a page</a><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/rope.ml">rope.ml — part A, every hole filled, commented</a><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/stream.ml">stream.ml — part B, every hole filled</a><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/next.ml">next.ml — part C, every hole filled</a><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/checks.ml">checks.ml — the 55 checks</a><a href="https://leon-gondelman.github.io/pp26/solutions/s5/s5-warmup-solutions.pdf">Warm-up — the sheet, worked, with its homework</a><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/warmup.ml">warmup.ml — the warm-up&#x27;s exercises at the keyboard, solved</a><a href="https://github.com/leon-gondelman/pp26/blob/main/solutions/s5/ocaml/queue.ml">queue.ml — the homework: lab 2&#x27;s queue, with its reversal kept</a></span></span></span></div></div>
+</section>
+
+<section class="story" id="this-session">
   <h2>This session</h2>
   <p>Session 5 is about functions passed as values, and how a program uses them to control,
      step by step, a traversal of its data and its own computation:</p>
@@ -71,7 +78,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
   </ul>
 </section>
 
-<section>
+<section id="the-lecture-in-two-blocks">
   <h2>The lecture, in two blocks</h2>
   <table class="parts">
     <tbody>
@@ -94,7 +101,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
      text editor on a rope, the tree structure in which text editors store a document.</p>
 </section>
 
-<section>
+<section id="the-questions-of-the-session">
   <h2>The questions of the session</h2>
   <p>Each part of the lecture asks one question. The two conclusions answer them.</p>
   <h3>Block 1: a function carries out one step of a traversal. Who calls it?</h3>
@@ -130,7 +137,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
      give a value.</p>
 </section>
 
-<section>
+<section id="the-types-of-the-session">
   <h2>The types of the session</h2>
   <p>Session 3 introduced algebraic data types on the melody: a closed list of shapes, each value
      built in exactly one way, taken apart by <code>match</code>, with the compiler telling us when
@@ -223,7 +230,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
      what a type with a parameter means, is session 11.</p>
 </section>
 
-<section>
+<section id="the-lab-warm-up-then-the-editor">
   <h2>The lab: warm-up, then the editor</h2>
   <table class="parts">
     <tbody>
@@ -245,7 +252,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
   <p class="p">Nothing is handed in; the checks, <code>dune exec ./main.exe</code>, say which levels remain.</p>
 </section>
 
-<section>
+<section id="homework-2">
   <h2>Homework</h2>
   <ul class="refs">
     <li class="must"><strong>Reading.</strong>
@@ -263,7 +270,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
   </ul>
 </section>
 
-<section>
+<section id="languages-this-session">
   <h2>Languages this session</h2>
   <table class="langs">
     <thead><tr><th>Language</th><th>Role</th></tr></thead>
@@ -281,7 +288,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
   </table>
 </section>
 
-<section>
+<section id="further-reading">
   <h2>Further reading</h2>
   <p>None of this is required.</p>
   <h3>Block 1</h3>
@@ -336,7 +343,168 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
         block 2, as the language ships them.</li>
   </ul>
 </section>
+<style>
+.nside-short{display:none}
+.nside{font:400 .9rem/1.4 var(--sans)}
+.nside ol{list-style:none;margin:0;padding:0}
+.nside li{margin:.1rem 0}
+.nside a{display:block;padding:.18rem .55rem;border-left:2px solid transparent;color:var(--ink2);text-decoration:none}
+.nside a:hover{color:var(--ink)}
+.nside a.on{color:var(--acc);border-left-color:var(--acc)}
+.nside-part>a{font-weight:600;color:var(--ink)}
+.nside-part>ol{margin:.15rem 0 .9rem .7rem}
+.nside-h{font:600 .72rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .6rem .55rem}
 
+/* the contents pane of the session's page (14 October, pp26-118; on every session page, with the
+   page's own sections before the notes', from 15 October, pp26-122): the course's rail stays on the
+   left; the contents have a pane of their own from the moment the page opens, headed by the session's
+   title, which leads back to the top of the page. From 1180 px it is a column on the right, the place readers of
+   documentation expect it, the whole list in view; from 981 px, with no room for a third column, a
+   band under the top bar. On a phone it is a bar under the course's strip that names the section
+   being read and opens the whole list; the top bar, whose only use there is the color theme, gives
+   way to it, and the theme's button moves to the bar's right end. The pane is set apart from the
+   page as the rail is, by the panes' tint (--pane, shared with the rail) and a gray rule of 1 px on the side that faces
+   the page and one where it meets the bar above it (the top bar; on a phone the course's strip). */
+nav.nside-pane{box-sizing:border-box;background:var(--bg);z-index:5}
+nav.nside-pane .nside-back{display:block;font:600 .86rem/1.3 var(--sans);color:var(--acc);text-decoration:none;
+  padding:.4rem .6rem;border-radius:6px;background:var(--bg);border:0}
+nav.nside-pane .nside-cur,nav.nside-pane .nside-open,nav.nside-pane .nside-theme,nav.nside-pane .nside-home{display:none}
+nav.nside-pane .nside-sheet{display:contents}
+/* the pane's head: the session, small, over its title, both leading to the page's top; then the
+   page's sections, then the notes' blocks under a heading of their own */
+nav.nside-pane .nside-title{font:600 .98rem/1.3 var(--sans);color:var(--ink);background:var(--pane);padding:.2rem .55rem}
+nav.nside-pane .nside-title small{display:block;font:600 .68rem/1.4 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--lbl);margin-bottom:.15rem}
+nav.nside-pane .nside-top{margin:0 0 1.4rem}
+nav.nside-pane .nside-top a{color:var(--ink)}
+nav.nside-pane .nside-notes{margin-top:.2rem}
+nav.nside-pane .nside-h{color:var(--lbl)}
+.notes-embed [id]{scroll-margin-top:calc(var(--pane-top,4.5rem) + .8rem)}
+@media (min-width:1180px){
+  :root{--pw:15.5rem}
+  nav.nside-pane{position:fixed;right:0;top:var(--pane-top,3.4rem);bottom:0;width:var(--pw);
+    overflow-y:auto;overscroll-behavior:contain;padding:1.4rem .9rem 2rem;border-left:1px solid var(--line);border-top:1px solid var(--line);background:var(--pane)}
+  main>.inner,main>footer.site{margin-right:var(--pw)}
+  main>.inner{max-width:calc(100% - var(--pw))}
+  nav.nside-pane .nside-back{margin:0 0 1.2rem}
+  nav.nside-pane .nside-parts{columns:auto}
+  nav.nside-pane .nside-part>a{margin-top:.3rem}
+  nav.nside-pane a:not(.nside-back){font-size:.86rem}
+}
+@media (min-width:981px) and (max-width:1179px){
+  nav.nside-pane{position:sticky;top:var(--pane-top,3.4rem);padding:.45rem 3rem .45rem 1rem;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--pane)}
+  /* in the band the way back stays at its left end while the rest scrolls under it */
+  nav.nside-pane .nside-back{position:sticky;left:0;z-index:1;box-shadow:-.7rem 0 0 .45rem var(--pane),.35rem 0 0 .2rem var(--pane)}
+}
+@media (min-width:981px) and (max-width:1179px){
+nav.nside-pane{display:flex;flex-wrap:nowrap;align-items:center;gap:.25rem;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none}
+nav.nside-pane::-webkit-scrollbar{display:none}
+nav.nside-pane{display:flex;flex-wrap:nowrap;align-items:center;gap:.25rem;margin:0}
+nav.nside-pane .nside-h{display:none}
+nav.nside-pane .nside-parts{display:flex;align-items:center;gap:.7rem;columns:auto}
+nav.nside-pane .nside-part{display:flex;align-items:center;gap:.1rem}
+nav.nside-pane .nside-part>ol{display:flex;gap:.1rem;margin:0}
+nav.nside-pane .nside-top{display:flex;gap:.1rem;margin:0 .7rem 0 0}
+nav.nside-pane .nside-title small{display:none}
+nav.nside-pane li{margin:0}
+nav.nside-pane a{white-space:nowrap;padding:.3rem .5rem;border-left:0;border-bottom:2px solid transparent;border-radius:0;font-size:.84rem}
+nav.nside-pane a.on{border-bottom-color:var(--acc)}
+nav.nside-pane .nside-part>a{margin:0}
+nav.nside-pane .nside-back{margin:0 .2rem 0 0;padding:.3rem .6rem}
+nav.nside-pane .nside-full{display:none}
+nav.nside-pane .nside-short{display:inline}
+}
+@media (max-width:980px){
+  main>.topbar{display:none}
+  nav.nside-pane{position:sticky;top:var(--pane-top,2.6rem);display:flex;flex-wrap:wrap;align-items:center;padding:0;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--pane)}
+  /* the bar: the section being read, a button that opens the whole list under it, and the theme */
+  nav.nside-pane .nside-open{display:flex;flex:1;min-width:0;align-items:center;gap:.6rem;box-sizing:border-box;
+    height:2.9rem;padding:0 .6rem 0 .8rem;border:0;background:none;font:400 .88rem/1.2 var(--sans);color:var(--ink);cursor:pointer;text-align:left}
+  nav.nside-pane .nside-open b{font-weight:600;color:var(--ink3);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;flex:none}
+  nav.nside-pane .nside-cur{display:block;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  nav.nside-pane .nside-open i{flex:none;font-style:normal;font-size:1.1rem;color:var(--ink3);transition:transform .2s ease}
+  nav.nside-pane.open .nside-open i{transform:rotate(180deg)}
+  /* two squares at the bar's ends: three lines on the left, to the course's home page; the color
+     theme on the right */
+  nav.nside-pane .nside-theme,nav.nside-pane .nside-home{flex:none;box-sizing:border-box;width:2.1rem;height:2.1rem;padding:0;
+    display:grid;place-items:center;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:8px;cursor:pointer}
+  nav.nside-pane .nside-theme{margin:0 .8rem 0 0}
+  nav.nside-pane .nside-home{margin:0 0 0 .8rem;align-content:center;gap:4px;text-decoration:none}
+  nav.nside-pane .nside-home span{display:block;width:1.05rem;height:1.6px;border-radius:1px;background:var(--ink2)}
+  nav.nside-pane .nside-theme span{display:none}
+  nav.nside-pane .nside-theme svg{width:1.15rem;height:1.15rem;display:block}
+  nav.nside-pane .nside-theme[data-mode="auto"] [data-t="auto"],nav.nside-pane .nside-theme[data-mode="light"] [data-t="light"],
+  nav.nside-pane .nside-theme[data-mode="dark"] [data-t="dark"]{display:block}
+  nav.nside-pane .nside-sheet{display:none;flex-basis:100%;box-sizing:border-box;max-height:min(70vh,34rem);overflow-y:auto;overscroll-behavior:contain;
+    padding:.8rem 1rem 1.2rem;border-top:1px solid var(--line);background:var(--bg);box-shadow:0 14px 30px rgba(15,17,21,.16)}
+  nav.nside-pane.open .nside-sheet{display:block}
+  nav.nside-pane .nside-back{margin:0 0 .9rem}
+  nav.nside-pane .nside-h{display:none}
+  nav.nside-pane .nside-parts{columns:auto}
+  nav.nside-pane a:not(.nside-back){padding:.4rem .55rem}
+}
+</style>
+<nav class="nside nside-pane" aria-label="Contents"><button class="nside-open" type="button" aria-expanded="false"><b>Contents</b><span class="nside-cur">Lecture</span><i aria-hidden="true">&#9662;</i></button><div class="nside-sheet"><a class="nside-back nside-title" href="#top"><span class="nside-full"><small>Session 5</small>Functions as Values: Iterators and&nbsp;Streams</span><span class="nside-short">&uarr; Top</span></a><p class="nside-h">On this page</p><ol class="nside-top"><li><a href="#lecture">Lecture</a></li><li><a href="#lab">Lab</a></li><li><a href="#this-session">This session</a></li><li><a href="#the-lecture-in-two-blocks">The lecture, in two&nbsp;blocks</a></li><li><a href="#the-questions-of-the-session">The questions of the&nbsp;session</a></li><li><a href="#the-types-of-the-session">The types of the&nbsp;session</a></li><li><a href="#the-lab-warm-up-then-the-editor">The lab: warm-up, then the&nbsp;editor</a></li><li><a href="#homework-2">Homework</a></li><li><a href="#languages-this-session">Languages this session</a></li><li><a href="#further-reading">Further reading</a></li></ol></div></nav>
+<script>
+(function(){
+  document.querySelectorAll('nav.nside').forEach(function(nav){
+    var links=[].slice.call(nav.querySelectorAll('a')), map={};
+    links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return; var a=map[e.target.id]; if(!a)return;
+      links.forEach(function(l){l.classList.remove('on');}); a.classList.add('on');
+      var box=nav.closest('aside.rail')||nav;
+      if(box.scrollWidth>box.clientWidth+2)box.scrollLeft=a.offsetLeft-box.clientWidth/3;
+      else if(nav.scrollHeight>nav.clientHeight)a.scrollIntoView({block:'nearest'});
+    });},{rootMargin:'-15% 0px -75% 0px'});
+    Object.keys(map).forEach(function(id){var t=document.getElementById(id); if(t)io.observe(t);});
+  });
+})();
+
+(function(){
+  var root=document.documentElement, pane=document.querySelector('nav.nside-pane'), bar=document.querySelector('.topbar');
+  if(!pane)return;
+  /* the pane sits right under the top bar, outside the page's column */
+  if(bar)bar.parentNode.insertBefore(pane,bar.nextSibling);
+  /* the bars at the top of the window (the top bar; on a phone the course's strip, the top bar hidden):
+     the pane starts under them */
+  var top=0;
+  function place(){top=bar?Math.max(0,bar.getBoundingClientRect().bottom):0;
+    if(bar&&getComputedStyle(bar).position==='sticky')top=bar.offsetHeight+(parseFloat(getComputedStyle(bar).top)||0);
+    root.style.setProperty('--pane-top',top+'px');}
+  /* a band that scrolls sideways shows the section being read a third of the way in */
+  function center(){var a=pane.querySelector('a.on'); if(a&&pane.scrollWidth>pane.clientWidth+2)pane.scrollLeft=a.offsetLeft-pane.clientWidth/3;}
+  place(); center();
+  addEventListener('resize',function(){place(); center();}); addEventListener('load',place);
+  /* links land under those bars, and under the pane when it lies across the top */
+  function under(){var t=top, r=pane.getBoundingClientRect();
+    if(r.top<=t+2&&r.height<innerHeight/2)t=Math.max(t,r.bottom); return Math.max(0,t);}
+  function to(t){window.scrollTo(0, t.getBoundingClientRect().top + window.scrollY - under() - 12);}
+  function close(){pane.classList.remove('open'); var b=pane.querySelector('.nside-open'); if(b)b.setAttribute('aria-expanded','false');}
+  document.querySelectorAll('nav.nside a').forEach(function(a){a.addEventListener('click',function(e){
+    var id=a.getAttribute('href').slice(1); close();
+    if(a.classList.contains('nside-back')){if(a.getAttribute('href').charAt(0)!=='#')return; e.preventDefault(); window.scrollTo(0,0); history.replaceState(null,'',location.pathname+location.search); return;}
+    var t=document.getElementById(id); if(!t)return; e.preventDefault(); to(t); history.replaceState(null,'','#'+id);});});
+  if(location.hash){var t=document.getElementById(location.hash.slice(1)); if(t)requestAnimationFrame(function(){to(t);});}
+  /* on a phone the bar names the section being read, and opens the list under it */
+  var ob=pane.querySelector('.nside-open'), cur=pane.querySelector('.nside-cur'), first=cur?cur.textContent:'';
+  if(ob){ob.addEventListener('click',function(){var o=!pane.classList.contains('open'); pane.classList.toggle('open',o); ob.setAttribute('aria-expanded',o?'true':'false');});
+    addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    document.addEventListener('click',function(e){if(!pane.contains(e.target))close();});
+    new MutationObserver(function(){var a=pane.querySelector('a.on'); cur.textContent=a?a.textContent.replace(/\u00a0/g,' '):first;})
+      .observe(pane,{subtree:true,attributes:true,attributeFilter:['class']});}
+  /* three lines in a square at the bar's left end: the course's home page */
+  if(ob){var h=document.createElement('a'); h.className='nside-home'; h.href=(document.querySelector('.tbbrand')||{getAttribute:function(){return 'index.html';}}).getAttribute('href'); h.title='The course';
+    h.setAttribute('aria-label','The course'); h.innerHTML='<span></span><span></span><span></span>'; ob.parentNode.insertBefore(h,ob);}
+  /* the top bar's theme button, copied to the bar's right end: a press there is a press on it */
+  var th=bar&&bar.querySelector('.theme');
+  if(th&&ob){var c=th.cloneNode(true); c.className='nside-theme'; ob.parentNode.insertBefore(c,ob.nextSibling);
+    function same(){if(th.dataset.mode)c.dataset.mode=th.dataset.mode; c.title=th.title; c.setAttribute('aria-label',th.getAttribute('aria-label'));}
+    c.addEventListener('click',function(e){e.stopPropagation(); th.click(); same();});
+    new MutationObserver(same).observe(th,{attributes:true,attributeFilter:['data-mode']}); same();}
+})();
+</script>
   </div>
   <footer class="site">
     <div class="colophon">

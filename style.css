@@ -20,6 +20,9 @@
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --rail:16.5rem;
+  /* the two panes, the rail on the left and the contents on the right, share one tint, halfway between
+     the rail's gray and the navy's light tint (15 October, pp26-122); the cards' squares take it too */
+  --pane:color-mix(in srgb,var(--side) 50%,var(--acc-l));
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
@@ -76,7 +79,7 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offse
 h1,h2,h3{text-wrap:balance}
 
 /* ---------------------------------------------------------------- rail */
-aside.rail{background:var(--side);border-right:1px solid var(--line);
+aside.rail{background:var(--pane);border-right:1px solid var(--line);
   padding:1.6rem 1.25rem;position:sticky;top:0;height:100vh;overflow-y:auto;overscroll-behavior:contain}
 .brand{display:flex;gap:.7rem;align-items:center;text-decoration:none;color:var(--ink)}
 .brand .monogram{flex:none;width:34px;height:34px;border-radius:9px;background:var(--acc);
@@ -262,43 +265,7 @@ td.ttl .blk-m{display:none}
 .dl.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
 
 /* ---------------------------------------------------------------- session pages */
-/* Materials. Same visual language as the index: a tinted pill per item,
-   coloured by what it is (lecture / lab / homework / solutions). The session
-   page differs only in that the pill can carry the full title, because here
-   there is room for it. */
-ul.materials{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;
-  gap:.45rem;max-width:56rem}
-ul.materials li{display:inline-flex;align-items:center;border-radius:7px;
-  padding:.5rem .75rem;font:600 .875rem/1.35 var(--sans);
-  background:var(--sunk);color:var(--ink2);border:1px solid var(--line);
-  transition:filter .12s ease}
-ul.materials li:hover{filter:brightness(.965)}
-ul.materials li a{text-decoration:none;color:inherit}
-ul.materials li a:hover{text-decoration:underline}
-ul.materials li .mi{min-width:0}
-ul.materials li .mi .dim{font-weight:400;opacity:.7;margin:0 .25em}
-ul.materials li.c-lecture{color:var(--lec);background:var(--lec-b);border-color:transparent}
-ul.materials li.c-warmup{color:var(--warm);background:var(--warm-b);border-color:transparent}
-ul.materials li.c-quest{color:var(--lab);background:var(--lab-b);border-color:transparent}
-ul.materials li.c-homework{color:var(--hw);background:var(--hw-b);border-color:transparent}
-ul.materials li.c-solutions{color:var(--sol);background:var(--sol-b);border-color:transparent}
-ul.materials li.dim{width:100%;display:block;font-weight:400;color:var(--ink3)}
-/* a lecture block's heading inside the Lecture group: a line, not a pill */
-ul.materials li.blockhead{width:100%;display:block;background:none;border:0;padding:.3rem 0 0;
-  font:500 .84rem/1.3 var(--sans);color:var(--ink2)}
-ul.materials li.blockhead .blk{margin-right:.4rem}
-ul.materials li.blocknote{width:100%;display:block;background:none;border:0;padding:.35rem 0 0;color:var(--ink3);font-size:.92em}
-
-/* A group is a labelled row of those pills, not a box of its own. */
-ul.materials li.group{display:block;width:100%;border:0;background:none;padding:0;
-  margin:0 0 1.05rem;filter:none}
-ul.materials li.group>.glabel{display:flex;align-items:center;gap:.7rem;
-  font:600 .68rem/1.4 var(--sans);letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink3);margin-bottom:.45rem}
-ul.materials li.group>.glabel::after{content:"";flex:1;height:1px;background:var(--line)}
-ul.materials li.group>ul{list-style:none;padding:0;margin:0;
-  display:flex;flex-wrap:wrap;gap:.45rem}
-ul.materials li.group>ul>li::before{content:none}
+/* the lecture and the lab are cards: see .mcard, after the tiles of Before the session */
 
 dl{margin:0}
 .field{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:.35rem 1.2rem;
@@ -475,8 +442,6 @@ tr.morerow td{padding-top:.1rem;padding-bottom:.8rem;border-bottom:1px solid var
 .more a:hover{border-color:var(--blkc)}
 .more .sep{color:var(--ink3);margin:0 .35em}
 .more-m{display:none}
-/* a link to a group of a session's materials stops below the sticky bar */
-ul.materials li.group[id]{scroll-margin-top:4.5rem}
 .entrysec .ehead{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .entrysec .eside{font-size:.85rem;color:var(--ink3)}
 .entry{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
@@ -494,6 +459,54 @@ a.etile:hover .go{color:var(--e)}
 .etile.soon{border-style:dashed}
 .etile.soon .ic,.etile.soon b,.etile.soon .go{opacity:.55}
 @media (max-width:760px){.entry{grid-template-columns:minmax(0,1fr)}}
+/* the session page's lecture and lab (15 October, pp26-122): cards drawn as the tiles above are, a
+   card per block of the lecture and per half of the lab, two to a row; the notes, the homework and
+   the solutions are wide cards under them. The whole card opens its thing, named at its right foot;
+   the other formats are small buttons at its left foot, over the card's link. */
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.mcard{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;
+  padding:1.3rem 1.3rem 1.1rem;background:var(--bg);transition:border-color .15s ease}
+.mcard:has(b>a):hover{border-color:var(--ink3)}
+.mcard .ic{flex:none;width:2.8rem;height:2.8rem;border-radius:11px;display:grid;place-items:center;
+  background:var(--pane);color:var(--ink2);margin-bottom:1.1rem}
+.mcard .ic .num{font:500 1.3rem/1 var(--sans);color:var(--ink2);font-variant-numeric:lining-nums}
+.mcard .mid{display:flex;flex-direction:column;flex:1;min-width:0}
+.mcard b{font-weight:500;font-size:1.15rem;line-height:1.3;color:var(--ink)}
+.mcard b>a{color:inherit;text-decoration:none}
+.mcard b>a::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.mcard .tx{margin-top:.45rem;font-size:.95rem;line-height:1.5;color:var(--ink2);flex:1;text-wrap:pretty}
+.mcard .ft{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-top:1.1rem;padding-top:.8rem;
+  border-top:1px solid var(--line-soft);font-size:.88rem;color:var(--ink3)}
+.mcard .chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.mcard .go{margin-left:auto;color:var(--file);font-weight:600;white-space:nowrap}
+.mcard:hover .go{text-decoration:underline;text-underline-offset:.2em}
+.chipb{position:relative;z-index:1;display:inline-block;font:600 .78rem/1 var(--sans);color:var(--file);text-decoration:none;
+  padding:.45em .62em;border:1px solid color-mix(in srgb,var(--file) 28%,var(--bg));border-radius:7px;background:var(--bg);transition:border-color .12s ease,color .12s ease}
+a.chipb:hover{border-color:var(--file)}
+.chipb.soon{border-style:dashed;color:var(--ink3)}
+.mcard.soon{border-style:dashed}
+.mcard.soon .ic,.mcard.soon b{opacity:.55}
+/* a wide card is one row: the mark, the title over its line, the foot at the right end */
+.mcard.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:1.1rem;padding:1rem 1.3rem}
+.mcard.wide .ic{margin:0}
+.mcard.wide .tx{margin-top:.15rem;flex:none}
+.mcard.wide .ft{flex:none;margin:0;padding:0;border:0}
+/* a wide card of several things lists them, each its own link, in two columns when there is room */
+.mcard.many{align-items:flex-start}
+.mlist{display:block;columns:2 17rem;column-gap:1.6rem;margin-top:.3rem}
+.mlist>*{display:block;break-inside:avoid;padding:.12rem 0;font-size:.92rem}
+.mlist a{color:var(--file);text-decoration:none}
+.mlist a:hover{text-decoration:underline}
+.mlist .dim{color:var(--ink3)}
+.mnote{margin:.9rem 0 0;font-size:.92rem;color:var(--ink3)}
+/* a session page's headings in small capitals take the orange of the index's block labels */
+:where(.inner:has(>#top))>section>h2,:where(.inner:has(>#top))>section>.ehead>h2{color:var(--lbl)}
+@media (max-width:760px){
+  .mgrid{grid-template-columns:minmax(0,1fr)}
+  .mcard.wide{flex-wrap:wrap;align-items:flex-start}
+  .mcard.wide .mid{flex-basis:calc(100% - 4rem)}
+  .mcard.wide .ft{flex-basis:100%;margin-top:.2rem;padding-top:.7rem;border-top:1px solid var(--line-soft)}
+}
 /* ---------------------------------------------------------------- the index as screens */
 /* On a desktop the index moves screen by screen, as a product page does: the
    course with a gallery and the first session, then one screen per part, then
@@ -595,16 +608,15 @@ html.splashing #top figure.masthead img,html.splashing #top .hero h1,html.splash
    quest the full one, its solutions and homework as teal outlines). Everything
    else is neutral; the wine marks only the current session. ?palette=old in the
    address shows the earlier palette (one colour per column) for comparison. */
-html:not(.pal-old) .dl.c-lecture,html:not(.pal-old) ul.materials li.c-lecture{color:var(--acc-t);background:var(--acc-l)}
-html:not(.pal-old) .dl.c-warmup,html:not(.pal-old) ul.materials li.c-warmup{color:var(--lab);background:color-mix(in srgb,var(--lab-b) 50%,var(--bg))}
-html:not(.pal-old) .dl.c-quest,html:not(.pal-old) ul.materials li.c-quest{color:var(--lab);background:var(--lab-b)}
-html:not(.pal-old) .dl.c-solutions,html:not(.pal-old) ul.materials li.c-solutions,
-html:not(.pal-old) .dl.c-homework,html:not(.pal-old) ul.materials li.c-homework{color:var(--lab);background:var(--bg);
+html:not(.pal-old) .dl.c-lecture{color:var(--acc-t);background:var(--acc-l)}
+html:not(.pal-old) .dl.c-warmup{color:var(--lab);background:color-mix(in srgb,var(--lab-b) 50%,var(--bg))}
+html:not(.pal-old) .dl.c-quest{color:var(--lab);background:var(--lab-b)}
+html:not(.pal-old) .dl.c-solutions,html:not(.pal-old) .dl.c-homework{color:var(--lab);background:var(--bg);
   border:1px solid color-mix(in srgb,var(--lab) 32%,var(--bg))}
 html:not(.pal-old) .more{--blkc:var(--lab)}
 html:not(.pal-old) .more a{border-color:color-mix(in srgb,var(--lab) 32%,var(--bg))}
 html:not(.pal-old) .blk{color:var(--lbl);font-weight:700;font-size:.74rem}
-html:not(.pal-old) .etile .ic{background:var(--sunk);color:var(--ink2)}
+html:not(.pal-old) .etile .ic{background:var(--pane);color:var(--ink2)}
 html:not(.pal-old) a.etile:hover{border-color:var(--ink3);box-shadow:none}
 html:not(.pal-old) a.etile:hover .go{color:var(--acc-t)}
 /* ---------------------------------------------------------------- the schedule's lines */
