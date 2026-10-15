@@ -618,7 +618,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 
 <p>In Java, <code>new Thread(work)</code> creates a thread that will run the code <code>work</code>, a <code>Runnable</code>, when it is started; <code>t1.start()</code> starts it; <code>t1.join()</code> makes the calling thread wait until <code>t1</code> has finished. The main thread below starts two threads and waits for both before&nbsp;printing.</p>
 
-<span class="notes-file">CounterRacy.java, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterRacy.java#L5" target="_blank" rel="noopener">CounterRacy.java</a>, the lines shown on the slide</span>
 <pre><code>static int n = 0;                       // shared by the two threads
 
 public static void main(String[] args) throws InterruptedException {
@@ -768,7 +768,7 @@ n = v;          // write</code></pre>
 
 <p>OCaml&nbsp;5 calls a unit of parallel execution a <b>domain</b>, several domains running at the same time on different cores; <code>Domain.spawn work</code> starts one running <code>work</code>, and <code>Domain.join</code> waits for it. The same program with two domains loses updates in the same&nbsp;way.</p>
 
-<span class="notes-file">counter_racy.ml, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_racy.ml#L8" target="_blank" rel="noopener">counter_racy.ml</a>, the lines shown on the slide</span>
 <pre><code>let n = ref 0
 
 let work () =
@@ -937,7 +937,7 @@ got      1056147</code></pre>
 
 <p>With atomic accesses defined, the definition of a data race in section&nbsp;2 takes one more clause: at least one of the two accesses is a <b>plain access</b>, that is, not atomic, so two accesses that are both atomic are never a data race, as block&nbsp;2, section&nbsp;2,&nbsp;states.</p>
 
-<span class="notes-file">SpinLock.java, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/SpinLock.java#L8" target="_blank" rel="noopener">SpinLock.java</a>, the lines shown on the slide</span>
 <pre><code>static final AtomicBoolean held = new AtomicBoolean(false);
 static void lock()   { while (held.getAndSet(true)) { } }   // loop until it was false
 static void unlock() { held.set(false); }
@@ -950,7 +950,7 @@ Runnable work = () -&gt; {
 got      2000000</code></pre>
 <p class="notes-sample">One sample. The field <code>n</code> is the plain <code>int</code> of section&nbsp;2; only the two lines around <code>n++</code>&nbsp;changed.</p>
 
-<span class="notes-file">spin_lock.ml, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/spin_lock.ml#L7" target="_blank" rel="noopener">spin_lock.ml</a>, the lines shown on the slide</span>
 <pre><code>let flag = Atomic.make false
 let lock () = while Atomic.exchange flag true do Domain.cpu_relax () done
 let unlock () = Atomic.set flag false
@@ -985,7 +985,7 @@ got      2000000</code></pre>
 
 <p>In Java every object carries a lock, which Java calls the object's monitor (section&nbsp;7 explains the word), and <code>synchronized (lock) { … }</code> acquires it at the opening brace and releases it at the closing one, also when the block ends by an exception. In OCaml&nbsp;5 a lock is a value of type <code>Mutex.t</code>, and <code>Mutex.protect m f</code> acquires <code>m</code>, runs <code>f</code> and releases <code>m</code>, also when <code>f</code>&nbsp;raises.</p>
 
-<span class="notes-file">CounterLocked.java, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterLocked.java#L5" target="_blank" rel="noopener">CounterLocked.java</a>, the lines shown on the slide</span>
 <pre><code>static final Object lock = new Object();
 static int n = 0;                       // guarded by lock
 
@@ -1009,7 +1009,7 @@ public static void main(String[] args) throws InterruptedException {
 got      2000000</code></pre>
 <p class="notes-sample">One&nbsp;sample.</p>
 
-<span class="notes-file">counter_locked.ml, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_locked.ml#L4" target="_blank" rel="noopener">counter_locked.ml</a>, the lines shown on the slide</span>
 <pre><code>let n = ref 0   (* read and written only while m is held *)
 let m = Mutex.create ()
 
@@ -1104,7 +1104,7 @@ got      2000000</code></pre>
 
 <p>The program of this section and of section&nbsp;6 is one program with two accounts. An account is an object with a name, an id (A has id 1, B has id 2), and a balance, a plain <code>int</code> field; each account's own lock is the one Java gives to every object, so <code>synchronized (from)</code> takes the lock of the account <code>from</code>. Both balances start at 100. A transfer takes an amount from one account and adds it to the other, and every transfer of the program moves an amount of 1; two threads, t1 and t2, transfer in opposite directions, a million times each. The program has four modes, chosen by a command-line argument, <code>java Accounts a</code> to <code>d</code>; this section shows mode d, which runs the transfer of mode c, the correct form of section&nbsp;6 with both locks taken in a fixed order (section&nbsp;6 says why), and adds a third thread that reads both balances and takes no&nbsp;lock.</p>
 
-<span class="notes-file">Accounts.java, mode d, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L39" target="_blank" rel="noopener">Accounts.java</a>, mode d, the lines shown on the slide</span>
 <pre><code>// (c) both locks, in the order of the ids
 static void transferC(Account from, Account to, int x) {
   Account first  = from.id &lt; to.id ? from : to;
@@ -1140,7 +1140,7 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 
 <p>The same program in OCaml&nbsp;5 behaves the same way, and the standard compiler reports nothing either. In its listing, <code>w</code> is a record of what the calling domain holds and waits for, kept for the watchdog that detects the deadlock of section&nbsp;6; <code>lock w first</code> takes the lock of <code>first</code> and notes it&nbsp;there.</p>
 
-<span class="notes-file">accounts.ml, mode unlocked, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/accounts.ml#L49" target="_blank" rel="noopener">accounts.ml</a>, mode unlocked, the lines shown on the slide</span>
 <pre><code>(* (c) both locks, in the order of the ids *)
 let transfer_ordered w src dst k =
   let first, second = if src.id &lt; dst.id then src, dst else dst, src in
@@ -1189,7 +1189,7 @@ visibility    fixed   the loop ended</code></pre>
 
 <p>The Rust compiler rejects the counter of section&nbsp;2. The program below says, in Rust's words, what the Java program said: a variable <code>count</code> that may change (<code>let mut</code>), two threads started with <code>s.spawn</code>, each running a function without a name (<code>|| …</code>) that adds one to <code>count</code> a million times, and a print of <code>count</code> at the end. The two threads are started inside <code>thread::scope</code>, which guarantees that both have ended before the scope returns; without it the compiler would also object that the threads might outlive the variable, and the one complaint left is about the&nbsp;sharing.</p>
 
-<span class="notes-file">r1a_scoped_mut.rs</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/rust/r1a_scoped_mut.rs#L4" target="_blank" rel="noopener">r1a_scoped_mut.rs</a></span>
 <pre><code>use std::thread;
 
 fn main() {
@@ -1222,7 +1222,7 @@ error: aborting due to 1 previous error</code></pre>
 
 <p>The same counter compiles when the integer is put inside a lock, and the way Rust does it is the second thing to see. In the program, <code>Mutex::new(0)</code> is a lock that contains the integer 0, <code>Arc::new</code> wraps it so that several threads may share it, <code>Arc::clone</code> gives each thread its own handle, and <code>c.lock()</code> acquires the lock and returns a <b>guard</b>, a value through which the integer is reached and whose disappearance at the end of the statement releases the&nbsp;lock.</p>
 
-<span class="notes-file">r1b_arc_mutex.rs</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/rust/r1b_arc_mutex.rs#L3" target="_blank" rel="noopener">r1b_arc_mutex.rs</a></span>
 <pre><code>use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -1258,7 +1258,7 @@ fn main() {
 
 <p>The two accounts A and B of section&nbsp;5 start with 100 each, and each transfer moves 1 from one to the&nbsp;other. The <b>invariant</b> of the pair is that the sum of the balances is 200: a transfer moves money and creates none. Two threads transfer in opposite directions, and a third thread reads both balances under both locks and checks the&nbsp;sum.</p>
 
-<span class="notes-file">Accounts.java, mode a, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L24" target="_blank" rel="noopener">Accounts.java</a>, mode a, the lines shown on the slide</span>
 <pre><code>// (a) each step under its lock, the transfer as a whole under none
 static void transferA(Account from, Account to, int x) {
   synchronized (from) { from.balance -= x; }
@@ -1308,7 +1308,7 @@ after the transfers: A = 100, B = 100, sum = 200</code></pre>
 
 <p>The repair is to hold both locks for the whole transfer. The first attempt takes the source's lock first, then the destination's. The lines after the transfer are the deadlock detector that Java ships, <code>ThreadMXBean.findDeadlockedThreads</code>, which the main thread calls until it finds threads waiting for each other's locks in a cycle; it then prints which lock each of them holds and waits&nbsp;for.</p>
 
-<span class="notes-file">Accounts.java, mode b, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L31" target="_blank" rel="noopener">Accounts.java</a>, mode b, the lines shown on the slide</span>
 <pre><code>// (b) both locks, the source's first
 static void transferB(Account from, Account to, int x) {
   synchronized (from) {
@@ -1366,7 +1366,7 @@ main ends; the two threads stay blocked until the JVM exits</code></pre>
 </ol></figcaption>
 </figure>
 
-<span class="notes-file">Accounts.java, mode c, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L39" target="_blank" rel="noopener">Accounts.java</a>, mode c, the lines shown on the slide</span>
 <pre><code>// (c) the locks always taken in the order of the ids
 static void transferC(Account from, Account to, int x) {
   Account first  = from.id &lt; to.id ? from : to;
@@ -1447,7 +1447,7 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 
 <p>The buffer below is a ring of <i>K</i> slots with a count of the items in it: <code>put</code> stores an item at the position <code>tail</code> and <code>take</code> removes the oldest, at <code>head</code>, both positions moving round the ring. A thread that finds the ring full, or empty, releases the lock and waits, and is woken by the next take, or&nbsp;put.</p>
 
-<span class="notes-file">Buffer.java, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Buffer.java#L14" target="_blank" rel="noopener">Buffer.java</a>, the lines shown on the slide</span>
 <pre><code>static final class WhileBuffer implements Buf {
   final Integer[] slots = new Integer[K];
   int head = 0, tail = 0, count = 0;    // guarded by this
@@ -1513,7 +1513,7 @@ taken: sum 25476</code></pre>
 
 <p>The same monitor in OCaml&nbsp;5, with two condition variables, <code>not_full</code> and <code>not_empty</code>, and the wait in a&nbsp;<code>while</code>:</p>
 
-<span class="notes-file">buffer.ml, the lines shown on the slide</span>
+<span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/buffer.ml#L21" target="_blank" rel="noopener">buffer.ml</a>, the lines shown on the slide</span>
 <pre><code>let put b x =
   Mutex.protect b.m (fun () -&gt;
     while b.count = Array.length b.slots do Condition.wait b.not_full b.m done;
@@ -1759,7 +1759,7 @@ document.querySelectorAll('figure.notes-steps').forEach(function (fig) {
 
 <h3>The locked stack, the&nbsp;reference</h3>
 
-<p class="notes-file">Example 7a, Java: <code>LockedStack.java</code>, the lines the slide&nbsp;shows</p>
+<p class="notes-file">Example 7a, Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/LockedStack.java#L6" target="_blank" rel="noopener"><code>LockedStack.java</code></a>, the lines the slide&nbsp;shows</p>
 <pre class="notes-src">record Node(int value, Node next) { }   // a record: its fields are final, set once
 
 Node top = null;                     // guarded by this stack's lock
@@ -1776,7 +1776,7 @@ synchronized Integer pop() {         // null when the stack is empty
 <pre class="notes-out">$ java LockedStack
 one lock: pushed sum 125000500000, popped 62500849627 + remaining 62499650373 = 125000500000</pre>
 
-<p class="notes-file">Example 7a, OCaml 5:&nbsp;<code>locked_stack.ml</code></p>
+<p class="notes-file">Example 7a, OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/locked_stack.ml#L7" target="_blank" rel="noopener"><code>locked_stack.ml</code></a></p>
 <pre class="notes-src">(* items is read and written only while m is held. *)
 type 'a stack = { mutable items : 'a list; m : Mutex.t }
 
@@ -1941,7 +1941,7 @@ pushes and pops, 4 domains, one lock
 
 <h3>The counter on compare-and-set, and on&nbsp;fetch-and-add</h3>
 
-<p class="notes-file">Example 6, Java:&nbsp;<code>CounterCas.java</code></p>
+<p class="notes-file">Example 6, Java:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterCas.java#L6" target="_blank" rel="noopener"><code>CounterCas.java</code></a></p>
 <pre class="notes-src">static final AtomicInteger n = new AtomicInteger(0);   // the counter, one word
 final int N = 1_000_000;                               // increments per thread
 
@@ -1961,7 +1961,7 @@ Runnable work = () -&gt; { for (int i = 0; i &lt; N; i++) n.getAndIncrement(); }
 compare-and-set: expected 2000000, got 2000000, failed attempts 653147
 fetch-and-add:   expected 2000000, got 2000000</pre>
 
-<p class="notes-file">Example 6, OCaml 5:&nbsp;<code>counter_cas.ml</code></p>
+<p class="notes-file">Example 6, OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_cas.ml#L4" target="_blank" rel="noopener"><code>counter_cas.ml</code></a></p>
 <pre class="notes-src">let n = Atomic.make 0
 
 (* Adds 1 to n; returns the number of failed attempts. *)
@@ -2038,7 +2038,7 @@ fetch-and-add    expected 2000000  got 2000000</pre>
 <p><b>An immutable node</b> is a node whose fields are never changed after it is built; in Java, a record, whose fields are final. <b>An atomic reference</b> is a location holding a reference, read and written only by atomic instructions, compare-and-set among them; in Java an <code>AtomicReference</code>, in OCaml 5 an&nbsp;<code>Atomic.t</code>.</p>
 </div>
 
-<p class="notes-file">Example 7b, Java:&nbsp;<code>Treiber.java</code></p>
+<p class="notes-file">Example 7b, Java:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Treiber.java#L8" target="_blank" rel="noopener"><code>Treiber.java</code></a></p>
 <pre class="notes-src">record Node(int value, Node next) { }             // immutable: final fields, never changed
 
 // invariant: top points to a well-formed stack, a chain of nodes ending in null
@@ -2067,7 +2067,7 @@ static void pushBroken(int x) {                   // broken on purpose
 compare-and-set: pushed sum 125000500000, popped 62557066183 + remaining 62443433817 = 125000500000
 read, then write: pushed 1000000 items, on the stack 307454, lost 692546</pre>
 
-<p class="notes-file">Example 7b, OCaml 5:&nbsp;<code>treiber.ml</code></p>
+<p class="notes-file">Example 7b, OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/treiber.ml#L5" target="_blank" rel="noopener"><code>treiber.ml</code></a></p>
 <pre class="notes-src">(* Invariant: the atomic holds a well-formed stack, an OCaml list.
    The list is never changed, only replaced by another one. *)
 type 'a stack = 'a list Atomic.t
@@ -2368,7 +2368,7 @@ pushes only, 4 domains
 
 <h3>A count per thread, then the&nbsp;sum</h3>
 
-<p class="notes-file">Example 8 (a), Java:&nbsp;<code>PerThread.java</code></p>
+<p class="notes-file">Example 8 (a), Java:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/PerThread.java#L9" target="_blank" rel="noopener"><code>PerThread.java</code></a></p>
 <pre class="notes-src">final int N = 1_000_000;
 long[] counts = new long[2];                    // slot t written by thread t, read after join
 Thread[] ts = new Thread[2];
@@ -2386,7 +2386,7 @@ System.out.println("expected " + 2 * N + ", got " + (counts[0] + counts[1]));</p
 <pre class="notes-out">$ java PerThread
 expected 2000000, got 2000000</pre>
 
-<p class="notes-file">Example 8 (a), OCaml 5:&nbsp;<code>per_thread.ml</code></p>
+<p class="notes-file">Example 8 (a), OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/per_thread.ml#L5" target="_blank" rel="noopener"><code>per_thread.ml</code></a></p>
 <pre class="notes-src">(* (a) Each domain counts in its own variable and returns the count. *)
 let count () =
   let c = ref 0 in   (* local: no other domain can reach it *)
@@ -2413,7 +2413,7 @@ got      2000000</pre>
 <p><b>A fold</b> combines the elements of a sequence with a binary operation, starting from a seed and going from left to right: the fold of 1, 2, 3 with subtraction from 0 is ((0 − 1) − 2) − 3. <b>A parallel fold</b> splits the sequence into parts, folds each part on a thread of its own from the seed, and combines the parts' results in their order, as a tree. With the parts' results p0, p1, p2, p3, two halves give p0 op p1, and four quarters give (p0 op p1) op (p2 op p3). A <b>split</b> is one way of cutting the sequence into parts. An operation is <b>associative</b> when (x op y) op z = x op (y op z) for all x, y, z; it has an <b>identity</b> e when e op x = x = x op e for all x; it is <b>commutative</b> when x op y = y op x for all x,&nbsp;y.</p>
 </div>
 
-<p class="notes-file">Example 8 (b) and (c), Java: <code>PerThread.java</code>, the&nbsp;fold</p>
+<p class="notes-file">Example 8 (b) and (c), Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/PerThread.java#L36" target="_blank" rel="noopener"><code>PerThread.java</code></a>, the&nbsp;fold</p>
 <pre class="notes-src">// one thread per part folds its part from e, from left to right;
 // then the main thread combines the parts' results as a tree:
 // two parts p0 op p1, four parts (p0 op p1) op (p2 op p3)
@@ -2445,7 +2445,7 @@ static long fold(long[] a, int parts, long e, LongBinaryOperator op)
 - in two halves:    16
 - in four quarters: 0</pre>
 
-<p class="notes-file">Example 8 (b) and (c), OCaml 5: <code>per_thread.ml</code>, the&nbsp;fold</p>
+<p class="notes-file">Example 8 (b) and (c), OCaml 5: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/per_thread.ml#L17" target="_blank" rel="noopener"><code>per_thread.ml</code></a>, the&nbsp;fold</p>
 <pre class="notes-src">(* (b), (c) Fold a.(lo) .. a.(hi - 1) with op from e, as a tree of depth
    levels: the left half in a new domain, the right half in this one,
    op at the node. depth 1 gives two halves, depth 2 four quarters. *)
@@ -2658,7 +2658,7 @@ four quarters  0</pre>
 
 <p>Block 1 showed the transfer: a withdrawal under the source's lock, then a deposit under the destination's lock, each atomic, and a third thread reading both balances under both locks saw 199 where the sum should be 200. Two atomic steps are not one atomic step. The same holds for the second way: a compare-and-set on the source and a compare-and-set on the destination are two points of effect, and a reader may read both balances between them. Neither locked nor compare-and-set operations compose by themselves into one atomic&nbsp;operation.</p>
 
-<p class="notes-file">Example 4 (a), Java: <code>Accounts.java</code>, the transfer in two halves, and the&nbsp;reader</p>
+<p class="notes-file">Example 4 (a), Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L19" target="_blank" rel="noopener"><code>Accounts.java</code></a>, the transfer in two halves, and the&nbsp;reader</p>
 <pre class="notes-src">static final Account A = new Account("A", 1, 100), B = new Account("B", 2, 100);  // name, id, balance
 
 // (a) each step under its lock, the transfer as a whole under none: broken on purpose
@@ -2674,7 +2674,7 @@ static int[] read() {
 reading 1: A = 99, B = 100, sum = 199 (should be 200)
 after the transfers: A = 100, B = 100, sum = 200</pre>
 
-<p class="notes-file">Example 4 (a), OCaml 5: <code>accounts.ml</code>, the transfer in two&nbsp;halves</p>
+<p class="notes-file">Example 4 (a), OCaml 5: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/accounts.ml#L34" target="_blank" rel="noopener"><code>accounts.ml</code></a>, the transfer in two&nbsp;halves</p>
 <pre class="notes-src">(* (a) Two atomic steps. lock w a takes account a's mutex and records,
    in w, who holds what, for the watchdog that detects the deadlock of (b). *)
 let transfer_split w src dst k =
@@ -2769,7 +2769,7 @@ the reader: 39283783 readings, 29828667 with a sum other than 200
 
 <p>Block 1's unlocked reader is the program outside the contract. The transfers take their locks in a global order and are correct; the reader takes&nbsp;none.</p>
 
-<p class="notes-file">Example 4 (d), Java: <code>Accounts.java</code>, the reader with no&nbsp;lock</p>
+<p class="notes-file">Example 4 (d), Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L55" target="_blank" rel="noopener"><code>Accounts.java</code></a>, the reader with no&nbsp;lock</p>
 <pre class="notes-src">// (d) the reader with no lock: broken on purpose, a data race
 static int[] readUnlocked() {
   return new int[] { A.balance, B.balance };
@@ -2779,7 +2779,7 @@ transfers: 1000000 A to B, 1000000 B to A
 readings with no lock during the transfers: 138670249, sums other than 200: 20954124
 first wrong reading 114: A = -5811, B = 6012, sum = 201 (should be 200)
 at the end: A = 100, B = 100, sum = 200</pre>
-<p class="notes-file">Example 4 (d), OCaml 5: <code>accounts.ml</code>, the reader with no&nbsp;lock</p>
+<p class="notes-file">Example 4 (d), OCaml 5: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/accounts.ml#L58" target="_blank" rel="noopener"><code>accounts.ml</code></a>, the reader with no&nbsp;lock</p>
 <pre class="notes-src">(* (d) The reader with no lock: broken on purpose, a data race. *)
 let read_unlocked () = (a.balance, b.balance)</pre>
 <pre class="notes-out">$ ./accounts unlocked
