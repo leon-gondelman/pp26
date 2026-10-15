@@ -208,6 +208,26 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 /* on a phone a wide table scrolls sideways in its own box instead of widening the page */
 @media (max-width:760px){.notes-embed table{display:block;overflow-x:auto;max-width:100%}}
 </style>
+<style id="hilite">
+/* Pygments token colours (tools/hilite.py); the same palette as the slides. */
+.hl-code .k,.hl-code .kd,.hl-code .kn,.hl-code .kr,.hl-code .kp,.hl-code .ow{color:#2a6f97}
+.hl-code .kt,.hl-code .nc,.hl-code .nn,.hl-code .nb,.hl-code .bp{color:#c05a0e}
+.hl-code .s,.hl-code .s1,.hl-code .s2,.hl-code .sb,.hl-code .sc,.hl-code .se,.hl-code .sd{color:#0f8a2f}
+.hl-code .c,.hl-code .c1,.hl-code .cm,.hl-code .cp{color:#6f7f84;font-style:italic}
+.hl-code .m,.hl-code .mi,.hl-code .mf,.hl-code .mh{color:#7a3e9d}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .hl-code .k,:root:not([data-theme="light"]) .hl-code .kd,:root:not([data-theme="light"]) .hl-code .kn,:root:not([data-theme="light"]) .hl-code .kr,:root:not([data-theme="light"]) .hl-code .kp,:root:not([data-theme="light"]) .hl-code .ow{color:#7fb3e0}
+  :root:not([data-theme="light"]) .hl-code .kt,:root:not([data-theme="light"]) .hl-code .nc,:root:not([data-theme="light"]) .hl-code .nn,:root:not([data-theme="light"]) .hl-code .nb,:root:not([data-theme="light"]) .hl-code .bp{color:#f0a060}
+  :root:not([data-theme="light"]) .hl-code .s,:root:not([data-theme="light"]) .hl-code .s1,:root:not([data-theme="light"]) .hl-code .s2,:root:not([data-theme="light"]) .hl-code .sb,:root:not([data-theme="light"]) .hl-code .sc,:root:not([data-theme="light"]) .hl-code .se,:root:not([data-theme="light"]) .hl-code .sd{color:#5fd37f}
+  :root:not([data-theme="light"]) .hl-code .c,:root:not([data-theme="light"]) .hl-code .c1,:root:not([data-theme="light"]) .hl-code .cm,:root:not([data-theme="light"]) .hl-code .cp{color:#8a929f}
+  :root:not([data-theme="light"]) .hl-code .m,:root:not([data-theme="light"]) .hl-code .mi,:root:not([data-theme="light"]) .hl-code .mf,:root:not([data-theme="light"]) .hl-code .mh{color:#c39be0}
+}
+:root[data-theme="dark"] .hl-code .k,:root[data-theme="dark"] .hl-code .kd,:root[data-theme="dark"] .hl-code .kn,:root[data-theme="dark"] .hl-code .kr,:root[data-theme="dark"] .hl-code .kp,:root[data-theme="dark"] .hl-code .ow{color:#7fb3e0}
+:root[data-theme="dark"] .hl-code .kt,:root[data-theme="dark"] .hl-code .nc,:root[data-theme="dark"] .hl-code .nn,:root[data-theme="dark"] .hl-code .nb,:root[data-theme="dark"] .hl-code .bp{color:#f0a060}
+:root[data-theme="dark"] .hl-code .s,:root[data-theme="dark"] .hl-code .s1,:root[data-theme="dark"] .hl-code .s2,:root[data-theme="dark"] .hl-code .sb,:root[data-theme="dark"] .hl-code .sc,:root[data-theme="dark"] .hl-code .se,:root[data-theme="dark"] .hl-code .sd{color:#5fd37f}
+:root[data-theme="dark"] .hl-code .c,:root[data-theme="dark"] .hl-code .c1,:root[data-theme="dark"] .hl-code .cm,:root[data-theme="dark"] .hl-code .cp{color:#8a929f}
+:root[data-theme="dark"] .hl-code .m,:root[data-theme="dark"] .hl-code .mi,:root[data-theme="dark"] .hl-code .mf,:root[data-theme="dark"] .hl-code .mh{color:#c39be0}
+</style>
 <div class="notes-host" id="notes-host"><nav class="nside" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block2"><span class="nside-full">Block 2, Atomics; independence of the&nbsp;order</span><span class="nside-short">Block 2</span></a><ol><li><a href="#b2-standards">1. Linearizability and&nbsp;progress</a></li>
 <li><a href="#b2-cas">2. Compare-and-set</a></li>
 <li><a href="#b2-treiber">3. Treiber&#x27;s stack</a></li>
@@ -407,33 +427,33 @@ nav.nside-pane .nside-short{display:inline}
 <h3>The locked stack, the&nbsp;reference</h3>
 
 <p class="notes-file">Example 7a, Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/LockedStack.java#L6" target="_blank" rel="noopener"><code>LockedStack.java</code></a>, the lines the slide&nbsp;shows</p>
-<pre class="notes-src">record Node(int value, Node next) { }   // a record: its fields are final, set once
+<pre class="notes-src hl-code"><span class="kd">record</span> <span class="nc">Node</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1">// a record: its fields are final, set once</span>
 
-Node top = null;                     // guarded by this stack's lock
+<span class="n">Node</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">                     </span><span class="c1">// guarded by this stack&#39;s lock</span>
 
-synchronized void push(int x) {      // one thread at a time
-  top = new Node(x, top);
-}
-synchronized Integer pop() {         // null when the stack is empty
-  if (top == null) return null;
-  Node old = top;
-  top = old.next();
-  return old.value();
-}</pre>
+<span class="kd">synchronized</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="c1">// one thread at a time</span>
+<span class="w">  </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">top</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">synchronized</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="nf">pop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">         </span><span class="c1">// null when the stack is empty</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">top</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">top</span><span class="p">;</span>
+<span class="w">  </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old</span><span class="p">.</span><span class="na">next</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">old</span><span class="p">.</span><span class="na">value</span><span class="p">();</span>
+<span class="p">}</span></pre>
 <pre class="notes-out">$ java LockedStack
 one lock: pushed sum 125000500000, popped 62500849627 + remaining 62499650373 = 125000500000</pre>
 
 <p class="notes-file">Example 7a, OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/locked_stack.ml#L7" target="_blank" rel="noopener"><code>locked_stack.ml</code></a></p>
-<pre class="notes-src">(* items is read and written only while m is held. *)
-type 'a stack = { mutable items : 'a list; m : Mutex.t }
+<pre class="notes-src hl-code"><span class="c">(* items is read and written only while m is held. *)</span>
+<span class="k">type</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">stack</span> <span class="o">=</span> <span class="o">{</span> <span class="k">mutable</span> <span class="n">items</span> <span class="o">:</span> <span class="k">&#39;</span><span class="n">a</span> <span class="kt">list</span><span class="o">;</span> <span class="n">m</span> <span class="o">:</span> <span class="nn">Mutex</span><span class="p">.</span><span class="n">t</span> <span class="o">}</span>
 
-let push s x = Mutex.protect s.m (fun () -&gt; s.items &lt;- x :: s.items)
+<span class="k">let</span> <span class="n">push</span> <span class="n">s</span> <span class="n">x</span> <span class="o">=</span> <span class="nn">Mutex</span><span class="p">.</span><span class="n">protect</span> <span class="n">s</span><span class="o">.</span><span class="n">m</span> <span class="o">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span> <span class="o">&lt;-</span> <span class="n">x</span> <span class="o">::</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="o">)</span>
 
-let pop s =
-  Mutex.protect s.m (fun () -&gt;
-    match s.items with
-    | [] -&gt; None
-    | x :: rest -&gt; s.items &lt;- rest; Some x)</pre>
+<span class="k">let</span> <span class="n">pop</span> <span class="n">s</span> <span class="o">=</span>
+  <span class="nn">Mutex</span><span class="p">.</span><span class="n">protect</span> <span class="n">s</span><span class="o">.</span><span class="n">m</span> <span class="o">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="o">-&gt;</span>
+    <span class="k">match</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span> <span class="k">with</span>
+    <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="nc">None</span>
+    <span class="o">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">rest</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span> <span class="o">&lt;-</span> <span class="n">rest</span><span class="o">;</span> <span class="nc">Some</span> <span class="n">x</span><span class="o">)</span></pre>
 <pre class="notes-out">$ ./locked_stack
 pushes and pops, 4 domains, one lock
   sum pushed          125000500000
@@ -589,38 +609,38 @@ pushes and pops, 4 domains, one lock
 <h3>The counter on compare-and-set, and on&nbsp;fetch-and-add</h3>
 
 <p class="notes-file">Example 6, Java:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterCas.java#L6" target="_blank" rel="noopener"><code>CounterCas.java</code></a></p>
-<pre class="notes-src">static final AtomicInteger n = new AtomicInteger(0);   // the counter, one word
-final int N = 1_000_000;                               // increments per thread
+<pre class="notes-src hl-code"><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">AtomicInteger</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AtomicInteger</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">   </span><span class="c1">// the counter, one word</span>
+<span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_000_000</span><span class="p">;</span><span class="w">                               </span><span class="c1">// increments per thread</span>
 
-// returns how many attempts failed before the one that succeeded
-static int increment() {
-  int failed = 0;
-  while (true) {
-    int v = n.get();                              // read
-    if (n.compareAndSet(v, v + 1)) return failed; // still v? then v + 1, in one step
-    failed++;                                     // another thread wrote first: retry
-  }
-}
+<span class="c1">// returns how many attempts failed before the one that succeeded</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">increment</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">failed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w">                              </span><span class="c1">// read</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="na">compareAndSet</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">failed</span><span class="p">;</span><span class="w"> </span><span class="c1">// still v? then v + 1, in one step</span>
+<span class="w">    </span><span class="n">failed</span><span class="o">++</span><span class="p">;</span><span class="w">                                     </span><span class="c1">// another thread wrote first: retry</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-n.set(0);                                                 // the counter back to 0
-Runnable work = () -&gt; { for (int i = 0; i &lt; N; i++) n.getAndIncrement(); };  // fetch-and-add</pre>
+<span class="n">n</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">                                                 </span><span class="c1">// the counter back to 0</span>
+<span class="n">Runnable</span><span class="w"> </span><span class="n">work</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="na">getAndIncrement</span><span class="p">();</span><span class="w"> </span><span class="p">};</span><span class="w">  </span><span class="c1">// fetch-and-add</span></pre>
 <pre class="notes-out">$ java CounterCas
 compare-and-set: expected 2000000, got 2000000, failed attempts 653147
 fetch-and-add:   expected 2000000, got 2000000</pre>
 
 <p class="notes-file">Example 6, OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_cas.ml#L4" target="_blank" rel="noopener"><code>counter_cas.ml</code></a></p>
-<pre class="notes-src">let n = Atomic.make 0
+<pre class="notes-src hl-code"><span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">make</span> <span class="mi">0</span>
 
-(* Adds 1 to n; returns the number of failed attempts. *)
-let increment () =
-  let rec attempt failed =
-    let v = Atomic.get n in
-    if Atomic.compare_and_set n v (v + 1) then failed
-    else attempt (failed + 1)   (* another domain wrote n meanwhile: retry *)
-  in
-  attempt 0
-let m = Atomic.make 0
-let increment_faa () = ignore (Atomic.fetch_and_add m 1)</pre>
+<span class="c">(* Adds 1 to n; returns the number of failed attempts. *)</span>
+<span class="k">let</span> <span class="n">increment</span> <span class="bp">()</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="k">rec</span> <span class="n">attempt</span> <span class="n">failed</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="n">v</span> <span class="o">=</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">get</span> <span class="n">n</span> <span class="k">in</span>
+    <span class="k">if</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">compare_and_set</span> <span class="n">n</span> <span class="n">v</span> <span class="o">(</span><span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="k">then</span> <span class="n">failed</span>
+    <span class="k">else</span> <span class="n">attempt</span> <span class="o">(</span><span class="n">failed</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>   <span class="c">(* another domain wrote n meanwhile: retry *)</span>
+  <span class="k">in</span>
+  <span class="n">attempt</span> <span class="mi">0</span>
+<span class="k">let</span> <span class="n">m</span> <span class="o">=</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">make</span> <span class="mi">0</span>
+<span class="k">let</span> <span class="n">increment_faa</span> <span class="bp">()</span> <span class="o">=</span> <span class="n">ignore</span> <span class="o">(</span><span class="nn">Atomic</span><span class="p">.</span><span class="n">fetch_and_add</span> <span class="n">m</span> <span class="mi">1</span><span class="o">)</span></pre>
 <pre class="notes-out">$ ./counter_cas
 compare-and-set  expected 2000000  got 2000000  failed attempts 679563
 fetch-and-add    expected 2000000  got 2000000</pre>
@@ -686,54 +706,54 @@ fetch-and-add    expected 2000000  got 2000000</pre>
 </div>
 
 <p class="notes-file">Example 7b, Java:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Treiber.java#L8" target="_blank" rel="noopener"><code>Treiber.java</code></a></p>
-<pre class="notes-src">record Node(int value, Node next) { }             // immutable: final fields, never changed
+<pre class="notes-src hl-code"><span class="kd">record</span> <span class="nc">Node</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w">             </span><span class="c1">// immutable: final fields, never changed</span>
 
-// invariant: top points to a well-formed stack, a chain of nodes ending in null
-static final AtomicReference&lt;Node&gt; top = new AtomicReference&lt;&gt;(null);
+<span class="c1">// invariant: top points to a well-formed stack, a chain of nodes ending in null</span>
+<span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">AtomicReference</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AtomicReference</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
 
-static void push(int x) {
-  while (true) {
-    Node old = top.get();
-    Node fresh = new Node(x, old);                // built beside the stack
-    if (top.compareAndSet(old, fresh)) return;    // point of effect: this compare-and-set
-  }
-}
-static Integer pop() {                            // null when the stack is empty
-  while (true) {
-    Node old = top.get();                         // empty: point of effect is this read
-    if (old == null) return null;
-    if (top.compareAndSet(old, old.next())) return old.value(); // point of effect
-  }
-}
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Node</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">top</span><span class="p">.</span><span class="na">get</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Node</span><span class="w"> </span><span class="n">fresh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">old</span><span class="p">);</span><span class="w">                </span><span class="c1">// built beside the stack</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">top</span><span class="p">.</span><span class="na">compareAndSet</span><span class="p">(</span><span class="n">old</span><span class="p">,</span><span class="w"> </span><span class="n">fresh</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w">    </span><span class="c1">// point of effect: this compare-and-set</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">static</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="nf">pop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">                            </span><span class="c1">// null when the stack is empty</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Node</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">top</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w">                         </span><span class="c1">// empty: point of effect is this read</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">old</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">top</span><span class="p">.</span><span class="na">compareAndSet</span><span class="p">(</span><span class="n">old</span><span class="p">,</span><span class="w"> </span><span class="n">old</span><span class="p">.</span><span class="na">next</span><span class="p">()))</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">old</span><span class="p">.</span><span class="na">value</span><span class="p">();</span><span class="w"> </span><span class="c1">// point of effect</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-static void pushBroken(int x) {                   // broken on purpose
-  Node old = top.get();                           // read
-  top.set(new Node(x, old));                      // write: another push may have come between
-}</pre>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">pushBroken</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">                   </span><span class="c1">// broken on purpose</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">top</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w">                           </span><span class="c1">// read</span>
+<span class="w">  </span><span class="n">top</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">old</span><span class="p">));</span><span class="w">                      </span><span class="c1">// write: another push may have come between</span>
+<span class="p">}</span></pre>
 <pre class="notes-out">$ java Treiber
 compare-and-set: pushed sum 125000500000, popped 62557066183 + remaining 62443433817 = 125000500000
 read, then write: pushed 1000000 items, on the stack 307454, lost 692546</pre>
 
 <p class="notes-file">Example 7b, OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/treiber.ml#L5" target="_blank" rel="noopener"><code>treiber.ml</code></a></p>
-<pre class="notes-src">(* Invariant: the atomic holds a well-formed stack, an OCaml list.
-   The list is never changed, only replaced by another one. *)
-type 'a stack = 'a list Atomic.t
+<pre class="notes-src hl-code"><span class="c">(* Invariant: the atomic holds a well-formed stack, an OCaml list.</span>
+<span class="c">   The list is never changed, only replaced by another one. *)</span>
+<span class="k">type</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">&#39;</span><span class="n">a</span> <span class="kt">list</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">t</span>
 
-let rec push (s : 'a stack) x =
-  let l = Atomic.get s in
-  (* Point of effect: the compare-and-set that succeeds. *)
-  if not (Atomic.compare_and_set s l (x :: l)) then push s x
-let rec pop (s : 'a stack) =
-  match Atomic.get s with
-  | [] -&gt; None   (* Point of effect: the read that saw the stack empty. *)
-  | x :: rest as l -&gt;
-      (* Point of effect: the compare-and-set that succeeds. *)
-      if Atomic.compare_and_set s l rest then Some x else pop s
-(* Broken on purpose: read the top, then write it, with no compare-and-set.
-   A push by another domain between the get and the set is lost. *)
-let push_broken (s : 'a stack) x =
-  let l = Atomic.get s in
-  Atomic.set s (x :: l)</pre>
+<span class="k">let</span> <span class="k">rec</span> <span class="n">push</span> <span class="o">(</span><span class="n">s</span> <span class="o">:</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">stack</span><span class="o">)</span> <span class="n">x</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">l</span> <span class="o">=</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">get</span> <span class="n">s</span> <span class="k">in</span>
+  <span class="c">(* Point of effect: the compare-and-set that succeeds. *)</span>
+  <span class="k">if</span> <span class="n">not</span> <span class="o">(</span><span class="nn">Atomic</span><span class="p">.</span><span class="n">compare_and_set</span> <span class="n">s</span> <span class="n">l</span> <span class="o">(</span><span class="n">x</span> <span class="o">::</span> <span class="n">l</span><span class="o">))</span> <span class="k">then</span> <span class="n">push</span> <span class="n">s</span> <span class="n">x</span>
+<span class="k">let</span> <span class="k">rec</span> <span class="n">pop</span> <span class="o">(</span><span class="n">s</span> <span class="o">:</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">stack</span><span class="o">)</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">get</span> <span class="n">s</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="nc">None</span>   <span class="c">(* Point of effect: the read that saw the stack empty. *)</span>
+  <span class="o">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">rest</span> <span class="k">as</span> <span class="n">l</span> <span class="o">-&gt;</span>
+      <span class="c">(* Point of effect: the compare-and-set that succeeds. *)</span>
+      <span class="k">if</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">compare_and_set</span> <span class="n">s</span> <span class="n">l</span> <span class="n">rest</span> <span class="k">then</span> <span class="nc">Some</span> <span class="n">x</span> <span class="k">else</span> <span class="n">pop</span> <span class="n">s</span>
+<span class="c">(* Broken on purpose: read the top, then write it, with no compare-and-set.</span>
+<span class="c">   A push by another domain between the get and the set is lost. *)</span>
+<span class="k">let</span> <span class="n">push_broken</span> <span class="o">(</span><span class="n">s</span> <span class="o">:</span> <span class="k">&#39;</span><span class="n">a</span> <span class="n">stack</span><span class="o">)</span> <span class="n">x</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">l</span> <span class="o">=</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">get</span> <span class="n">s</span> <span class="k">in</span>
+  <span class="nn">Atomic</span><span class="p">.</span><span class="n">set</span> <span class="n">s</span> <span class="o">(</span><span class="n">x</span> <span class="o">::</span> <span class="n">l</span><span class="o">)</span></pre>
 <pre class="notes-out">$ ./treiber
 pushes and pops, 4 domains
   sum pushed          125000500000
@@ -1016,33 +1036,33 @@ pushes only, 4 domains
 <h3>A count per thread, then the&nbsp;sum</h3>
 
 <p class="notes-file">Example 8 (a), Java:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/PerThread.java#L9" target="_blank" rel="noopener"><code>PerThread.java</code></a></p>
-<pre class="notes-src">final int N = 1_000_000;
-long[] counts = new long[2];                    // slot t written by thread t, read after join
-Thread[] ts = new Thread[2];
-for (int t = 0; t &lt; 2; t++) {
-  final int id = t;
-  ts[t] = new Thread(() -&gt; {
-    long mine = 0;                              // local: no other thread sees it
-    for (int i = 0; i &lt; N; i++) mine++;
-    counts[id] = mine;
-  });
-}
-for (Thread t : ts) t.start();
-for (Thread t : ts) t.join();
-System.out.println("expected " + 2 * N + ", got " + (counts[0] + counts[1]));</pre>
+<pre class="notes-src hl-code"><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_000_000</span><span class="p">;</span>
+<span class="kt">long</span><span class="o">[]</span><span class="w"> </span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">long</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="p">;</span><span class="w">                    </span><span class="c1">// slot t written by thread t, read after join</span>
+<span class="n">Thread</span><span class="o">[]</span><span class="w"> </span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">  </span><span class="n">ts</span><span class="o">[</span><span class="n">t</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">mine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                              </span><span class="c1">// local: no other thread sees it</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">mine</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="n">counts</span><span class="o">[</span><span class="n">id</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mine</span><span class="p">;</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">}</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Thread</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ts</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">start</span><span class="p">();</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Thread</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ts</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">join</span><span class="p">();</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;expected &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;, got &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">counts</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">counts</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">));</span></pre>
 <pre class="notes-out">$ java PerThread
 expected 2000000, got 2000000</pre>
 
 <p class="notes-file">Example 8 (a), OCaml 5:&nbsp;<a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/per_thread.ml#L5" target="_blank" rel="noopener"><code>per_thread.ml</code></a></p>
-<pre class="notes-src">(* (a) Each domain counts in its own variable and returns the count. *)
-let count () =
-  let c = ref 0 in   (* local: no other domain can reach it *)
-  for _ = 1 to 1_000_000 do incr c done;
-  !c
+<pre class="notes-src hl-code"><span class="c">(* (a) Each domain counts in its own variable and returns the count. *)</span>
+<span class="k">let</span> <span class="n">count</span> <span class="bp">()</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">c</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">0</span> <span class="k">in</span>   <span class="c">(* local: no other domain can reach it *)</span>
+  <span class="k">for</span> <span class="o">_</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">to</span> <span class="mi">1_000_000</span> <span class="k">do</span> <span class="n">incr</span> <span class="n">c</span> <span class="k">done</span><span class="o">;</span>
+  <span class="o">!</span><span class="n">c</span>
 
-let per_domain () =
-  let a = Domain.spawn count and b = Domain.spawn count in
-  Printf.printf "expected %d\ngot      %d\n" 2_000_000 (Domain.join a + Domain.join b)</pre>
+<span class="k">let</span> <span class="n">per_domain</span> <span class="bp">()</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="nn">Domain</span><span class="p">.</span><span class="n">spawn</span> <span class="n">count</span> <span class="k">and</span> <span class="n">b</span> <span class="o">=</span> <span class="nn">Domain</span><span class="p">.</span><span class="n">spawn</span> <span class="n">count</span> <span class="k">in</span>
+  <span class="nn">Printf</span><span class="p">.</span><span class="n">printf</span> <span class="s2">&quot;expected %d</span><span class="se">\n</span><span class="s2">got      %d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="mi">2_000_000</span> <span class="o">(</span><span class="nn">Domain</span><span class="p">.</span><span class="n">join</span> <span class="n">a</span> <span class="o">+</span> <span class="nn">Domain</span><span class="p">.</span><span class="n">join</span> <span class="n">b</span><span class="o">)</span></pre>
 <pre class="notes-out">$ ./per_thread
 (a) a count per domain, then the sum
 expected 2000000
@@ -1061,31 +1081,31 @@ got      2000000</pre>
 </div>
 
 <p class="notes-file">Example 8 (b) and (c), Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/PerThread.java#L36" target="_blank" rel="noopener"><code>PerThread.java</code></a>, the&nbsp;fold</p>
-<pre class="notes-src">// one thread per part folds its part from e, from left to right;
-// then the main thread combines the parts' results as a tree:
-// two parts p0 op p1, four parts (p0 op p1) op (p2 op p3)
-static long fold(long[] a, int parts, long e, LongBinaryOperator op)
-    throws InterruptedException {
-  long[] partial = new long[parts];
-  Thread[] ts = new Thread[parts];
-  int size = a.length / parts;
-  for (int p = 0; p &lt; parts; p++) {
-    final int lo = p * size, id = p;
-    ts[p] = new Thread(() -&gt; {
-      long acc = e;
-      for (int i = lo; i &lt; lo + size; i++)
-        acc = op.applyAsLong(acc, a[i]);
-      partial[id] = acc;
-    });
-  }
-  for (Thread t : ts) t.start();
-  for (Thread t : ts) t.join();
-  for (int n = parts; n &gt; 1; n /= 2)    // one level of the tree
-    for (int p = 0; p &lt; n / 2; p++)
-      partial[p] = op.applyAsLong(partial[2 * p],
-                                  partial[2 * p + 1]);
-  return partial[0];
-}</pre>
+<pre class="notes-src hl-code"><span class="c1">// one thread per part folds its part from e, from left to right;</span>
+<span class="c1">// then the main thread combines the parts&#39; results as a tree:</span>
+<span class="c1">// two parts p0 op p1, four parts (p0 op p1) op (p2 op p3)</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">fold</span><span class="p">(</span><span class="kt">long</span><span class="o">[]</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">LongBinaryOperator</span><span class="w"> </span><span class="n">op</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">long</span><span class="o">[]</span><span class="w"> </span><span class="n">partial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">long</span><span class="o">[</span><span class="n">parts</span><span class="o">]</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Thread</span><span class="o">[]</span><span class="w"> </span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="o">[</span><span class="n">parts</span><span class="o">]</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="na">length</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">lo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ts</span><span class="o">[</span><span class="n">p</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">long</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">;</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lo</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">lo</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="n">acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">op</span><span class="p">.</span><span class="na">applyAsLong</span><span class="p">(</span><span class="n">acc</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">);</span>
+<span class="w">      </span><span class="n">partial</span><span class="o">[</span><span class="n">id</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">acc</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Thread</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ts</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">start</span><span class="p">();</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Thread</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ts</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">join</span><span class="p">();</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c1">// one level of the tree</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="o">++</span><span class="p">)</span>
+<span class="w">      </span><span class="n">partial</span><span class="o">[</span><span class="n">p</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">op</span><span class="p">.</span><span class="na">applyAsLong</span><span class="p">(</span><span class="n">partial</span><span class="o">[</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="o">]</span><span class="p">,</span>
+<span class="w">                                  </span><span class="n">partial</span><span class="o">[</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">partial</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+<span class="p">}</span></pre>
 <pre class="notes-out">$ java PerThread
 + in two halves:    36
 + in four quarters: 36
@@ -1093,16 +1113,16 @@ static long fold(long[] a, int parts, long e, LongBinaryOperator op)
 - in four quarters: 0</pre>
 
 <p class="notes-file">Example 8 (b) and (c), OCaml 5: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/per_thread.ml#L17" target="_blank" rel="noopener"><code>per_thread.ml</code></a>, the&nbsp;fold</p>
-<pre class="notes-src">(* (b), (c) Fold a.(lo) .. a.(hi - 1) with op from e, as a tree of depth
-   levels: the left half in a new domain, the right half in this one,
-   op at the node. depth 1 gives two halves, depth 2 four quarters. *)
-let rec pfold op e a lo hi depth =
-  if depth = 0 then Array.fold_left op e (Array.sub a lo (hi - lo))
-  else
-    let mid = (lo + hi) / 2 in
-    let left = Domain.spawn (fun () -&gt; pfold op e a lo mid (depth - 1)) in
-    let right = pfold op e a mid hi (depth - 1) in
-    op (Domain.join left) right</pre>
+<pre class="notes-src hl-code"><span class="c">(* (b), (c) Fold a.(lo) .. a.(hi - 1) with op from e, as a tree of depth</span>
+<span class="c">   levels: the left half in a new domain, the right half in this one,</span>
+<span class="c">   op at the node. depth 1 gives two halves, depth 2 four quarters. *)</span>
+<span class="k">let</span> <span class="k">rec</span> <span class="n">pfold</span> <span class="n">op</span> <span class="n">e</span> <span class="n">a</span> <span class="n">lo</span> <span class="n">hi</span> <span class="n">depth</span> <span class="o">=</span>
+  <span class="k">if</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">then</span> <span class="nn">Array</span><span class="p">.</span><span class="n">fold_left</span> <span class="n">op</span> <span class="n">e</span> <span class="o">(</span><span class="nn">Array</span><span class="p">.</span><span class="n">sub</span> <span class="n">a</span> <span class="n">lo</span> <span class="o">(</span><span class="n">hi</span> <span class="o">-</span> <span class="n">lo</span><span class="o">))</span>
+  <span class="k">else</span>
+    <span class="k">let</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="k">in</span>
+    <span class="k">let</span> <span class="n">left</span> <span class="o">=</span> <span class="nn">Domain</span><span class="p">.</span><span class="n">spawn</span> <span class="o">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="o">-&gt;</span> <span class="n">pfold</span> <span class="n">op</span> <span class="n">e</span> <span class="n">a</span> <span class="n">lo</span> <span class="n">mid</span> <span class="o">(</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="k">in</span>
+    <span class="k">let</span> <span class="n">right</span> <span class="o">=</span> <span class="n">pfold</span> <span class="n">op</span> <span class="n">e</span> <span class="n">a</span> <span class="n">mid</span> <span class="n">hi</span> <span class="o">(</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="k">in</span>
+    <span class="n">op</span> <span class="o">(</span><span class="nn">Domain</span><span class="p">.</span><span class="n">join</span> <span class="n">left</span><span class="o">)</span> <span class="n">right</span></pre>
 <pre class="notes-out">$ ./per_thread
 (b) fold of 1 .. 8 with ( + ) from 0
 two halves     36
@@ -1306,27 +1326,27 @@ four quarters  0</pre>
 <p>Block 1 showed the transfer: a withdrawal under the source's lock, then a deposit under the destination's lock, each atomic, and a third thread reading both balances under both locks saw 199 where the sum should be 200. Two atomic steps are not one atomic step. The same holds for the second way: a compare-and-set on the source and a compare-and-set on the destination are two points of effect, and a reader may read both balances between them. Neither locked nor compare-and-set operations compose by themselves into one atomic&nbsp;operation.</p>
 
 <p class="notes-file">Example 4 (a), Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L19" target="_blank" rel="noopener"><code>Accounts.java</code></a>, the transfer in two halves, and the&nbsp;reader</p>
-<pre class="notes-src">static final Account A = new Account("A", 1, 100), B = new Account("B", 2, 100);  // name, id, balance
+<pre class="notes-src hl-code"><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Account</span><span class="p">(</span><span class="s">&quot;A&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">),</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Account</span><span class="p">(</span><span class="s">&quot;B&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span><span class="w">  </span><span class="c1">// name, id, balance</span>
 
-// (a) each step under its lock, the transfer as a whole under none: broken on purpose
-static void transferA(Account from, Account to, int x) {
-  synchronized (from) { from.balance -= x; }
-  synchronized (to)   { to.balance   += x; }
-}
-// the reader: both balances under both locks, A's first (the order of the ids)
-static int[] read() {
-  synchronized (A) { synchronized (B) { return new int[] { A.balance, B.balance }; } }
-}</pre>
+<span class="c1">// (a) each step under its lock, the transfer as a whole under none: broken on purpose</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transferA</span><span class="p">(</span><span class="n">Account</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="kd">to</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">from</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="kd">to</span><span class="p">)</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">balance</span><span class="w">   </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// the reader: both balances under both locks, A&#39;s first (the order of the ids)</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="na">balance</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span></pre>
 <pre class="notes-out">$ java Accounts a
 reading 1: A = 99, B = 100, sum = 199 (should be 200)
 after the transfers: A = 100, B = 100, sum = 200</pre>
 
 <p class="notes-file">Example 4 (a), OCaml 5: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/accounts.ml#L34" target="_blank" rel="noopener"><code>accounts.ml</code></a>, the transfer in two&nbsp;halves</p>
-<pre class="notes-src">(* (a) Two atomic steps. lock w a takes account a's mutex and records,
-   in w, who holds what, for the watchdog that detects the deadlock of (b). *)
-let transfer_split w src dst k =
-  lock w src; src.balance &lt;- src.balance - k; unlock w src;
-  lock w dst; dst.balance &lt;- dst.balance + k; unlock w dst</pre>
+<pre class="notes-src hl-code"><span class="c">(* (a) Two atomic steps. lock w a takes account a&#39;s mutex and records,</span>
+<span class="c">   in w, who holds what, for the watchdog that detects the deadlock of (b). *)</span>
+<span class="k">let</span> <span class="n">transfer_split</span> <span class="n">w</span> <span class="n">src</span> <span class="n">dst</span> <span class="n">k</span> <span class="o">=</span>
+  <span class="n">lock</span> <span class="n">w</span> <span class="n">src</span><span class="o">;</span> <span class="n">src</span><span class="o">.</span><span class="n">balance</span> <span class="o">&lt;-</span> <span class="n">src</span><span class="o">.</span><span class="n">balance</span> <span class="o">-</span> <span class="n">k</span><span class="o">;</span> <span class="n">unlock</span> <span class="n">w</span> <span class="n">src</span><span class="o">;</span>
+  <span class="n">lock</span> <span class="n">w</span> <span class="n">dst</span><span class="o">;</span> <span class="n">dst</span><span class="o">.</span><span class="n">balance</span> <span class="o">&lt;-</span> <span class="n">dst</span><span class="o">.</span><span class="n">balance</span> <span class="o">+</span> <span class="n">k</span><span class="o">;</span> <span class="n">unlock</span> <span class="n">w</span> <span class="n">dst</span></pre>
 <pre class="notes-out">$ ./accounts split
 2000000 transfers, A = 100, B = 100, sum 200
 the reader: 39283783 readings, 29828667 with a sum other than 200
@@ -1417,18 +1437,18 @@ the reader: 39283783 readings, 29828667 with a sum other than 200
 <p>Block 1's unlocked reader is the program outside the contract. The transfers take their locks in a global order and are correct; the reader takes&nbsp;none.</p>
 
 <p class="notes-file">Example 4 (d), Java: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L55" target="_blank" rel="noopener"><code>Accounts.java</code></a>, the reader with no&nbsp;lock</p>
-<pre class="notes-src">// (d) the reader with no lock: broken on purpose, a data race
-static int[] readUnlocked() {
-  return new int[] { A.balance, B.balance };
-}</pre>
+<pre class="notes-src hl-code"><span class="c1">// (d) the reader with no lock: broken on purpose, a data race</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="nf">readUnlocked</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="na">balance</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span></pre>
 <pre class="notes-out">$ java Accounts d
 transfers: 1000000 A to B, 1000000 B to A
 readings with no lock during the transfers: 138670249, sums other than 200: 20954124
 first wrong reading 114: A = -5811, B = 6012, sum = 201 (should be 200)
 at the end: A = 100, B = 100, sum = 200</pre>
 <p class="notes-file">Example 4 (d), OCaml 5: <a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/accounts.ml#L58" target="_blank" rel="noopener"><code>accounts.ml</code></a>, the reader with no&nbsp;lock</p>
-<pre class="notes-src">(* (d) The reader with no lock: broken on purpose, a data race. *)
-let read_unlocked () = (a.balance, b.balance)</pre>
+<pre class="notes-src hl-code"><span class="c">(* (d) The reader with no lock: broken on purpose, a data race. *)</span>
+<span class="k">let</span> <span class="n">read_unlocked</span> <span class="bp">()</span> <span class="o">=</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="n">balance</span><span class="o">,</span> <span class="n">b</span><span class="o">.</span><span class="n">balance</span><span class="o">)</span></pre>
 <pre class="notes-out">$ ./accounts unlocked
 2000000 transfers, A = 100, B = 100, sum 200
 the reader: 109518919 readings, 2611258 with a sum other than 200

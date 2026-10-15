@@ -102,7 +102,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 .notes-embed li{margin:0 0 .45rem;color:var(--ink2)}
 .notes-embed b{color:var(--ink);font-weight:600}
 .notes-embed pre{margin:0 0 1rem;padding:.8rem .9rem;border-radius:6px;background:var(--code);border:1px solid var(--line);overflow-x:auto;line-height:1.45}
-.notes-embed pre code{font-size:.8rem;background:none;padding:0}
+.notes-embed pre code{font-size:.8rem;background:none;padding:0;border:0;border-radius:0}
 .notes-embed .notes-kicker{font:500 .78rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .8rem}
 .notes-embed .notes-lede{font:400 1.2rem/1.5 var(--serif);color:var(--ink)}
 .notes-embed .notes-date{font-size:.85rem;color:var(--ink3);margin:0 0 2rem}
@@ -274,6 +274,26 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 .notes-embed .notes-sep{border:0;border-top:1px solid var(--line);margin:3.5rem 0 2.5rem}
 /* on a phone a wide table scrolls sideways in its own box instead of widening the page */
 @media (max-width:760px){.notes-embed table{display:block;overflow-x:auto;max-width:100%}}
+</style>
+<style id="hilite">
+/* Pygments token colours (tools/hilite.py); the same palette as the slides. */
+.hl-code .k,.hl-code .kd,.hl-code .kn,.hl-code .kr,.hl-code .kp,.hl-code .ow{color:#2a6f97}
+.hl-code .kt,.hl-code .nc,.hl-code .nn,.hl-code .nb,.hl-code .bp{color:#c05a0e}
+.hl-code .s,.hl-code .s1,.hl-code .s2,.hl-code .sb,.hl-code .sc,.hl-code .se,.hl-code .sd{color:#0f8a2f}
+.hl-code .c,.hl-code .c1,.hl-code .cm,.hl-code .cp{color:#6f7f84;font-style:italic}
+.hl-code .m,.hl-code .mi,.hl-code .mf,.hl-code .mh{color:#7a3e9d}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .hl-code .k,:root:not([data-theme="light"]) .hl-code .kd,:root:not([data-theme="light"]) .hl-code .kn,:root:not([data-theme="light"]) .hl-code .kr,:root:not([data-theme="light"]) .hl-code .kp,:root:not([data-theme="light"]) .hl-code .ow{color:#7fb3e0}
+  :root:not([data-theme="light"]) .hl-code .kt,:root:not([data-theme="light"]) .hl-code .nc,:root:not([data-theme="light"]) .hl-code .nn,:root:not([data-theme="light"]) .hl-code .nb,:root:not([data-theme="light"]) .hl-code .bp{color:#f0a060}
+  :root:not([data-theme="light"]) .hl-code .s,:root:not([data-theme="light"]) .hl-code .s1,:root:not([data-theme="light"]) .hl-code .s2,:root:not([data-theme="light"]) .hl-code .sb,:root:not([data-theme="light"]) .hl-code .sc,:root:not([data-theme="light"]) .hl-code .se,:root:not([data-theme="light"]) .hl-code .sd{color:#5fd37f}
+  :root:not([data-theme="light"]) .hl-code .c,:root:not([data-theme="light"]) .hl-code .c1,:root:not([data-theme="light"]) .hl-code .cm,:root:not([data-theme="light"]) .hl-code .cp{color:#8a929f}
+  :root:not([data-theme="light"]) .hl-code .m,:root:not([data-theme="light"]) .hl-code .mi,:root:not([data-theme="light"]) .hl-code .mf,:root:not([data-theme="light"]) .hl-code .mh{color:#c39be0}
+}
+:root[data-theme="dark"] .hl-code .k,:root[data-theme="dark"] .hl-code .kd,:root[data-theme="dark"] .hl-code .kn,:root[data-theme="dark"] .hl-code .kr,:root[data-theme="dark"] .hl-code .kp,:root[data-theme="dark"] .hl-code .ow{color:#7fb3e0}
+:root[data-theme="dark"] .hl-code .kt,:root[data-theme="dark"] .hl-code .nc,:root[data-theme="dark"] .hl-code .nn,:root[data-theme="dark"] .hl-code .nb,:root[data-theme="dark"] .hl-code .bp{color:#f0a060}
+:root[data-theme="dark"] .hl-code .s,:root[data-theme="dark"] .hl-code .s1,:root[data-theme="dark"] .hl-code .s2,:root[data-theme="dark"] .hl-code .sb,:root[data-theme="dark"] .hl-code .sc,:root[data-theme="dark"] .hl-code .se,:root[data-theme="dark"] .hl-code .sd{color:#5fd37f}
+:root[data-theme="dark"] .hl-code .c,:root[data-theme="dark"] .hl-code .c1,:root[data-theme="dark"] .hl-code .cm,:root[data-theme="dark"] .hl-code .cp{color:#8a929f}
+:root[data-theme="dark"] .hl-code .m,:root[data-theme="dark"] .hl-code .mi,:root[data-theme="dark"] .hl-code .mf,:root[data-theme="dark"] .hl-code .mh{color:#c39be0}
 </style>
 <div class="notes-host" id="notes-host"><nav class="nside" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1"><span class="nside-full">Block 1, Mutual&nbsp;exclusion</span><span class="nside-short">Block 1</span></a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
 <li><a href="#b1-counter">2. Race conditions</a></li>
@@ -602,17 +622,17 @@ nav.nside-pane .nside-short{display:inline}
 <p>In Java, <code>new Thread(work)</code> creates a thread that will run the code <code>work</code>, a <code>Runnable</code>, when it is started; <code>t1.start()</code> starts it; <code>t1.join()</code> makes the calling thread wait until <code>t1</code> has finished. The main thread below starts two threads and waits for both before&nbsp;printing.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterRacy.java#L5" target="_blank" rel="noopener">CounterRacy.java</a>, the lines shown on the slide</span>
-<pre><code>static int n = 0;                       // shared by the two threads
+<pre class="hl-code"><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                       </span><span class="c1">// shared by the two threads</span>
 
-public static void main(String[] args) throws InterruptedException {
-  final int N = 1_000_000;
-  Runnable work = () -&gt; { for (int i = 0; i &lt; N; i++) n++; };
-  Thread t1 = new Thread(work), t2 = new Thread(work);
-  t1.start(); t2.start();
-  t1.join();  t2.join();
-  System.out.println("expected " + 2 * N);
-  System.out.println("got      " + n);
-}</code></pre>
+<span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_000_000</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Runnable</span><span class="w"> </span><span class="n">work</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="n">Thread</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(</span><span class="n">work</span><span class="p">),</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(</span><span class="n">work</span><span class="p">);</span>
+<span class="w">  </span><span class="n">t1</span><span class="p">.</span><span class="na">start</span><span class="p">();</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="na">start</span><span class="p">();</span>
+<span class="w">  </span><span class="n">t1</span><span class="p">.</span><span class="na">join</span><span class="p">();</span><span class="w">  </span><span class="n">t2</span><span class="p">.</span><span class="na">join</span><span class="p">();</span>
+<span class="w">  </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;expected &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">N</span><span class="p">);</span>
+<span class="w">  </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;got      &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 
 <div class="notes-q">
 <p>What does the program print as the value of <code>n</code>, with <i>N</i> increments per&nbsp;thread?</p>
@@ -632,9 +652,9 @@ got      1017204</code></pre>
 
 <p>The statement <code>n++</code> is one line of Java and several instructions of the machine. The Java compiler turns it into four instructions of the virtual machine, <code>getstatic</code>, <code>iconst_1</code>, <code>iadd</code> and <code>putstatic</code>, of which the first reads <code>n</code> and the last writes&nbsp;it; whatever machine code the runtime makes of them, the read and the write of <code>n</code> are two accesses, and the scheduler may run another thread between them. For the argument, the three steps that matter are&nbsp;these:</p>
 
-<pre><code>int v = n;      // read
-v = v + 1;      // add
-n = v;          // write</code></pre>
+<pre class="hl-code"><code><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w">      </span><span class="c1">// read</span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">      </span><span class="c1">// add</span>
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w">          </span><span class="c1">// write</span></code></pre>
 
 <p>The interleaving that loses an update is the one in which both threads read before either writes. The table shows it for one increment of each thread, starting from <code>n</code> equal to 5; "register" is the thread's own copy of the&nbsp;value.</p>
 
@@ -752,18 +772,18 @@ n = v;          // write</code></pre>
 <p>OCaml&nbsp;5 calls a unit of parallel execution a <b>domain</b>, several domains running at the same time on different cores; <code>Domain.spawn work</code> starts one running <code>work</code>, and <code>Domain.join</code> waits for it. The same program with two domains loses updates in the same&nbsp;way.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_racy.ml#L8" target="_blank" rel="noopener">counter_racy.ml</a>, the lines shown on the slide</span>
-<pre><code>let n = ref 0
+<pre class="hl-code"><code><span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">0</span>
 
-let work () =
-  for _ = 1 to 1_000_000 do
-    n := !n + 1
-  done
+<span class="k">let</span> <span class="n">work</span> <span class="bp">()</span> <span class="o">=</span>
+  <span class="k">for</span> <span class="o">_</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">to</span> <span class="mi">1_000_000</span> <span class="k">do</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="o">!</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="k">done</span>
 
-let () =
-  let a = Domain.spawn work and b = Domain.spawn work in
-  Domain.join a;
-  Domain.join b;
-  Printf.printf "expected %d\ngot      %d\n" 2_000_000 !n</code></pre>
+<span class="k">let</span> <span class="bp">()</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="nn">Domain</span><span class="p">.</span><span class="n">spawn</span> <span class="n">work</span> <span class="k">and</span> <span class="n">b</span> <span class="o">=</span> <span class="nn">Domain</span><span class="p">.</span><span class="n">spawn</span> <span class="n">work</span> <span class="k">in</span>
+  <span class="nn">Domain</span><span class="p">.</span><span class="n">join</span> <span class="n">a</span><span class="o">;</span>
+  <span class="nn">Domain</span><span class="p">.</span><span class="n">join</span> <span class="n">b</span><span class="o">;</span>
+  <span class="nn">Printf</span><span class="p">.</span><span class="n">printf</span> <span class="s2">&quot;expected %d</span><span class="se">\n</span><span class="s2">got      %d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="mi">2_000_000</span> <span class="o">!</span><span class="n">n</span></code></pre>
 <span class="notes-file">$ ./counter_racy</span>
 <pre class="notes-out"><code>expected 2000000
 got      1056147</code></pre>
@@ -921,31 +941,31 @@ got      1056147</code></pre>
 <p>With atomic accesses defined, the definition of a data race in section&nbsp;2 takes one more clause: at least one of the two accesses is a <b>plain access</b>, that is, not atomic, so two accesses that are both atomic are never a data race, as block&nbsp;2, section&nbsp;2,&nbsp;states.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/SpinLock.java#L8" target="_blank" rel="noopener">SpinLock.java</a>, the lines shown on the slide</span>
-<pre><code>static final AtomicBoolean held = new AtomicBoolean(false);
-static void lock()   { while (held.getAndSet(true)) { } }   // loop until it was false
-static void unlock() { held.set(false); }
+<pre class="hl-code"><code><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="w"> </span><span class="n">held</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lock</span><span class="p">()</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">held</span><span class="p">.</span><span class="na">getAndSet</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1">// loop until it was false</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">unlock</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">held</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 
-Runnable work = () -&gt; {
-  for (int i = 0; i &lt; N; i++) { lock(); n++; unlock(); }
-};</code></pre>
+<span class="n">Runnable</span><span class="w"> </span><span class="n">work</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lock</span><span class="p">();</span><span class="w"> </span><span class="n">n</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="n">unlock</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span></code></pre>
 <span class="notes-file">$ java SpinLock</span>
 <pre class="notes-out"><code>expected 2000000
 got      2000000</code></pre>
 <p class="notes-sample">One sample. The field <code>n</code> is the plain <code>int</code> of section&nbsp;2; only the two lines around <code>n++</code>&nbsp;changed.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/spin_lock.ml#L7" target="_blank" rel="noopener">spin_lock.ml</a>, the lines shown on the slide</span>
-<pre><code>let flag = Atomic.make false
-let lock () = while Atomic.exchange flag true do Domain.cpu_relax () done
-let unlock () = Atomic.set flag false
+<pre class="hl-code"><code><span class="k">let</span> <span class="n">flag</span> <span class="o">=</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">make</span> <span class="bp">false</span>
+<span class="k">let</span> <span class="n">lock</span> <span class="bp">()</span> <span class="o">=</span> <span class="k">while</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">exchange</span> <span class="n">flag</span> <span class="bp">true</span> <span class="k">do</span> <span class="nn">Domain</span><span class="p">.</span><span class="n">cpu_relax</span> <span class="bp">()</span> <span class="k">done</span>
+<span class="k">let</span> <span class="n">unlock</span> <span class="bp">()</span> <span class="o">=</span> <span class="nn">Atomic</span><span class="p">.</span><span class="n">set</span> <span class="n">flag</span> <span class="bp">false</span>
 
-let n = ref 0   (* read and written only between lock () and unlock () *)
+<span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">0</span>   <span class="c">(* read and written only between lock () and unlock () *)</span>
 
-let work () =
-  for _ = 1 to 1_000_000 do
-    lock ();
-    n := !n + 1;
-    unlock ()
-  done</code></pre>
+<span class="k">let</span> <span class="n">work</span> <span class="bp">()</span> <span class="o">=</span>
+  <span class="k">for</span> <span class="o">_</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">to</span> <span class="mi">1_000_000</span> <span class="k">do</span>
+    <span class="n">lock</span> <span class="bp">()</span><span class="o">;</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="o">!</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="n">unlock</span> <span class="bp">()</span>
+  <span class="k">done</span></code></pre>
 <span class="notes-file">$ ./spin_lock</span>
 <pre class="notes-out"><code>expected 2000000
 got      2000000</code></pre>
@@ -969,37 +989,37 @@ got      2000000</code></pre>
 <p>In Java every object carries a lock, which Java calls the object's monitor (section&nbsp;7 explains the word), and <code>synchronized (lock) { … }</code> acquires it at the opening brace and releases it at the closing one, also when the block ends by an exception. In OCaml&nbsp;5 a lock is a value of type <code>Mutex.t</code>, and <code>Mutex.protect m f</code> acquires <code>m</code>, runs <code>f</code> and releases <code>m</code>, also when <code>f</code>&nbsp;raises.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterLocked.java#L5" target="_blank" rel="noopener">CounterLocked.java</a>, the lines shown on the slide</span>
-<pre><code>static final Object lock = new Object();
-static int n = 0;                       // guarded by lock
+<pre class="hl-code"><code><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">lock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Object</span><span class="p">();</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                       </span><span class="c1">// guarded by lock</span>
 
-public static void main(String[] args) throws InterruptedException {
-  final int N = 1_000_000;
-  Runnable work = () -&gt; {
-    for (int i = 0; i &lt; N; i++) {
-      synchronized (lock) {             // critical section: begin
-        n++;
-      }                                 // critical section: end
-    }
-  };
-  Thread t1 = new Thread(work), t2 = new Thread(work);
-  t1.start(); t2.start();
-  t1.join();  t2.join();
-  System.out.println("expected " + 2 * N);
-  System.out.println("got      " + n);
-}</code></pre>
+<span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_000_000</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Runnable</span><span class="w"> </span><span class="n">work</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">lock</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">             </span><span class="c1">// critical section: begin</span>
+<span class="w">        </span><span class="n">n</span><span class="o">++</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span><span class="w">                                 </span><span class="c1">// critical section: end</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="n">Thread</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(</span><span class="n">work</span><span class="p">),</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(</span><span class="n">work</span><span class="p">);</span>
+<span class="w">  </span><span class="n">t1</span><span class="p">.</span><span class="na">start</span><span class="p">();</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="na">start</span><span class="p">();</span>
+<span class="w">  </span><span class="n">t1</span><span class="p">.</span><span class="na">join</span><span class="p">();</span><span class="w">  </span><span class="n">t2</span><span class="p">.</span><span class="na">join</span><span class="p">();</span>
+<span class="w">  </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;expected &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">N</span><span class="p">);</span>
+<span class="w">  </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;got      &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 <span class="notes-file">$ java CounterLocked</span>
 <pre class="notes-out"><code>expected 2000000
 got      2000000</code></pre>
 <p class="notes-sample">One&nbsp;sample.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_locked.ml#L4" target="_blank" rel="noopener">counter_locked.ml</a>, the lines shown on the slide</span>
-<pre><code>let n = ref 0   (* read and written only while m is held *)
-let m = Mutex.create ()
+<pre class="hl-code"><code><span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">0</span>   <span class="c">(* read and written only while m is held *)</span>
+<span class="k">let</span> <span class="n">m</span> <span class="o">=</span> <span class="nn">Mutex</span><span class="p">.</span><span class="n">create</span> <span class="bp">()</span>
 
-let work () =
-  for _ = 1 to 1_000_000 do
-    Mutex.protect m (fun () -&gt; n := !n + 1)   (* the critical section *)
-  done</code></pre>
+<span class="k">let</span> <span class="n">work</span> <span class="bp">()</span> <span class="o">=</span>
+  <span class="k">for</span> <span class="o">_</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">to</span> <span class="mi">1_000_000</span> <span class="k">do</span>
+    <span class="nn">Mutex</span><span class="p">.</span><span class="n">protect</span> <span class="n">m</span> <span class="o">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="o">-&gt;</span> <span class="n">n</span> <span class="o">:=</span> <span class="o">!</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>   <span class="c">(* the critical section *)</span>
+  <span class="k">done</span></code></pre>
 <span class="notes-file">$ ./counter_locked</span>
 <pre class="notes-out"><code>expected 2000000
 got      2000000</code></pre>
@@ -1088,18 +1108,18 @@ got      2000000</code></pre>
 <p>The program of this section and of section&nbsp;6 is one program with two accounts. An account is an object with a name, an id (A has id 1, B has id 2), and a balance, a plain <code>int</code> field; each account's own lock is the one Java gives to every object, so <code>synchronized (from)</code> takes the lock of the account <code>from</code>. Both balances start at 100. A transfer takes an amount from one account and adds it to the other, and every transfer of the program moves an amount of 1; two threads, t1 and t2, transfer in opposite directions, a million times each. The program has four modes, chosen by a command-line argument, <code>java Accounts a</code> to <code>d</code>; this section shows mode d, which runs the transfer of mode c, the correct form of section&nbsp;6 with both locks taken in a fixed order (section&nbsp;6 says why), and adds a third thread that reads both balances and takes no&nbsp;lock.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L39" target="_blank" rel="noopener">Accounts.java</a>, mode d, the lines shown on the slide</span>
-<pre><code>// (c) both locks, in the order of the ids
-static void transferC(Account from, Account to, int x) {
-  Account first  = from.id &lt; to.id ? from : to;
-  Account second = from.id &lt; to.id ? to : from;
-  synchronized (first) {
-    synchronized (second) { from.balance -= x; to.balance += x; }
-  }
-}
-// (d) a reader that takes no lock
-static int[] readUnlocked() {
-  return new int[] { A.balance, B.balance };
-}</code></pre>
+<pre class="hl-code"><code><span class="c1">// (c) both locks, in the order of the ids</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transferC</span><span class="p">(</span><span class="n">Account</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="kd">to</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Account</span><span class="w"> </span><span class="n">first</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kd">to</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Account</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="kd">to</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">from</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">first</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">second</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// (d) a reader that takes no lock</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="nf">readUnlocked</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="na">balance</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span></code></pre>
 
 <div class="notes-q">
 <p>The reader takes no lock. Does the program compile, and what did the compiler establish about the reader's two&nbsp;reads?</p>
@@ -1124,15 +1144,15 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 <p>The same program in OCaml&nbsp;5 behaves the same way, and the standard compiler reports nothing either. In its listing, <code>w</code> is a record of what the calling domain holds and waits for, kept for the watchdog that detects the deadlock of section&nbsp;6; <code>lock w first</code> takes the lock of <code>first</code> and notes it&nbsp;there.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/accounts.ml#L49" target="_blank" rel="noopener">accounts.ml</a>, mode unlocked, the lines shown on the slide</span>
-<pre><code>(* (c) both locks, in the order of the ids *)
-let transfer_ordered w src dst k =
-  let first, second = if src.id &lt; dst.id then src, dst else dst, src in
-  lock w first; lock w second;
-  src.balance &lt;- src.balance - k; dst.balance &lt;- dst.balance + k;
-  unlock w second; unlock w first
+<pre class="hl-code"><code><span class="c">(* (c) both locks, in the order of the ids *)</span>
+<span class="k">let</span> <span class="n">transfer_ordered</span> <span class="n">w</span> <span class="n">src</span> <span class="n">dst</span> <span class="n">k</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">first</span><span class="o">,</span> <span class="n">second</span> <span class="o">=</span> <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">dst</span><span class="o">.</span><span class="n">id</span> <span class="k">then</span> <span class="n">src</span><span class="o">,</span> <span class="n">dst</span> <span class="k">else</span> <span class="n">dst</span><span class="o">,</span> <span class="n">src</span> <span class="k">in</span>
+  <span class="n">lock</span> <span class="n">w</span> <span class="n">first</span><span class="o">;</span> <span class="n">lock</span> <span class="n">w</span> <span class="n">second</span><span class="o">;</span>
+  <span class="n">src</span><span class="o">.</span><span class="n">balance</span> <span class="o">&lt;-</span> <span class="n">src</span><span class="o">.</span><span class="n">balance</span> <span class="o">-</span> <span class="n">k</span><span class="o">;</span> <span class="n">dst</span><span class="o">.</span><span class="n">balance</span> <span class="o">&lt;-</span> <span class="n">dst</span><span class="o">.</span><span class="n">balance</span> <span class="o">+</span> <span class="n">k</span><span class="o">;</span>
+  <span class="n">unlock</span> <span class="n">w</span> <span class="n">second</span><span class="o">;</span> <span class="n">unlock</span> <span class="n">w</span> <span class="n">first</span>
 
-(* (d) a reader that takes no lock *)
-let read_unlocked () = (a.balance, b.balance)</code></pre>
+<span class="c">(* (d) a reader that takes no lock *)</span>
+<span class="k">let</span> <span class="n">read_unlocked</span> <span class="bp">()</span> <span class="o">=</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="n">balance</span><span class="o">,</span> <span class="n">b</span><span class="o">.</span><span class="n">balance</span><span class="o">)</span></code></pre>
 <span class="notes-file">$ ./accounts unlocked</span>
 <pre class="notes-out"><code>2000000 transfers, A = 100, B = 100, sum 200
 the reader: 109518919 readings, 2611258 with a sum other than 200
@@ -1144,13 +1164,13 @@ the reader: 109518919 readings, 2611258 with a sum other than 200
 <p>For one <b>word</b>, a variable that fits in one location such as an <code>int</code> or a <code>boolean</code>, that one thread writes and another reads, Java offers a repair short of a lock: a <code>volatile</code> field, whose every write is synchronization for the read that sees it. That makes a flag or a result visible across threads, and the plain flag of the rules sheet, rule&nbsp;9, is the data race with no multi-step operation that section&nbsp;2&nbsp;announced.</p>
 
 <span class="notes-file">Rules.java, rule 9, the lines of the flag</span>
-<pre><code>static boolean stopPlain; static volatile boolean stopVolatile;
+<pre class="hl-code"><code><span class="kd">static</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">stopPlain</span><span class="p">;</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">volatile</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">stopVolatile</span><span class="p">;</span>
 
-Thread t = new Thread(() -&gt; { while (!stopPlain) { } }); t.setDaemon(true); t.start();
-Thread.sleep(200); stopPlain = true; t.join(DEADLINE);
+<span class="n">Thread</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stopPlain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">setDaemon</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">start</span><span class="p">();</span>
+<span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span><span class="w"> </span><span class="n">stopPlain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="n">DEADLINE</span><span class="p">);</span>
 
-Thread u = new Thread(() -&gt; { while (!stopVolatile) { } }); u.setDaemon(true); u.start();
-Thread.sleep(200); stopVolatile = true; u.join(DEADLINE);</code></pre>
+<span class="n">Thread</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stopVolatile</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="na">setDaemon</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="na">start</span><span class="p">();</span>
+<span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span><span class="w"> </span><span class="n">stopVolatile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="n">DEADLINE</span><span class="p">);</span></code></pre>
 <span class="notes-file">$ java Rules visibility</span>
 <pre class="notes-out"><code>visibility    broken  the loop never saw the write: stuck at the deadline
 visibility    fixed   the loop ended</code></pre>
@@ -1173,16 +1193,16 @@ visibility    fixed   the loop ended</code></pre>
 <p>The Rust compiler rejects the counter of section&nbsp;2. The program below says, in Rust's words, what the Java program said: a variable <code>count</code> that may change (<code>let mut</code>), two threads started with <code>s.spawn</code>, each running a function without a name (<code>|| …</code>) that adds one to <code>count</code> a million times, and a print of <code>count</code> at the end. The two threads are started inside <code>thread::scope</code>, which guarantees that both have ended before the scope returns; without it the compiler would also object that the threads might outlive the variable, and the one complaint left is about the&nbsp;sharing.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/rust/r1a_scoped_mut.rs#L4" target="_blank" rel="noopener">r1a_scoped_mut.rs</a></span>
-<pre><code>use std::thread;
+<pre class="hl-code"><code><span class="k">use</span><span class="w"> </span><span class="n">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-fn main() {
-    let mut count = 0;
-    thread::scope(|s| {
-        s.spawn(|| for _ in 0..1_000_000 { count += 1 });
-        s.spawn(|| for _ in 0..1_000_000 { count += 1 });
-    });
-    println!("{}", count);
-}</code></pre>
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">thread</span><span class="p">::</span><span class="n">scope</span><span class="p">(</span><span class="o">|</span><span class="n">s</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="o">||</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">1_000_000</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="o">||</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">1_000_000</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 <span class="notes-file">$ rustc --edition 2024 -O r1a_scoped_mut.rs</span>
 <pre class="notes-out"><code>error[E0499]: cannot borrow `count` as mutable more than once at a time
  --&gt; r1a_scoped_mut.rs:7:17
@@ -1206,25 +1226,25 @@ error: aborting due to 1 previous error</code></pre>
 <p>The same counter compiles when the integer is put inside a lock, and the way Rust does it is the second thing to see. In the program, <code>Mutex::new(0)</code> is a lock that contains the integer 0, <code>Arc::new</code> wraps it so that several threads may share it, <code>Arc::clone</code> gives each thread its own handle, and <code>c.lock()</code> acquires the lock and returns a <b>guard</b>, a value through which the integer is reached and whose disappearance at the end of the statement releases the&nbsp;lock.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/rust/r1b_arc_mutex.rs#L3" target="_blank" rel="noopener">r1b_arc_mutex.rs</a></span>
-<pre><code>use std::sync::{Arc, Mutex};
-use std::thread;
+<pre class="hl-code"><code><span class="k">use</span><span class="w"> </span><span class="n">std</span><span class="p">::</span><span class="n">sync</span><span class="p">::{</span><span class="n">Arc</span><span class="p">,</span><span class="w"> </span><span class="n">Mutex</span><span class="p">};</span>
+<span class="k">use</span><span class="w"> </span><span class="n">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-fn main() {
-    let count = Arc::new(Mutex::new(0));
-    let mut handles = Vec::new();
-    for _ in 0..2 {
-        let c = Arc::clone(&amp;count);
-        handles.push(thread::spawn(move || {
-            for _ in 0..1_000_000 {
-                *c.lock().unwrap() += 1;
-            }
-        }));
-    }
-    for h in handles {
-        h.join().unwrap();
-    }
-    println!("{}", *count.lock().unwrap());
-}</code></pre>
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">Mutex</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">handles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span><span class="p">::</span><span class="n">new</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span><span class="p">::</span><span class="n">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="n">count</span><span class="p">);</span>
+<span class="w">        </span><span class="n">handles</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">thread</span><span class="p">::</span><span class="n">spawn</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">1_000_000</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="o">*</span><span class="n">c</span><span class="p">.</span><span class="n">lock</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">handles</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">h</span><span class="p">.</span><span class="n">join</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">count</span><span class="p">.</span><span class="n">lock</span><span class="p">().</span><span class="n">unwrap</span><span class="p">());</span>
+<span class="p">}</span></code></pre>
 <span class="notes-file">$ ./r1b_arc_mutex</span>
 <pre class="notes-out"><code>2000000</code></pre>
 <p class="notes-sample">One sample; three runs printed the&nbsp;same.</p>
@@ -1242,15 +1262,15 @@ fn main() {
 <p>The two accounts A and B of section&nbsp;5 start with 100 each, and each transfer moves 1 from one to the&nbsp;other. The <b>invariant</b> of the pair is that the sum of the balances is 200: a transfer moves money and creates none. Two threads transfer in opposite directions, and a third thread reads both balances under both locks and checks the&nbsp;sum.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L24" target="_blank" rel="noopener">Accounts.java</a>, mode a, the lines shown on the slide</span>
-<pre><code>// (a) each step under its lock, the transfer as a whole under none
-static void transferA(Account from, Account to, int x) {
-  synchronized (from) { from.balance -= x; }
-  synchronized (to)   { to.balance   += x; }
-}
-// the reader: both balances, both locks
-static int[] read() {
-  synchronized (A) { synchronized (B) { return new int[] { A.balance, B.balance }; } }
-}</code></pre>
+<pre class="hl-code"><code><span class="c1">// (a) each step under its lock, the transfer as a whole under none</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transferA</span><span class="p">(</span><span class="n">Account</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="kd">to</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">from</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="kd">to</span><span class="p">)</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">balance</span><span class="w">   </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// the reader: both balances, both locks</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="na">balance</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span></code></pre>
 
 <div class="notes-q">
 <p>The withdrawal and the deposit are each under a lock. Is the transfer atomic, that is, does every other thread see either both of its steps or&nbsp;neither?</p>
@@ -1292,16 +1312,16 @@ after the transfers: A = 100, B = 100, sum = 200</code></pre>
 <p>The repair is to hold both locks for the whole transfer. The first attempt takes the source's lock first, then the destination's. The lines after the transfer are the deadlock detector that Java ships, <code>ThreadMXBean.findDeadlockedThreads</code>, which the main thread calls until it finds threads waiting for each other's locks in a cycle; it then prints which lock each of them holds and waits&nbsp;for.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L31" target="_blank" rel="noopener">Accounts.java</a>, mode b, the lines shown on the slide</span>
-<pre><code>// (b) both locks, the source's first
-static void transferB(Account from, Account to, int x) {
-  synchronized (from) {
-    synchronized (to) { from.balance -= x; to.balance += x; }
-  }
-}
+<pre class="hl-code"><code><span class="c1">// (b) both locks, the source&#39;s first</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transferB</span><span class="p">(</span><span class="n">Account</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="kd">to</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">from</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="kd">to</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-long[] ids;
-while ((ids = bean.findDeadlockedThreads()) == null) Thread.sleep(50);</code></pre>
+<span class="n">ThreadMXBean</span><span class="w"> </span><span class="n">bean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ManagementFactory</span><span class="p">.</span><span class="na">getThreadMXBean</span><span class="p">();</span>
+<span class="kt">long</span><span class="o">[]</span><span class="w"> </span><span class="n">ids</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">ids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bean</span><span class="p">.</span><span class="na">findDeadlockedThreads</span><span class="p">())</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span></code></pre>
 <span class="notes-file">$ java Accounts b</span>
 <pre class="notes-out"><code>deadlock: 2 threads blocked for ever
   t1 holds account A, waits for account B, held by t2
@@ -1350,14 +1370,14 @@ main ends; the two threads stay blocked until the JVM exits</code></pre>
 </figure>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Accounts.java#L39" target="_blank" rel="noopener">Accounts.java</a>, mode c, the lines shown on the slide</span>
-<pre><code>// (c) the locks always taken in the order of the ids
-static void transferC(Account from, Account to, int x) {
-  Account first  = from.id &lt; to.id ? from : to;
-  Account second = from.id &lt; to.id ? to : from;
-  synchronized (first) {
-    synchronized (second) { from.balance -= x; to.balance += x; }
-  }
-}</code></pre>
+<pre class="hl-code"><code><span class="c1">// (c) the locks always taken in the order of the ids</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transferC</span><span class="p">(</span><span class="n">Account</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="kd">to</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Account</span><span class="w"> </span><span class="n">first</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kd">to</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Account</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="kd">to</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">from</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">first</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">second</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="kd">to</span><span class="p">.</span><span class="na">balance</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span></code></pre>
 <span class="notes-file">$ java Accounts c</span>
 <pre class="notes-out"><code>transfers: 1000000 A to B, 1000000 B to A
 readings during the transfers: 530369, sums other than 200: 0
@@ -1431,22 +1451,22 @@ at the end: A = 100, B = 100, sum = 200</code></pre>
 <p>The buffer below is a ring of <i>K</i> slots with a count of the items in it: <code>put</code> stores an item at the position <code>tail</code> and <code>take</code> removes the oldest, at <code>head</code>, both positions moving round the ring. A thread that finds the ring full, or empty, releases the lock and waits, and is woken by the next take, or&nbsp;put.</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/Buffer.java#L14" target="_blank" rel="noopener">Buffer.java</a>, the lines shown on the slide</span>
-<pre><code>static final class WhileBuffer implements Buf {
-  final Integer[] slots = new Integer[K];
-  int head = 0, tail = 0, count = 0;    // guarded by this
+<pre class="hl-code"><code><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WhileBuffer</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Buf</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">final</span><span class="w"> </span><span class="n">Integer</span><span class="o">[]</span><span class="w"> </span><span class="n">slots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Integer</span><span class="o">[</span><span class="n">K</span><span class="o">]</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">tail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">    </span><span class="c1">// guarded by this</span>
 
-  public synchronized void put(int x) throws InterruptedException {
-    while (count == K) wait();          // full: release the lock and sleep
-    slots[tail] = x; tail = (tail + 1) % K; count++;
-    notifyAll();                        // wake every waiting thread
-  }
-  public synchronized Integer take() throws InterruptedException {
-    while (count == 0) wait();          // empty: release the lock and sleep
-    Integer x = slots[head]; slots[head] = null; head = (head + 1) % K; count--;
-    notifyAll();
-    return x;
-  }
-}</code></pre>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">synchronized</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">K</span><span class="p">)</span><span class="w"> </span><span class="n">wait</span><span class="p">();</span><span class="w">          </span><span class="c1">// full: release the lock and sleep</span>
+<span class="w">    </span><span class="n">slots</span><span class="o">[</span><span class="n">tail</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="n">tail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">tail</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">K</span><span class="p">;</span><span class="w"> </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="n">notifyAll</span><span class="p">();</span><span class="w">                        </span><span class="c1">// wake every waiting thread</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">synchronized</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="nf">take</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">wait</span><span class="p">();</span><span class="w">          </span><span class="c1">// empty: release the lock and sleep</span>
+<span class="w">    </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slots</span><span class="o">[</span><span class="n">head</span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="n">slots</span><span class="o">[</span><span class="n">head</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">head</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">K</span><span class="p">;</span><span class="w"> </span><span class="n">count</span><span class="o">--</span><span class="p">;</span>
+<span class="w">    </span><span class="n">notifyAll</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span></code></pre>
 <span class="notes-file">$ java Buffer while</span>
 <pre class="notes-out"><code>put:   200000 items, sum 10000100000
 taken: sum 10000100000</code></pre>
@@ -1497,22 +1517,22 @@ taken: sum 25476</code></pre>
 <p>The same monitor in OCaml&nbsp;5, with two condition variables, <code>not_full</code> and <code>not_empty</code>, and the wait in a&nbsp;<code>while</code>:</p>
 
 <span class="notes-file"><a class="notes-srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/buffer.ml#L21" target="_blank" rel="noopener">buffer.ml</a>, the lines shown on the slide</span>
-<pre><code>let put b x =
-  Mutex.protect b.m (fun () -&gt;
-    while b.count = Array.length b.slots do Condition.wait b.not_full b.m done;
-    b.slots.((b.head + b.count) mod Array.length b.slots) &lt;- Some x;
-    b.count &lt;- b.count + 1;
-    Condition.broadcast b.not_empty)
+<pre class="hl-code"><code><span class="k">let</span> <span class="n">put</span> <span class="n">b</span> <span class="n">x</span> <span class="o">=</span>
+  <span class="nn">Mutex</span><span class="p">.</span><span class="n">protect</span> <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="o">-&gt;</span>
+    <span class="k">while</span> <span class="n">b</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">length</span> <span class="n">b</span><span class="o">.</span><span class="n">slots</span> <span class="k">do</span> <span class="nn">Condition</span><span class="p">.</span><span class="n">wait</span> <span class="n">b</span><span class="o">.</span><span class="n">not_full</span> <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="k">done</span><span class="o">;</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">slots</span><span class="o">.((</span><span class="n">b</span><span class="o">.</span><span class="n">head</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">count</span><span class="o">)</span> <span class="ow">mod</span> <span class="nn">Array</span><span class="p">.</span><span class="n">length</span> <span class="n">b</span><span class="o">.</span><span class="n">slots</span><span class="o">)</span> <span class="o">&lt;-</span> <span class="nc">Some</span> <span class="n">x</span><span class="o">;</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">count</span> <span class="o">&lt;-</span> <span class="n">b</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="nn">Condition</span><span class="p">.</span><span class="n">broadcast</span> <span class="n">b</span><span class="o">.</span><span class="n">not_empty</span><span class="o">)</span>
 
-let take b =
-  Mutex.protect b.m (fun () -&gt;
-    while b.count = 0 do Condition.wait b.not_empty b.m done;
-    let x = Option.get b.slots.(b.head) in   (* raises if the slot is empty *)
-    b.slots.(b.head) &lt;- None;
-    b.head &lt;- (b.head + 1) mod Array.length b.slots;
-    b.count &lt;- b.count - 1;
-    Condition.broadcast b.not_full;
-    x)</code></pre>
+<span class="k">let</span> <span class="n">take</span> <span class="n">b</span> <span class="o">=</span>
+  <span class="nn">Mutex</span><span class="p">.</span><span class="n">protect</span> <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="o">-&gt;</span>
+    <span class="k">while</span> <span class="n">b</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">do</span> <span class="nn">Condition</span><span class="p">.</span><span class="n">wait</span> <span class="n">b</span><span class="o">.</span><span class="n">not_empty</span> <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="k">done</span><span class="o">;</span>
+    <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="nn">Option</span><span class="p">.</span><span class="n">get</span> <span class="n">b</span><span class="o">.</span><span class="n">slots</span><span class="o">.(</span><span class="n">b</span><span class="o">.</span><span class="n">head</span><span class="o">)</span> <span class="k">in</span>   <span class="c">(* raises if the slot is empty *)</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">slots</span><span class="o">.(</span><span class="n">b</span><span class="o">.</span><span class="n">head</span><span class="o">)</span> <span class="o">&lt;-</span> <span class="nc">None</span><span class="o">;</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">head</span> <span class="o">&lt;-</span> <span class="o">(</span><span class="n">b</span><span class="o">.</span><span class="n">head</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="ow">mod</span> <span class="nn">Array</span><span class="p">.</span><span class="n">length</span> <span class="n">b</span><span class="o">.</span><span class="n">slots</span><span class="o">;</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">count</span> <span class="o">&lt;-</span> <span class="n">b</span><span class="o">.</span><span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="nn">Condition</span><span class="p">.</span><span class="n">broadcast</span> <span class="n">b</span><span class="o">.</span><span class="n">not_full</span><span class="o">;</span>
+    <span class="n">x</span><span class="o">)</span></code></pre>
 <span class="notes-file">$ ./buffer while; $ ./buffer if</span>
 <pre class="notes-out"><code>4 slots, 2 producers and 2 consumers, 100000 items each
 sum put   20000100000
