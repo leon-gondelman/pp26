@@ -1672,6 +1672,21 @@ consumer 1 took from an empty slot, after 8 items
    steps forward and back, and the caption's list marks the step shown and moves to a step clicked. The figure
    opens at its first step. For the print, every step is drawn once, small and numbered, in a grid that only the
    print shows. */
+/* First, every figure's labels: the deck draws them in Fira Sans and the notes in a wider face, so a label that
+   runs past its drawing's right edge is set just small enough to end at it, before any figure is copied. */
+document.querySelectorAll('figure > svg').forEach(function (svg) {
+  if (svg.dataset.fitted) return; svg.dataset.fitted = '1';
+  var vb = svg.viewBox && svg.viewBox.baseVal; if (!vb || !vb.width) return;
+  var right = vb.x + vb.width - 4;
+  svg.querySelectorAll('text').forEach(function (t) {
+    var b; try { b = t.getBBox(); } catch (e) { return; }
+    if (!b.width || b.x + b.width <= right + 2) return;
+    var fs = parseFloat(getComputedStyle(t).fontSize), anchor = getComputedStyle(t).textAnchor, room;
+    if (anchor === 'end') return;
+    room = anchor === 'middle' ? 2 * (right - (b.x + b.width / 2)) : right - b.x;
+    if (room > b.width * 0.6) t.style.fontSize = (fs * room / b.width).toFixed(1) + 'px';
+  });
+});
 document.querySelectorAll('figure.notes-steps').forEach(function (fig) {
   if (fig.classList.contains('ready')) return;      /* the page of both blocks runs this script twice */
   var a = +fig.dataset.first, b = +fig.dataset.last, svg = fig.querySelector('svg'), cur = a;
