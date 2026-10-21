@@ -1319,6 +1319,7 @@ html.print-pdf .reveal #callbacks .cbswap > .current-visible, html.reveal-print 
 </head>
 <body>
 <style>
+.reveal .accent { font-weight: 500; }
 .reveal p.def.b1-ask { border-left-color: var(--accent); background: var(--box); }
 /* block 2's own styles: what the shared theme lacks (reported to the local session) */
 .reveal .fig.b2 text { font-size: 30px; }
@@ -1389,7 +1390,7 @@ html.print-pdf .reveal .b2-apx-say, html.reveal-print .reveal .b2-apx-say { disp
 <h1>Multi-threading</h1>
   <div class="sub">atomic instruction with retry; independence of the&nbsp;order</div>
   <div class="rule"></div>
-  <p class="meta">Can a logically atomic operation be built from atomic instructions, without&nbsp;exclusion?</p>
+  <p class="meta">Can a logically atomic operation be built from atomic instructions, <span class="accent">without&nbsp;exclusion</span>?</p>
   
 </section>
 
@@ -1437,7 +1438,7 @@ OCaml 5  popped + remaining = 125000500000</pre></div>
     </div>
     <div>
       <p>Four threads each push 1 to 250,000 and pop after every second push: what was popped and what remains add up to what was pushed,&nbsp;125,000,500,000.</p>
-      <p>Each operation holds the stack's one lock for its whole body: pushes and pops run one after another, each taking effect at one instant inside its critical section. In OCaml, <code>Mutex.protect m f</code> holds the lock <code>m</code> for the whole of&nbsp;<code>f</code>.</p>
+      <p>Each operation <span class="accent">holds the stack's one lock for its whole body</span>: pushes and pops run one after another, each taking effect at <span class="accent">one instant inside its critical section</span>. In OCaml, <code>Mutex.protect m f</code> holds the lock <code>m</code> for the whole of&nbsp;<code>f</code>.</p>
       <p class="fragment" data-fragment-index="0">One run of each is one sample; ten more runs&nbsp;agreed.</p>
     </div>
   </div>
@@ -1471,9 +1472,9 @@ OCaml 5  popped + remaining = 125000500000</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>A history</b> records one run as seen from outside: for each operation, the thread that called it, which operation it is with its arguments, the instant of its call, the instant of its return, and the value&nbsp;returned.</p>
-    <p class="fragment" data-fragment-index="0">Two operations <b>overlap</b> when each is called before the other has&nbsp;returned.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="1"><b>The sequential stack</b> is the specification: a pop returns the most recent push not yet popped, or&nbsp;<code>null</code>.</p><p class="def b1-ask fragment" data-fragment-index="2">When does the sequential stack explain a&nbsp;history?</p></div>
+    <p><b>A history</b> <span class="accent">records one run as seen from outside</span>: for each operation, the thread that called it, which operation it is with its arguments, the instant of its call, the instant of its return, and the value&nbsp;returned.</p>
+    <p class="fragment" data-fragment-index="0">Two operations <b>overlap</b> <span class="accent">when each is called before the other has&nbsp;returned</span>.</p>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="1"><b>The sequential stack</b> is the specification: <span class="accent">a pop returns the most recent push not yet popped</span>, or&nbsp;<code>null</code>.</p><p class="def b1-ask fragment" data-fragment-index="2">When does the sequential stack explain a&nbsp;history?</p></div>
   </div>
   
 </section>
@@ -1511,8 +1512,8 @@ OCaml 5  popped + remaining = 125000500000</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p>A history is <b>linearizable</b>, or explained by the sequential stack, when each operation can be assigned one instant between its call and its return, its <b>point of effect</b>, so that the operations taken in the order of these instants form a run of the sequential stack returning what they returned in the&nbsp;history.</p>
-    <p class="fragment" data-fragment-index="0">An object is linearizable when every history it can produce&nbsp;is.</p>
+    <p>A history is <b>linearizable</b>, or explained by the sequential stack, when each operation can be assigned <span class="accent">one instant between its call and its return</span>, its <b><span class="accent">point of effect</span></b>, so that the operations taken in the order of these instants form a run of the sequential stack returning what they returned in the&nbsp;history.</p>
+    <p class="fragment" data-fragment-index="0">An object is linearizable when <span class="accent">every history it can produce</span>&nbsp;is.</p>
   </div>
   
 </section>
@@ -1543,10 +1544,10 @@ OCaml 5  popped + remaining = 125000500000</pre></div>
   <p>Thread A's pop returns 1, thread B's pop returns 2. Can the sequential stack explain this&nbsp;history?</p>
   <ol class="cards">
     <li>No: <code>push(1)</code> was called first, so the first pop must return&nbsp;2.</li>
-    <li class="fragment ans" data-fragment-index="0">Yes: the pushes overlap, so <code>push(2)</code> may take effect first; the pops then return 1, then&nbsp;2.</li>
+    <li class="fragment ans" data-fragment-index="0">Yes: the pushes overlap, so <code>push(2)</code> <span class="accent">may take effect first</span>; the pops then return 1, then&nbsp;2.</li>
     <li>No: the sequential stack explains no history with overlapping&nbsp;operations.</li>
   </ol>
-  <div class="box fragment" data-fragment-index="0">No client can tell which push took effect first: the locked stack itself produces this history when thread B takes the lock&nbsp;first.</div>
+  <div class="box fragment" data-fragment-index="0"><span class="accent">No client can tell which push took effect first</span>: the locked stack itself produces this history when thread B takes the lock&nbsp;first.</div>
     <p class="def b1-ask fragment" data-fragment-index="1">Does linearizability say that an operation returns at&nbsp;all?</p>
 
 </section>
@@ -1595,8 +1596,8 @@ OCaml 5  popped + remaining = 125000500000</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Blocking</b>: a thread's progress in an operation can depend on another thread's being scheduled. Thread A holds the lock and is stopped: B and C wait for&nbsp;ever.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Lock-free</b>: from any point on, as long as some thread keeps taking steps inside an operation, some operation completes within finitely many steps, whichever threads are stopped and whenever. B keeps completing; each of B's successes fails C's attempt, and C&nbsp;starves.</p><p class="def b1-ask fragment" data-fragment-index="1">Can an operation be linearizable and lock-free, without a&nbsp;lock?</p></div>
+    <p><b>Blocking</b>: a thread's progress in an operation can <span class="accent">depend on another thread's being scheduled</span>. Thread A holds the lock and is stopped: B and C wait for&nbsp;ever.</p>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Lock-free</b>: from any point on, as long as some thread keeps taking steps inside an operation, <span class="accent">some operation completes within finitely many steps</span>, <span class="accent">whichever threads are stopped</span> and whenever. B keeps completing; each of B's successes fails C's attempt, and C&nbsp;starves.</p><p class="def b1-ask fragment" data-fragment-index="1">Can an operation be linearizable and lock-free, without a&nbsp;lock?</p></div>
   </div>
   <a class="apx" href="#/progress-2">appendix</a><span class="b2-apx-say">wait-free; the clause on stopped threads; how a structure is built against the progress it&nbsp;guarantees</span>
   
@@ -1653,7 +1654,7 @@ fetch-and-add: got 2000000 in both</pre></div>
       </ol>
     </div>
   </div>
-  <div class="swap"><div class="current-visible box fragment" data-fragment-index="0">A failed attempt loses no increment: the loop reads again. Fetch-and-add, the last line, never&nbsp;retries.</div><p class="def b1-ask fragment" data-fragment-index="1">What does this way guarantee, and what does it&nbsp;require?</p></div>
+  <div class="swap"><div class="current-visible box fragment" data-fragment-index="0"><span class="accent">A failed attempt loses no increment</span>: the loop reads again. Fetch-and-add, the last line, <span class="accent">never&nbsp;retries</span>.</div><p class="def b1-ask fragment" data-fragment-index="1">What does this way guarantee, and what does it&nbsp;require?</p></div>
   
 </section>
 
@@ -1681,8 +1682,8 @@ fetch-and-add: got 2000000 in both</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The contract.</b> The operation is atomic without exclusion, and linearizable: its point of effect is the compare-and-set that&nbsp;succeeds.</p>
-    <p class="fragment" data-fragment-index="0"><b>The obligation.</b> Every attempt starts from a fresh read; every write keeps the invariant, here that it replaces v by v + 1; the programmer names the point of&nbsp;effect.</p>
+    <p><b>The contract.</b> The operation is <span class="accent">atomic without exclusion</span>, and linearizable: its point of effect is <span class="accent">the compare-and-set that&nbsp;succeeds</span>.</p>
+    <p class="fragment" data-fragment-index="0"><b>The obligation.</b> Every attempt starts from a <span class="accent">fresh read</span>; every write keeps the invariant, here that it replaces v by v + 1; the programmer <span class="accent">names the point of&nbsp;effect</span>.</p>
   </div>
   
 </section>
@@ -1712,8 +1713,8 @@ fetch-and-add: got 2000000 in both</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The progress risk.</b> A compare-and-set fails only because another succeeded, so operations keep completing: lock-free. Not wait-free: a thread may retry without end while the others keep completing operations. Fetch-and-add takes no expected value, so it never fails: wait-free, each call one&nbsp;step.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Who checks.</b> Nobody but the programmer, by proof; Java and OCaml accept a loop that keeps an old value, or two atomic steps meant to be&nbsp;one.</p><p class="def b1-ask fragment" data-fragment-index="1">Lock-free and wait-free here, deadlock and starvation in block 1: how do the four line&nbsp;up?</p></div>
+    <p><b>The progress risk.</b> A compare-and-set <span class="accent">fails only because another succeeded</span>, so operations keep completing: lock-free. <span class="accent">Not wait-free</span>: a thread may retry without end while the others keep completing operations. Fetch-and-add takes no expected value, so it never fails: wait-free, each call one&nbsp;step.</p>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Who checks.</b> <span class="accent">Nobody but the programmer, by proof</span>; Java and OCaml accept a loop that keeps an old value, or two atomic steps meant to be&nbsp;one.</p><p class="def b1-ask fragment" data-fragment-index="1">Lock-free and wait-free here, deadlock and starvation in block 1: how do the four line&nbsp;up?</p></div>
   </div>
   
 </section>
@@ -1747,8 +1748,8 @@ fetch-and-add: got 2000000 in both</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p>The columns say who completes; the rows say what the condition assumes of the scheduler. Deadlock-freedom and starvation-freedom are the blocking counterparts of lock-freedom and&nbsp;wait-freedom.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0">The blocking row holds only while the scheduler runs every thread, the holder included: a stopped holder stops the waiters under both conditions. The non-blocking row holds whichever threads are stopped, and that is what block 1's progress failures lacked a word&nbsp;for.</p><p class="def b1-ask fragment" data-fragment-index="1">How does a structure of many nodes change in one&nbsp;compare-and-set?</p></div>
+    <p>The columns say <span class="accent">who completes</span>; the rows say <span class="accent">what the condition assumes of the scheduler</span>. Deadlock-freedom and starvation-freedom are the blocking counterparts of lock-freedom and&nbsp;wait-freedom.</p>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0">The blocking row holds only while the scheduler runs every thread, the holder included: a stopped holder stops the waiters under both conditions. The non-blocking row <span class="accent">holds whichever threads are stopped</span>, and that is what block 1's progress failures lacked a word&nbsp;for.</p><p class="def b1-ask fragment" data-fragment-index="1">How does a structure of many nodes change in one&nbsp;compare-and-set?</p></div>
   </div>
   
 </section>
@@ -1808,8 +1809,8 @@ let rec pop (s : 'a stack) =
       </div></div>
     </div>
     <div>
-      <p><code>top</code> is an atomic reference; the nodes are immutable, a record's fields being set once. The invariant: <code>top</code> points to a well-formed stack, a chain of nodes ending in <code>null</code>, in OCaml a&nbsp;list.</p>
-      <p>A push builds its node outside the stack, pointing at the top it read, and replaces <code>top</code> by it with a compare-and-set, which succeeds only if <code>top</code> is still the one it read; otherwise it reads again and builds a new&nbsp;node.</p>
+      <p><code>top</code> is an atomic reference; <span class="accent">the nodes are immutable</span>, a record's fields being set once. The invariant: <code>top</code> points to a well-formed stack, a chain of nodes ending in <code>null</code>, in OCaml a&nbsp;list.</p>
+      <p>A push <span class="accent">builds its node outside the stack</span>, pointing at the top it read, and replaces <code>top</code> by it with a compare-and-set, <span class="accent">which succeeds only if</span> <code>top</code> is still the one it read; otherwise it reads again and builds a new&nbsp;node.</p>
       <div class="swap"><pre class="current-visible out rec fragment" data-fragment-index="0">Java     popped + remaining
          = pushed 125000500000
 OCaml 5  popped + remaining
@@ -1842,13 +1843,13 @@ OCaml 5  on the stack 350362 of 1000000 pushed</pre></div>
     <div>
       <p>Four threads push only, a million pushes in all. Where does it go wrong, and is it a data&nbsp;race?</p>
       <ol class="cards">
-        <li class="fragment ans" data-fragment-index="0">between its read and its write another push took effect, and the write loses it; not a data race, both accesses being&nbsp;atomic</li>
+        <li class="fragment ans" data-fragment-index="0">between its read and its write another push took effect, and <span class="accent">the write loses it</span>; <span class="accent">not a data race, both accesses being&nbsp;atomic</span></li>
         <li>the read and the write are a data race with the other threads' writes, since nothing orders&nbsp;them</li>
         <li>the immutable nodes are the problem: a node cannot be re-pointed at a new&nbsp;top</li>
       </ol>
     </div>
   </div>
-  <div class="swap"><div class="current-visible box fragment" data-fragment-index="0">The bug is the racy counter's: a step of another thread falls between a thread's read and the write that depends on it. An atomicity violation without a data&nbsp;race.</div><p class="def b1-ask fragment" data-fragment-index="1">Why is the stack with compare-and-set&nbsp;correct?</p></div>
+  <div class="swap"><div class="current-visible box fragment" data-fragment-index="0">The bug is the racy counter's: a step of another thread falls between a thread's read and the write that depends on it. <span class="accent">An atomicity violation without a data&nbsp;race</span>.</div><p class="def b1-ask fragment" data-fragment-index="1">Why is the stack with compare-and-set&nbsp;correct?</p></div>
   
 </section>
 
@@ -1891,8 +1892,8 @@ OCaml 5  on the stack 350362 of 1000000 pushed</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The invariant.</b> <code>top</code> points to a well-formed stack, the list of values from the top node down to <code>null</code>. It holds at the start; every write to <code>top</code> is a compare-and-set that keeps it; a failed attempt writes&nbsp;nothing.</p>
-    <p class="fragment" data-fragment-index="0"><b>The points of effect.</b> For a push, the compare-and-set that succeeds. For a pop on a non-empty stack, the same. For a pop on an empty stack, the read that saw <code>top</code>&nbsp;null.</p>
+    <p><b>The invariant.</b> <code>top</code> points to a well-formed stack, the list of values from the top node down to <code>null</code>. It holds at the start; every write to <code>top</code> is a compare-and-set that keeps it; <span class="accent">a failed attempt writes&nbsp;nothing</span>.</p>
+    <p class="fragment" data-fragment-index="0"><b>The points of effect.</b> For a push, <span class="accent">the compare-and-set that succeeds</span>. For a pop on a non-empty stack, the same. For a pop on an empty stack, <span class="accent">the read that saw</span> <code>top</code>&nbsp;null.</p>
   </div>
   
 </section>
@@ -1932,8 +1933,8 @@ OCaml 5  on the stack 350362 of 1000000 pushed</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Safety.</b> In the order of the points of effect, the operations form a run of the sequential stack: between two of them <code>top</code> does not change, and each does one sequential push or pop and returns what it&nbsp;returns.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Liveness.</b> An attempt fails only because another thread's succeeded since its read, and each success completes an operation; so operations keep completing: lock-free, and not&nbsp;wait-free.</p><p class="def b1-ask fragment" data-fragment-index="1">Where does the method of nodes that never change come&nbsp;from?</p></div>
+    <p><b>Safety.</b> In the order of the points of effect, the operations <span class="accent">form a run of the sequential stack</span>: between two of them <code>top</code> does not change, and each does one sequential push or pop and returns what it&nbsp;returns.</p>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Liveness.</b> An attempt <span class="accent">fails only because another thread's succeeded since its read</span>, and each success completes an operation; so operations keep completing: <span class="accent">lock-free, and not&nbsp;wait-free</span>.</p><p class="def b1-ask fragment" data-fragment-index="1">Where does the method of nodes that never change come&nbsp;from?</p></div>
   </div>
   <a class="apx" href="#/aba">appendix</a><span class="b2-apx-say">the ABA problem: a top that changes and comes back, with a garbage collector and&nbsp;without</span>
   
@@ -1974,8 +1975,8 @@ OCaml 5  on the stack 350362 of 1000000 pushed</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p>A persistent structure keeps its old version usable after an update; the new version shares the unchanged part. Treiber's stack is such a value behind one atomic reference, and a read of the reference is a snapshot of the whole&nbsp;stack.</p>
-    <p class="fragment" data-fragment-index="0"><b>Herlihy, 1993.</b> Read the reference, apply the operation to a copy, swing the reference to the copy with a store-conditional, which fails if anything wrote since the read; retry on&nbsp;failure.</p>
+    <p>A persistent structure <span class="accent">keeps its old version usable after an update</span>; the new version shares the unchanged part. Treiber's stack is such a value behind one atomic reference, and a read of the reference is <span class="accent">a snapshot of the whole&nbsp;stack</span>.</p>
+    <p class="fragment" data-fragment-index="0"><b>Herlihy, 1993.</b> Read the reference, apply the operation to a copy, swing the reference to the copy with a store-conditional, which fails if anything wrote since the read; <span class="accent">retry on&nbsp;failure</span>.</p>
   </div>
   
 </section>
@@ -2027,7 +2028,7 @@ OCaml 5  on the stack 350362 of 1000000 pushed</pre></div>
   </svg>
   <div class="claims">
     <p><b>Clojure's <code>swap!</code></b> applies a function to the value in an atom, an atomic reference, by that protocol on compare-and-set: read, apply, compare-and-set,&nbsp;retry.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0">Under contention the function runs several times: in three runs, 800,000 swaps ran it between 4.2 and 4.6 million times. So it must have no effects, and nothing checks it. Java's <code>updateAndGet</code> is the same loop with the same&nbsp;warning.</p><p class="def b1-ask fragment" data-fragment-index="1">Is a structure without a lock always the better&nbsp;choice?</p></div>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0">Under contention <span class="accent">the function runs several times</span>: in three runs, 800,000 swaps ran it between 4.2 and 4.6 million times. So it <span class="accent">must have no effects, and nothing checks it</span>. Java's <code>updateAndGet</code> is the same loop with the same&nbsp;warning.</p><p class="def b1-ask fragment" data-fragment-index="1">Is a structure without a lock always the better&nbsp;choice?</p></div>
   </div>
   
 </section>
@@ -2076,8 +2077,8 @@ OCaml 5  on the stack 350362 of 1000000 pushed</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Contention.</b> Several threads want the same word at once: one attempt succeeds, the rest are wasted work, and every operation on the stack passes through the top. An uncontended lock costs one step, like one&nbsp;attempt.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Flat combining.</b> Each thread publishes its request; one thread, under a coarse lock, performs them all: lock-based, blocking, and faster (Hendler, Incze, Shavit and Tzafrir,&nbsp;2010).</p><p class="def b1-ask fragment" data-fragment-index="1">What if the threads share nothing while they&nbsp;run?</p></div>
+    <p><b>Contention.</b> Several threads want the same word at once: <span class="accent">one attempt succeeds, the rest are wasted work</span>, and every operation on the stack passes through the top. An uncontended lock costs one step, like one&nbsp;attempt.</p>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>Flat combining.</b> Each thread publishes its request; one thread, under a coarse lock, performs them all: <span class="accent">lock-based, blocking, and faster</span> (Hendler, Incze, Shavit and Tzafrir,&nbsp;2010).</p><p class="def b1-ask fragment" data-fragment-index="1">What if the threads share nothing while they&nbsp;run?</p></div>
   </div>
   <a class="apx" href="#/cost-2">appendix</a><span class="b2-apx-say">operations on the whole structure; where only a non-blocking structure will do; the universality of&nbsp;compare-and-set</span>
   
@@ -2129,9 +2130,9 @@ let per_domain () =
 OCaml 5  got 2000000</pre></div>
     </div>
     <div>
-      <p>Each thread counts in a variable of its own; the order in which the threads run cannot matter, because no location written by one thread is read or written by another while they&nbsp;run.</p>
-      <p class="fragment" data-fragment-index="1">The argument rests on the <code>join</code>, which orders each thread's write of its element of <code>counts</code> before the main thread's read. Without it the program has a data race and may print 0, one million or two&nbsp;million.</p>
-      <div class="swap"><p class="current-visible fragment" data-fragment-index="2">In Rust the compiler checks that nothing is shared, by giving each slot one owner; in Haskell the types do, since a pure function cannot write a cell. In Java, nobody&nbsp;does.</p><p class="def b1-ask fragment" data-fragment-index="3">Does every split of the work give the same&nbsp;result?</p></div>
+      <p>Each thread counts in <span class="accent">a variable of its own</span>; the order in which the threads run cannot matter, because no location written by one thread is read or written by another while they&nbsp;run.</p>
+      <p class="fragment" data-fragment-index="1"><span class="accent">The argument rests on the</span> <code>join</code>, which orders each thread's write of its element of <code>counts</code> before the main thread's read. Without it the program has a data race and may print 0, one million or two&nbsp;million.</p>
+      <div class="swap"><p class="current-visible fragment" data-fragment-index="2">In Rust the compiler checks that nothing is shared, by giving each slot one owner; in Haskell the types do, since a pure function cannot write a cell. <span class="accent">In Java, nobody&nbsp;does</span>.</p><p class="def b1-ask fragment" data-fragment-index="3">Does every split of the work give the same&nbsp;result?</p></div>
     </div>
   </div>
   
@@ -2156,7 +2157,7 @@ Java and OCaml 5 print the same</pre>
       </ol>
     </div>
   </div>
-  <div class="box fragment" data-fragment-index="0">With subtraction the answer depends on how the sequence is split, never on which thread finishes first. If the operation has no side effects and is associative, every part is folded from its identity, and the parts are combined in their order, every split gives the sequential fold's&nbsp;answer.</div>
+  <div class="box fragment" data-fragment-index="0">With subtraction the answer <span class="accent">depends on how the sequence is split, never on which thread finishes first</span>. If the operation has <span class="accent">no side effects and is associative</span>, every part is folded from its identity, and the parts are combined in their order, every split gives the sequential fold's&nbsp;answer.</div>
   
 </section>
 
@@ -2200,7 +2201,7 @@ Java and OCaml 5 print the same</pre>
     <line class="w thin" x1="880" y1="170" x2="1028" y2="140"/>
     <line class="w thin" x1="1200" y1="170" x2="1052" y2="140"/>
   </svg>
-  <p class="tight">The parts are the same numbers in the same order; only the bracketing differs, and the roots differ. With addition both roots are 36, as is the sequential fold, because addition is&nbsp;associative.</p>
+  <p class="tight">The parts are the same numbers in the same order; <span class="accent">only the bracketing differs</span>, and the roots differ. With addition both roots are 36, as is the sequential fold, <span class="accent">because addition is&nbsp;associative</span>.</p>
     <p class="def b1-ask fragment" data-fragment-index="0">Which forms does independence of the order&nbsp;take?</p>
 
 </section>
@@ -2241,8 +2242,8 @@ Java and OCaml 5 print the same</pre>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Independent parts and a combine step.</b> No location written by one thread is read or written by another while they run; the combine has no side effects and is associative with an identity, and the parts are combined in their&nbsp;order.</p>
-    <p class="fragment" data-fragment-index="0"><b>Commuting updates.</b> Each update is one atomic step, or goes to a replica merged at the end; the interleaving orders the steps, and commutativity makes the final state the same for every&nbsp;order.</p>
+    <p><b>Independent parts and a combine step.</b> No location written by one thread is read or written by another while they run; the combine has <span class="accent">no side effects and is associative with an identity</span>, and the parts are combined in their&nbsp;order.</p>
+    <p class="fragment" data-fragment-index="0"><b>Commuting updates.</b> Each update is one atomic step, or goes to a replica merged at the end; the interleaving orders the steps, and <span class="accent">commutativity makes the final state the same for every&nbsp;order</span>.</p>
   </div>
   
 </section>
@@ -2276,8 +2277,8 @@ Java and OCaml 5 print the same</pre>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Determinism by construction.</b> A dataflow network, sequential programs connected by queues with one writer and one reader each, computes the same function in every schedule (Kahn, 1974); single-assignment variables do the&nbsp;same.</p>
-    <p class="fragment" data-fragment-index="0"><b>Immutability</b> is not a fourth way: it serves the second, Treiber's nodes and copy-and-swap, and the third, nothing shared because nothing&nbsp;mutable.</p>
+    <p><b>Determinism by construction.</b> A dataflow network, sequential programs connected by queues with one writer and one reader each, computes <span class="accent">the same function in every schedule</span> (Kahn, 1974); single-assignment variables do the&nbsp;same.</p>
+    <p class="fragment" data-fragment-index="0"><b>Immutability</b> is <span class="accent">not a fourth way</span>: it serves the second, Treiber's nodes and copy-and-swap, and the third, nothing shared because nothing&nbsp;mutable.</p>
   </div>
   
 </section>
@@ -2314,8 +2315,8 @@ Java and OCaml 5 print the same</pre>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The counter.</b> Increments commute: applying them in any order gives the same total. So when each increment is atomic, under a lock or by one instruction, or is made in a slot of its own, every way gives the same final&nbsp;value.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>The stack.</b> Two pushes on a shared stack do not commute, and the pops show which came first: the result depends on the interleaving under every way; the only demand on it is&nbsp;linearizability.</p><p class="def b1-ask fragment" data-fragment-index="1">Each way makes one operation atomic: are two atomic operations together&nbsp;atomic?</p></div>
+    <p><b>The counter.</b> <span class="accent">Increments commute</span>: applying them in any order gives the same total. So when each increment is atomic, under a lock or by one instruction, or is made in a slot of its own, every way gives the same final&nbsp;value.</p>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>The stack.</b> Two pushes on a shared stack <span class="accent">do not commute</span>, and the pops show which came first: the result depends on the interleaving under every way; <span class="accent">the only demand on it is&nbsp;linearizability</span>.</p><p class="def b1-ask fragment" data-fragment-index="1">Each way makes one operation atomic: are two atomic operations together&nbsp;atomic?</p></div>
   </div>
   
 </section>
@@ -2354,8 +2355,8 @@ let transfer_split w src dst k =
 OCaml 5  first wrong reading: A = 234, B = -35</pre></div>
     </div>
     <div>
-      <p>The two balances add up to 200 between transfers. A reader holding both locks sees 199: it read between the two halves of a transfer. Two atomic steps are not one atomic step, under locks or under&nbsp;compare-and-set.</p>
-      <p class="fragment" data-fragment-index="0">Two linearizable objects used together are a linearizable system, each operation at its own instant: Herlihy and Wing's locality. What is not given is one instant for two operations: the withdrawal and the deposit each have&nbsp;theirs.</p>
+      <p>The two balances add up to 200 between transfers. A reader holding both locks <span class="accent">sees 199</span>: it read between the two halves of a transfer. <span class="accent">Two atomic steps are not one atomic step</span>, under locks or under&nbsp;compare-and-set.</p>
+      <p class="fragment" data-fragment-index="0">Two linearizable objects used together are a linearizable system, each operation at its own instant: Herlihy and Wing's <span class="accent">locality</span>. What is not given is <span class="accent">one instant for two operations</span>: the withdrawal and the deposit each have&nbsp;theirs.</p>
     </div>
   </div>
   <a class="apx" href="#/composing">appendix</a><span class="b2-apx-say">one instant for two operations: both locks, one reference, or a&nbsp;transaction</span>
@@ -2405,8 +2406,8 @@ OCaml 5  first wrong reading: A = 234, B = -35</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p>There is one memory, and every read returns the value of the latest write before it in the interleaving (Lamport, 1979: sequential consistency). The language guarantees it <span class="hl">for every program none of whose interleavings has a data race</span>, with its atomics in the strongest&nbsp;mode.</p>
-    <p class="fragment" data-fragment-index="0"><b>Why a guarantee.</b> Processor and compiler reorder reads and writes for speed. Adve and Hill, 1990: a race-free program still runs as one sequence; the language's <b>memory model</b> says&nbsp;so.</p>
+    <p>There is one memory, and every read returns the value of the latest write before it in the interleaving (Lamport, 1979: <span class="accent">sequential consistency</span>). The language guarantees it <span class="hl">for every program <span class="accent">none of whose interleavings has a data race</span></span>, with its atomics in the strongest&nbsp;mode.</p>
+    <p class="fragment" data-fragment-index="0"><b>Why a guarantee.</b> Processor and compiler <span class="accent">reorder reads and writes for speed</span>. Adve and Hill, 1990: a race-free program still runs as one sequence; the language's <b>memory model</b> says&nbsp;so.</p>
   </div>
   
 </section>
@@ -2440,7 +2441,7 @@ OCaml 5  first wrong reading: A = 234, B = -35</pre></div>
   </svg>
   <div class="claims">
     <p><b>What made the session's programs race-free.</b> In the spin lock, the order test-and-set gives between one thread's release and the next's acquire; in the count per thread, the join; in the loop and Treiber's stack, every access to <code>top</code> atomic, the nodes published through&nbsp;it.</p>
-    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>The guarantee applied to them</b>: every run behaved as an interleaving; the reasoning by interleavings was&nbsp;sound.</p><p class="def b1-ask fragment" data-fragment-index="1">What does the language guarantee for a program with a data&nbsp;race?</p></div>
+    <div class="swap"><p class="current-visible fragment" data-fragment-index="0"><b>The guarantee applied to them</b>: <span class="accent">every run behaved as an interleaving</span>; the reasoning by interleavings was&nbsp;sound.</p><p class="def b1-ask fragment" data-fragment-index="1">What does the language guarantee for a program with a data&nbsp;race?</p></div>
   </div>
   
 </section>
@@ -2468,11 +2469,11 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
       <ol class="cards">
         <li>nothing: a racy program has no meaning in any&nbsp;language</li>
         <li>every run is some interleaving: the transfers are&nbsp;locked</li>
-        <li class="fragment ans" data-fragment-index="0">no guarantee of an interleaving; what remains is set by each language's memory model, and in Java and OCaml 5 a race is&nbsp;bounded</li>
+        <li class="fragment ans" data-fragment-index="0"><span class="accent">no guarantee of an interleaving</span>; what remains is set by each language's memory model, and in Java and OCaml 5 a race is&nbsp;bounded</li>
       </ol>
     </div>
   </div>
-  <div class="swap"><div class="current-visible box fragment" data-fragment-index="0">C and C++: undefined behaviour. Java: a read returns a value once written to that variable, bounded in space. OCaml 5: also bounded in time. Go: like Java for one word. Safe Rust: no data race can be&nbsp;written.</div><p class="def b1-ask fragment" data-fragment-index="1">Three ways, four terms each: how do they read side by&nbsp;side?</p></div>
+  <div class="swap"><div class="current-visible box fragment" data-fragment-index="0">C and C++: <span class="accent">undefined behaviour</span>. Java: a read returns a value once written to that variable, bounded in space. OCaml 5: also bounded in time. Go: like Java for one word. Safe Rust: <span class="accent">no data race can be&nbsp;written</span>.</div><p class="def b1-ask fragment" data-fragment-index="1">Three ways, four terms each: how do they read side by&nbsp;side?</p></div>
   
 </section>
 
@@ -2489,9 +2490,9 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
   <h2>The ways&nbsp;compared</h2>
   <table class="ways3">
     <tr><th>The&nbsp;way</th><th>Contract</th><th>Obligation</th><th>Progress&nbsp;risk</th><th>Who&nbsp;checks</th></tr>
-    <tr><td>Mutual exclusion: forbid the&nbsp;interleaving</td><td>atomic by exclusion; linearizable by&nbsp;construction</td><td>every access under the lock; the invariant; a global order of the&nbsp;locks</td><td>deadlock, starvation; a stopped holder stops the threads that wait for its&nbsp;lock</td><td>not the language (Java, C, C++, Go); a detector at run time (Go, ThreadSanitizer); the compiler (Rust, data&nbsp;races)</td></tr>
-    <tr><td>Atomic instruction with retry: detect it and&nbsp;retry</td><td>atomic without exclusion; linearizable at a point of&nbsp;effect</td><td>the loop re-reads; the invariant; the point of effect&nbsp;named</td><td>lock-free, not wait-free: a thread may retry for ever; fetch-and-add&nbsp;wait-free</td><td>the programmer, by proof; the collector removes ABA when no node is reused; checkers of&nbsp;histories</td></tr>
-    <tr><td>Independence of the order: make it&nbsp;irrelevant</td><td>a deterministic final&nbsp;result</td><td>independent parts and an associative combine in order; or commuting atomic updates; or determinism by&nbsp;construction</td><td>none from interleaving; the join waits for every&nbsp;worker</td><td>that nothing is shared, the type system can; associativity or commutativity, the programmer&nbsp;only</td></tr>
+    <tr><td>Mutual exclusion: <span class="accent">forbid the&nbsp;interleaving</span></td><td>atomic by exclusion; linearizable by&nbsp;construction</td><td>every access under the lock; the invariant; a global order of the&nbsp;locks</td><td>deadlock, starvation; a stopped holder stops the threads that wait for its&nbsp;lock</td><td>not the language (Java, C, C++, Go); a detector at run time (Go, ThreadSanitizer); the compiler (Rust, data&nbsp;races)</td></tr>
+    <tr><td>Atomic instruction with retry: <span class="accent">detect it and&nbsp;retry</span></td><td>atomic without exclusion; linearizable at a point of&nbsp;effect</td><td>the loop re-reads; the invariant; the point of effect&nbsp;named</td><td>lock-free, not wait-free: a thread may retry for ever; fetch-and-add&nbsp;wait-free</td><td>the programmer, by proof; the collector removes ABA when no node is reused; checkers of&nbsp;histories</td></tr>
+    <tr><td>Independence of the order: <span class="accent">make it&nbsp;irrelevant</span></td><td>a deterministic final&nbsp;result</td><td>independent parts and an associative combine in order; or commuting atomic updates; or determinism by&nbsp;construction</td><td>none from interleaving; the join waits for every&nbsp;worker</td><td>that nothing is shared, the type system can; associativity or commutativity, the programmer&nbsp;only</td></tr>
   </table>
   <a class="apx" href="#/languages-a">appendix</a><span class="b2-apx-say">nine languages: what the programmer expresses, who checks, what a race costs, what holds by&nbsp;construction</span>
   
@@ -2501,7 +2502,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
 <section id="closing">
   <h2>Conclusion of block&nbsp;2</h2>
   <div class="defs">
-    <p><b>The session's question.</b> Three questions of any program: which contract it chooses, how that contract is stated, and which obligation is left to the&nbsp;programmer.</p>
+    <p><b>The session's question.</b> Three questions of any program: <span class="accent">which contract it chooses</span>, <span class="accent">how that contract is stated</span>, and <span class="accent">which obligation is left to the&nbsp;programmer</span>.</p>
     <p class="fragment" data-fragment-index="0"><b>The lab</b> builds four structures in Java, each with its contract and a check: the counter in three versions, worker threads, the bounded buffer, and a barrier as the extension. Then it makes a small ray tracer multi-threaded with them, so that each mistake shows in the&nbsp;picture.</p>
     <p class="fragment" data-fragment-index="0"><b>Workers.</b> The thread that starts the workers owns them and joins them. Stopping is a request through a flag, which ends nothing by&nbsp;itself.</p>
     <p class="fragment" data-fragment-index="1"><b>The mini-project</b> builds the bounded buffer as a queue in three versions, with one lock, with two locks and without locks, behind one interface, with a checker of histories and a measurement of&nbsp;throughput.</p>
@@ -2565,8 +2566,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Wait-free</b>: every thread that keeps taking steps inside an operation completes it within a finite number of its own steps, whichever other threads are stopped and whenever. B and C both&nbsp;complete.</p>
-    <p class="fragment" data-fragment-index="0"><b>The clause</b> "whichever threads are stopped" is what makes these conditions about progress: without it a lock would count as lock-free, since a holder that is allowed to run&nbsp;finishes.</p>
+    <p><b>Wait-free</b>: every thread that keeps taking steps inside an operation completes it <span class="accent">within a finite number of its own steps</span>, whichever other threads are stopped and whenever. B and C both&nbsp;complete.</p>
+    <p class="fragment" data-fragment-index="0"><b>The clause</b> "whichever threads are stopped" is what makes these conditions about progress: without it <span class="accent">a lock would count as lock-free</span>, since a holder that is allowed to run&nbsp;finishes.</p>
   </div>
   <a class="apx back" href="#/progress">back</a>
   
@@ -2602,8 +2603,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Lock-based</b> and <b>without locks</b> say how a structure is built; <b>blocking</b>, <b>lock-free</b> and <b>wait-free</b> say what progress it guarantees, and nothing else. A lock-based structure is never&nbsp;lock-free.</p>
-    <p class="fragment" data-fragment-index="0">A structure built without locks is not thereby lock-free: the Disruptor, a queue over a ring buffer, has no lock on its path and still&nbsp;blocks.</p>
+    <p><b>Lock-based</b> and <b>without locks</b> say <span class="accent">how a structure is built</span>; <b>blocking</b>, <b>lock-free</b> and <b>wait-free</b> say <span class="accent">what progress it guarantees</span>, and nothing else. A lock-based structure is never&nbsp;lock-free.</p>
+    <p class="fragment" data-fragment-index="0">A structure built without locks is <span class="accent">not thereby lock-free</span>: the Disruptor, a queue over a ring buffer, has no lock on its path and still&nbsp;blocks.</p>
   </div>
   <a class="apx back" href="#/progress">back</a>
   
@@ -2725,8 +2726,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The hazard.</b> A thread reads a location as A; other threads change it to B and back to A; the thread's compare-and-set, expecting A, succeeds although the structure it reasoned about may have&nbsp;changed.</p>
-    <p class="fragment" data-fragment-index="0"><b>On this stack.</b> A push and a pop between the read and the compare-and-set leave the very node read at the top again: harmless, since that node, never changed, heads the same&nbsp;chain.</p>
+    <p><b>The hazard.</b> A thread reads a location as A; other threads change it to B and back to A; the thread's compare-and-set, expecting A, <span class="accent">succeeds although the structure it reasoned about may have&nbsp;changed</span>.</p>
+    <p class="fragment" data-fragment-index="0"><b>On this stack.</b> A push and a pop between the read and the compare-and-set leave the very node read at the top again: <span class="accent">harmless</span>, since that node, never changed, heads the same&nbsp;chain.</p>
   </div>
   <a class="apx back" href="#/proof-2">back</a>
   
@@ -2831,8 +2832,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>The garbage collector.</b> A node any thread still holds is never freed, so its address is never reused, and every push allocates a fresh node: a different node at the same address cannot&nbsp;arise.</p>
-    <p class="fragment" data-fragment-index="0"><b>Without a collector.</b> In C or C++ a popped node may be freed and its memory reused. A stale pop may read <code>next</code> from freed memory, a use after free, or, as here, install a freed node as the top. Hazard pointers and epochs delay the freeing of a node until no thread can still hold&nbsp;it.</p>
+    <p><b>The garbage collector.</b> A node any thread still holds is <span class="accent">never freed</span>, so its address is never reused, and every push allocates a fresh node: a different node at the same address cannot&nbsp;arise.</p>
+    <p class="fragment" data-fragment-index="0"><b>Without a collector.</b> In C or C++ a popped node may be freed and its memory reused. A stale pop may read <code>next</code> from freed memory, <span class="accent">a use after free</span>, or, as here, install a freed node as the top. Hazard pointers and epochs <span class="accent">delay the freeing of a node</span> until no thread can still hold&nbsp;it.</p>
   </div>
   <a class="apx back" href="#/proof-2">back</a>
   
@@ -2892,8 +2893,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Operations on the whole structure.</b> Where nodes change in place there is no instant at which the whole is unchanged: Java's <code>ConcurrentLinkedQueue.size</code> traverses and may be inaccurate. A persistent value behind one reference has that instant, the read of the&nbsp;reference.</p>
-    <p class="fragment" data-fragment-index="0"><b>Progress guarantee.</b> A stopped lock holder stops every waiter; a thread stopped in mid-push stops nobody. Where that must hold, only a non-blocking structure will&nbsp;do.</p>
+    <p><b>Operations on the whole structure.</b> Where nodes change in place there is <span class="accent">no instant at which the whole is unchanged</span>: Java's <code>ConcurrentLinkedQueue.size</code> traverses and may be inaccurate. A persistent value behind one reference has that instant, the read of the&nbsp;reference.</p>
+    <p class="fragment" data-fragment-index="0"><b>Progress guarantee.</b> A stopped lock holder stops every waiter; a thread stopped in mid-push <span class="accent">stops nobody</span>. Where that must hold, only a non-blocking structure will&nbsp;do.</p>
   </div>
   <a class="apx back" href="#/cost">back</a>
   
@@ -2948,8 +2949,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Every structure.</b> With compare-and-set, every object with a sequential specification has a wait-free, linearizable version; with reads and writes alone, not even a stack that two threads&nbsp;share.</p>
-    <p class="fragment" data-fragment-index="0"><b>The construction.</b> Every operation is appended to one shared list, which every thread applies in the same order to a copy of its own; a thread that appends also appends the operation of the thread whose turn it is. Nothing runs in&nbsp;parallel.</p>
+    <p><b>Every structure.</b> With compare-and-set, every object with a sequential specification has <span class="accent">a wait-free, linearizable version</span>; with reads and writes alone, not even a stack that two threads&nbsp;share.</p>
+    <p class="fragment" data-fragment-index="0"><b>The construction.</b> Every operation is appended to one shared list, which every thread applies in the same order to a copy of its own; a thread that appends also appends the operation of the thread whose turn it is. <span class="accent">Nothing runs in&nbsp;parallel</span>.</p>
   </div>
   <a class="apx back" href="#/cost">back</a>
   
@@ -2981,8 +2982,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Locks compose by hand.</b> Both locks around both steps make the transfer one operation, at the cost of deadlock and a global order of the&nbsp;locks.</p>
-    <p class="fragment" data-fragment-index="0"><b>One compare-and-set covers one reference.</b> Both accounts behind one reference to a persistent dictionary: the transfer is one compare-and-set, and every update of the dictionary competes for that reference, the cost of Clojure's&nbsp;atom.</p>
+    <p><b>Locks compose by hand.</b> Both locks around both steps make the transfer one operation, <span class="accent">at the cost of deadlock and a global order of the&nbsp;locks</span>.</p>
+    <p class="fragment" data-fragment-index="0"><b>One compare-and-set covers one reference.</b> Both accounts behind one reference to a persistent dictionary: the transfer is one compare-and-set, and every update of the dictionary <span class="accent">competes for that reference</span>, the cost of Clojure's&nbsp;atom.</p>
   </div>
   <a class="apx back" href="#/composition">back</a>
   
@@ -3015,8 +3016,8 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
     </g>
   </svg>
   <div class="claims">
-    <p><b>Transactions compose</b>, lock-based operations do not (Harris et al., 2005). A transaction's writes take effect together, at one instant, or not at all; on a conflict the runtime reruns&nbsp;it.</p>
-    <p class="fragment" data-fragment-index="0">In the course's runs, Haskell's counter under <code>atomically</code> was exact in ten runs of ten; in Clojure, with 800,000 transfers in one <code>dosync</code> each, a reader inside a transaction was never wrong and a reader outside one was wrong 5,345&nbsp;times.</p>
+    <p><b>Transactions compose</b>, lock-based operations do not (Harris et al., 2005). A transaction's writes take effect <span class="accent">together, at one instant, or not at all</span>; on a conflict the runtime reruns&nbsp;it.</p>
+    <p class="fragment" data-fragment-index="0">In the course's runs, Haskell's counter under <code>atomically</code> was exact in ten runs of ten; in Clojure, with 800,000 transfers in one <code>dosync</code> each, a reader inside a transaction was <span class="accent">never wrong</span> and a reader outside one was wrong 5,345&nbsp;times.</p>
   </div>
   <a class="apx back" href="#/composition">back</a>
   
@@ -3029,7 +3030,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
 <tr><th>Language</th><th>What the programmer&nbsp;expresses</th><th>Who&nbsp;checks</th><th>What a race&nbsp;costs</th><th>What holds by&nbsp;construction</th></tr>
 <tr><td>Java</td><td>locks, atomics with four modes, <code>volatile</code>, <code>join</code>; all three&nbsp;ways</td><td>nobody in the language or the&nbsp;JDK</td><td>defined; a value once written to that variable; bounded in space, not in&nbsp;time</td><td>a correctly synchronized program runs as an&nbsp;interleaving</td></tr>
     <tr><td>OCaml&nbsp;5</td><td><code>Mutex</code>, <code>Condition</code>, <code>Atomic</code>, <code>Domain.join</code>; all three&nbsp;ways</td><td>nothing in the compiler; a ThreadSanitizer build at run&nbsp;time</td><td>defined; bounded in space and in&nbsp;time</td><td>a race-free program, and every race-free location, runs as an&nbsp;interleaving</td></tr>
-<tr><td>Rust</td><td>ownership; a <code>Mutex&lt;T&gt;</code> owning its data; atomics with a mode per&nbsp;access</td><td>the compiler, data races&nbsp;only</td><td>cannot be written in safe&nbsp;Rust</td><td>shared or mutable, never both, unless a lock or an atomic is&nbsp;between</td></tr>
+<tr><td>Rust</td><td>ownership; a <code>Mutex&lt;T&gt;</code> owning its data; atomics with a mode per&nbsp;access</td><td>the compiler, data races&nbsp;only</td><td><span class="accent">cannot be written in safe&nbsp;Rust</span></td><td>shared or mutable, never both, unless a lock or an atomic is&nbsp;between</td></tr>
   </table>
   <a class="apx back" href="#/contracts">back</a>
   
@@ -3041,7 +3042,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
   <table class="langs5">
 <tr><th>Language</th><th>What the programmer&nbsp;expresses</th><th>Who&nbsp;checks</th><th>What a race&nbsp;costs</th><th>What holds by&nbsp;construction</th></tr>
 <tr><td>Go</td><td><code>sync.Mutex</code>, atomics, channels; sharing allowed, the proverb advises against&nbsp;it</td><td>the race detector at run&nbsp;time</td><td>one word like Java; several words, memory&nbsp;corruption</td><td>a race-free program runs as an interleaving&nbsp;(2022)</td></tr>
-    <tr><td>C,&nbsp;C++</td><td><code>std::mutex</code>, <code>std::atomic</code> with a mode per&nbsp;access</td><td>nobody; ThreadSanitizer at run&nbsp;time</td><td>undefined&nbsp;behaviour</td><td>race-free, with mutexes and default atomics: an&nbsp;interleaving</td></tr>
+    <tr><td>C,&nbsp;C++</td><td><code>std::mutex</code>, <code>std::atomic</code> with a mode per&nbsp;access</td><td>nobody; ThreadSanitizer at run&nbsp;time</td><td><span class="accent">undefined&nbsp;behaviour</span></td><td>race-free, with mutexes and default atomics: an&nbsp;interleaving</td></tr>
 <tr><td>Haskell</td><td>pure functions; mutation in typed cells;&nbsp;<code>atomically</code></td><td>the types: a pure function cannot mutate; a transaction cannot do&nbsp;I/O</td><td>a read then a write on an <code>IORef</code> loses updates, as the racy&nbsp;counter</td><td>an ordinary value cannot change; transactions&nbsp;compose</td></tr>
   </table>
   <a class="apx back" href="#/contracts">back</a>
@@ -3053,7 +3054,7 @@ OCaml 5  109518919 readings, 2611258 wrong</pre></div>
   <h2>Languages that limit shared mutation<span class="h2sub">Erlang, Clojure,&nbsp;JavaScript</span></h2>
   <table class="langs5">
 <tr><th>Language</th><th>What the programmer&nbsp;expresses</th><th>Who&nbsp;checks</th><th>What a race&nbsp;costs</th><th>What holds by&nbsp;construction</th></tr>
-<tr><td>Erlang</td><td>processes that share no heap, send copied messages; ETS tables are&nbsp;shared</td><td>nothing between heaps; nobody on ETS&nbsp;tables</td><td>no data race between processes; a get then a set by messages still loses&nbsp;updates</td><td>a process's state is its own, one message at a&nbsp;time</td></tr>
+<tr><td>Erlang</td><td>processes that share no heap, send copied messages; ETS tables are&nbsp;shared</td><td>nothing between heaps; nobody on ETS&nbsp;tables</td><td><span class="accent">no data race between processes</span>; a get then a set by messages still loses&nbsp;updates</td><td>a process's state is its own, one message at a&nbsp;time</td></tr>
 <tr><td>Clojure</td><td>immutable values; an atom (<code>swap!</code>); refs with <code>dosync</code>;&nbsp;agents</td><td>nothing: the function of <code>swap!</code> should be pure, and nothing enforces&nbsp;it</td><td>the function of <code>swap!</code> runs once per attempt; its effects&nbsp;repeat</td><td>an atom's value replaced as a whole; a transaction sees a&nbsp;snapshot</td></tr>
 <tr><td>JavaScript</td><td>workers that receive copies; <code>SharedArrayBuffer</code> and <code>Atomics</code> by&nbsp;choice</td><td>nothing</td><td>a plain <code>++</code> on a shared array loses updates; <code>Atomics.add</code> does&nbsp;not</td><td>without a shared buffer nothing is shared; one thread per&nbsp;worker</td></tr>
   </table>
