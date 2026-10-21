@@ -297,7 +297,6 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 </style>
 <div class="notes-host" id="notes-host"><nav class="nside" aria-label="Contents"><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1"><span class="nside-full">Block 1, Mutual&nbsp;exclusion</span><span class="nside-short">Block 1</span></a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
 <li><a href="#b1-counter">2. Race conditions</a></li>
-<li><a href="#b1-instruction">3. Atomic instructions</a></li>
 <li><a href="#b1-lock">4. Locks</a></li>
 <li><a href="#b1-checker">5. Race detection and&nbsp;prevention</a></li>
 <li><a href="#b1-two-locks">6. Deadlock</a></li>
@@ -408,7 +407,6 @@ nav.nside-pane .nside-short{display:inline}
 </style>
 <nav class="nside nside-pane" aria-label="Contents"><button class="nside-open" type="button" aria-expanded="false"><b>Contents</b><span class="nside-cur">Block 1, Mutual exclusion</span><i aria-hidden="true">&#9662;</i></button><div class="nside-sheet"><a class="nside-back" href="../s7.html"><span class="nside-full">&larr; Back to session&nbsp;7</span><span class="nside-short">&larr; Session 7</span></a><p class="nside-h">Contents</p><div class="nside-parts"><div class="nside-part"><a href="#block1"><span class="nside-full">Block 1, Mutual&nbsp;exclusion</span><span class="nside-short">Block 1</span></a><ol><li><a href="#b1-model">1. Threads and shared&nbsp;memory</a></li>
 <li><a href="#b1-counter">2. Race conditions</a></li>
-<li><a href="#b1-instruction">3. Atomic instructions</a></li>
 <li><a href="#b1-lock">4. Locks</a></li>
 <li><a href="#b1-checker">5. Race detection and&nbsp;prevention</a></li>
 <li><a href="#b1-two-locks">6. Deadlock</a></li>
@@ -835,7 +833,7 @@ got      1056147</code></pre>
 </ol></figcaption>
 </figure>
 
-<p>An operation is <b>atomic</b> when every other thread sees either all of it or none of it: to the other threads it appears to happen at one instant. An instruction of the model of section&nbsp;1, a read of one location, a write of one location or an operation on registers, is atomic by definition. An instruction of a real processor need not be: on x86, <code>inc</code> applied to a memory location is one instruction that reads the location and writes it, and another processor's write can fall between the two unless the instruction carries the <code>lock</code> prefix. An operation of several instructions is atomic only if the program makes it&nbsp;so.</p>
+<p>The word <b>atomic</b> has two senses. An <b>instruction</b> is atomic when the processor executes it as one step, so that no instruction of another thread falls inside it. The instructions of the model of section&nbsp;1 are atomic by definition; an instruction of a real processor is atomic only when its definition says so: on x86, <code>inc</code> applied to a memory location is one instruction that reads the location and writes it, and another processor's write can fall between the two unless the instruction carries the <code>lock</code> prefix. An <b>operation</b> of several steps is <b>logically atomic</b> when it appears to take effect at one instant between its start and its end, so that every other thread sees all of it or none of it. A lock makes an operation logically atomic by exclusion (section&nbsp;4); block&nbsp;2 states this standard in full, as linearizability, and asks whether atomic instructions alone can give&nbsp;it.</p>
 
 <p class="notes-def"><b>Definition.</b> An <b>atomicity violation</b> is an operation of several steps that the program meant as a unit and did not protect as a unit, so that another thread's step can fall between two of its&nbsp;steps.</p>
 
@@ -863,6 +861,8 @@ got      1056147</code></pre>
 </section>
 
 <section id="b1-instruction">
+<p>The rest of the block follows from the two faults. Section&nbsp;3 builds a lock from one atomic instruction, test-and-set. Section&nbsp;4 states what the language's lock guarantees, what it requires of the program, and where a program that meets the requirement can still stop. Section&nbsp;5 asks who checks the requirement: nobody by default, a static checker or a detector at run time, or Rust's compiler, for data races only. Section&nbsp;6 takes two locks: a transfer that is not one unit and has no data race, then deadlock, and the order of the locks that removes it. The block ends on the question for block&nbsp;2: whether a logically atomic operation can be built from atomic instructions, without&nbsp;exclusion.</p>
+
 <h2>3. Atomic&nbsp;instructions</h2>
 
 <p class="notes-lede">A lock makes the increment's three steps one unit and orders the accesses: it fixes both faults of section&nbsp;2 at once. A lock is itself shared state, though, and something must protect it. This section builds a lock from one instruction of the processor that reads and writes as one step, which shows what a lock is made of and gives the first example of&nbsp;synchronization.</p>
@@ -1033,9 +1033,9 @@ got      2000000</code></pre>
 <figcaption>The critical section as a band on A's lane, from its acquire to its release; B, which asked for the lock meanwhile, waits at the edge of its own until A releases, and the tag on the memory names the&nbsp;holder.</figcaption>
 </figure>
 
-<p>The session presents three ways of dealing with the interleavings of a program: <b>mutual exclusion</b>, which forbids the interleaving with a lock and is the subject of this block; the <b>atomic instruction with retry</b>, which lets the interleaving happen, detects it and redoes the operation; and <b>independence of the order</b>, which arranges the work so that the result is the same in every interleaving. The last two are block&nbsp;2. Each way is described by four things. Its <b>contract</b> is what the way guarantees when it is used correctly. Its <b>obligation</b> is what the program must establish for the contract to hold. Its <b>progress risk</b> is the way in which a correct program can still fail to go forward. Last, someone checks the obligation, or nobody does. For mutual&nbsp;exclusion:</p>
+<p>The session presents three ways of dealing with the interleavings of a program: <b>mutual exclusion</b>, which forbids the interleaving with a lock and is the subject of this block; the <b>atomic instruction with retry</b>, which lets the interleaving happen, detects it and redoes the operation; and <b>independence of the order</b>, which arranges the work so that the result is the same in every interleaving. The last two are block&nbsp;2. Each way is described by four things. Its <b>contract</b> is what the way guarantees when it is used correctly. Its <b>obligation</b> is what the program must establish for the contract to hold. Its <b>progress risk</b> is the way in which a correct program can still fail to go forward. Last, someone checks the obligation, or nobody does. The four terms are the rows of one table and the three ways its columns. For mutual exclusion, this section gives the contract, the first two parts of the obligation and the progress risk; section&nbsp;5 gives who checks; section&nbsp;6 gives the third part of the obligation and the deadlock; section&nbsp;7 gives the fourth part. Block&nbsp;2 fills the other two columns, and its last part sets the whole table side by side. Section&nbsp;8 is the first column, filled. For mutual&nbsp;exclusion:</p>
 
-<p class="notes-def"><b>The contract.</b> Operations are atomic by exclusion. Under the lock, operations happen one after another, and each appears to the other threads to happen at one instant inside its critical section. Block&nbsp;2 gives this property its name, linearizability, and its definition; the instant holds here by construction, provided the obligation is met, and what remains is that each operation, run alone, does what its specification&nbsp;says.</p>
+<p class="notes-def"><b>The contract.</b> Operations are logically atomic by exclusion. Under the lock, operations happen one after another, and each appears to the other threads to happen at one instant inside its critical section. This is the coarse way to be logically atomic: no two operations overlap at all; the operations of block&nbsp;2 overlap in time and must still each appear to take effect at one instant between their start and their end. Block&nbsp;2 gives this property its name, linearizability, and its definition; the instant holds here by construction, provided the obligation is met, and what remains is that each operation, run alone, does what its specification&nbsp;says.</p>
 
 <p class="notes-def"><b>The obligation.</b> It has four parts; two are stated here, the third comes in section&nbsp;6 and the fourth in section&nbsp;7. First, every access to the state the lock protects, every read and every write, is made while holding the lock. Second, the lock is held for the whole of an operation, over every piece of state that the operation's invariant mentions. An <b>invariant</b> is a statement about the shared state that is true whenever no thread is inside a critical section; an operation may make it false inside its section and must make it true again before releasing the lock. For the counter the invariant is that <code>n</code> equals the number of completed&nbsp;increments.</p>
 <figure class="notes-steps" id="b1-fig-obligation" data-first="-1" data-last="1">
@@ -1551,12 +1551,14 @@ consumer 1 took from an empty slot, after 8 items
 <table>
 <thead class="notes-table-head"><tr><th>Mutual&nbsp;exclusion</th><th>Forbid the&nbsp;interleaving</th></tr></thead>
 <tbody>
-<tr><td>The&nbsp;guarantee</td><td>Operations are atomic by exclusion: under the lock they happen one after another, and each appears to the other threads to happen at one instant inside its critical&nbsp;section.</td></tr>
+<tr><td>The&nbsp;guarantee</td><td>Operations are logically atomic by exclusion: under the lock they happen one after another, and each appears to the other threads to happen at one instant inside its critical&nbsp;section.</td></tr>
 <tr><td>The&nbsp;obligation</td><td>Every access to the protected state, read or write, under the lock; every lock the operation's invariant needs, held for the whole operation; one global order of the&nbsp;locks. Section&nbsp;7 adds a fourth part for a thread that waits: every wait in a loop that checks its condition&nbsp;again.</td></tr>
 <tr><td>The progress&nbsp;risk</td><td>A stopped holder stops every thread that needs its lock: deadlock when the holders wait in a cycle, a missed deadline when the holder is not scheduled. And starvation, when the lock keeps changing hands but one thread is passed over for&nbsp;ever.</td></tr>
 <tr><td>Who&nbsp;checks</td><td>Nobody by default, in Java, OCaml&nbsp;5, Go, C and C++; in Java a static checker, Error Prone, at compile time, for the fields annotated <code>@GuardedBy</code>; a detector at run time when the run is made with Go's <code>-race</code> or ThreadSanitizer, for the accesses that run made; the compiler, in Rust, for data races only, never for the lock order or for&nbsp;atomicity.</td></tr>
 </tbody>
 </table>
+
+<p>The progress risk opens into four failures, each with its remedy. <b>Deadlock</b>: every thread of a set waits for a lock held by another thread of the set (section&nbsp;6), removed by one global order of the locks. <b>A missed deadline</b>: the holder is ready to run and the scheduler does not run it, so a thread that needs its lock waits past its deadline (the appendix on priority inversion), removed by priority inheritance. <b>Starvation</b>: the lock keeps changing hands and one thread is passed over for ever (section&nbsp;4), removed by an order among the waiters, a ticket lock or a fair lock. <b>A lost wake-up</b>: a notification reaches no thread that waits for it, because it came before the thread waited or woke a thread of the wrong kind, and the thread then sleeps for ever (section&nbsp;7), removed by testing the condition and waiting under one lock, and by <code>notifyAll</code> or one condition variable per kind of waiter. The first two are a stopped holder; block&nbsp;2's progress conditions remove that family at the root, since a thread stopped in mid-operation there holds&nbsp;nothing.</p>
 
 <p>The counter has been exact twice, under the spin lock of section&nbsp;3 and under the language's lock of section&nbsp;4, both by exclusion: one thread at a time between the acquire and the release. The spin lock was built from one instruction that is itself atomic, test-and-set, and the question that block&nbsp;2 opens on is whether the lock around it was needed at all. Block&nbsp;2 first states what an operation must guarantee to the threads that call it at once, with a stack under one lock as the reference. Its first program without a lock is the counter written as a loop around compare-and-set, an atomic instruction: the loop reads <code>n</code> and retries until the instruction&nbsp;succeeds.</p>
 
@@ -1571,9 +1573,9 @@ consumer 1 took from an empty slot, after 8 items
   </svg>
 <figcaption>The increment of block 1 made atomic by a critical section, and the same increment as one instruction of the processor, fetch-and-add, with no lock around it; block&nbsp;2 runs it beside the counter written with&nbsp;compare-and-set.</figcaption>
 </figure>
-<p class="notes-def"><b>The question.</b> Can an operation be atomic without a lock around&nbsp;it?</p>
+<p class="notes-def"><b>The question.</b> Can a logically atomic operation be built from atomic instructions, without&nbsp;exclusion?</p>
 
-<p>Block&nbsp;2 answers three questions this block leaves open: what an atomic operation without a lock guarantees and requires; how to prove such an operation correct; and, in its last part, what the language guaranteed about memory in the fourth assumption of section&nbsp;1, and what holds instead for a program with a data&nbsp;race.</p>
+<p>Block&nbsp;2 answers in three steps: the standard of logical atomicity in full, linearizability and the progress conditions; compare-and-set with retry, the second way; and, in its last part, the condition of the fourth assumption of section&nbsp;1, and what holds instead for a program with a data&nbsp;race.</p>
 
 </section>
 

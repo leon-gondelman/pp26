@@ -1590,7 +1590,6 @@ html.print-pdf .reveal #b1-interleaving svg.b1-fig2, html.reveal-print .reveal #
 .reveal #b1-atomicity svg.b1-fig2 .fault line { stroke: var(--accent); stroke-width: 3; }
 .reveal #b1-atomicity svg.b1-fig2 .fault text { fill: var(--accent); }
 .reveal #b1-atomicity svg.b1-fig2 text.nolock { fill: var(--accent); }
-.reveal #b1-atomicity[data-step="2"] svg.b1-fig2 .fig-counter { visibility: hidden; }
 .reveal #b1-atomicity .b1-stack { display: grid; }
 .reveal #b1-atomicity .b1-stack > p { grid-area: 1 / 1; align-self: start; margin: 0; }
 /* the print shows every click at once: the counter in its last state, the transfer left out, both sentences */
@@ -1661,20 +1660,20 @@ html.print-pdf .reveal #b1-bridge .b1-defs, html.reveal-print .reveal #b1-bridge
 .reveal #b1-tas svg.b1-fig2 .flag rect { fill: var(--code-bg); }
 .reveal #b1-tas svg.b1-fig2 .hb line { stroke-width: 2.5; }
 .reveal #b1-tas svg.b1-fig2 .spin line { stroke-dasharray: 5 6; }
-.reveal #b1-tas[data-step="0"] svg.b1-fig2 .tas-a rect,
-.reveal #b1-tas[data-step="2"] svg.b1-fig2 :is(.rel-a, .tas-b) rect,
-.reveal #b1-tas[data-step="1"] svg.b1-fig2 .spin-b rect { fill: var(--box); stroke: var(--accent); stroke-width: 3; }
-.reveal #b1-tas[data-step="0"] svg.b1-fig2 .tas-a line,
-.reveal #b1-tas[data-step="2"] svg.b1-fig2 .tas-b line,
-.reveal #b1-tas[data-step="1"] svg.b1-fig2 .spin-b line { stroke: var(--accent); }
-.reveal #b1-tas[data-step="1"] svg.b1-fig2 .spin line { stroke: var(--accent); stroke-width: 3; }
+.reveal #b1-tas[data-step="1"] svg.b1-fig2 .tas-a rect,
+.reveal #b1-tas[data-step="3"] svg.b1-fig2 :is(.rel-a, .tas-b) rect,
+.reveal #b1-tas[data-step="2"] svg.b1-fig2 .spin-b rect { fill: var(--box); stroke: var(--accent); stroke-width: 3; }
+.reveal #b1-tas[data-step="1"] svg.b1-fig2 .tas-a line,
+.reveal #b1-tas[data-step="3"] svg.b1-fig2 .tas-b line,
+.reveal #b1-tas[data-step="2"] svg.b1-fig2 .spin-b line { stroke: var(--accent); }
+.reveal #b1-tas[data-step="2"] svg.b1-fig2 .spin line { stroke: var(--accent); stroke-width: 3; }
 .reveal #b1-tas .b1-stack { display: grid; }
 /* before the first click, the naive lock: the figure's .naive group and the .b1-naive boxes, in place of
    the definition of test-and-set; from the first click on, the reverse */
-.reveal #b1-tas:not([data-step="-1"]) :is(svg.b1-fig2 .naive, .b1-naive) { display: none; }
-.reveal #b1-tas[data-step="-1"] p.b1-tas-def { display: none; }
+.reveal #b1-tas:not([data-step="-1"]):not([data-step="0"]) :is(svg.b1-fig2 .naive, .b1-naive) { display: none; }
+.reveal #b1-tas:is([data-step="-1"],[data-step="0"]) p.b1-tas-def { display: none; }
 /* the title follows: "Naive lock" before the first click, "Test-and-set and its guarantees" after */
-.reveal #b1-tas[data-step="-1"] h2 .h-then, .reveal #b1-tas:not([data-step="-1"]) h2 .h-first { display: none; }
+.reveal #b1-tas:is([data-step="-1"],[data-step="0"]) h2 .h-then, .reveal #b1-tas:not([data-step="-1"]):not([data-step="0"]) h2 .h-first { display: none; }
 html.print-pdf .reveal #b1-tas h2 .h-first, html.reveal-print .reveal #b1-tas h2 .h-first { display: none; }
 html.print-pdf .reveal #b1-tas h2 .h-then, html.reveal-print .reveal #b1-tas h2 .h-then { display: inline; }
 .reveal #b1-tas .b1-naive > p + p { margin-top: 24px; }
@@ -1771,6 +1770,58 @@ html.print-pdf .reveal #b1-orders svg.b1-fig2 .ords text, html.reveal-print .rev
 html.print-pdf .reveal #b1-orders svg.b1-fig2 .fragment, html.reveal-print .reveal #b1-orders svg.b1-fig2 .fragment { opacity: 1 !important; visibility: visible !important; }
 html.print-pdf .reveal #b1-orders svg.b1-fig2 text.lost, html.reveal-print .reveal #b1-orders svg.b1-fig2 text.lost { fill: var(--rule); }
 /* == end b1-orders == */
+
+/* the interleaving: the boxes in the braid's colors */
+.reveal #b1-interleaving svg.b1-fig2 rect.ia { stroke: #2A6F97; fill: #E6F0F6; }
+.reveal #b1-interleaving svg.b1-fig2 rect.ib { stroke: var(--accent); fill: #FDF0E3; }
+/* the terms table */
+.reveal table.b1-terms { font-size: 26px; }
+.reveal table.b1-terms td:first-child { width: 40%; }
+.reveal table.b1-terms tr:first-child td { font-weight: 500; }
+.reveal #b1-orders-b svg.b1-fig2 { display: block; width: 100%; height: auto; margin: 0 0 48px 0; overflow: visible; }
+.reveal #b1-orders-b svg.b1-fig2 text { font-family: "Fira Mono", monospace; font-size: 3.8px; fill: var(--fg); text-anchor: middle; }
+.reveal #b1-orders-b svg.b1-fig2 .rest { transition: opacity .6s ease; }
+.reveal #b1-orders-b svg.b1-fig2 .rest text { fill: var(--muted); }
+.reveal #b1-orders-b[data-step="-1"] svg.b1-fig2 .ords text { fill: var(--accent); }
+.reveal #b1-orders-b:not([data-step="-1"]) .b1-o-intro { display: none; }
+.reveal #b1-orders-b svg.b1-fig2 .ords text { transform-box: view-box; transform-origin: 0 0; transition: transform .8s ease-in-out, fill .2s; }
+.reveal #b1-orders-b:not([data-step="-1"]) svg.b1-fig2 .rest { opacity: 0; }
+.reveal #b1-orders-b:not([data-step="-1"]) svg.b1-fig2 .ords text { transform: translate(var(--dx), var(--dy)) scale(5); }
+.reveal #b1-orders-b svg.b1-fig2 .bar line { stroke: var(--fg); stroke-width: 2.5; }
+.reveal #b1-orders-b svg.b1-fig2 .bar.acc line { stroke: var(--accent); stroke-width: 3; }
+.reveal #b1-orders-b svg.b1-fig2 .tint rect { fill: var(--box); stroke: none; }
+.reveal #b1-orders-b[data-step="1"] svg.b1-fig2 text.lost { fill: var(--rule); }
+html.print-pdf .reveal #b1-orders-b svg.b1-fig2 .rest, html.reveal-print .reveal #b1-orders-b svg.b1-fig2 .rest { display: none; }
+html.print-pdf .reveal #b1-orders-b svg.b1-fig2 .ords text, html.reveal-print .reveal #b1-orders-b svg.b1-fig2 .ords text { transition: none; transform: translate(var(--dx), var(--dy)) scale(5); }
+html.print-pdf .reveal #b1-orders-b svg.b1-fig2 .fragment, html.reveal-print .reveal #b1-orders-b svg.b1-fig2 .fragment { opacity: 1 !important; visibility: visible !important; }
+html.print-pdf .reveal #b1-orders-b svg.b1-fig2 text.lost, html.reveal-print .reveal #b1-orders-b svg.b1-fig2 text.lost { fill: var(--rule); }
+.reveal #b1-orders-b svg.b1-fig2 .rest { display: none; }
+.reveal #b1-orders-b svg.b1-fig2 .ords text { transform: translate(var(--dx), var(--dy)) scale(5); transition: none; }
+.reveal #b1-orders-b[data-step="0"] svg.b1-fig2 text.lost { fill: var(--rule); }
+
+.reveal #b1-faults svg.b1-fig2 { display: block; width: 100%; height: auto; margin: 0 0 48px 0; overflow: visible; }
+.reveal #b1-faults svg.b1-fig2 text { font-family: "Fira Sans", sans-serif; font-size: 19px; fill: var(--fg); text-anchor: middle; }
+.reveal #b1-faults svg.b1-fig2 text.lbl { text-anchor: start; }
+.reveal #b1-faults svg.b1-fig2 text.end, .reveal #b1-faults svg.b1-fig2 text.time { text-anchor: end; }
+.reveal #b1-faults svg.b1-fig2 rect { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+.reveal #b1-faults svg.b1-fig2 path { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+.reveal #b1-faults svg.b1-fig2 .cs rect { fill: var(--box); }
+.reveal #b1-faults svg.b1-fig2 .hi rect { fill: var(--box); stroke: var(--accent); stroke-width: 3; }
+.reveal #b1-faults svg.b1-fig2 .fault line { stroke: var(--accent); stroke-width: 3; }
+.reveal #b1-faults svg.b1-fig2 .fault text { fill: var(--accent); }
+.reveal #b1-faults svg.b1-fig2 text.nolock { fill: var(--accent); }
+.reveal #b1-faults .b1-stack { display: grid; }
+.reveal #b1-faults .b1-stack > p { grid-area: 1 / 1; align-self: start; margin: 0; }
+html.print-pdf .reveal #b1-faults svg.b1-fig2 .fig-transfer, html.reveal-print .reveal #b1-faults svg.b1-fig2 .fig-transfer { display: none; }
+html.print-pdf .reveal #b1-faults .b1-stack, html.reveal-print .reveal #b1-faults .b1-stack { gap: 24px; }
+html.print-pdf .reveal #b1-faults .b1-stack > p, html.reveal-print .reveal #b1-faults .b1-stack > p { grid-area: auto; opacity: 1 !important; visibility: visible !important; font-size: 27px; }
+.reveal #b1-faults svg.b1-fig2 { width: 76%; margin: 0 auto 32px auto; }
+.reveal #b1-faults table.b1-close { margin-bottom: 32px; }
+.reveal table.b1-road { font-size: 33px; }
+.reveal table.b1-road td:first-child { width: 23%; }
+.reveal table.b1-road td { padding-top: 14px; padding-bottom: 14px; }
+.reveal table.b1-road .pn { display: block; color: var(--accent); font-weight: 500; font-size: 0.72em; letter-spacing: 0.06em; text-transform: uppercase; }
+.reveal section.part p.bridge { font-size: 36px; color: var(--band-fg); margin: 0; padding-top: 56px; line-height: 1.4; max-width: 1240px; }
 </style>
 <script>
   window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
@@ -1819,8 +1870,9 @@ window.addEventListener('load', () => {
 <!-- part 1 -->
 <section class="part" data-background-color="#23373B">
   <div class="eyebrow">PART 1</div>
-  <h1>Threads and shared&nbsp;memory</h1>
-  <div class="sub">the scheduler, interleavings, sequential&nbsp;consistency</div>
+  <h1>Introduction</h1>
+  <div class="sub">threads and the interleaving; data races and atomicity violations; synchronization; the&nbsp;terms</div>
+  <p class="bridge">A program with several threads runs in many orders. Before any way of controlling them: the model of those orders, the two faults they allow, and the terms every way is judged&nbsp;in.</p>
   
 </section>
 
@@ -1851,23 +1903,23 @@ window.addEventListener('load', () => {
   <svg class="b1-fig2" viewBox="0 0 1000 290" role="img" aria-label="Two threads of three instructions each, two of their interleavings as rows of six positions marked A or B, beside them each interleaving as a braid of two strands whose crossings from top to bottom are its steps, and the count of twenty interleavings">
         <defs><marker id="b1-il-a" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2A6F97"/></marker><marker id="b1-il-b" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#EB811B"/></marker></defs>
         <text class="lbl" x="0" y="47">thread A</text><text class="lbl" x="0" y="107">thread B</text>
-        <g><rect x="200" y="20" width="90" height="40" rx="5"/><text x="245" y="47">read n</text></g><g><rect x="300" y="20" width="90" height="40" rx="5"/><text x="345" y="47">add 1</text></g><g><rect x="400" y="20" width="90" height="40" rx="5"/><text x="445" y="47">write n</text></g>
-        <g><rect x="200" y="80" width="90" height="40" rx="5"/><text x="245" y="107">read n</text></g><g><rect x="300" y="80" width="90" height="40" rx="5"/><text x="345" y="107">add 1</text></g><g><rect x="400" y="80" width="90" height="40" rx="5"/><text x="445" y="107">write n</text></g>
+        <g><rect class="ia" x="200" y="20" width="90" height="40" rx="5"/><text x="245" y="47">read n</text></g><g><rect class="ia" x="300" y="20" width="90" height="40" rx="5"/><text x="345" y="47">add 1</text></g><g><rect class="ia" x="400" y="20" width="90" height="40" rx="5"/><text x="445" y="47">write n</text></g>
+        <g><rect class="ib" x="200" y="80" width="90" height="40" rx="5"/><text x="245" y="107">read n</text></g><g><rect class="ib" x="300" y="80" width="90" height="40" rx="5"/><text x="345" y="107">add 1</text></g><g><rect class="ib" x="400" y="80" width="90" height="40" rx="5"/><text x="445" y="107">write n</text></g>
         <g class="row row-1 fragment" data-fragment-index="0"><text class="lbl" x="0" y="187">one interleaving</text>
-        <text x="245" y="148">A</text><g><rect x="200" y="160" width="90" height="40" rx="5"/><text x="245" y="187">read n</text></g>
-        <text x="345" y="148">A</text><g><rect x="300" y="160" width="90" height="40" rx="5"/><text x="345" y="187">add 1</text></g>
-        <text x="445" y="148">A</text><g><rect x="400" y="160" width="90" height="40" rx="5"/><text x="445" y="187">write n</text></g>
-        <text x="545" y="148">B</text><g><rect x="500" y="160" width="90" height="40" rx="5"/><text x="545" y="187">read n</text></g>
-        <text x="645" y="148">B</text><g><rect x="600" y="160" width="90" height="40" rx="5"/><text x="645" y="187">add 1</text></g>
-        <text x="745" y="148">B</text><g><rect x="700" y="160" width="90" height="40" rx="5"/><text x="745" y="187">write n</text></g>
+        <g><rect class="ia" x="200" y="160" width="90" height="40" rx="5"/><text x="245" y="187">read n</text></g>
+        <g><rect class="ia" x="300" y="160" width="90" height="40" rx="5"/><text x="345" y="187">add 1</text></g>
+        <g><rect class="ia" x="400" y="160" width="90" height="40" rx="5"/><text x="445" y="187">write n</text></g>
+        <g><rect class="ib" x="500" y="160" width="90" height="40" rx="5"/><text x="545" y="187">read n</text></g>
+        <g><rect class="ib" x="600" y="160" width="90" height="40" rx="5"/><text x="645" y="187">add 1</text></g>
+        <g><rect class="ib" x="700" y="160" width="90" height="40" rx="5"/><text x="745" y="187">write n</text></g>
         </g>
         <g class="row row-2 fragment" data-fragment-index="1"><text class="lbl" x="0" y="267">another interleaving</text>
-        <text x="245" y="228">A</text><g><rect x="200" y="240" width="90" height="40" rx="5"/><text x="245" y="267">read n</text></g>
-        <text x="345" y="228">B</text><g><rect x="300" y="240" width="90" height="40" rx="5"/><text x="345" y="267">read n</text></g>
-        <text x="445" y="228">A</text><g><rect x="400" y="240" width="90" height="40" rx="5"/><text x="445" y="267">add 1</text></g>
-        <text x="545" y="228">B</text><g><rect x="500" y="240" width="90" height="40" rx="5"/><text x="545" y="267">add 1</text></g>
-        <text x="645" y="228">B</text><g><rect x="600" y="240" width="90" height="40" rx="5"/><text x="645" y="267">write n</text></g>
-        <text x="745" y="228">A</text><g><rect x="700" y="240" width="90" height="40" rx="5"/><text x="745" y="267">write n</text></g>
+        <g><rect class="ia" x="200" y="240" width="90" height="40" rx="5"/><text x="245" y="267">read n</text></g>
+        <g><rect class="ib" x="300" y="240" width="90" height="40" rx="5"/><text x="345" y="267">read n</text></g>
+        <g><rect class="ia" x="400" y="240" width="90" height="40" rx="5"/><text x="445" y="267">add 1</text></g>
+        <g><rect class="ib" x="500" y="240" width="90" height="40" rx="5"/><text x="545" y="267">add 1</text></g>
+        <g><rect class="ib" x="600" y="240" width="90" height="40" rx="5"/><text x="645" y="267">write n</text></g>
+        <g><rect class="ia" x="700" y="240" width="90" height="40" rx="5"/><text x="745" y="267">write n</text></g>
         </g>
         <g class="braid braid-1 fragment" data-fragment-index="0">
         <text class="sa" x="830" y="13">A</text><text class="sb" x="880" y="13">B</text>
@@ -1928,7 +1980,7 @@ window.addEventListener('load', () => {
         <g class="count fragment" data-fragment-index="2"><text class="lbl" x="820" y="197">6 positions,</text><text class="lbl" x="820" y="220">choose 3 for B:</text><text class="lbl" x="820" y="243">20 interleavings</text></g>
       </svg>
   <div class="b1-stack">
-    <p class="def fragment fade-out" data-fragment-index="2"><b>Definition.</b> An <b>execution</b> of a multi-threaded program is an <b>interleaving</b> of its threads' instructions: one sequence that contains every instruction of every thread, each thread's instructions in the order the thread issues&nbsp;them.</p>
+    <p class="def fragment fade-out" data-fragment-index="2"><b>Definition.</b> An <b>execution</b> of a multi-threaded program is an <b>interleaving</b> of its threads' instructions: one sequence of the instructions the threads execute, each thread's in the order the thread issues them.</p>
     <p class="b1-cap fragment current-visible" data-fragment-index="2">Two threads of <i>m</i> and <i>n</i> instructions have \(\tbinom{m+n}{n} = \tfrac{(m+n)!}{m!\,n!}\) interleavings: an interleaving is fixed by the <i>n</i> positions of the second thread among the <i>m</i>&nbsp;+&nbsp;<i>n</i>. Here \(\tbinom{6}{3} = 20\); for the counter's two loops of \(3\cdot 10^6\) steps, \(\tbinom{6\cdot 10^6}{3\cdot 10^6} >&nbsp;10^{1\,800\,000}\).</p>
     <div class="b1-last fragment" data-fragment-index="3">
       <p>Two threads that each execute a million three-step increments have more interleavings than any test could&nbsp;run.</p>
@@ -1938,117 +1990,9 @@ window.addEventListener('load', () => {
   
 </section>
 
-<!-- 1.3 -->
-<section id="b1-assumptions">
-  <h2>Four&nbsp;assumptions</h2>
-  <ol class="b1-list">
-    <li><b>Several threads.</b> Two or more, each a sequence of&nbsp;instructions.</li>
-    <li><b>One shared memory.</b> All threads read and write the same&nbsp;locations.</li>
-    <li><b>A scheduler that may stop a thread between any two instructions.</b> So an execution is an interleaving, and any interleaving may&nbsp;occur.</li>
-    <li class="fragment" data-fragment-index="0"><b>Sequential consistency.</b> There is one memory, and every read returns the value of the latest write to the same location before it in the interleaving; with assumption 3, this is Lamport's sequential consistency<sup><a class="cite" href="https://lamport.azurewebsites.net/pubs/multi.pdf" target="_blank" rel="noopener">*</a></sup>.<span class="b1-line">Each processor buffers its writes and compilers reorder, so this is not literally what the hardware does: a guarantee of the language, given only for programs without <b>data races</b>, defined in part&nbsp;2.</span></li>
-  </ol>
-  <p class="fn fragment" data-fragment-index="0"><sup>*</sup> <a class="cite" href="https://lamport.azurewebsites.net/pubs/multi.pdf" target="_blank" rel="noopener">L. Lamport, IEEE Transactions on Computers C-28(9), September 1979</a>, pages 690–691: the&nbsp;definition.</p>
-  
-</section>
-
-<!-- part 2 -->
-<section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 2</div>
-  <h1>Race&nbsp;conditions</h1>
-  <div class="sub">data races and atomicity&nbsp;violations</div>
-  
-</section>
-
-<!-- 2.1 -->
-<section id="b1-ex1">
-  <h2>Example 1: the counter,&nbsp;unprotected</h2>
-  <div class="cols wide">
-    <div class="prog">
-      <div class="car langcar">
-        <div class="car-tabs"><span>Java</span><span>OCaml 5</span></div>
-        <div class="car-panels">
-          <div class="car-panel java" data-fragment-index="-1"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterRacy.java#L5" data-file="demos7/java/CounterRacy.java" data-at="static int n = 0;" target="_blank" rel="noopener">CounterRacy.java</a><code class="language-java">static int n = 0;   // shared
-
-Runnable work = () -&gt; {
-  for (int i = 0; i &lt; N; i++) n++;
-};
-Thread t1 = new Thread(work),
-       t2 = new Thread(work);
-t1.start(); t2.start();
-t1.join();  t2.join();
-System.out.println("got " + n);</code></pre></div>
-          <div class="car-panel ocaml"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_racy.ml#L8" data-file="demos7/ocaml/counter_racy.ml" data-at="let n = ref 0" data-to="(* end slide *)" target="_blank" rel="noopener">counter_racy.ml</a><code class="language-ocaml">let n = ref 0   (* shared *)
-
-let work () =
-  for _ = 1 to 1_000_000 do
-    n := !n + 1
-  done
-
-let () =
-  let a = Domain.spawn work
-  and b = Domain.spawn work in
-  Domain.join a; Domain.join b;
-  Printf.printf "got %d\n" !n</code></pre></div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <p>Two threads each add one to <code>n</code>, <i>N</i> times. What does the program print as&nbsp;<code>n</code>?</p>
-      <ol class="cards">
-        <li>Always&nbsp;2<i>N</i>.</li>
-        <li class="fragment ans" data-fragment-index="0">At most&nbsp;2<i>N.</i></li>
-        <li>Possibly more than&nbsp;2<i>N</i>.</li>
-        <li>Always less than&nbsp;2<i>N</i>.</li>
-      </ol>
-      <pre class="out rec fragment" data-fragment-index="0">$ java CounterRacy
-expected 2000000
-got      1017204</pre>
-      <p class="fragment muted" data-fragment-index="0" style="color: var(--fg)">One sample of a run. Ten further runs printed ten other numbers, none of them&nbsp;2,000,000.</p>
-    </div>
-  </div>
-  
-</section>
-
-<!-- 2.2 -->
-<section id="b1-three-steps" data-step="-1">
-  <h2>The three steps of&nbsp;<code>n++</code></h2>
-  <div class="cols">
-    <div>
-      <div class="car langcar">
-        <div class="car-tabs"><span>Java</span><span>OCaml 5</span></div>
-        <div class="car-panels">
-          <div class="car-panel java" data-fragment-index="-1"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterRacy.java#L19" data-file="demos7/java/CounterRacy.java" data-at="// n++ is three steps" target="_blank" rel="noopener">CounterRacy.java</a><code class="language-java">int v = n;      // read
-v = v + 1;      // add
-n = v;          // write</code></pre></div>
-          <div class="car-panel ocaml"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_racy.ml#L8" data-file="demos7/ocaml/counter_racy.ml" data-at="let n = ref 0" data-to="(* end slide *)" target="_blank" rel="noopener">counter_racy.ml</a><code class="language-ocaml">let v = !n in      (* read  *)
-let v = v + 1 in   (* add   *)
-n := v             (* write *)</code></pre></div>
-        </div>
-      </div>
-      <p>The Java compiler produces four bytecodes, <code>getstatic</code>, <code>iconst_1</code>, <code>iadd</code>, <code>putstatic</code>: the first is the read, the last the write, and the scheduler may run another thread between&nbsp;them.</p>
-      <p class="def fragment" data-fragment-index="1"><b>Lost update.</b> A write whose effect is overwritten by a write based on an older&nbsp;read.</p>
-    </div>
-    <div class="fragment" data-fragment-index="0">
-      <table class="b1-steps">
-<tr><th>Step</th><th>Thread&nbsp;A</th><th>Thread&nbsp;B</th><th>n</th></tr>
-<tr><td>1</td><td>read n, gets&nbsp;5</td><td></td><td>5</td></tr>
-<tr><td>2</td><td></td><td>read n, gets&nbsp;5</td><td>5</td></tr>
-<tr><td>3</td><td>add: register&nbsp;6</td><td></td><td>5</td></tr>
-<tr class="b1-lost"><td>4</td><td>write&nbsp;6</td><td></td><td>6</td></tr>
-<tr><td>5</td><td></td><td>add: register&nbsp;6</td><td>6</td></tr>
-<tr class="b1-lost"><td>6</td><td></td><td>write&nbsp;6</td><td>6</td></tr>
-      </table>
-      <p class="fragment" data-fragment-index="0">The table is the interleaving that loses an update, from <code>n</code> equal to 5: both read 5, both write 6; "register" is the thread's own copy of the value. Two increments were executed and <code>n</code> grew by&nbsp;one.</p>
-    </div>
-  </div>
-  <a class="apx" href="#/b1-bounds">appendix</a><span class="b1-apx-say">the bounds on the printed value, at most 2N, exactly 2N and at least 2, each with its&nbsp;reason</span>
-  
-</section>
-
 <section id="b1-orders" data-step="-1">
   <h2>The interleavings of two&nbsp;increments</h2>
   <svg class="b1-fig2" viewBox="0 0 1000 300" role="img" aria-label="The 720 orders of r1 a1 w1 r2 a2 w2 in a field too small to read, the 20 interleavings among them in ink; on the first click the other 700 fade and the 20 grow into four columns and five rows; on the second the 18 in which the two increments overlap are struck out in accent, and the 2 that run one increment after the other are shaded">
-    <g class="tint fragment" data-fragment-index="1"><rect x="14" y="11" width="222" height="46" rx="5"/><rect x="764" y="251" width="222" height="46" rx="5"/></g>
     <g class="rest">
       <text x="62.5" y="6.33">r1 a1 w1 r2 w2 a2</text><text x="104.17" y="6.33">r1 a1 w1 a2 r2 w2</text><text x="145.83" y="6.33">r1 a1 w1 a2 w2 r2</text><text x="187.5" y="6.33">r1 a1 w1 w2 r2 a2</text><text x="229.17" y="6.33">r1 a1 w1 w2 a2 r2</text><text x="312.5" y="6.33">r1 a1 r2 w1 w2 a2</text><text x="437.5" y="6.33">r1 a1 r2 w2 w1 a2</text><text x="479.17" y="6.33">r1 a1 r2 w2 a2 w1</text><text x="520.83" y="6.33">r1 a1 a2 w1 r2 w2</text><text x="562.5" y="6.33">r1 a1 a2 w1 w2 r2</text><text x="604.17" y="6.33">r1 a1 a2 r2 w1 w2</text><text x="645.83" y="6.33">r1 a1 a2 r2 w2 w1</text><text x="687.5" y="6.33">r1 a1 a2 w2 w1 r2</text><text x="729.17" y="6.33">r1 a1 a2 w2 r2 w1</text><text x="770.83" y="6.33">r1 a1 w2 w1 r2 a2</text><text x="812.5" y="6.33">r1 a1 w2 w1 a2 r2</text><text x="854.17" y="6.33">r1 a1 w2 r2 w1 a2</text><text x="895.83" y="6.33">r1 a1 w2 r2 a2 w1</text><text x="937.5" y="6.33">r1 a1 w2 a2 w1 r2</text><text x="979.17" y="6.33">r1 a1 w2 a2 r2 w1</text><text x="20.83" y="16.33">r1 w1 a1 r2 a2 w2</text><text x="62.5" y="16.33">r1 w1 a1 r2 w2 a2</text><text x="104.17" y="16.33">r1 w1 a1 a2 r2 w2</text><text x="145.83" y="16.33">r1 w1 a1 a2 w2 r2</text>
       <text x="187.5" y="16.33">r1 w1 a1 w2 r2 a2</text><text x="229.17" y="16.33">r1 w1 a1 w2 a2 r2</text><text x="270.83" y="16.33">r1 w1 r2 a1 a2 w2</text><text x="312.5" y="16.33">r1 w1 r2 a1 w2 a2</text><text x="354.17" y="16.33">r1 w1 r2 a2 a1 w2</text><text x="395.83" y="16.33">r1 w1 r2 a2 w2 a1</text><text x="437.5" y="16.33">r1 w1 r2 w2 a1 a2</text><text x="479.17" y="16.33">r1 w1 r2 w2 a2 a1</text><text x="520.83" y="16.33">r1 w1 a2 a1 r2 w2</text><text x="562.5" y="16.33">r1 w1 a2 a1 w2 r2</text><text x="604.17" y="16.33">r1 w1 a2 r2 a1 w2</text><text x="645.83" y="16.33">r1 w1 a2 r2 w2 a1</text><text x="687.5" y="16.33">r1 w1 a2 w2 a1 r2</text><text x="729.17" y="16.33">r1 w1 a2 w2 r2 a1</text><text x="770.83" y="16.33">r1 w1 w2 a1 r2 a2</text><text x="812.5" y="16.33">r1 w1 w2 a1 a2 r2</text><text x="854.17" y="16.33">r1 w1 w2 r2 a1 a2</text><text x="895.83" y="16.33">r1 w1 w2 r2 a2 a1</text><text x="937.5" y="16.33">r1 w1 w2 a2 a1 r2</text><text x="979.17" y="16.33">r1 w1 w2 a2 r2 a1</text><text x="62.5" y="26.33">r1 r2 a1 w1 w2 a2</text><text x="187.5" y="26.33">r1 r2 a1 w2 w1 a2</text><text x="229.17" y="26.33">r1 r2 a1 w2 a2 w1</text><text x="270.83" y="26.33">r1 r2 w1 a1 a2 w2</text>
@@ -2103,11 +2047,9 @@ n := v             (* write *)</code></pre></div>
       <text class="lost" x="187.5" y="186.33" style="--dx: -312.5px; --dy: -650.65px">r2 a2 r1 w2 a1 w1</text>
       <text class="ok" x="770.83" y="186.33" style="--dx: -2979.15px; --dy: -650.65px">r2 a2 w2 r1 a1 w1</text>
     </g>
-    <g class="bar acc fragment" data-fragment-index="1"><line x1="270" y1="35.5" x2="480" y2="35.5"/><line x1="520" y1="35.5" x2="730" y2="35.5"/><line x1="770" y1="35.5" x2="980" y2="35.5"/><line x1="20" y1="95.5" x2="230" y2="95.5"/><line x1="270" y1="95.5" x2="480" y2="95.5"/><line x1="520" y1="95.5" x2="730" y2="95.5"/><line x1="770" y1="95.5" x2="980" y2="95.5"/><line x1="20" y1="155.5" x2="230" y2="155.5"/><line x1="270" y1="155.5" x2="480" y2="155.5"/><line x1="520" y1="155.5" x2="730" y2="155.5"/><line x1="770" y1="155.5" x2="980" y2="155.5"/><line x1="20" y1="215.5" x2="230" y2="215.5"/><line x1="270" y1="215.5" x2="480" y2="215.5"/><line x1="520" y1="215.5" x2="730" y2="215.5"/><line x1="770" y1="215.5" x2="980" y2="215.5"/><line x1="20" y1="275.5" x2="230" y2="275.5"/><line x1="270" y1="275.5" x2="480" y2="275.5"/><line x1="520" y1="275.5" x2="730" y2="275.5"/></g>
   </svg>
   <p class="def b1-o-intro">The 720 orders of the six steps <code>r1 a1 w1 r2 a2 w2</code>, one per cell, in lexicographic order. In orange, the 20 that keep each thread's own order, <code>r</code> before <code>a</code> before <code>w</code>: the&nbsp;interleavings.</p>
   <p class="fragment" data-fragment-index="0">Of the 720 orders of the six steps, program order within each thread leaves these&nbsp;20.</p>
-  <p class="fragment" data-fragment-index="1">18 of the 20 read before the other thread's write and lose an update; 2&nbsp;count correctly: one increment after the&nbsp;other.</p>
   
 </section>
 
@@ -2131,7 +2073,7 @@ n := v             (* write *)</code></pre></div>
       </svg>
   <p class="def fragment" data-fragment-index="0"><b>Data race.</b> Two accesses to one memory location from two threads, at least one a write, with nothing of the program ordering one before the&nbsp;other.<sup>*</sup></p>
   <p class="def b1-ask fragment" data-fragment-index="1">To avoid the race, the two threads must coordinate: what can the program put between the two&nbsp;accesses?</p>
-  <p class="fn fragment" data-fragment-index="0"><sup>*</sup> <a class="cite" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">The Java Language Specification, 17.4.5</a>; C++, Rust and OCaml state the same; Java and Go, in their own&nbsp;terms.</p>
+  <p class="fn fragment" data-fragment-index="0"><sup>*</sup> <a class="cite" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">The Java Language Specification, 17.4.5</a>; C++, Rust and OCaml add: at least one access not&nbsp;atomic.</p>
   
 </section>
 
@@ -2152,15 +2094,15 @@ n := v             (* write *)</code></pre></div>
     <p class="def fragment current-visible" data-fragment-index="0"><b>A lock.</b> Its release is ordered before the acquire that follows it: what the releasing thread wrote before, the thread that acquires next sees&nbsp;after.</p>
     <p class="def fragment current-visible" data-fragment-index="1"><b>A thread's start and join.</b> The call of <code>start</code> is ordered before the new thread's first instruction, and its last instruction before the return of the <code>join</code> that waits for&nbsp;it.</p>
     <p class="def fragment current-visible" data-fragment-index="2"><b>An atomic.</b> A write to an atomic or volatile variable is ordered before the read that sees it, with everything the writer did&nbsp;before.</p>
-    <p class="def b1-ask fragment current-visible" data-fragment-index="3">Each mechanism orders one thread's instructions before another's: what the first thread wrote before, the second sees after. The counter has none of them between its accesses, and that is its data&nbsp;race.</p>
-    <p class="def b1-ask fragment current-visible" data-fragment-index="4">But is a data race the only fault in the&nbsp;counter?</p>
+    <p class="def b1-ask fragment current-visible" data-fragment-index="3">Each mechanism orders one thread's instructions before another's: what the first thread wrote before, the second sees after. Two accesses with none of them between are a data&nbsp;race.</p>
+    <p class="def b1-ask fragment current-visible" data-fragment-index="4">A data race is missing order. Is order all that an operation of several steps&nbsp;needs?</p>
   </div>
   
 </section>
 
 <section id="b1-atomicity" data-step="-1">
   <h2>Atomicity&nbsp;violation</h2>
-  <svg class="b1-fig2" viewBox="0 0 1000 274" role="img" aria-label="A's three steps read n, add 1, write n under a bracket marked one unit, B's write n between A's read n and add 1, marked as a step inside the unit and as a data race; then the transfer of 50 from x to y, A's x = x − 50 under x's lock and y = y + 50 under y's lock, and B's read of x + y under both locks between them, which sees 150 instead of 200">
+  <svg class="b1-fig2" viewBox="0 0 1000 274" role="img" aria-label="A's three steps read n, add 1, write n under a bracket marked one unit, B's write n between A's read n and add 1, marked as a step inside the unit and as a data race">
         <text class="lbl" x="0" y="77">thread A</text><text class="lbl" x="0" y="217">thread B</text>
         <text class="time" x="996" y="77">time</text><text class="time" x="996" y="217">time</text>
         <g class="fig-counter">
@@ -2170,30 +2112,238 @@ n := v             (* write *)</code></pre></div>
           <g class="fragment" data-fragment-index="0"><g class="hi"><rect x="335" y="190" width="90" height="40" rx="5"/><text x="380" y="217">write n</text></g><g class="fault"><line x1="380" y1="182" x2="380" y2="60"/><text class="lbl" x="392" y="160">a step falls inside the unit</text></g></g>
           <g class="fragment" data-fragment-index="1"><g class="hi"><rect x="200" y="50" width="90" height="40" rx="5"/><text x="245" y="77">read n</text></g><g class="fault"><line x1="265" y1="98" x2="335" y2="182"/><text class="end" x="285" y="160">data race</text></g></g>
         </g>
-        <g class="fig-transfer fragment" data-fragment-index="2">
-          <g class="unit"><path d="M185 38 V28 H695 V38"/><text x="440" y="18">transfer of 50 from x to y, both at 100: one unit</text></g>
-          <g class="cs"><rect x="185" y="40" width="150" height="90" rx="5"/><text x="260" y="117">under x's lock</text></g><g class="cs"><rect x="545" y="40" width="150" height="90" rx="5"/><text x="620" y="117">under y's lock</text></g>
-          <text x="260" y="156">now x = 50, y = 100</text>
-          <text class="nolock" x="440" y="77">A holds no lock</text>
-          <g class="cs"><rect x="350" y="180" width="180" height="90" rx="5"/><text x="440" y="257">under both locks</text></g>
-          <g><rect x="200" y="50" width="120" height="40" rx="5"/><text x="260" y="77">x = x − 50</text></g><g><rect x="560" y="50" width="120" height="40" rx="5"/><text x="620" y="77">y = y + 50</text></g>
-          <g class="hi"><rect x="370" y="190" width="140" height="40" rx="5"/><text x="440" y="217">reads 50 + 100</text></g>
-          <g class="fault"><line x1="440" y1="182" x2="440" y2="92"/><text class="lbl" x="452" y="160">a step falls inside the unit</text><text class="lbl" x="545" y="217">sum 150, not 200</text></g>
-        </g>
       </svg>
   <p class="def"><b>Atomicity violation.</b> An operation of several steps meant as a unit, <b>atomic</b>, every other thread seeing all of it or none, and not protected as a unit, so that another thread's step can fall between two of its&nbsp;steps.</p>
   <div class="b1-stack">
-    <p class="fragment current-visible" data-fragment-index="1">The counter is&nbsp;both.</p>
-    <p class="fragment" data-fragment-index="2" style="font-size: 0.877em">In <a href="#/b1-ex4a">part 6</a>'s transfer each access is under its lock: no data race, and still an atomicity&nbsp;violation.</p>
+    <p class="fragment current-visible" data-fragment-index="1">This increment has both: a data race, the two accesses unordered; an atomicity violation, the unit split. Part 4 shows an operation with the second fault and not the&nbsp;first.</p>
+    <p class="fragment" data-fragment-index="2" style="font-size: 0.877em"><b>Two senses of atomic.</b> An instruction of the model is atomic: the processor executes it as one step; test-and-set, in part 2, is one that a real processor provides. An operation of several steps is <b>logically atomic</b>: it appears to take effect at one instant between its start and its end, and block 2 states this standard in full as&nbsp;<b>linearizability</b>.</p>
   </div>
+  
+</section>
+
+<!-- 1.3 -->
+<section id="b1-assumptions">
+  <h2>Four&nbsp;assumptions</h2>
+  <ol class="b1-list">
+    <li><b>Several threads.</b> Two or more, each a sequence of&nbsp;instructions.</li>
+    <li><b>One shared memory.</b> All threads read and write the same&nbsp;locations.</li>
+    <li><b>A scheduler that may stop a thread between any two instructions.</b> So an execution is an interleaving, and any interleaving may&nbsp;occur.</li>
+    <li class="fragment" data-fragment-index="0"><b>Sequential consistency.</b> There is one memory, and every read returns the value of the latest write to the same location before it in the interleaving; with assumption 3, this is Lamport's sequential consistency<sup><a class="cite" href="https://lamport.azurewebsites.net/pubs/multi.pdf" target="_blank" rel="noopener">*</a></sup>.<span class="b1-line">Each processor buffers its writes and compilers reorder, so this is not literally what the hardware does: a guarantee of the language, given only for programs without <b>data races</b>, as defined&nbsp;earlier.</span></li>
+  </ol>
+  <p class="fn fragment" data-fragment-index="0"><sup>*</sup> <a class="cite" href="https://lamport.azurewebsites.net/pubs/multi.pdf" target="_blank" rel="noopener">L. Lamport, IEEE Transactions on Computers C-28(9), September 1979</a>, pages 690–691: the&nbsp;definition.</p>
+  
+</section>
+
+<!-- 1.7 -->
+<section id="b1-terms">
+  <h2>The terms of each&nbsp;way</h2>
+  <p>Three ways: mutual exclusion in this block; an atomic instruction with retry, and independence of the order, in block 2. Each is judged in the same four terms, and a table answers them at the end of each&nbsp;block.</p>
+  <ol class="b1-list">
+    <li><b>The guarantee.</b> What holds in every interleaving: for the first two ways a logically atomic operation, which block 2 states in full as linearizability; for the third, one result in every&nbsp;order.</li>
+    <li class="fragment" data-fragment-index="0"><b>The obligation.</b> What the program must do for the guarantee to&nbsp;hold.</li>
+    <li class="fragment" data-fragment-index="1"><b>The progress risk.</b> Where a program that meets the obligation can still stop; block 2 states it as a progress&nbsp;condition.</li>
+    <li class="fragment" data-fragment-index="2"><b>Who checks.</b> Nobody; a checker at compile time or a detector at run time; the&nbsp;compiler.</li>
+  </ol>
   
 </section>
 
 <!-- part 3 -->
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 3</div>
-  <h1>Atomic&nbsp;instructions</h1>
-  <div class="sub">test-and-set and spin&nbsp;locks</div>
+  <div class="eyebrow">PART 2</div>
+  <h1>Mutual&nbsp;exclusion</h1>
+  <div class="sub">what makes several steps logically atomic, and what it&nbsp;costs</div>
+  <p class="bridge">The terms are set. The first way begins where every way begins, with the program that has none of them: the counter,&nbsp;unprotected.</p>
+  
+</section>
+
+<!-- 2.1 -->
+<section id="b1-ex1">
+  <h2>Example 1: the counter,&nbsp;unprotected</h2>
+  <div class="cols wide">
+    <div class="prog">
+      <div class="car langcar">
+        <div class="car-tabs"><span>Java</span><span>OCaml 5</span></div>
+        <div class="car-panels">
+          <div class="car-panel java" data-fragment-index="-1"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterRacy.java#L5" data-file="demos7/java/CounterRacy.java" data-at="static int n = 0;" target="_blank" rel="noopener">CounterRacy.java</a><code class="language-java">static int n = 0;   // shared
+
+Runnable work = () -&gt; {
+  for (int i = 0; i &lt; N; i++) n++;
+};
+Thread t1 = new Thread(work),
+       t2 = new Thread(work);
+t1.start(); t2.start();
+t1.join();  t2.join();
+System.out.println("got " + n);</code></pre></div>
+          <div class="car-panel ocaml"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_racy.ml#L8" data-file="demos7/ocaml/counter_racy.ml" data-at="let n = ref 0" data-to="(* end slide *)" target="_blank" rel="noopener">counter_racy.ml</a><code class="language-ocaml">let n = ref 0   (* shared *)
+
+let work () =
+  for _ = 1 to 1_000_000 do
+    n := !n + 1
+  done
+
+let () =
+  let a = Domain.spawn work
+  and b = Domain.spawn work in
+  Domain.join a; Domain.join b;
+  Printf.printf "got %d\n" !n</code></pre></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p>Two threads each add one to <code>n</code>, <i>N</i> times. What does the program print as&nbsp;<code>n</code>?</p>
+      <ol class="cards">
+        <li>Always&nbsp;2<i>N</i>.</li>
+        <li class="fragment ans" data-fragment-index="0">At most&nbsp;2<i>N.</i></li>
+        <li>Possibly more than&nbsp;2<i>N</i>.</li>
+        <li>Always less than&nbsp;2<i>N</i>.</li>
+      </ol>
+      <pre class="out rec fragment" data-fragment-index="0">$ java CounterRacy
+expected 2000000
+got      1017204</pre>
+      <p class="fragment muted" data-fragment-index="0" style="color: var(--fg)">One sample of a run. Ten further runs printed ten other numbers, none of them&nbsp;2,000,000.</p>
+    </div>
+  </div>
+  <p class="def b1-ask fragment" data-fragment-index="1">Where does an increment lose a&nbsp;step?</p>
+  
+</section>
+
+<!-- 2.2 -->
+<section id="b1-three-steps" data-step="-1">
+  <h2>The three steps of&nbsp;<code>n++</code></h2>
+  <div class="cols">
+    <div>
+      <div class="car langcar">
+        <div class="car-tabs"><span>Java</span><span>OCaml 5</span></div>
+        <div class="car-panels">
+          <div class="car-panel java" data-fragment-index="-1"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/java/CounterRacy.java#L19" data-file="demos7/java/CounterRacy.java" data-at="// n++ is three steps" target="_blank" rel="noopener">CounterRacy.java</a><code class="language-java">int v = n;      // read
+v = v + 1;      // add
+n = v;          // write</code></pre></div>
+          <div class="car-panel ocaml"><pre class="has-src"><a class="srclink" href="https://github.com/leon-gondelman/pp26/blob/main/slides/demos7/ocaml/counter_racy.ml#L8" data-file="demos7/ocaml/counter_racy.ml" data-at="let n = ref 0" data-to="(* end slide *)" target="_blank" rel="noopener">counter_racy.ml</a><code class="language-ocaml">let v = !n in      (* read  *)
+let v = v + 1 in   (* add   *)
+n := v             (* write *)</code></pre></div>
+        </div>
+      </div>
+      <p>The Java compiler produces four bytecodes, <code>getstatic</code>, <code>iconst_1</code>, <code>iadd</code>, <code>putstatic</code>: the first is the read, the last the write, and the scheduler may run another thread between&nbsp;them.</p>
+      <p class="def fragment" data-fragment-index="1"><b>Lost update.</b> A write whose effect is overwritten by a write based on an older&nbsp;read.</p>
+    </div>
+    <div class="fragment" data-fragment-index="0">
+      <table class="b1-steps">
+<tr><th>Step</th><th>Thread&nbsp;A</th><th>Thread&nbsp;B</th><th>n</th></tr>
+<tr><td>1</td><td>read n, gets&nbsp;5</td><td></td><td>5</td></tr>
+<tr><td>2</td><td></td><td>read n, gets&nbsp;5</td><td>5</td></tr>
+<tr><td>3</td><td>add: register&nbsp;6</td><td></td><td>5</td></tr>
+<tr class="b1-lost"><td>4</td><td>write&nbsp;6</td><td></td><td>6</td></tr>
+<tr><td>5</td><td></td><td>add: register&nbsp;6</td><td>6</td></tr>
+<tr class="b1-lost"><td>6</td><td></td><td>write&nbsp;6</td><td>6</td></tr>
+      </table>
+      <p class="fragment" data-fragment-index="0">The table is the interleaving that loses an update, from <code>n</code> equal to 5: both read 5, both write 6; "register" is the thread's own copy of the value. Two increments were executed and <code>n</code> grew by&nbsp;one.</p>
+    </div>
+  </div>
+  <a class="apx" href="#/b1-bounds">appendix</a><span class="b1-apx-say">the bounds on the printed value, at most 2N, exactly 2N and at least 2, each with its&nbsp;reason</span>
+  <p class="def b1-ask fragment" data-fragment-index="2">How many of the twenty interleavings lose an&nbsp;update?</p>
+  
+</section>
+
+<!-- 2.2b -->
+<section id="b1-orders-b" data-step="-1">
+  <h2>The interleavings that lose an&nbsp;update</h2>
+  <svg class="b1-fig2" viewBox="0 0 1000 300" role="img" aria-label="The 720 orders of r1 a1 w1 r2 a2 w2 in a field too small to read, the 20 interleavings among them in ink; on the first click the other 700 fade and the 20 grow into four columns and five rows; on the second the 18 in which the two increments overlap are struck out in accent, and the 2 that run one increment after the other are shaded">
+    <g class="tint fragment" data-fragment-index="0"><rect x="14" y="11" width="222" height="46" rx="5"/><rect x="764" y="251" width="222" height="46" rx="5"/></g>
+    <g class="rest">
+      <text x="62.5" y="6.33">r1 a1 w1 r2 w2 a2</text><text x="104.17" y="6.33">r1 a1 w1 a2 r2 w2</text><text x="145.83" y="6.33">r1 a1 w1 a2 w2 r2</text><text x="187.5" y="6.33">r1 a1 w1 w2 r2 a2</text><text x="229.17" y="6.33">r1 a1 w1 w2 a2 r2</text><text x="312.5" y="6.33">r1 a1 r2 w1 w2 a2</text><text x="437.5" y="6.33">r1 a1 r2 w2 w1 a2</text><text x="479.17" y="6.33">r1 a1 r2 w2 a2 w1</text><text x="520.83" y="6.33">r1 a1 a2 w1 r2 w2</text><text x="562.5" y="6.33">r1 a1 a2 w1 w2 r2</text><text x="604.17" y="6.33">r1 a1 a2 r2 w1 w2</text><text x="645.83" y="6.33">r1 a1 a2 r2 w2 w1</text><text x="687.5" y="6.33">r1 a1 a2 w2 w1 r2</text><text x="729.17" y="6.33">r1 a1 a2 w2 r2 w1</text><text x="770.83" y="6.33">r1 a1 w2 w1 r2 a2</text><text x="812.5" y="6.33">r1 a1 w2 w1 a2 r2</text><text x="854.17" y="6.33">r1 a1 w2 r2 w1 a2</text><text x="895.83" y="6.33">r1 a1 w2 r2 a2 w1</text><text x="937.5" y="6.33">r1 a1 w2 a2 w1 r2</text><text x="979.17" y="6.33">r1 a1 w2 a2 r2 w1</text><text x="20.83" y="16.33">r1 w1 a1 r2 a2 w2</text><text x="62.5" y="16.33">r1 w1 a1 r2 w2 a2</text><text x="104.17" y="16.33">r1 w1 a1 a2 r2 w2</text><text x="145.83" y="16.33">r1 w1 a1 a2 w2 r2</text>
+      <text x="187.5" y="16.33">r1 w1 a1 w2 r2 a2</text><text x="229.17" y="16.33">r1 w1 a1 w2 a2 r2</text><text x="270.83" y="16.33">r1 w1 r2 a1 a2 w2</text><text x="312.5" y="16.33">r1 w1 r2 a1 w2 a2</text><text x="354.17" y="16.33">r1 w1 r2 a2 a1 w2</text><text x="395.83" y="16.33">r1 w1 r2 a2 w2 a1</text><text x="437.5" y="16.33">r1 w1 r2 w2 a1 a2</text><text x="479.17" y="16.33">r1 w1 r2 w2 a2 a1</text><text x="520.83" y="16.33">r1 w1 a2 a1 r2 w2</text><text x="562.5" y="16.33">r1 w1 a2 a1 w2 r2</text><text x="604.17" y="16.33">r1 w1 a2 r2 a1 w2</text><text x="645.83" y="16.33">r1 w1 a2 r2 w2 a1</text><text x="687.5" y="16.33">r1 w1 a2 w2 a1 r2</text><text x="729.17" y="16.33">r1 w1 a2 w2 r2 a1</text><text x="770.83" y="16.33">r1 w1 w2 a1 r2 a2</text><text x="812.5" y="16.33">r1 w1 w2 a1 a2 r2</text><text x="854.17" y="16.33">r1 w1 w2 r2 a1 a2</text><text x="895.83" y="16.33">r1 w1 w2 r2 a2 a1</text><text x="937.5" y="16.33">r1 w1 w2 a2 a1 r2</text><text x="979.17" y="16.33">r1 w1 w2 a2 r2 a1</text><text x="62.5" y="26.33">r1 r2 a1 w1 w2 a2</text><text x="187.5" y="26.33">r1 r2 a1 w2 w1 a2</text><text x="229.17" y="26.33">r1 r2 a1 w2 a2 w1</text><text x="270.83" y="26.33">r1 r2 w1 a1 a2 w2</text>
+      <text x="312.5" y="26.33">r1 r2 w1 a1 w2 a2</text><text x="354.17" y="26.33">r1 r2 w1 a2 a1 w2</text><text x="395.83" y="26.33">r1 r2 w1 a2 w2 a1</text><text x="437.5" y="26.33">r1 r2 w1 w2 a1 a2</text><text x="479.17" y="26.33">r1 r2 w1 w2 a2 a1</text><text x="604.17" y="26.33">r1 r2 a2 w1 a1 w2</text><text x="645.83" y="26.33">r1 r2 a2 w1 w2 a1</text><text x="729.17" y="26.33">r1 r2 a2 w2 w1 a1</text><text x="770.83" y="26.33">r1 r2 w2 a1 w1 a2</text><text x="812.5" y="26.33">r1 r2 w2 a1 a2 w1</text><text x="854.17" y="26.33">r1 r2 w2 w1 a1 a2</text><text x="895.83" y="26.33">r1 r2 w2 w1 a2 a1</text><text x="937.5" y="26.33">r1 r2 w2 a2 a1 w1</text><text x="979.17" y="26.33">r1 r2 w2 a2 w1 a1</text><text x="20.83" y="36.33">r1 a2 a1 w1 r2 w2</text><text x="62.5" y="36.33">r1 a2 a1 w1 w2 r2</text><text x="104.17" y="36.33">r1 a2 a1 r2 w1 w2</text><text x="145.83" y="36.33">r1 a2 a1 r2 w2 w1</text><text x="187.5" y="36.33">r1 a2 a1 w2 w1 r2</text><text x="229.17" y="36.33">r1 a2 a1 w2 r2 w1</text><text x="270.83" y="36.33">r1 a2 w1 a1 r2 w2</text><text x="312.5" y="36.33">r1 a2 w1 a1 w2 r2</text><text x="354.17" y="36.33">r1 a2 w1 r2 a1 w2</text><text x="395.83" y="36.33">r1 a2 w1 r2 w2 a1</text>
+      <text x="437.5" y="36.33">r1 a2 w1 w2 a1 r2</text><text x="479.17" y="36.33">r1 a2 w1 w2 r2 a1</text><text x="520.83" y="36.33">r1 a2 r2 a1 w1 w2</text><text x="562.5" y="36.33">r1 a2 r2 a1 w2 w1</text><text x="604.17" y="36.33">r1 a2 r2 w1 a1 w2</text><text x="645.83" y="36.33">r1 a2 r2 w1 w2 a1</text><text x="687.5" y="36.33">r1 a2 r2 w2 a1 w1</text><text x="729.17" y="36.33">r1 a2 r2 w2 w1 a1</text><text x="770.83" y="36.33">r1 a2 w2 a1 w1 r2</text><text x="812.5" y="36.33">r1 a2 w2 a1 r2 w1</text><text x="854.17" y="36.33">r1 a2 w2 w1 a1 r2</text><text x="895.83" y="36.33">r1 a2 w2 w1 r2 a1</text><text x="937.5" y="36.33">r1 a2 w2 r2 a1 w1</text><text x="979.17" y="36.33">r1 a2 w2 r2 w1 a1</text><text x="20.83" y="46.33">r1 w2 a1 w1 r2 a2</text><text x="62.5" y="46.33">r1 w2 a1 w1 a2 r2</text><text x="104.17" y="46.33">r1 w2 a1 r2 w1 a2</text><text x="145.83" y="46.33">r1 w2 a1 r2 a2 w1</text><text x="187.5" y="46.33">r1 w2 a1 a2 w1 r2</text><text x="229.17" y="46.33">r1 w2 a1 a2 r2 w1</text><text x="270.83" y="46.33">r1 w2 w1 a1 r2 a2</text><text x="312.5" y="46.33">r1 w2 w1 a1 a2 r2</text><text x="354.17" y="46.33">r1 w2 w1 r2 a1 a2</text><text x="395.83" y="46.33">r1 w2 w1 r2 a2 a1</text>
+      <text x="437.5" y="46.33">r1 w2 w1 a2 a1 r2</text><text x="479.17" y="46.33">r1 w2 w1 a2 r2 a1</text><text x="520.83" y="46.33">r1 w2 r2 a1 w1 a2</text><text x="562.5" y="46.33">r1 w2 r2 a1 a2 w1</text><text x="604.17" y="46.33">r1 w2 r2 w1 a1 a2</text><text x="645.83" y="46.33">r1 w2 r2 w1 a2 a1</text><text x="687.5" y="46.33">r1 w2 r2 a2 a1 w1</text><text x="729.17" y="46.33">r1 w2 r2 a2 w1 a1</text><text x="770.83" y="46.33">r1 w2 a2 a1 w1 r2</text><text x="812.5" y="46.33">r1 w2 a2 a1 r2 w1</text><text x="854.17" y="46.33">r1 w2 a2 w1 a1 r2</text><text x="895.83" y="46.33">r1 w2 a2 w1 r2 a1</text><text x="937.5" y="46.33">r1 w2 a2 r2 a1 w1</text><text x="979.17" y="46.33">r1 w2 a2 r2 w1 a1</text><text x="20.83" y="56.33">a1 r1 w1 r2 a2 w2</text><text x="62.5" y="56.33">a1 r1 w1 r2 w2 a2</text><text x="104.17" y="56.33">a1 r1 w1 a2 r2 w2</text><text x="145.83" y="56.33">a1 r1 w1 a2 w2 r2</text><text x="187.5" y="56.33">a1 r1 w1 w2 r2 a2</text><text x="229.17" y="56.33">a1 r1 w1 w2 a2 r2</text><text x="270.83" y="56.33">a1 r1 r2 w1 a2 w2</text><text x="312.5" y="56.33">a1 r1 r2 w1 w2 a2</text><text x="354.17" y="56.33">a1 r1 r2 a2 w1 w2</text><text x="395.83" y="56.33">a1 r1 r2 a2 w2 w1</text>
+      <text x="437.5" y="56.33">a1 r1 r2 w2 w1 a2</text><text x="479.17" y="56.33">a1 r1 r2 w2 a2 w1</text><text x="520.83" y="56.33">a1 r1 a2 w1 r2 w2</text><text x="562.5" y="56.33">a1 r1 a2 w1 w2 r2</text><text x="604.17" y="56.33">a1 r1 a2 r2 w1 w2</text><text x="645.83" y="56.33">a1 r1 a2 r2 w2 w1</text><text x="687.5" y="56.33">a1 r1 a2 w2 w1 r2</text><text x="729.17" y="56.33">a1 r1 a2 w2 r2 w1</text><text x="770.83" y="56.33">a1 r1 w2 w1 r2 a2</text><text x="812.5" y="56.33">a1 r1 w2 w1 a2 r2</text><text x="854.17" y="56.33">a1 r1 w2 r2 w1 a2</text><text x="895.83" y="56.33">a1 r1 w2 r2 a2 w1</text><text x="937.5" y="56.33">a1 r1 w2 a2 w1 r2</text><text x="979.17" y="56.33">a1 r1 w2 a2 r2 w1</text><text x="20.83" y="66.33">a1 w1 r1 r2 a2 w2</text><text x="62.5" y="66.33">a1 w1 r1 r2 w2 a2</text><text x="104.17" y="66.33">a1 w1 r1 a2 r2 w2</text><text x="145.83" y="66.33">a1 w1 r1 a2 w2 r2</text><text x="187.5" y="66.33">a1 w1 r1 w2 r2 a2</text><text x="229.17" y="66.33">a1 w1 r1 w2 a2 r2</text><text x="270.83" y="66.33">a1 w1 r2 r1 a2 w2</text><text x="312.5" y="66.33">a1 w1 r2 r1 w2 a2</text><text x="354.17" y="66.33">a1 w1 r2 a2 r1 w2</text><text x="395.83" y="66.33">a1 w1 r2 a2 w2 r1</text>
+      <text x="437.5" y="66.33">a1 w1 r2 w2 r1 a2</text><text x="479.17" y="66.33">a1 w1 r2 w2 a2 r1</text><text x="520.83" y="66.33">a1 w1 a2 r1 r2 w2</text><text x="562.5" y="66.33">a1 w1 a2 r1 w2 r2</text><text x="604.17" y="66.33">a1 w1 a2 r2 r1 w2</text><text x="645.83" y="66.33">a1 w1 a2 r2 w2 r1</text><text x="687.5" y="66.33">a1 w1 a2 w2 r1 r2</text><text x="729.17" y="66.33">a1 w1 a2 w2 r2 r1</text><text x="770.83" y="66.33">a1 w1 w2 r1 r2 a2</text><text x="812.5" y="66.33">a1 w1 w2 r1 a2 r2</text><text x="854.17" y="66.33">a1 w1 w2 r2 r1 a2</text><text x="895.83" y="66.33">a1 w1 w2 r2 a2 r1</text><text x="937.5" y="66.33">a1 w1 w2 a2 r1 r2</text><text x="979.17" y="66.33">a1 w1 w2 a2 r2 r1</text><text x="20.83" y="76.33">a1 r2 r1 w1 a2 w2</text><text x="62.5" y="76.33">a1 r2 r1 w1 w2 a2</text><text x="104.17" y="76.33">a1 r2 r1 a2 w1 w2</text><text x="145.83" y="76.33">a1 r2 r1 a2 w2 w1</text><text x="187.5" y="76.33">a1 r2 r1 w2 w1 a2</text><text x="229.17" y="76.33">a1 r2 r1 w2 a2 w1</text><text x="270.83" y="76.33">a1 r2 w1 r1 a2 w2</text><text x="312.5" y="76.33">a1 r2 w1 r1 w2 a2</text><text x="354.17" y="76.33">a1 r2 w1 a2 r1 w2</text><text x="395.83" y="76.33">a1 r2 w1 a2 w2 r1</text>
+      <text x="437.5" y="76.33">a1 r2 w1 w2 r1 a2</text><text x="479.17" y="76.33">a1 r2 w1 w2 a2 r1</text><text x="520.83" y="76.33">a1 r2 a2 r1 w1 w2</text><text x="562.5" y="76.33">a1 r2 a2 r1 w2 w1</text><text x="604.17" y="76.33">a1 r2 a2 w1 r1 w2</text><text x="645.83" y="76.33">a1 r2 a2 w1 w2 r1</text><text x="687.5" y="76.33">a1 r2 a2 w2 r1 w1</text><text x="729.17" y="76.33">a1 r2 a2 w2 w1 r1</text><text x="770.83" y="76.33">a1 r2 w2 r1 w1 a2</text><text x="812.5" y="76.33">a1 r2 w2 r1 a2 w1</text><text x="854.17" y="76.33">a1 r2 w2 w1 r1 a2</text><text x="895.83" y="76.33">a1 r2 w2 w1 a2 r1</text><text x="937.5" y="76.33">a1 r2 w2 a2 r1 w1</text><text x="979.17" y="76.33">a1 r2 w2 a2 w1 r1</text><text x="20.83" y="86.33">a1 a2 r1 w1 r2 w2</text><text x="62.5" y="86.33">a1 a2 r1 w1 w2 r2</text><text x="104.17" y="86.33">a1 a2 r1 r2 w1 w2</text><text x="145.83" y="86.33">a1 a2 r1 r2 w2 w1</text><text x="187.5" y="86.33">a1 a2 r1 w2 w1 r2</text><text x="229.17" y="86.33">a1 a2 r1 w2 r2 w1</text><text x="270.83" y="86.33">a1 a2 w1 r1 r2 w2</text><text x="312.5" y="86.33">a1 a2 w1 r1 w2 r2</text><text x="354.17" y="86.33">a1 a2 w1 r2 r1 w2</text><text x="395.83" y="86.33">a1 a2 w1 r2 w2 r1</text>
+      <text x="437.5" y="86.33">a1 a2 w1 w2 r1 r2</text><text x="479.17" y="86.33">a1 a2 w1 w2 r2 r1</text><text x="520.83" y="86.33">a1 a2 r2 r1 w1 w2</text><text x="562.5" y="86.33">a1 a2 r2 r1 w2 w1</text><text x="604.17" y="86.33">a1 a2 r2 w1 r1 w2</text><text x="645.83" y="86.33">a1 a2 r2 w1 w2 r1</text><text x="687.5" y="86.33">a1 a2 r2 w2 r1 w1</text><text x="729.17" y="86.33">a1 a2 r2 w2 w1 r1</text><text x="770.83" y="86.33">a1 a2 w2 r1 w1 r2</text><text x="812.5" y="86.33">a1 a2 w2 r1 r2 w1</text><text x="854.17" y="86.33">a1 a2 w2 w1 r1 r2</text><text x="895.83" y="86.33">a1 a2 w2 w1 r2 r1</text><text x="937.5" y="86.33">a1 a2 w2 r2 r1 w1</text><text x="979.17" y="86.33">a1 a2 w2 r2 w1 r1</text><text x="20.83" y="96.33">a1 w2 r1 w1 r2 a2</text><text x="62.5" y="96.33">a1 w2 r1 w1 a2 r2</text><text x="104.17" y="96.33">a1 w2 r1 r2 w1 a2</text><text x="145.83" y="96.33">a1 w2 r1 r2 a2 w1</text><text x="187.5" y="96.33">a1 w2 r1 a2 w1 r2</text><text x="229.17" y="96.33">a1 w2 r1 a2 r2 w1</text><text x="270.83" y="96.33">a1 w2 w1 r1 r2 a2</text><text x="312.5" y="96.33">a1 w2 w1 r1 a2 r2</text><text x="354.17" y="96.33">a1 w2 w1 r2 r1 a2</text><text x="395.83" y="96.33">a1 w2 w1 r2 a2 r1</text>
+      <text x="437.5" y="96.33">a1 w2 w1 a2 r1 r2</text><text x="479.17" y="96.33">a1 w2 w1 a2 r2 r1</text><text x="520.83" y="96.33">a1 w2 r2 r1 w1 a2</text><text x="562.5" y="96.33">a1 w2 r2 r1 a2 w1</text><text x="604.17" y="96.33">a1 w2 r2 w1 r1 a2</text><text x="645.83" y="96.33">a1 w2 r2 w1 a2 r1</text><text x="687.5" y="96.33">a1 w2 r2 a2 r1 w1</text><text x="729.17" y="96.33">a1 w2 r2 a2 w1 r1</text><text x="770.83" y="96.33">a1 w2 a2 r1 w1 r2</text><text x="812.5" y="96.33">a1 w2 a2 r1 r2 w1</text><text x="854.17" y="96.33">a1 w2 a2 w1 r1 r2</text><text x="895.83" y="96.33">a1 w2 a2 w1 r2 r1</text><text x="937.5" y="96.33">a1 w2 a2 r2 r1 w1</text><text x="979.17" y="96.33">a1 w2 a2 r2 w1 r1</text><text x="20.83" y="106.33">w1 r1 a1 r2 a2 w2</text><text x="62.5" y="106.33">w1 r1 a1 r2 w2 a2</text><text x="104.17" y="106.33">w1 r1 a1 a2 r2 w2</text><text x="145.83" y="106.33">w1 r1 a1 a2 w2 r2</text><text x="187.5" y="106.33">w1 r1 a1 w2 r2 a2</text><text x="229.17" y="106.33">w1 r1 a1 w2 a2 r2</text><text x="270.83" y="106.33">w1 r1 r2 a1 a2 w2</text><text x="312.5" y="106.33">w1 r1 r2 a1 w2 a2</text><text x="354.17" y="106.33">w1 r1 r2 a2 a1 w2</text><text x="395.83" y="106.33">w1 r1 r2 a2 w2 a1</text>
+      <text x="437.5" y="106.33">w1 r1 r2 w2 a1 a2</text><text x="479.17" y="106.33">w1 r1 r2 w2 a2 a1</text><text x="520.83" y="106.33">w1 r1 a2 a1 r2 w2</text><text x="562.5" y="106.33">w1 r1 a2 a1 w2 r2</text><text x="604.17" y="106.33">w1 r1 a2 r2 a1 w2</text><text x="645.83" y="106.33">w1 r1 a2 r2 w2 a1</text><text x="687.5" y="106.33">w1 r1 a2 w2 a1 r2</text><text x="729.17" y="106.33">w1 r1 a2 w2 r2 a1</text><text x="770.83" y="106.33">w1 r1 w2 a1 r2 a2</text><text x="812.5" y="106.33">w1 r1 w2 a1 a2 r2</text><text x="854.17" y="106.33">w1 r1 w2 r2 a1 a2</text><text x="895.83" y="106.33">w1 r1 w2 r2 a2 a1</text><text x="937.5" y="106.33">w1 r1 w2 a2 a1 r2</text><text x="979.17" y="106.33">w1 r1 w2 a2 r2 a1</text><text x="20.83" y="116.33">w1 a1 r1 r2 a2 w2</text><text x="62.5" y="116.33">w1 a1 r1 r2 w2 a2</text><text x="104.17" y="116.33">w1 a1 r1 a2 r2 w2</text><text x="145.83" y="116.33">w1 a1 r1 a2 w2 r2</text><text x="187.5" y="116.33">w1 a1 r1 w2 r2 a2</text><text x="229.17" y="116.33">w1 a1 r1 w2 a2 r2</text><text x="270.83" y="116.33">w1 a1 r2 r1 a2 w2</text><text x="312.5" y="116.33">w1 a1 r2 r1 w2 a2</text><text x="354.17" y="116.33">w1 a1 r2 a2 r1 w2</text><text x="395.83" y="116.33">w1 a1 r2 a2 w2 r1</text>
+      <text x="437.5" y="116.33">w1 a1 r2 w2 r1 a2</text><text x="479.17" y="116.33">w1 a1 r2 w2 a2 r1</text><text x="520.83" y="116.33">w1 a1 a2 r1 r2 w2</text><text x="562.5" y="116.33">w1 a1 a2 r1 w2 r2</text><text x="604.17" y="116.33">w1 a1 a2 r2 r1 w2</text><text x="645.83" y="116.33">w1 a1 a2 r2 w2 r1</text><text x="687.5" y="116.33">w1 a1 a2 w2 r1 r2</text><text x="729.17" y="116.33">w1 a1 a2 w2 r2 r1</text><text x="770.83" y="116.33">w1 a1 w2 r1 r2 a2</text><text x="812.5" y="116.33">w1 a1 w2 r1 a2 r2</text><text x="854.17" y="116.33">w1 a1 w2 r2 r1 a2</text><text x="895.83" y="116.33">w1 a1 w2 r2 a2 r1</text><text x="937.5" y="116.33">w1 a1 w2 a2 r1 r2</text><text x="979.17" y="116.33">w1 a1 w2 a2 r2 r1</text><text x="20.83" y="126.33">w1 r2 r1 a1 a2 w2</text><text x="62.5" y="126.33">w1 r2 r1 a1 w2 a2</text><text x="104.17" y="126.33">w1 r2 r1 a2 a1 w2</text><text x="145.83" y="126.33">w1 r2 r1 a2 w2 a1</text><text x="187.5" y="126.33">w1 r2 r1 w2 a1 a2</text><text x="229.17" y="126.33">w1 r2 r1 w2 a2 a1</text><text x="270.83" y="126.33">w1 r2 a1 r1 a2 w2</text><text x="312.5" y="126.33">w1 r2 a1 r1 w2 a2</text><text x="354.17" y="126.33">w1 r2 a1 a2 r1 w2</text><text x="395.83" y="126.33">w1 r2 a1 a2 w2 r1</text>
+      <text x="437.5" y="126.33">w1 r2 a1 w2 r1 a2</text><text x="479.17" y="126.33">w1 r2 a1 w2 a2 r1</text><text x="520.83" y="126.33">w1 r2 a2 r1 a1 w2</text><text x="562.5" y="126.33">w1 r2 a2 r1 w2 a1</text><text x="604.17" y="126.33">w1 r2 a2 a1 r1 w2</text><text x="645.83" y="126.33">w1 r2 a2 a1 w2 r1</text><text x="687.5" y="126.33">w1 r2 a2 w2 r1 a1</text><text x="729.17" y="126.33">w1 r2 a2 w2 a1 r1</text><text x="770.83" y="126.33">w1 r2 w2 r1 a1 a2</text><text x="812.5" y="126.33">w1 r2 w2 r1 a2 a1</text><text x="854.17" y="126.33">w1 r2 w2 a1 r1 a2</text><text x="895.83" y="126.33">w1 r2 w2 a1 a2 r1</text><text x="937.5" y="126.33">w1 r2 w2 a2 r1 a1</text><text x="979.17" y="126.33">w1 r2 w2 a2 a1 r1</text><text x="20.83" y="136.33">w1 a2 r1 a1 r2 w2</text><text x="62.5" y="136.33">w1 a2 r1 a1 w2 r2</text><text x="104.17" y="136.33">w1 a2 r1 r2 a1 w2</text><text x="145.83" y="136.33">w1 a2 r1 r2 w2 a1</text><text x="187.5" y="136.33">w1 a2 r1 w2 a1 r2</text><text x="229.17" y="136.33">w1 a2 r1 w2 r2 a1</text><text x="270.83" y="136.33">w1 a2 a1 r1 r2 w2</text><text x="312.5" y="136.33">w1 a2 a1 r1 w2 r2</text><text x="354.17" y="136.33">w1 a2 a1 r2 r1 w2</text><text x="395.83" y="136.33">w1 a2 a1 r2 w2 r1</text>
+      <text x="437.5" y="136.33">w1 a2 a1 w2 r1 r2</text><text x="479.17" y="136.33">w1 a2 a1 w2 r2 r1</text><text x="520.83" y="136.33">w1 a2 r2 r1 a1 w2</text><text x="562.5" y="136.33">w1 a2 r2 r1 w2 a1</text><text x="604.17" y="136.33">w1 a2 r2 a1 r1 w2</text><text x="645.83" y="136.33">w1 a2 r2 a1 w2 r1</text><text x="687.5" y="136.33">w1 a2 r2 w2 r1 a1</text><text x="729.17" y="136.33">w1 a2 r2 w2 a1 r1</text><text x="770.83" y="136.33">w1 a2 w2 r1 a1 r2</text><text x="812.5" y="136.33">w1 a2 w2 r1 r2 a1</text><text x="854.17" y="136.33">w1 a2 w2 a1 r1 r2</text><text x="895.83" y="136.33">w1 a2 w2 a1 r2 r1</text><text x="937.5" y="136.33">w1 a2 w2 r2 r1 a1</text><text x="979.17" y="136.33">w1 a2 w2 r2 a1 r1</text><text x="20.83" y="146.33">w1 w2 r1 a1 r2 a2</text><text x="62.5" y="146.33">w1 w2 r1 a1 a2 r2</text><text x="104.17" y="146.33">w1 w2 r1 r2 a1 a2</text><text x="145.83" y="146.33">w1 w2 r1 r2 a2 a1</text><text x="187.5" y="146.33">w1 w2 r1 a2 a1 r2</text><text x="229.17" y="146.33">w1 w2 r1 a2 r2 a1</text><text x="270.83" y="146.33">w1 w2 a1 r1 r2 a2</text><text x="312.5" y="146.33">w1 w2 a1 r1 a2 r2</text><text x="354.17" y="146.33">w1 w2 a1 r2 r1 a2</text><text x="395.83" y="146.33">w1 w2 a1 r2 a2 r1</text>
+      <text x="437.5" y="146.33">w1 w2 a1 a2 r1 r2</text><text x="479.17" y="146.33">w1 w2 a1 a2 r2 r1</text><text x="520.83" y="146.33">w1 w2 r2 r1 a1 a2</text><text x="562.5" y="146.33">w1 w2 r2 r1 a2 a1</text><text x="604.17" y="146.33">w1 w2 r2 a1 r1 a2</text><text x="645.83" y="146.33">w1 w2 r2 a1 a2 r1</text><text x="687.5" y="146.33">w1 w2 r2 a2 r1 a1</text><text x="729.17" y="146.33">w1 w2 r2 a2 a1 r1</text><text x="770.83" y="146.33">w1 w2 a2 r1 a1 r2</text><text x="812.5" y="146.33">w1 w2 a2 r1 r2 a1</text><text x="854.17" y="146.33">w1 w2 a2 a1 r1 r2</text><text x="895.83" y="146.33">w1 w2 a2 a1 r2 r1</text><text x="937.5" y="146.33">w1 w2 a2 r2 r1 a1</text><text x="979.17" y="146.33">w1 w2 a2 r2 a1 r1</text><text x="62.5" y="156.33">r2 r1 a1 w1 w2 a2</text><text x="187.5" y="156.33">r2 r1 a1 w2 w1 a2</text><text x="229.17" y="156.33">r2 r1 a1 w2 a2 w1</text><text x="270.83" y="156.33">r2 r1 w1 a1 a2 w2</text><text x="312.5" y="156.33">r2 r1 w1 a1 w2 a2</text><text x="354.17" y="156.33">r2 r1 w1 a2 a1 w2</text><text x="395.83" y="156.33">r2 r1 w1 a2 w2 a1</text><text x="437.5" y="156.33">r2 r1 w1 w2 a1 a2</text><text x="479.17" y="156.33">r2 r1 w1 w2 a2 a1</text><text x="604.17" y="156.33">r2 r1 a2 w1 a1 w2</text>
+      <text x="645.83" y="156.33">r2 r1 a2 w1 w2 a1</text><text x="729.17" y="156.33">r2 r1 a2 w2 w1 a1</text><text x="770.83" y="156.33">r2 r1 w2 a1 w1 a2</text><text x="812.5" y="156.33">r2 r1 w2 a1 a2 w1</text><text x="854.17" y="156.33">r2 r1 w2 w1 a1 a2</text><text x="895.83" y="156.33">r2 r1 w2 w1 a2 a1</text><text x="937.5" y="156.33">r2 r1 w2 a2 a1 w1</text><text x="979.17" y="156.33">r2 r1 w2 a2 w1 a1</text><text x="20.83" y="166.33">r2 a1 r1 w1 a2 w2</text><text x="62.5" y="166.33">r2 a1 r1 w1 w2 a2</text><text x="104.17" y="166.33">r2 a1 r1 a2 w1 w2</text><text x="145.83" y="166.33">r2 a1 r1 a2 w2 w1</text><text x="187.5" y="166.33">r2 a1 r1 w2 w1 a2</text><text x="229.17" y="166.33">r2 a1 r1 w2 a2 w1</text><text x="270.83" y="166.33">r2 a1 w1 r1 a2 w2</text><text x="312.5" y="166.33">r2 a1 w1 r1 w2 a2</text><text x="354.17" y="166.33">r2 a1 w1 a2 r1 w2</text><text x="395.83" y="166.33">r2 a1 w1 a2 w2 r1</text><text x="437.5" y="166.33">r2 a1 w1 w2 r1 a2</text><text x="479.17" y="166.33">r2 a1 w1 w2 a2 r1</text><text x="520.83" y="166.33">r2 a1 a2 r1 w1 w2</text><text x="562.5" y="166.33">r2 a1 a2 r1 w2 w1</text><text x="604.17" y="166.33">r2 a1 a2 w1 r1 w2</text><text x="645.83" y="166.33">r2 a1 a2 w1 w2 r1</text>
+      <text x="687.5" y="166.33">r2 a1 a2 w2 r1 w1</text><text x="729.17" y="166.33">r2 a1 a2 w2 w1 r1</text><text x="770.83" y="166.33">r2 a1 w2 r1 w1 a2</text><text x="812.5" y="166.33">r2 a1 w2 r1 a2 w1</text><text x="854.17" y="166.33">r2 a1 w2 w1 r1 a2</text><text x="895.83" y="166.33">r2 a1 w2 w1 a2 r1</text><text x="937.5" y="166.33">r2 a1 w2 a2 r1 w1</text><text x="979.17" y="166.33">r2 a1 w2 a2 w1 r1</text><text x="20.83" y="176.33">r2 w1 r1 a1 a2 w2</text><text x="62.5" y="176.33">r2 w1 r1 a1 w2 a2</text><text x="104.17" y="176.33">r2 w1 r1 a2 a1 w2</text><text x="145.83" y="176.33">r2 w1 r1 a2 w2 a1</text><text x="187.5" y="176.33">r2 w1 r1 w2 a1 a2</text><text x="229.17" y="176.33">r2 w1 r1 w2 a2 a1</text><text x="270.83" y="176.33">r2 w1 a1 r1 a2 w2</text><text x="312.5" y="176.33">r2 w1 a1 r1 w2 a2</text><text x="354.17" y="176.33">r2 w1 a1 a2 r1 w2</text><text x="395.83" y="176.33">r2 w1 a1 a2 w2 r1</text><text x="437.5" y="176.33">r2 w1 a1 w2 r1 a2</text><text x="479.17" y="176.33">r2 w1 a1 w2 a2 r1</text><text x="520.83" y="176.33">r2 w1 a2 r1 a1 w2</text><text x="562.5" y="176.33">r2 w1 a2 r1 w2 a1</text><text x="604.17" y="176.33">r2 w1 a2 a1 r1 w2</text><text x="645.83" y="176.33">r2 w1 a2 a1 w2 r1</text>
+      <text x="687.5" y="176.33">r2 w1 a2 w2 r1 a1</text><text x="729.17" y="176.33">r2 w1 a2 w2 a1 r1</text><text x="770.83" y="176.33">r2 w1 w2 r1 a1 a2</text><text x="812.5" y="176.33">r2 w1 w2 r1 a2 a1</text><text x="854.17" y="176.33">r2 w1 w2 a1 r1 a2</text><text x="895.83" y="176.33">r2 w1 w2 a1 a2 r1</text><text x="937.5" y="176.33">r2 w1 w2 a2 r1 a1</text><text x="979.17" y="176.33">r2 w1 w2 a2 a1 r1</text><text x="104.17" y="186.33">r2 a2 r1 w1 a1 w2</text><text x="145.83" y="186.33">r2 a2 r1 w1 w2 a1</text><text x="229.17" y="186.33">r2 a2 r1 w2 w1 a1</text><text x="270.83" y="186.33">r2 a2 a1 r1 w1 w2</text><text x="312.5" y="186.33">r2 a2 a1 r1 w2 w1</text><text x="354.17" y="186.33">r2 a2 a1 w1 r1 w2</text><text x="395.83" y="186.33">r2 a2 a1 w1 w2 r1</text><text x="437.5" y="186.33">r2 a2 a1 w2 r1 w1</text><text x="479.17" y="186.33">r2 a2 a1 w2 w1 r1</text><text x="520.83" y="186.33">r2 a2 w1 r1 a1 w2</text><text x="562.5" y="186.33">r2 a2 w1 r1 w2 a1</text><text x="604.17" y="186.33">r2 a2 w1 a1 r1 w2</text><text x="645.83" y="186.33">r2 a2 w1 a1 w2 r1</text><text x="687.5" y="186.33">r2 a2 w1 w2 r1 a1</text><text x="729.17" y="186.33">r2 a2 w1 w2 a1 r1</text><text x="812.5" y="186.33">r2 a2 w2 r1 w1 a1</text>
+      <text x="854.17" y="186.33">r2 a2 w2 a1 r1 w1</text><text x="895.83" y="186.33">r2 a2 w2 a1 w1 r1</text><text x="937.5" y="186.33">r2 a2 w2 w1 r1 a1</text><text x="979.17" y="186.33">r2 a2 w2 w1 a1 r1</text><text x="20.83" y="196.33">r2 w2 r1 a1 w1 a2</text><text x="62.5" y="196.33">r2 w2 r1 a1 a2 w1</text><text x="104.17" y="196.33">r2 w2 r1 w1 a1 a2</text><text x="145.83" y="196.33">r2 w2 r1 w1 a2 a1</text><text x="187.5" y="196.33">r2 w2 r1 a2 a1 w1</text><text x="229.17" y="196.33">r2 w2 r1 a2 w1 a1</text><text x="270.83" y="196.33">r2 w2 a1 r1 w1 a2</text><text x="312.5" y="196.33">r2 w2 a1 r1 a2 w1</text><text x="354.17" y="196.33">r2 w2 a1 w1 r1 a2</text><text x="395.83" y="196.33">r2 w2 a1 w1 a2 r1</text><text x="437.5" y="196.33">r2 w2 a1 a2 r1 w1</text><text x="479.17" y="196.33">r2 w2 a1 a2 w1 r1</text><text x="520.83" y="196.33">r2 w2 w1 r1 a1 a2</text><text x="562.5" y="196.33">r2 w2 w1 r1 a2 a1</text><text x="604.17" y="196.33">r2 w2 w1 a1 r1 a2</text><text x="645.83" y="196.33">r2 w2 w1 a1 a2 r1</text><text x="687.5" y="196.33">r2 w2 w1 a2 r1 a1</text><text x="729.17" y="196.33">r2 w2 w1 a2 a1 r1</text><text x="770.83" y="196.33">r2 w2 a2 r1 a1 w1</text><text x="812.5" y="196.33">r2 w2 a2 r1 w1 a1</text>
+      <text x="854.17" y="196.33">r2 w2 a2 a1 r1 w1</text><text x="895.83" y="196.33">r2 w2 a2 a1 w1 r1</text><text x="937.5" y="196.33">r2 w2 a2 w1 r1 a1</text><text x="979.17" y="196.33">r2 w2 a2 w1 a1 r1</text><text x="20.83" y="206.33">a2 r1 a1 w1 r2 w2</text><text x="62.5" y="206.33">a2 r1 a1 w1 w2 r2</text><text x="104.17" y="206.33">a2 r1 a1 r2 w1 w2</text><text x="145.83" y="206.33">a2 r1 a1 r2 w2 w1</text><text x="187.5" y="206.33">a2 r1 a1 w2 w1 r2</text><text x="229.17" y="206.33">a2 r1 a1 w2 r2 w1</text><text x="270.83" y="206.33">a2 r1 w1 a1 r2 w2</text><text x="312.5" y="206.33">a2 r1 w1 a1 w2 r2</text><text x="354.17" y="206.33">a2 r1 w1 r2 a1 w2</text><text x="395.83" y="206.33">a2 r1 w1 r2 w2 a1</text><text x="437.5" y="206.33">a2 r1 w1 w2 a1 r2</text><text x="479.17" y="206.33">a2 r1 w1 w2 r2 a1</text><text x="520.83" y="206.33">a2 r1 r2 a1 w1 w2</text><text x="562.5" y="206.33">a2 r1 r2 a1 w2 w1</text><text x="604.17" y="206.33">a2 r1 r2 w1 a1 w2</text><text x="645.83" y="206.33">a2 r1 r2 w1 w2 a1</text><text x="687.5" y="206.33">a2 r1 r2 w2 a1 w1</text><text x="729.17" y="206.33">a2 r1 r2 w2 w1 a1</text><text x="770.83" y="206.33">a2 r1 w2 a1 w1 r2</text><text x="812.5" y="206.33">a2 r1 w2 a1 r2 w1</text>
+      <text x="854.17" y="206.33">a2 r1 w2 w1 a1 r2</text><text x="895.83" y="206.33">a2 r1 w2 w1 r2 a1</text><text x="937.5" y="206.33">a2 r1 w2 r2 a1 w1</text><text x="979.17" y="206.33">a2 r1 w2 r2 w1 a1</text><text x="20.83" y="216.33">a2 a1 r1 w1 r2 w2</text><text x="62.5" y="216.33">a2 a1 r1 w1 w2 r2</text><text x="104.17" y="216.33">a2 a1 r1 r2 w1 w2</text><text x="145.83" y="216.33">a2 a1 r1 r2 w2 w1</text><text x="187.5" y="216.33">a2 a1 r1 w2 w1 r2</text><text x="229.17" y="216.33">a2 a1 r1 w2 r2 w1</text><text x="270.83" y="216.33">a2 a1 w1 r1 r2 w2</text><text x="312.5" y="216.33">a2 a1 w1 r1 w2 r2</text><text x="354.17" y="216.33">a2 a1 w1 r2 r1 w2</text><text x="395.83" y="216.33">a2 a1 w1 r2 w2 r1</text><text x="437.5" y="216.33">a2 a1 w1 w2 r1 r2</text><text x="479.17" y="216.33">a2 a1 w1 w2 r2 r1</text><text x="520.83" y="216.33">a2 a1 r2 r1 w1 w2</text><text x="562.5" y="216.33">a2 a1 r2 r1 w2 w1</text><text x="604.17" y="216.33">a2 a1 r2 w1 r1 w2</text><text x="645.83" y="216.33">a2 a1 r2 w1 w2 r1</text><text x="687.5" y="216.33">a2 a1 r2 w2 r1 w1</text><text x="729.17" y="216.33">a2 a1 r2 w2 w1 r1</text><text x="770.83" y="216.33">a2 a1 w2 r1 w1 r2</text><text x="812.5" y="216.33">a2 a1 w2 r1 r2 w1</text>
+      <text x="854.17" y="216.33">a2 a1 w2 w1 r1 r2</text><text x="895.83" y="216.33">a2 a1 w2 w1 r2 r1</text><text x="937.5" y="216.33">a2 a1 w2 r2 r1 w1</text><text x="979.17" y="216.33">a2 a1 w2 r2 w1 r1</text><text x="20.83" y="226.33">a2 w1 r1 a1 r2 w2</text><text x="62.5" y="226.33">a2 w1 r1 a1 w2 r2</text><text x="104.17" y="226.33">a2 w1 r1 r2 a1 w2</text><text x="145.83" y="226.33">a2 w1 r1 r2 w2 a1</text><text x="187.5" y="226.33">a2 w1 r1 w2 a1 r2</text><text x="229.17" y="226.33">a2 w1 r1 w2 r2 a1</text><text x="270.83" y="226.33">a2 w1 a1 r1 r2 w2</text><text x="312.5" y="226.33">a2 w1 a1 r1 w2 r2</text><text x="354.17" y="226.33">a2 w1 a1 r2 r1 w2</text><text x="395.83" y="226.33">a2 w1 a1 r2 w2 r1</text><text x="437.5" y="226.33">a2 w1 a1 w2 r1 r2</text><text x="479.17" y="226.33">a2 w1 a1 w2 r2 r1</text><text x="520.83" y="226.33">a2 w1 r2 r1 a1 w2</text><text x="562.5" y="226.33">a2 w1 r2 r1 w2 a1</text><text x="604.17" y="226.33">a2 w1 r2 a1 r1 w2</text><text x="645.83" y="226.33">a2 w1 r2 a1 w2 r1</text><text x="687.5" y="226.33">a2 w1 r2 w2 r1 a1</text><text x="729.17" y="226.33">a2 w1 r2 w2 a1 r1</text><text x="770.83" y="226.33">a2 w1 w2 r1 a1 r2</text><text x="812.5" y="226.33">a2 w1 w2 r1 r2 a1</text>
+      <text x="854.17" y="226.33">a2 w1 w2 a1 r1 r2</text><text x="895.83" y="226.33">a2 w1 w2 a1 r2 r1</text><text x="937.5" y="226.33">a2 w1 w2 r2 r1 a1</text><text x="979.17" y="226.33">a2 w1 w2 r2 a1 r1</text><text x="20.83" y="236.33">a2 r2 r1 a1 w1 w2</text><text x="62.5" y="236.33">a2 r2 r1 a1 w2 w1</text><text x="104.17" y="236.33">a2 r2 r1 w1 a1 w2</text><text x="145.83" y="236.33">a2 r2 r1 w1 w2 a1</text><text x="187.5" y="236.33">a2 r2 r1 w2 a1 w1</text><text x="229.17" y="236.33">a2 r2 r1 w2 w1 a1</text><text x="270.83" y="236.33">a2 r2 a1 r1 w1 w2</text><text x="312.5" y="236.33">a2 r2 a1 r1 w2 w1</text><text x="354.17" y="236.33">a2 r2 a1 w1 r1 w2</text><text x="395.83" y="236.33">a2 r2 a1 w1 w2 r1</text><text x="437.5" y="236.33">a2 r2 a1 w2 r1 w1</text><text x="479.17" y="236.33">a2 r2 a1 w2 w1 r1</text><text x="520.83" y="236.33">a2 r2 w1 r1 a1 w2</text><text x="562.5" y="236.33">a2 r2 w1 r1 w2 a1</text><text x="604.17" y="236.33">a2 r2 w1 a1 r1 w2</text><text x="645.83" y="236.33">a2 r2 w1 a1 w2 r1</text><text x="687.5" y="236.33">a2 r2 w1 w2 r1 a1</text><text x="729.17" y="236.33">a2 r2 w1 w2 a1 r1</text><text x="770.83" y="236.33">a2 r2 w2 r1 a1 w1</text><text x="812.5" y="236.33">a2 r2 w2 r1 w1 a1</text>
+      <text x="854.17" y="236.33">a2 r2 w2 a1 r1 w1</text><text x="895.83" y="236.33">a2 r2 w2 a1 w1 r1</text><text x="937.5" y="236.33">a2 r2 w2 w1 r1 a1</text><text x="979.17" y="236.33">a2 r2 w2 w1 a1 r1</text><text x="20.83" y="246.33">a2 w2 r1 a1 w1 r2</text><text x="62.5" y="246.33">a2 w2 r1 a1 r2 w1</text><text x="104.17" y="246.33">a2 w2 r1 w1 a1 r2</text><text x="145.83" y="246.33">a2 w2 r1 w1 r2 a1</text><text x="187.5" y="246.33">a2 w2 r1 r2 a1 w1</text><text x="229.17" y="246.33">a2 w2 r1 r2 w1 a1</text><text x="270.83" y="246.33">a2 w2 a1 r1 w1 r2</text><text x="312.5" y="246.33">a2 w2 a1 r1 r2 w1</text><text x="354.17" y="246.33">a2 w2 a1 w1 r1 r2</text><text x="395.83" y="246.33">a2 w2 a1 w1 r2 r1</text><text x="437.5" y="246.33">a2 w2 a1 r2 r1 w1</text><text x="479.17" y="246.33">a2 w2 a1 r2 w1 r1</text><text x="520.83" y="246.33">a2 w2 w1 r1 a1 r2</text><text x="562.5" y="246.33">a2 w2 w1 r1 r2 a1</text><text x="604.17" y="246.33">a2 w2 w1 a1 r1 r2</text><text x="645.83" y="246.33">a2 w2 w1 a1 r2 r1</text><text x="687.5" y="246.33">a2 w2 w1 r2 r1 a1</text><text x="729.17" y="246.33">a2 w2 w1 r2 a1 r1</text><text x="770.83" y="246.33">a2 w2 r2 r1 a1 w1</text><text x="812.5" y="246.33">a2 w2 r2 r1 w1 a1</text>
+      <text x="854.17" y="246.33">a2 w2 r2 a1 r1 w1</text><text x="895.83" y="246.33">a2 w2 r2 a1 w1 r1</text><text x="937.5" y="246.33">a2 w2 r2 w1 r1 a1</text><text x="979.17" y="246.33">a2 w2 r2 w1 a1 r1</text><text x="20.83" y="256.33">w2 r1 a1 w1 r2 a2</text><text x="62.5" y="256.33">w2 r1 a1 w1 a2 r2</text><text x="104.17" y="256.33">w2 r1 a1 r2 w1 a2</text><text x="145.83" y="256.33">w2 r1 a1 r2 a2 w1</text><text x="187.5" y="256.33">w2 r1 a1 a2 w1 r2</text><text x="229.17" y="256.33">w2 r1 a1 a2 r2 w1</text><text x="270.83" y="256.33">w2 r1 w1 a1 r2 a2</text><text x="312.5" y="256.33">w2 r1 w1 a1 a2 r2</text><text x="354.17" y="256.33">w2 r1 w1 r2 a1 a2</text><text x="395.83" y="256.33">w2 r1 w1 r2 a2 a1</text><text x="437.5" y="256.33">w2 r1 w1 a2 a1 r2</text><text x="479.17" y="256.33">w2 r1 w1 a2 r2 a1</text><text x="520.83" y="256.33">w2 r1 r2 a1 w1 a2</text><text x="562.5" y="256.33">w2 r1 r2 a1 a2 w1</text><text x="604.17" y="256.33">w2 r1 r2 w1 a1 a2</text><text x="645.83" y="256.33">w2 r1 r2 w1 a2 a1</text><text x="687.5" y="256.33">w2 r1 r2 a2 a1 w1</text><text x="729.17" y="256.33">w2 r1 r2 a2 w1 a1</text><text x="770.83" y="256.33">w2 r1 a2 a1 w1 r2</text><text x="812.5" y="256.33">w2 r1 a2 a1 r2 w1</text>
+      <text x="854.17" y="256.33">w2 r1 a2 w1 a1 r2</text><text x="895.83" y="256.33">w2 r1 a2 w1 r2 a1</text><text x="937.5" y="256.33">w2 r1 a2 r2 a1 w1</text><text x="979.17" y="256.33">w2 r1 a2 r2 w1 a1</text><text x="20.83" y="266.33">w2 a1 r1 w1 r2 a2</text><text x="62.5" y="266.33">w2 a1 r1 w1 a2 r2</text><text x="104.17" y="266.33">w2 a1 r1 r2 w1 a2</text><text x="145.83" y="266.33">w2 a1 r1 r2 a2 w1</text><text x="187.5" y="266.33">w2 a1 r1 a2 w1 r2</text><text x="229.17" y="266.33">w2 a1 r1 a2 r2 w1</text><text x="270.83" y="266.33">w2 a1 w1 r1 r2 a2</text><text x="312.5" y="266.33">w2 a1 w1 r1 a2 r2</text><text x="354.17" y="266.33">w2 a1 w1 r2 r1 a2</text><text x="395.83" y="266.33">w2 a1 w1 r2 a2 r1</text><text x="437.5" y="266.33">w2 a1 w1 a2 r1 r2</text><text x="479.17" y="266.33">w2 a1 w1 a2 r2 r1</text><text x="520.83" y="266.33">w2 a1 r2 r1 w1 a2</text><text x="562.5" y="266.33">w2 a1 r2 r1 a2 w1</text><text x="604.17" y="266.33">w2 a1 r2 w1 r1 a2</text><text x="645.83" y="266.33">w2 a1 r2 w1 a2 r1</text><text x="687.5" y="266.33">w2 a1 r2 a2 r1 w1</text><text x="729.17" y="266.33">w2 a1 r2 a2 w1 r1</text><text x="770.83" y="266.33">w2 a1 a2 r1 w1 r2</text><text x="812.5" y="266.33">w2 a1 a2 r1 r2 w1</text>
+      <text x="854.17" y="266.33">w2 a1 a2 w1 r1 r2</text><text x="895.83" y="266.33">w2 a1 a2 w1 r2 r1</text><text x="937.5" y="266.33">w2 a1 a2 r2 r1 w1</text><text x="979.17" y="266.33">w2 a1 a2 r2 w1 r1</text><text x="20.83" y="276.33">w2 w1 r1 a1 r2 a2</text><text x="62.5" y="276.33">w2 w1 r1 a1 a2 r2</text><text x="104.17" y="276.33">w2 w1 r1 r2 a1 a2</text><text x="145.83" y="276.33">w2 w1 r1 r2 a2 a1</text><text x="187.5" y="276.33">w2 w1 r1 a2 a1 r2</text><text x="229.17" y="276.33">w2 w1 r1 a2 r2 a1</text><text x="270.83" y="276.33">w2 w1 a1 r1 r2 a2</text><text x="312.5" y="276.33">w2 w1 a1 r1 a2 r2</text><text x="354.17" y="276.33">w2 w1 a1 r2 r1 a2</text><text x="395.83" y="276.33">w2 w1 a1 r2 a2 r1</text><text x="437.5" y="276.33">w2 w1 a1 a2 r1 r2</text><text x="479.17" y="276.33">w2 w1 a1 a2 r2 r1</text><text x="520.83" y="276.33">w2 w1 r2 r1 a1 a2</text><text x="562.5" y="276.33">w2 w1 r2 r1 a2 a1</text><text x="604.17" y="276.33">w2 w1 r2 a1 r1 a2</text><text x="645.83" y="276.33">w2 w1 r2 a1 a2 r1</text><text x="687.5" y="276.33">w2 w1 r2 a2 r1 a1</text><text x="729.17" y="276.33">w2 w1 r2 a2 a1 r1</text><text x="770.83" y="276.33">w2 w1 a2 r1 a1 r2</text><text x="812.5" y="276.33">w2 w1 a2 r1 r2 a1</text>
+      <text x="854.17" y="276.33">w2 w1 a2 a1 r1 r2</text><text x="895.83" y="276.33">w2 w1 a2 a1 r2 r1</text><text x="937.5" y="276.33">w2 w1 a2 r2 r1 a1</text><text x="979.17" y="276.33">w2 w1 a2 r2 a1 r1</text><text x="20.83" y="286.33">w2 r2 r1 a1 w1 a2</text><text x="62.5" y="286.33">w2 r2 r1 a1 a2 w1</text><text x="104.17" y="286.33">w2 r2 r1 w1 a1 a2</text><text x="145.83" y="286.33">w2 r2 r1 w1 a2 a1</text><text x="187.5" y="286.33">w2 r2 r1 a2 a1 w1</text><text x="229.17" y="286.33">w2 r2 r1 a2 w1 a1</text><text x="270.83" y="286.33">w2 r2 a1 r1 w1 a2</text><text x="312.5" y="286.33">w2 r2 a1 r1 a2 w1</text><text x="354.17" y="286.33">w2 r2 a1 w1 r1 a2</text><text x="395.83" y="286.33">w2 r2 a1 w1 a2 r1</text><text x="437.5" y="286.33">w2 r2 a1 a2 r1 w1</text><text x="479.17" y="286.33">w2 r2 a1 a2 w1 r1</text><text x="520.83" y="286.33">w2 r2 w1 r1 a1 a2</text><text x="562.5" y="286.33">w2 r2 w1 r1 a2 a1</text><text x="604.17" y="286.33">w2 r2 w1 a1 r1 a2</text><text x="645.83" y="286.33">w2 r2 w1 a1 a2 r1</text><text x="687.5" y="286.33">w2 r2 w1 a2 r1 a1</text><text x="729.17" y="286.33">w2 r2 w1 a2 a1 r1</text><text x="770.83" y="286.33">w2 r2 a2 r1 a1 w1</text><text x="812.5" y="286.33">w2 r2 a2 r1 w1 a1</text>
+      <text x="854.17" y="286.33">w2 r2 a2 a1 r1 w1</text><text x="895.83" y="286.33">w2 r2 a2 a1 w1 r1</text><text x="937.5" y="286.33">w2 r2 a2 w1 r1 a1</text><text x="979.17" y="286.33">w2 r2 a2 w1 a1 r1</text><text x="20.83" y="296.33">w2 a2 r1 a1 w1 r2</text><text x="62.5" y="296.33">w2 a2 r1 a1 r2 w1</text><text x="104.17" y="296.33">w2 a2 r1 w1 a1 r2</text><text x="145.83" y="296.33">w2 a2 r1 w1 r2 a1</text><text x="187.5" y="296.33">w2 a2 r1 r2 a1 w1</text><text x="229.17" y="296.33">w2 a2 r1 r2 w1 a1</text><text x="270.83" y="296.33">w2 a2 a1 r1 w1 r2</text><text x="312.5" y="296.33">w2 a2 a1 r1 r2 w1</text><text x="354.17" y="296.33">w2 a2 a1 w1 r1 r2</text><text x="395.83" y="296.33">w2 a2 a1 w1 r2 r1</text><text x="437.5" y="296.33">w2 a2 a1 r2 r1 w1</text><text x="479.17" y="296.33">w2 a2 a1 r2 w1 r1</text><text x="520.83" y="296.33">w2 a2 w1 r1 a1 r2</text><text x="562.5" y="296.33">w2 a2 w1 r1 r2 a1</text><text x="604.17" y="296.33">w2 a2 w1 a1 r1 r2</text><text x="645.83" y="296.33">w2 a2 w1 a1 r2 r1</text><text x="687.5" y="296.33">w2 a2 w1 r2 r1 a1</text><text x="729.17" y="296.33">w2 a2 w1 r2 a1 r1</text><text x="770.83" y="296.33">w2 a2 r2 r1 a1 w1</text><text x="812.5" y="296.33">w2 a2 r2 r1 w1 a1</text>
+      <text x="854.17" y="296.33">w2 a2 r2 a1 r1 w1</text><text x="895.83" y="296.33">w2 a2 r2 a1 w1 r1</text><text x="937.5" y="296.33">w2 a2 r2 w1 r1 a1</text><text x="979.17" y="296.33">w2 a2 r2 w1 a1 r1</text>
+    </g>
+    <g class="ords">
+      <text class="ok" x="20.83" y="6.33" style="--dx: 20.85px; --dy: 9.35px">r1 a1 w1 r2 a2 w2</text>
+      <text class="lost" x="270.83" y="6.33" style="--dx: -979.15px; --dy: 9.35px">r1 a1 r2 w1 a2 w2</text>
+      <text class="lost" x="354.17" y="6.33" style="--dx: -1145.85px; --dy: 9.35px">r1 a1 r2 a2 w1 w2</text>
+      <text class="lost" x="395.83" y="6.33" style="--dx: -1104.15px; --dy: 9.35px">r1 a1 r2 a2 w2 w1</text>
+      <text class="lost" x="20.83" y="26.33" style="--dx: 20.85px; --dy: -30.65px">r1 r2 a1 w1 a2 w2</text>
+      <text class="lost" x="104.17" y="26.33" style="--dx: -145.85px; --dy: -30.65px">r1 r2 a1 a2 w1 w2</text>
+      <text class="lost" x="145.83" y="26.33" style="--dx: -104.15px; --dy: -30.65px">r1 r2 a1 a2 w2 w1</text>
+      <text class="lost" x="520.83" y="26.33" style="--dx: -1729.15px; --dy: -30.65px">r1 r2 a2 a1 w1 w2</text>
+      <text class="lost" x="562.5" y="26.33" style="--dx: -2687.5px; --dy: 29.35px">r1 r2 a2 a1 w2 w1</text>
+      <text class="lost" x="687.5" y="26.33" style="--dx: -3062.5px; --dy: 29.35px">r1 r2 a2 w2 a1 w1</text>
+      <text class="lost" x="20.83" y="156.33" style="--dx: 520.85px; --dy: -620.65px">r2 r1 a1 w1 a2 w2</text>
+      <text class="lost" x="104.17" y="156.33" style="--dx: 354.15px; --dy: -620.65px">r2 r1 a1 a2 w1 w2</text>
+      <text class="lost" x="145.83" y="156.33" style="--dx: -604.15px; --dy: -560.65px">r2 r1 a1 a2 w2 w1</text>
+      <text class="lost" x="520.83" y="156.33" style="--dx: -2229.15px; --dy: -560.65px">r2 r1 a2 a1 w1 w2</text>
+      <text class="lost" x="562.5" y="156.33" style="--dx: -2187.5px; --dy: -560.65px">r2 r1 a2 a1 w2 w1</text>
+      <text class="lost" x="687.5" y="156.33" style="--dx: -2562.5px; --dy: -560.65px">r2 r1 a2 w2 a1 w1</text>
+      <text class="lost" x="20.83" y="186.33" style="--dx: 20.85px; --dy: -650.65px">r2 a2 r1 a1 w1 w2</text>
+      <text class="lost" x="62.5" y="186.33" style="--dx: 62.5px; --dy: -650.65px">r2 a2 r1 a1 w2 w1</text>
+      <text class="lost" x="187.5" y="186.33" style="--dx: -312.5px; --dy: -650.65px">r2 a2 r1 w2 a1 w1</text>
+      <text class="ok" x="770.83" y="186.33" style="--dx: -2979.15px; --dy: -650.65px">r2 a2 w2 r1 a1 w1</text>
+    </g>
+    <g class="bar acc fragment" data-fragment-index="0"><line x1="270" y1="35.5" x2="480" y2="35.5"/><line x1="520" y1="35.5" x2="730" y2="35.5"/><line x1="770" y1="35.5" x2="980" y2="35.5"/><line x1="20" y1="95.5" x2="230" y2="95.5"/><line x1="270" y1="95.5" x2="480" y2="95.5"/><line x1="520" y1="95.5" x2="730" y2="95.5"/><line x1="770" y1="95.5" x2="980" y2="95.5"/><line x1="20" y1="155.5" x2="230" y2="155.5"/><line x1="270" y1="155.5" x2="480" y2="155.5"/><line x1="520" y1="155.5" x2="730" y2="155.5"/><line x1="770" y1="155.5" x2="980" y2="155.5"/><line x1="20" y1="215.5" x2="230" y2="215.5"/><line x1="270" y1="215.5" x2="480" y2="215.5"/><line x1="520" y1="215.5" x2="730" y2="215.5"/><line x1="770" y1="215.5" x2="980" y2="215.5"/><line x1="20" y1="275.5" x2="230" y2="275.5"/><line x1="270" y1="275.5" x2="480" y2="275.5"/><line x1="520" y1="275.5" x2="730" y2="275.5"/></g>
+  </svg>
+  <p class="def">The 20 interleavings of the two increments, each thread's own order&nbsp;kept.</p>
+  <p class="fragment" data-fragment-index="0">18 of the 20 read before the other thread's write and lose an update; 2&nbsp;count correctly: one increment after the&nbsp;other.</p>
+  
+</section>
+
+<!-- 2.3 -->
+
+<!-- 2.3 -->
+<section id="b1-faults" data-step="-1">
+  <h2>The counter's two&nbsp;faults</h2>
+  <svg class="b1-fig2" viewBox="0 0 1000 274" role="img" aria-label="Thread A's three steps read n, add 1, write n under a bracket marked one unit, and B's write n between A's read n and add 1, marked on the first click as a step inside the unit and on the second as a data race">
+        <text class="lbl" x="0" y="77">thread A</text><text class="lbl" x="0" y="217">thread B</text>
+        <text class="time" x="996" y="77">time</text><text class="time" x="996" y="217">time</text>
+        <g class="fig-counter">
+          <g class="unit"><path d="M200 38 V28 H660 V38"/><text x="430" y="18">one unit</text></g>
+          <g><rect x="200" y="50" width="90" height="40" rx="5"/><text x="245" y="77">read n</text></g><g><rect x="470" y="50" width="90" height="40" rx="5"/><text x="515" y="77">add 1</text></g><g><rect x="570" y="50" width="90" height="40" rx="5"/><text x="615" y="77">write n</text></g>
+          <g><rect x="335" y="190" width="90" height="40" rx="5"/><text x="380" y="217">write n</text></g>
+          <g class="fragment" data-fragment-index="0"><g class="hi"><rect x="335" y="190" width="90" height="40" rx="5"/><text x="380" y="217">write n</text></g><g class="fault"><line x1="380" y1="182" x2="380" y2="60"/><text class="lbl" x="392" y="160">a step falls inside the unit</text></g></g>
+          <g class="fragment" data-fragment-index="1"><g class="hi"><rect x="200" y="50" width="90" height="40" rx="5"/><text x="245" y="77">read n</text></g><g class="fault"><line x1="265" y1="98" x2="335" y2="182"/><text class="end" x="285" y="160">data race</text></g></g>
+        </g>
+      </svg>
+  <table class="b1-close">
+    <tr class="fragment" data-fragment-index="0"><td>Atomicity&nbsp;violation</td><td>The increment is meant to be <b>logically atomic</b>, its three steps seen whole or not at all. B's write falls inside them, and A's write stores one more than a value B already replaced: the unit is&nbsp;split.</td></tr>
+    <tr class="fragment" data-fragment-index="1"><td>Data&nbsp;race</td><td>A's read of n and B's write of n, nothing ordering them: the order is&nbsp;missing.</td></tr>
+    <tr class="fragment" data-fragment-index="2"><td>Both</td><td>A lock removes both at once; part 4 shows the violation without the&nbsp;race.</td></tr>
+  </table>
+  <p class="def b1-ask fragment" data-fragment-index="3">What makes the three steps logically&nbsp;atomic?</p>
+  
+</section>
+
+<!-- 2.4 -->
+<section id="b1-roadmap">
+  <h2>Roadmap</h2>
+  <table class="b1-close b1-road">
+    <tr><td><span class="pn">Part 2</span>Mutual&nbsp;exclusion</td><td><span class="hl">What makes three steps logically atomic, and what does it cost?</span> A lock, built from one atomic instruction; its contract, its obligation, its progress&nbsp;risk.</td></tr>
+    <tr class="fragment" data-fragment-index="0"><td><span class="pn">Part 3</span>Race detection and&nbsp;prevention</td><td><span class="hl">Who checks that every access is under the lock?</span> Nobody by default; a checker or a detector; Rust's&nbsp;compiler.</td></tr>
+    <tr class="fragment" data-fragment-index="1"><td><span class="pn">Part 4</span>Deadlock</td><td><span class="hl">Are two logically atomic steps one?</span> A transfer with no data race and a wrong sum; two locks and a program that stops; the order that cures&nbsp;it.</td></tr>
+    <tr class="fragment" data-fragment-index="2"><td><span class="pn">Block 2</span>The question</td><td><span class="hl">Can a logically atomic operation exist without any&nbsp;lock?</span></td></tr>
+  </table>
   
 </section>
 
@@ -2209,45 +2359,48 @@ n := v             (* write *)</code></pre></div>
     <g class="naive">
       <g class="flag"><line x1="400" y1="4" x2="400" y2="44"/><text class="lbl mono" x="412" y="31">true</text></g>
       <g><rect x="110" y="74" width="100" height="40" rx="5"/><text x="160" y="101">read flag</text></g>
-      <text x="160" y="142">reads <tspan class="mono">false</tspan></text>
-      <g class="nv-b"><rect x="230" y="192" width="100" height="40" rx="5"/><text x="280" y="219">read flag</text></g>
-      <text x="280" y="260">reads <tspan class="mono">false</tspan></text>
       <g><rect x="350" y="74" width="100" height="40" rx="5"/><text x="400" y="101">write true</text></g>
-      <g><rect x="470" y="192" width="100" height="40" rx="5"/><text x="520" y="219">write true</text></g>
       <g class="nv-cs"><rect x="590" y="74" width="200" height="40" rx="5"/><text x="690" y="101">critical section</text></g>
+      <text x="160" y="142">reads <tspan class="mono">false</tspan></text>
+      <g class="fragment" data-fragment-index="0">
+      <g class="nv-b"><rect x="230" y="192" width="100" height="40" rx="5"/><text x="280" y="219">read flag</text></g>
+      <g><rect x="470" y="192" width="100" height="40" rx="5"/><text x="520" y="219">write true</text></g>
       <g class="nv-cs"><rect x="590" y="192" width="200" height="40" rx="5"/><text x="690" y="219">critical section</text></g>
       <g class="nv-gap"><line x1="280" y1="186" x2="280" y2="120"/><text class="lbl" x="292" y="160">between A's read and write</text></g>
+      <text x="280" y="260">reads <tspan class="mono">false</tspan></text>
       <text class="lbl nv-both" x="810" y="160">both inside</text>
+      </g>
     </g>
-    <g class="fragment" data-fragment-index="0">
+    <g class="fragment" data-fragment-index="1">
       <g class="flag"><line x1="210" y1="4" x2="210" y2="44"/><text class="lbl mono" x="222" y="31">true</text></g>
       <g class="tas tas-a"><rect x="110" y="74" width="200" height="40" rx="5"/><line x1="210" y1="74" x2="210" y2="114"/><text x="160" y="101">read flag</text><text x="260" y="101">write true</text></g>
       <text class="lbl" x="320" y="101">returns <tspan class="mono">false</tspan></text>
       <text x="210" y="142">one indivisible step</text>
     </g>
-    <g class="fragment" data-fragment-index="2">
+    <g class="fragment" data-fragment-index="3">
       <g class="flag"><line x1="560" y1="4" x2="560" y2="44"/><text class="lbl mono" x="572" y="31">false</text><line x1="790" y1="4" x2="790" y2="44"/><text class="lbl mono" x="802" y="31">true</text></g>
       <g class="rel-a"><rect x="560" y="74" width="110" height="40" rx="5"/><text x="615" y="101">write false</text></g>
       <g class="tas tas-b"><rect x="690" y="192" width="200" height="40" rx="5"/><line x1="790" y1="192" x2="790" y2="232"/><text x="740" y="219">read flag</text><text x="840" y="219">write true</text></g>
       <text x="790" y="260">returns <tspan class="mono">false</tspan></text>
       <g class="hb"><line x1="615" y1="122" x2="738" y2="186" marker-end="url(#b1tas-arr)"/><text class="lbl" x="730" y="142">ordered before,</text><text class="lbl" x="730" y="167">with everything A did before</text></g>
     </g>
-    <g class="fragment" data-fragment-index="1">
+    <g class="fragment" data-fragment-index="2">
       <g class="tas spin-b"><rect x="330" y="192" width="200" height="40" rx="5"/><line x1="430" y1="192" x2="430" y2="232"/><text x="380" y="219">read flag</text><text x="480" y="219">write true</text></g>
       <text x="430" y="260">returns <tspan class="mono">true</tspan></text>
       <g class="spin"><line x1="538" y1="212" x2="682" y2="212"/><text x="610" y="260">spins</text></g>
     </g>
   </svg>
   <div class="b1-naive">
-    <p class="def"><b>A naive lock.</b> To acquire, a thread reads the flag and, if it is <code>false</code>, writes <code>true</code>. Two steps on a shared location: the other thread can read between them, and both threads&nbsp;enter.</p>
-    <p class="def b1-ask">The lock protects the critical section; but then what protects the lock&nbsp;itself?</p>
+    <p class="def"><b>A naive lock.</b> To acquire, a thread reads the flag and, if it is <code>false</code>, writes <code>true</code>; then it enters the critical&nbsp;section.</p>
+    <p class="def fragment" data-fragment-index="0">Two steps on a shared location: the other thread reads the flag between them, also finds <code>false</code>, and both threads&nbsp;enter.</p>
+    <p class="def b1-ask fragment" data-fragment-index="0">The lock protects the critical section; but then what protects the lock&nbsp;itself?</p>
   </div>
   <p class="def b1-tas-def"><b>Test-and-set.</b> An instruction that reads the old value of one memory location and writes a new value to it as one indivisible step: no instruction of any other thread falls between the read and the&nbsp;write.</p>
   <div class="b1-stack">
-    <p class="b1-sentence fragment current-visible" data-fragment-index="0"><b>Indivisibility.</b> It reads the old value and writes the new one as one step: no thread sees the location&nbsp;between.</p>
-    <p class="b1-sentence fragment current-visible" data-fragment-index="2"><b>Synchronization.</b> The write of <code>false</code> that releases the flag is ordered before the test-and-set that reads it, and with it everything the releasing thread did&nbsp;before.</p>
-    <p class="def fragment current-visible" data-fragment-index="1"><b>Spin lock.</b> A <b>flag</b>, a boolean location, and a loop: to acquire, a thread repeats test-and-set on the flag until the old value is <code>false</code>, <b>spinning</b> while it finds <code>true</code>; to release, it writes&nbsp;<code>false</code>.</p>
-    <div class="box fragment" data-fragment-index="3">The first guarantee makes the lock exclusive; the second makes the plain variable inside it&nbsp;race-free.</div>
+    <p class="b1-sentence fragment current-visible" data-fragment-index="1"><b>Indivisibility.</b> It reads the old value and writes the new one as one step: no thread sees the location&nbsp;between.</p>
+    <p class="b1-sentence fragment current-visible" data-fragment-index="3"><b>Synchronization.</b> The write of <code>false</code> that releases the flag is ordered before the test-and-set that reads it, and with it everything the releasing thread did&nbsp;before.</p>
+    <p class="def fragment current-visible" data-fragment-index="2"><b>Spin lock.</b> A <b>flag</b>, a boolean location, and a loop: to acquire, a thread repeats test-and-set on the flag until the old value is <code>false</code>, <b>spinning</b> while it finds <code>true</code>; to release, it writes&nbsp;<code>false</code>.</p>
+    <div class="box fragment" data-fragment-index="4">The first guarantee makes the lock exclusive; the second makes the plain variable inside it&nbsp;race-free.</div>
   </div>
   
 </section>
@@ -2299,14 +2452,6 @@ got      2000000</pre>
   
 </section>
 
-<!-- part 4 -->
-<section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 4</div>
-  <h1>Locks</h1>
-  <div class="sub">critical sections; contract, obligation and&nbsp;risks</div>
-  
-</section>
-
 <!-- 4.1 -->
 <section id="b1-ex3" data-step="-1">
   <h2>Example 3: the counter under one&nbsp;lock</h2>
@@ -2339,7 +2484,7 @@ expected 2000000
 got      2000000</pre>
       <div class="b1-ex3-say">
         <p class="fragment current-visible" data-fragment-index="0">One thread at a time inside; the interleaving is forbidden there. One sample of a&nbsp;run.</p>
-        <p class="fragment" data-fragment-index="1">A waiting thread is <span class="hl">suspended</span> until the release, not spinning; the closing brace releases the lock even on an&nbsp;exception.</p>
+        <p class="fragment" data-fragment-index="1">A waiting thread is <span class="hl">suspended</span> until the release, after at most a brief spin; the closing brace releases the lock even on an&nbsp;exception.</p>
       </div>
     </div>
     <div>
@@ -2401,11 +2546,12 @@ got      2000000</pre>
   </svg>
   <div class="b1-stack">
     <div class="b1-defs2 fragment fade-out" data-fragment-index="2">
-      <p class="def b1-ctr fragment fade-out" data-fragment-index="0"><b>Contract.</b> Operations are atomic by exclusion: under the lock they happen one after another, and each appears to the other threads to happen at one instant inside its critical&nbsp;section.</p>
+      <p class="def b1-ctr fragment fade-out" data-fragment-index="0"><b>Contract.</b> Operations are logically atomic by exclusion, in every interleaving: under the lock they happen one after another, and each appears to the other threads to happen at one instant inside its critical section. The coarse way: no two operations overlap at&nbsp;all.</p>
       <p class="def fragment" data-fragment-index="0"><b>Obligation</b>, two parts here. Every access to the protected state, read or write, while holding the&nbsp;lock<span class="b1-ob2 fragment" data-fragment-index="1">; and the lock held for the whole operation, over every piece of state its <b>invariant</b> mentions, the statement that holds whenever no thread is inside a critical&nbsp;section</span>.</p>
     </div>
     <div class="box fragment" data-fragment-index="2">A lock protects only against the threads that take it: a new lock per call, <code>synchronized (new Object()) { n++; }</code>, is held by one thread and never taken by another. The lock that works is one lock shared by every thread that touches <code>n</code>. <br>The obligation is then the <span class="hl">programmer's discipline</span>: the lock enforces none of it.</div>
   </div>
+  <p class="def b1-ask fragment" data-fragment-index="3">Where can a program that keeps the obligation still&nbsp;stop?</p>
   
 </section>
 
@@ -2420,21 +2566,22 @@ got      2000000</pre>
   <div class="b1-pr-cmp fragment" data-fragment-index="1">
     <table class="b1-pr-table">
       <tr><th></th><th>Spinning: the spin&nbsp;lock</th><th><span class="hl">Suspended</span>: the language's&nbsp;lock</th></tr>
-      <tr><td>A waiter costs</td><td>a busy processor, for as long as it&nbsp;waits</td><td>no processor time; waking it up costs a switch of&nbsp;threads</td></tr>
-      <tr><td>A stopped holder</td><td>the waiters spin as long as it is stopped; on one processor, a spinner takes the time the holder needs to&nbsp;finish</td><td>the waiters leave the processor to the holder, and still wait as long as it is&nbsp;stopped</td></tr>
-      <tr><td>A lock changing hands</td><td>no order among the waiters:&nbsp;starvation</td><td>a woken waiter competes with newcomers:&nbsp;starvation</td></tr>
+      <tr><td>A waiter&nbsp;costs</td><td>a busy processor, for as long as it&nbsp;waits</td><td>no processor time; waking it up costs a switch of&nbsp;threads</td></tr>
+      <tr><td>A stopped&nbsp;holder</td><td>the waiters spin as long as it is stopped; on one processor, a spinner takes the time the holder needs to&nbsp;finish</td><td>the waiters leave the processor to the holder, and still wait as long as it is&nbsp;stopped</td></tr>
+      <tr><td>A lock changing&nbsp;hands</td><td>no order among the waiters: starvation is possible</td><td>a woken waiter competes with newcomers: starvation is possible</td></tr>
     </table>
     <p class="def">Suspension saves processor time; it removes neither source of the risk. Only an order among the waiters removes starvation: a ticket lock spins in turn, a fair lock suspends in&nbsp;turn.</p>
   </div>
-  <p class="def b1-ask b1-pr-q fragment" data-fragment-index="2" style="font-size: 0.725em">And who checks that every access is under the lock -- programmer's discipline or can a language enforce it ? </p>
+  <p class="def b1-ask b1-pr-q fragment" data-fragment-index="2" style="font-size: 0.725em">And who checks that every access is under the lock -- programmer's discipline or can a language enforce it&nbsp;? </p>
   
 </section>
 
 <!-- part 5 -->
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 5</div>
+  <div class="eyebrow">PART 3</div>
   <h1>Race detection and&nbsp;prevention</h1>
-  <div class="sub">run-time detectors; ownership in&nbsp;Rust</div>
+  <div class="sub">who checks that every access is under the&nbsp;lock</div>
+  <p class="bridge">A lock enforces none of its obligation, and a discipline nobody checks is a fault waiting for its run. Who can check it: a tool watching the run, or the compiler before any&nbsp;run?</p>
   
 </section>
 
@@ -2498,11 +2645,11 @@ first wrong: A = -5811, B = 6012</pre>
 
 <!-- 5.2 -->
 <section id="b1-who-checks">
-  <h2>Who checks the&nbsp;obligation</h2>
+  <h2>Who checks that every access is under the&nbsp;lock</h2>
   <table class="b1-check">
 <tr><th>Language</th><th>Who checks that every access is under the&nbsp;lock</th></tr>
     <tr><td>Java</td><td>Nobody by default. A comment beside the field, <code>// guarded by lock</code>, records the rule; Error Prone, a static checker, checks every access at compile time when the rule is written as the annotation&nbsp;<code>@GuardedBy("lock")</code>.</td></tr>
-    <tr class="fragment" data-fragment-index="0"><td>OCaml&nbsp;5; Go; C&nbsp;and&nbsp;C++</td><td>Nobody by default; a detector at run time when run with Go's <code>-race</code> or ThreadSanitizer, a race detector in clang, gcc and OCaml&nbsp;5.2 and later: it reports two unordered accesses the run made, even when the timing kept them apart and the answer was right, as far as its record of recent accesses reaches; a path the run did not take is not&nbsp;checked.</td></tr>
+    <tr class="fragment" data-fragment-index="0"><td>OCaml&nbsp;5; Go; C&nbsp;and&nbsp;C++</td><td>Nobody by default; a detector at run time when run with Go's <code>-race</code> or ThreadSanitizer, a race detector in clang and gcc, and in an OCaml compiler of 5.2 or later built with it: it reports two unordered accesses the run made, even when the timing kept them apart and the answer was right, as far as its record of recent accesses reaches; a path the run did not take is not&nbsp;checked.</td></tr>
 <tr class="fragment" data-fragment-index="1"><td>Rust</td><td>The compiler, before any run, for data races&nbsp;only.</td></tr>
   </table>
   <div class="box fragment" data-fragment-index="2">For one word, a variable of one location, that one thread writes and another reads, Java offers <code>volatile</code>: every write is synchronization for the read that sees it. <code>n++</code> on a <code>volatile</code> field is the same three steps as&nbsp;before.</div>
@@ -2578,7 +2725,7 @@ println!("{}", *count.lock().unwrap());</code></pre></div>
       <p class="fragment current-visible" data-fragment-index="1">In Java, example 3's <code>lock</code> and <code>n</code> are tied only by a comment: the compiler accepts <code>n++</code> outside <code>synchronized&nbsp;(lock)</code>. In Rust, as in a <a href="#/b1-monitor">monitor</a> of the appendix, the data is reachable only under its lock; the rule is stated in the types of a library, and the compiler checks&nbsp;it.</p>
       <div class="b1-rm-pair">
         <p class="def fragment" data-fragment-index="2">Rust checks the first part of the obligation, every access under its lock; the others remain the&nbsp;programmer's.</p>
-        <div class="box fragment" data-fragment-index="3">Not checked: the order of the locks, so the deadlock of part 6 compiles; nor atomicity, so the transfer in two halves compiles. A compiler can rule out a data race, not an atomicity&nbsp;violation.</div>
+        <div class="box fragment" data-fragment-index="2">Not checked: the order of the locks, so the deadlock of part 4 compiles; nor atomicity, so the transfer in two halves compiles. A compiler can rule out a data race, not an atomicity&nbsp;violation.</div>
       </div>
       </div>
     </div>
@@ -2588,9 +2735,10 @@ println!("{}", *count.lock().unwrap());</code></pre></div>
 
 <!-- part 6 -->
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 6</div>
+  <div class="eyebrow">PART 4</div>
   <h1>Deadlock</h1>
-  <div class="sub">lock ordering; safety and&nbsp;liveness</div>
+  <div class="sub">two logically atomic steps, and whether they are&nbsp;one</div>
+  <p class="bridge">Rust's compiler rules out data races and nothing else. The fault with no data race in it needs two locks: a transfer in two halves, and the deadlock behind its&nbsp;repair.</p>
   
 </section>
 
@@ -2646,6 +2794,7 @@ reading 1: A = 99, B = 100,
            sum = 199</pre>
     </div>
   </div>
+  <p class="def b1-ask fragment" data-fragment-index="1">What if both locks are held for the whole&nbsp;transfer?</p>
   
 </section>
 
@@ -2722,6 +2871,7 @@ deadlock: 2 threads blocked for ever
   <p class="def"><b>Safety property.</b> Something bad never happens; a violation is a finite run, one that reaches the bad state. <b>Liveness property.</b> Something good eventually happens; no finite run can show a violation, since the good thing may still&nbsp;come.<sup>*</sup></p>
   <p>The deadlock violates both kinds. <span class="fragment" data-fragment-index="0">That each thread holds one lock and waits for the other's is a state, and the detector finds it: "never deadlocked" is a safety property. That no transfer will ever complete is the liveness property it ruins; no detector can see&nbsp;"ever".</span></p>
   <p class="fn"><sup>*</sup> Lamport 1977 (IEEE TSE SE-3(2), 125–143); Alpern and Schneider 1985 (Inf. Proc. Letters 21(4),&nbsp;181–185).</p>
+  <p class="def b1-ask fragment" data-fragment-index="1">What are the conditions of a&nbsp;deadlock?</p>
   
 </section>
 
@@ -2757,7 +2907,7 @@ deadlock: 2 threads blocked for ever
         <li class="fragment" data-fragment-index="2"><b>No preemption.</b> A held resource cannot be taken&nbsp;away.</li>
         <li class="fragment" data-fragment-index="3"><b>Circular wait.</b> A cycle of threads, each waiting for a resource the next&nbsp;holds.</li>
       </ol>
-      <p class="fragment" data-fragment-index="4">This session removes the&nbsp;fourth.</p>
+      <p class="fragment" data-fragment-index="4">A global order of the locks removes the fourth, circular wait: the next&nbsp;example.</p>
     </div>
   </div>
   
@@ -2806,13 +2956,9 @@ transfers: 1000000 A to B,
 readings: 530369, wrong sums: 0
 at the end: A = 100, B = 100</pre>
       <div class="b1-4c-stack">
-      <div class="fragment fade-out" data-fragment-index="3">
+      <div>
       <p class="fragment" data-fragment-index="1" style="font-size: 0.795em">Every thread that takes several locks takes them in the <b>same order</b>. A thread waits only for a lock <b>later in the order</b> than every lock it holds; along a chain of waiting threads the locks come later and later, and a chain that only goes up <b>cannot return to its&nbsp;start</b>.</p>
-      <p class="fragment" data-fragment-index="2" style="font-size: 0.795em">The order is the <b>third part of the obligation</b>. <b>No compiler checks it</b>, and the deadlock <b>compiles in safe Rust</b>; tools find it only in&nbsp;runs.</p>
-      </div>
-      <div class="fragment" data-fragment-index="3">
-        <p class="def b1-ask">A lock makes a thread wait, spinning or suspended, for its turn. But a consumer that finds a buffer empty must wait until the buffer holds an item: what does a thread use to wait until a condition on the shared state&nbsp;holds?</p>
-        <p class="b1-4c-apx">The appendix answers it: <a href="#/b1-semaphore">semaphores, monitors and condition&nbsp;variables</a>.</p>
+      <p class="fragment" data-fragment-index="2" style="font-size: 0.795em">The order is the <b>obligation's third part</b>, after every access under the lock and the lock held over the invariant. <b>No compiler checks it</b>, and the deadlock <b>compiles in safe Rust</b>; tools find it only in&nbsp;runs.</p>
       </div>
       </div>
     </div>
@@ -2821,28 +2967,34 @@ at the end: A = 100, B = 100</pre>
   
 </section>
 
-
 <!-- part 7 -->
-<section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 7</div>
-<h1>Summary</h1>
-  <div class="sub">mutual exclusion: guarantee, obligation, progress&nbsp;risk</div>
-  
-</section>
-
 <!-- 7.1 -->
 <section id="b1-checkpoint">
   <h2>Mutual exclusion in&nbsp;summary</h2>
   <table class="b1-close">
-    <tr><td>The&nbsp;guarantee</td><td>Operations atomic by exclusion: under the lock they happen one after another, each at one instant inside its critical&nbsp;section.</td></tr>
+    <tr><td>The&nbsp;guarantee</td><td>Operations logically atomic by exclusion: under the lock they happen one after another, each at one instant inside its critical&nbsp;section.</td></tr>
     <tr class="fragment" data-fragment-index="0"><td>The&nbsp;obligation</td><td>Every access to the protected state under the lock; every lock the invariant needs, held for the whole operation; one global order of the&nbsp;locks.</td></tr>
     <tr class="fragment" data-fragment-index="1"><td>The progress&nbsp;risk</td><td>A stopped holder stops every thread that needs its lock: deadlock when the holders wait in a cycle, a missed deadline when the holder is not scheduled. And starvation, when the lock keeps changing hands but one thread is passed over for&nbsp;ever.</td></tr>
-    <tr class="fragment" data-fragment-index="2"><td>Who&nbsp;checks</td><td>Nobody by default, in Java, OCaml&nbsp;5, Go, C and C++; a detector at run time, with Go's <code>-race</code> or ThreadSanitizer, for the accesses a run made; Rust's compiler, for data races only, never the lock order or&nbsp;atomicity.</td></tr>
+    <tr class="fragment" data-fragment-index="2"><td>Who&nbsp;checks</td><td>Nobody by default, in Java, OCaml&nbsp;5, Go, C and C++; in Java a static checker, Error Prone, for the fields annotated <code>@GuardedBy</code>; a detector at run time, with Go's <code>-race</code> or ThreadSanitizer, for the accesses a run made; Rust's compiler, for data races only, never the lock order or&nbsp;atomicity.</td></tr>
   </table>
+  <p class="def b1-ask fragment" data-fragment-index="3">Where can a program that locks every access still stop, failure by&nbsp;failure?</p>
   
 </section>
 
 <!-- 7.2 -->
+<section id="b1-failures">
+  <h2>Progress&nbsp;failures</h2>
+  <table class="b1-close">
+    <tr><td>Deadlock</td><td>Every thread of a set waits for a lock that another thread of the set holds: example 4b. Removed by one global order of the locks, example&nbsp;4c.</td></tr>
+    <tr class="fragment" data-fragment-index="0"><td>A missed&nbsp;deadline</td><td>The holder is ready to run and the scheduler does not run it, so a thread that needs its lock waits past its deadline: <a href="#/b1-pathfinder">Mars Pathfinder</a>, in the appendix. Removed by priority&nbsp;inheritance.</td></tr>
+    <tr class="fragment" data-fragment-index="1"><td>Starvation</td><td>The lock keeps changing hands, and one thread is passed over for ever: the figure of part&nbsp;2. Removed by an order among the waiters, a ticket lock or a fair&nbsp;lock.</td></tr>
+    <tr class="fragment" data-fragment-index="2"><td>A lost&nbsp;wake-up</td><td>A notification reaches no thread that waits for it, because it came before the wait or woke a thread of the wrong kind, and the waiter sleeps for ever: <a href="#/b1-mesa">the monitor's one waiting set</a>, in the appendix. Removed by testing the condition and waiting under one lock, and by <code>notifyAll</code> or one condition variable per kind of&nbsp;waiter.</td></tr>
+  </table>
+  <p class="def b1-ask fragment" data-fragment-index="3">Was the lock around the instruction needed at&nbsp;all?</p>
+  
+</section>
+
+<!-- 7.3 -->
 <section id="b1-bridge" data-step="-1">
   <h2>The question for block&nbsp;2</h2>
   <svg class="b1-fig2" viewBox="0 0 1000 200" role="img" aria-label="Thread A's increment of n: first its three steps in a critical section, the lock held by A; then the same increment as one instruction, with no lock" font-family="&quot;Fira Sans&quot;, sans-serif" font-size="19">
@@ -2869,13 +3021,12 @@ at the end: A = 100, B = 100</pre>
   <div class="b1-defs">
     <p class="fragment fade-out" data-fragment-index="0">The counter has been exact twice, under the spin lock and under the language's lock, both by exclusion. The spin lock was built from one instruction that is itself atomic,&nbsp;test-and-set.</p>
     <div class="b1-br-next">
-      <p class="def b1-ask fragment" data-fragment-index="0">Then can an operation be atomic without a lock around&nbsp;it?</p>
-      <p class="fragment" data-fragment-index="1">Block 2 answers three questions this block leaves open: what an atomic operation without a lock guarantees and requires; how to prove such an operation correct; and, at its end, what the language guaranteed about memory in the fourth assumption, and what holds instead for a program with a data&nbsp;race.</p>
+      <p class="def b1-ask fragment" data-fragment-index="0">Then can a logically atomic operation be built from atomic instructions, without&nbsp;exclusion?</p>
+      <p class="fragment" data-fragment-index="1">Block 2: the standard of logical atomicity in full, linearizability and progress; compare-and-set with retry, the second way; and the fourth assumption's&nbsp;condition.</p>
     </div>
   </div>
   
 </section>
-
 
 <!-- appendix -->
 <section class="part" data-background-color="#23373B">
@@ -2884,6 +3035,7 @@ at the end: A = 100, B = 100</pre>
   <div class="sub">the bounds on the printed value; Mars Pathfinder and priority&nbsp;inheritance</div>
   
 </section>
+
 <section id="b1-bounds" data-step="-1">
   <h2>The bounds on the printed&nbsp;value</h2>
   <svg class="b1-fig2" viewBox="0 0 1000 180" role="img" aria-label="A number line of the printed value from 0 to 2N, broken between 2 and N: the ceiling at 2N, the point 2N reached, the floor at 2, and the range from 2 to 2N shaded">
@@ -2902,6 +3054,7 @@ at the end: A = 100, B = 100</pre>
   <a class="apx back" href="#/b1-three-steps">back</a>
   
 </section>
+
 <!-- 6.5 -->
 <section id="b1-pathfinder" data-step="-1">
   <h2>Mars Pathfinder&nbsp;(1997)</h2>
@@ -2949,7 +3102,7 @@ at the end: A = 100, B = 100</pre>
     <p class="b1-pf-cause fragment" data-fragment-index="0">The cause was a <b>priority inversion</b>: a <span class="nw">high-priority</span> task waited for a lock held by a <span class="nw">low-priority</span>&nbsp;task, <span class="fragment" data-fragment-index="1">which <span class="nw">medium-priority</span> tasks kept from&nbsp;running.</span></p>
     <p class="fragment" data-fragment-index="2">The lock did its job: one task at a time held it. What failed was progress: the <span class="nw">high-priority</span> task missed a hard deadline, and the system reset. Not a deadlock: one lock, no cycle. An unbounded <b>priority inversion</b>: the holder was ready to run, and the scheduler kept choosing the medium&nbsp;tasks.</p>
   </div>
-  <a class="apx back" href="#/b1-ex4c">back</a>
+  <a class="apx back" href="#/b1-failures">back</a>
   
 </section>
 
@@ -2997,10 +3150,9 @@ at the end: A = 100, B = 100</pre>
     <p class="b1-pi-def">The remedy was <b>priority inheritance</b>: a task holding a lock runs at the priority of the highest task waiting for&nbsp;it. <span class="fragment" data-fragment-index="0">JPL turned it on by a patch sent from&nbsp;Earth.</span></p>
     <div class="box fragment" data-fragment-index="2">Inheritance alone does not prevent deadlock on two locks taken in opposite order; a fixed order does, anywhere, and on one processor so does the priority ceiling protocol (Sha, Rajkumar and Lehoczky,&nbsp;1990).</div>
   </div>
-  <a class="apx back" href="#/b1-ex4c">back</a>
+  <a class="apx back" href="#/b1-failures">back</a>
   
 </section>
-
 
 <!-- appendix: condition synchronization -->
 <section class="part" data-background-color="#23373B">
@@ -3013,7 +3165,7 @@ at the end: A = 100, B = 100</pre>
 <!-- 7.1 -->
 <section id="b1-semaphore">
   <h2>Dijkstra's bounded buffer&nbsp;(1965)</h2>
-  <p class="def"><b>Semaphore.</b> A counter with two indivisible operations: <b>P</b> waits until the counter is above zero and then decreases it by one; <b>V</b> increases it by one. In the Part 2 introduction and in Java's library: <code>acquire</code> and&nbsp;<code>release</code>.<sup>*</sup></p>
+  <p class="def"><b>Semaphore.</b> A counter with two indivisible operations: <b>P</b> waits until the counter is above zero and then decreases it by one; <b>V</b> increases it by one. In the introduction to Part 2 of the course and in Java's library: <code>acquire</code> and&nbsp;<code>release</code>.<sup>*</sup></p>
   <div class="cols fragment" data-fragment-index="0">
     <div>
       <p>Three semaphores around a queue of <i>N</i>&nbsp;places:</p>
@@ -3029,7 +3181,7 @@ at the end: A = 100, B = 100</pre>
     </div>
   </div>
   <p class="fn"><sup>*</sup> <a class="cite" href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD01xx/EWD123.html" target="_blank" rel="noopener">Dijkstra, Cooperating sequential processes, EWD 123, 1965</a>, section&nbsp;4.3.</p>
-  <a class="apx back" href="#/b1-ex4c">back</a>
+  <a class="apx back" href="#/b1-failures">back</a>
   
 </section>
 
@@ -3082,7 +3234,7 @@ at the end: A = 100, B = 100</pre>
     <p class="fragment" data-fragment-index="4">Java: every object is a monitor; a <code>synchronized</code> method holds its lock, <code>wait()</code> and <code>notifyAll()</code> are its one condition variable. OCaml&nbsp;5: a record with a <code>Mutex.t</code> and one <code>Condition.t</code> per thing to wait&nbsp;for.</p>
   </div>
   <p class="fn"><sup>*</sup> Brinch Hansen, Operating System Principles, 1973; <a class="cite" href="https://pages.cs.wisc.edu/~remzi/Classes/736/Spring2000/Papers/hoare-monitors.pdf" target="_blank" rel="noopener">Hoare, Communications of the ACM 17(10),&nbsp;1974</a>.</p>
-  <a class="apx back" href="#/b1-ex4c">back</a>
+  <a class="apx back" href="#/b1-failures">back</a>
   
 </section>
 
@@ -3140,7 +3292,7 @@ put:   200000 items, sum 10000100000
 taken: sum 10000100000</pre>
     </div>
   </div>
-  <a class="apx back" href="#/b1-ex4c">back</a>
+  <a class="apx back" href="#/b1-failures">back</a>
   
 </section>
 
@@ -3171,7 +3323,7 @@ c1 took from an empty buffer: got null,
       </table>
     </div>
   </div>
-  <a class="apx back" href="#/b1-ex4c">back</a>
+  <a class="apx back" href="#/b1-failures">back</a>
   
 </section>
 
@@ -3233,9 +3385,10 @@ c1 took from an empty buffer: got null,
     <p class="fragment current-visible" data-fragment-index="2"><code>wait</code> may return with no <code>notify</code> at all, a <b>spurious wake-up</b>, which Java and OCaml&nbsp;allow.</p>
     <div class="box fragment" data-fragment-index="3">The obligation's fourth part: every wait in a loop that checks its condition again. And <code>notifyAll</code> rather than <code>notify</code>: an object has one waiting set, and waking one thread may wake one of the wrong&nbsp;kind.</div>
   </div>
-  <a class="apx back" href="#/b1-ex4c">back</a>
+  <a class="apx back" href="#/b1-failures">back</a>
   
 </section>
+
 
 </div>
 <div class="toc" id="toc" hidden>
