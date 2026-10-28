@@ -1116,6 +1116,90 @@ COPY &gt;&gt; COPY
 
 </section>
 </article>
+<script id="s8f-js">
+/* The figures of session 8 that step: see Sessions/Session Eight/figures/s8fig.py. */
+(function () {
+  if (window.__s8fStepper) return; window.__s8fStepper = true;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function has(list, s) { return (' ' + list + ' ').indexOf(' ' + s + ' ') >= 0; }
+  function offset(spec, s) {
+    var best = null;
+    spec.split(';').forEach(function (p) { var kv = p.split(':'), k = +kv[0]; if (k <= s && (best === null || k >= best[0])) best = [k, kv[1]]; });
+    return best ? best[1].split(',') : ['0', '0'];
+  }
+  function paint(root, s, live, prev) {
+    root.querySelectorAll('[data-on]').forEach(function (e) {
+      var on = has(e.dataset.on, s), was = prev === null ? on : has(e.dataset.on, prev);
+      e.classList.toggle('off', !on);
+      if (live && on && !was && !reduce && e.matches('path.draw')) {
+        var L = e.getTotalLength(); e.style.transition = 'none'; e.style.strokeDasharray = L; e.style.strokeDashoffset = L;
+        e.getBoundingClientRect(); e.style.transition = ''; e.style.strokeDashoffset = 0;
+      } else if (e.matches('path.draw')) { e.style.strokeDasharray = ''; e.style.strokeDashoffset = ''; }
+    });
+    root.querySelectorAll('[data-hi]').forEach(function (e) { e.classList.toggle('hi', has(e.dataset.hi, s)); });
+    root.querySelectorAll('[data-at]').forEach(function (e) {
+      var xy = offset(e.dataset.at, s);
+      if (!live) e.style.transition = 'none';
+      e.style.transform = 'translate(' + xy[0] + 'px,' + xy[1] + 'px)';
+    });
+    root.querySelectorAll('[data-lit]').forEach(function (e) { e.classList.toggle('lit', has(e.dataset.lit, s)); });
+  }
+  document.querySelectorAll('figure.s8f').forEach(function (fig) {
+    if (fig.classList.contains('ready')) return;
+    var n = +fig.dataset.steps, cur = 0, svg = fig.querySelector('.s8f-body > svg'), code = fig.querySelector('.s8f-code');
+    var items = [].slice.call(fig.querySelectorAll('ol.s8f-steps > li'));
+    items.forEach(function (li, k) { li.value = k + 1; });   /* the numbers stay 1 to n whatever is shown */
+    function show(c) {                                         /* past four steps, a trio: before, this, after */
+      var trio = n > 4, lo = trio ? Math.max(0, Math.min(c - 1, n - 3)) : 0;
+      items.forEach(function (li, k) {
+        li.classList.toggle('on', k === c); li.classList.toggle('near', trio && k !== c && k >= lo && k <= lo + 2);
+        li.classList.toggle('far', trio && (k < lo || k > lo + 2));
+        if (k === c) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+      });
+    }
+    var grid = document.createElement('div'); grid.className = 's8f-print'; grid.setAttribute('aria-hidden', 'true');
+    for (var s = 0; s < n; s++) {
+      var cell = document.createElement('div'), no = document.createElement('span'), c = svg.cloneNode(true);
+      no.className = 'n'; no.textContent = s + 1; c.removeAttribute('role'); c.removeAttribute('aria-label');
+      c.querySelectorAll('[id]').forEach(function (e) { e.removeAttribute('id'); });
+      paint(c, s, false, null); cell.appendChild(no); cell.appendChild(c); grid.appendChild(cell);
+    }
+    var bar = document.createElement('div'); bar.className = 's8f-bar';
+    bar.innerHTML = '<button type="button" aria-label="previous step">&lsaquo;</button><span aria-live="polite"></span><button type="button" aria-label="next step">&rsaquo;</button>';
+    var prev = bar.children[0], lab = bar.children[1], next = bar.children[2];
+    function go(t) {
+      var before = cur; cur = Math.max(0, Math.min(n - 1, t));
+      paint(svg, cur, true, before === cur ? null : before); if (code) paint(code, cur, true, null);
+      show(cur);
+      lab.textContent = 'step ' + (cur + 1) + ' of ' + n; prev.disabled = cur === 0; next.disabled = cur === n - 1;
+    }
+    prev.onclick = function () { go(cur - 1); }; next.onclick = function () { go(cur + 1); };
+    items.forEach(function (li, k) {
+      li.tabIndex = 0; li.onclick = function () { go(k); };
+      li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } };
+    });
+    fig.tabIndex = -1;
+    fig.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(cur + (e.key === 'ArrowRight' ? 1 : -1)); }
+    });
+    fig.querySelector('.s8f-body').insertAdjacentElement('afterend', bar); bar.insertAdjacentElement('afterend', grid);
+    paint(svg, 0, false, null); if (code) paint(code, 0, false, null);
+    fig.classList.add('ready'); go(0);
+    var ol = fig.querySelector('ol.s8f-steps');      /* the list keeps the height of its tallest trio, measured with the page's fonts */
+    function fit() {
+      if (!ol || n <= 4) return;
+      ol.style.minHeight = ''; var hmax = 0;
+      for (var t = 0; t < n; t++) { show(t); hmax = Math.max(hmax, ol.getBoundingClientRect().height); }
+      show(cur); ol.style.minHeight = Math.ceil(hmax) + 'px';
+    }
+    fit();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(fit, 150); });
+    var q = new URLSearchParams(location.search).get('step');   /* ?step=fid:k opens a figure at a step, for checks */
+    if (q && q.split(':')[0] === fig.id) go(+q.split(':')[1]);
+  });
+})();
+</script>
 </div>
 <hr class="notes-sep">
 <div class="notes-part" id="block2">
@@ -1451,6 +1535,90 @@ COPY &gt;&gt; COPY
 
 </section>
 </article>
+<script id="s8f-js">
+/* The figures of session 8 that step: see Sessions/Session Eight/figures/s8fig.py. */
+(function () {
+  if (window.__s8fStepper) return; window.__s8fStepper = true;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function has(list, s) { return (' ' + list + ' ').indexOf(' ' + s + ' ') >= 0; }
+  function offset(spec, s) {
+    var best = null;
+    spec.split(';').forEach(function (p) { var kv = p.split(':'), k = +kv[0]; if (k <= s && (best === null || k >= best[0])) best = [k, kv[1]]; });
+    return best ? best[1].split(',') : ['0', '0'];
+  }
+  function paint(root, s, live, prev) {
+    root.querySelectorAll('[data-on]').forEach(function (e) {
+      var on = has(e.dataset.on, s), was = prev === null ? on : has(e.dataset.on, prev);
+      e.classList.toggle('off', !on);
+      if (live && on && !was && !reduce && e.matches('path.draw')) {
+        var L = e.getTotalLength(); e.style.transition = 'none'; e.style.strokeDasharray = L; e.style.strokeDashoffset = L;
+        e.getBoundingClientRect(); e.style.transition = ''; e.style.strokeDashoffset = 0;
+      } else if (e.matches('path.draw')) { e.style.strokeDasharray = ''; e.style.strokeDashoffset = ''; }
+    });
+    root.querySelectorAll('[data-hi]').forEach(function (e) { e.classList.toggle('hi', has(e.dataset.hi, s)); });
+    root.querySelectorAll('[data-at]').forEach(function (e) {
+      var xy = offset(e.dataset.at, s);
+      if (!live) e.style.transition = 'none';
+      e.style.transform = 'translate(' + xy[0] + 'px,' + xy[1] + 'px)';
+    });
+    root.querySelectorAll('[data-lit]').forEach(function (e) { e.classList.toggle('lit', has(e.dataset.lit, s)); });
+  }
+  document.querySelectorAll('figure.s8f').forEach(function (fig) {
+    if (fig.classList.contains('ready')) return;
+    var n = +fig.dataset.steps, cur = 0, svg = fig.querySelector('.s8f-body > svg'), code = fig.querySelector('.s8f-code');
+    var items = [].slice.call(fig.querySelectorAll('ol.s8f-steps > li'));
+    items.forEach(function (li, k) { li.value = k + 1; });   /* the numbers stay 1 to n whatever is shown */
+    function show(c) {                                         /* past four steps, a trio: before, this, after */
+      var trio = n > 4, lo = trio ? Math.max(0, Math.min(c - 1, n - 3)) : 0;
+      items.forEach(function (li, k) {
+        li.classList.toggle('on', k === c); li.classList.toggle('near', trio && k !== c && k >= lo && k <= lo + 2);
+        li.classList.toggle('far', trio && (k < lo || k > lo + 2));
+        if (k === c) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+      });
+    }
+    var grid = document.createElement('div'); grid.className = 's8f-print'; grid.setAttribute('aria-hidden', 'true');
+    for (var s = 0; s < n; s++) {
+      var cell = document.createElement('div'), no = document.createElement('span'), c = svg.cloneNode(true);
+      no.className = 'n'; no.textContent = s + 1; c.removeAttribute('role'); c.removeAttribute('aria-label');
+      c.querySelectorAll('[id]').forEach(function (e) { e.removeAttribute('id'); });
+      paint(c, s, false, null); cell.appendChild(no); cell.appendChild(c); grid.appendChild(cell);
+    }
+    var bar = document.createElement('div'); bar.className = 's8f-bar';
+    bar.innerHTML = '<button type="button" aria-label="previous step">&lsaquo;</button><span aria-live="polite"></span><button type="button" aria-label="next step">&rsaquo;</button>';
+    var prev = bar.children[0], lab = bar.children[1], next = bar.children[2];
+    function go(t) {
+      var before = cur; cur = Math.max(0, Math.min(n - 1, t));
+      paint(svg, cur, true, before === cur ? null : before); if (code) paint(code, cur, true, null);
+      show(cur);
+      lab.textContent = 'step ' + (cur + 1) + ' of ' + n; prev.disabled = cur === 0; next.disabled = cur === n - 1;
+    }
+    prev.onclick = function () { go(cur - 1); }; next.onclick = function () { go(cur + 1); };
+    items.forEach(function (li, k) {
+      li.tabIndex = 0; li.onclick = function () { go(k); };
+      li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } };
+    });
+    fig.tabIndex = -1;
+    fig.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(cur + (e.key === 'ArrowRight' ? 1 : -1)); }
+    });
+    fig.querySelector('.s8f-body').insertAdjacentElement('afterend', bar); bar.insertAdjacentElement('afterend', grid);
+    paint(svg, 0, false, null); if (code) paint(code, 0, false, null);
+    fig.classList.add('ready'); go(0);
+    var ol = fig.querySelector('ol.s8f-steps');      /* the list keeps the height of its tallest trio, measured with the page's fonts */
+    function fit() {
+      if (!ol || n <= 4) return;
+      ol.style.minHeight = ''; var hmax = 0;
+      for (var t = 0; t < n; t++) { show(t); hmax = Math.max(hmax, ol.getBoundingClientRect().height); }
+      show(cur); ol.style.minHeight = Math.ceil(hmax) + 'px';
+    }
+    fit();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(fit, 150); });
+    var q = new URLSearchParams(location.search).get('step');   /* ?step=fid:k opens a figure at a step, for checks */
+    if (q && q.split(':')[0] === fig.id) go(+q.split(':')[1]);
+  });
+})();
+</script>
 </div>
 </div>
 </div>
