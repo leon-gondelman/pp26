@@ -2416,10 +2416,10 @@ Found 1 data race(s)</pre>
   })();
   const parts = [...document.querySelectorAll('.reveal .slides > section')].map((s, h) => {
     const d = s.querySelector('section.part') || (s.classList.contains('part') ? s : null);
-    return d ? { h, name: d.querySelector('h1').textContent, sub: (d.querySelector('.sub') || {}).textContent || '' } : null;
+    return d ? { h, name: d.querySelector('h1').textContent, sub: (d.querySelector('.sub') || {}).textContent || '', appendix: d.hasAttribute('data-appendix') } : null;
   }).filter(Boolean);
   const tocList = document.getElementById('toc-list');
-  parts.forEach(p => { const li = document.createElement('li'); li.innerHTML = `<b>${p.name}</b> <span class="muted">${p.sub}</span>`; li.onclick = () => { Reveal.slide(p.h, 0); toggleToc(false); }; tocList.appendChild(li); });
+  parts.forEach(p => { const li = document.createElement('li'); if (p.appendix) li.className = 'appendix'; li.innerHTML = `<b>${p.name}</b> <span class="muted">${p.sub}</span>`; li.onclick = () => { Reveal.slide(p.h, 0); toggleToc(false); }; tocList.appendChild(li); });
   const toggleToc = (on) => { const t = document.getElementById('toc'); t.hidden = on === undefined ? !t.hidden : !on; };
 
   // Print (?print-pdf): reveal lays the pages out between animation frames, and headless Chrome
