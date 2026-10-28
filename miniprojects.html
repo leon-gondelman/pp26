@@ -107,7 +107,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 </ul>
 <p>Three things are left to the&nbsp;group:</p>
 <ul>
-<li data-note-reply="Rewritten. The problem is not part of the description: the group writes it. It now stands apart from the list, under &#39;Two things are left to the group&#39;, with an example."><strong>The problem</strong>: within the chosen topic, the group states the concrete problem its project answers, in half a page sent with the registration on 11 November: for whom the problem matters, what is not known or does not work, and what result would answer it; and, if the core is adjusted, how. For example, within Mini-git: whether a history of ten thousand commits fits in memory once the versions share their nodes, and how much the sharing saves against a copy per commit. Two groups on the same topic thus answer two different&nbsp;problems.</li>
+<li data-note-reply="Rewritten. The problem is not part of the description: the group writes it. It now stands apart from the list, under &#39;Two things are left to the group&#39;, with an example."><strong>The problem</strong>: within the chosen topic, the group states the concrete problem its project answers, in half a page sent with the registration on 18 November: for whom the problem matters, what is not known or does not work, and what result would answer it; and, if the core is adjusted, how. For example, within Mini-git: whether a history of ten thousand commits fits in memory once the versions share their nodes, and how much the sharing saves against a copy per commit. Two groups on the same topic thus answer two different&nbsp;problems.</li>
 <li><strong>The language</strong>: free, with at least one part in a language of the course (OCaml, Python, JavaScript, Java, Go, Rust, Erlang, Haskell); a comparison across two languages is always&nbsp;welcome.</li>
 <li><strong>The core, within limits</strong>: a group may adjust its core: replace a step by another of the same weight, change the language or the data, or trade a step for a direction, as long as the question stays and the core still ends with its evidence. The half page sent at registration states the adjustment, and the lecturer&rsquo;s reply confirms it. A larger change, to the question itself, is possible as well: the project then becomes a topic of the group&rsquo;s own, option (c), which needs the lecturer&rsquo;s agreement and is proposed by 4&nbsp;November.</li>
 </ul>
@@ -140,8 +140,8 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 
 <h3 id="dates">Deadlines</h3>
 <ul>
-<li><strong>4 November (S9)</strong> &mdash; proposals for an own topic, option (c), sent to the&nbsp;lecturer</li>
-<li><strong>11 November (S10)</strong> &mdash; registration of groups (or individual work), topics and the half-page problem formulation, through the form on&nbsp;Moodle</li>
+<li><strong>11 November (S9)</strong> &mdash; proposals for an own topic, option (c), sent to the&nbsp;lecturer</li>
+<li><strong>18 November (S10)</strong> &mdash; registration of groups (or individual work), topics and the half-page problem formulation, through the form on&nbsp;Moodle</li>
 <li><strong>Early January 2027</strong> &mdash; report and code submitted in Digital Exam (date set by the study&nbsp;secretariat)</li>
 <li><strong>January 2027</strong> &mdash; oral&nbsp;exams</li>
 </ul>
@@ -344,7 +344,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 <h3><span class="tnum">11</span> Channels on shared&nbsp;memory</h3>
 <p class="tmeta">Part 2 &middot; Sessions 7 and 8, lab&nbsp;7</p>
 <p><strong>The question.</strong> Go&rsquo;s channels are values of the language, implemented by its runtime from a lock, a ring buffer and queues of waiting senders and receivers. What does it take to build them in a language that has only threads, locks and condition variables, and where does the result differ from Go&rsquo;s? The decision is communication: message passing as a discipline over shared&nbsp;memory.</p>
-<p><strong>Before starting.</strong> Session 8 introduces channels on 28 October; A Tour of Go is enough to start before&nbsp;it.</p>
+<p><strong>Before starting.</strong> Session 8 introduces channels on 4 November; A Tour of Go is enough to start before&nbsp;it.</p>
 <p><strong>The core.</strong> Go&rsquo;s channels, rebuilt in Java or OCaml&nbsp;5.</p>
 <ol class="steps">
 <li>A buffered channel of capacity <em>n</em>, starting from lab 7&rsquo;s bounded&nbsp;buffer.</li>
@@ -362,7 +362,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 <h3><span class="tnum">12</span> Actors on threads: a mailbox&nbsp;each</h3>
 <p class="tmeta">Part 2 &middot; Sessions 7 and&nbsp;8</p>
 <p><strong>The question.</strong> An Erlang actor has one mailbox, selective receive, and no shared state. What does it take to build that on threads, and which race condition remains once every variable is private to an actor? No data race is possible, yet an invariant can still break between two&nbsp;messages.</p>
-<p><strong>Before starting.</strong> Session 8 introduces actors on 28 October; the chapter of &ldquo;Learn You Some Erlang&rdquo; below is enough to start before&nbsp;it.</p>
+<p><strong>Before starting.</strong> Session 8 introduces actors on 4 November; the chapter of &ldquo;Learn You Some Erlang&rdquo; below is enough to start before&nbsp;it.</p>
 <p><strong>The core.</strong> An actor runtime on threads, in Java or OCaml 5, and the race it&nbsp;leaves.</p>
 <ol class="steps">
 <li>An actor as a thread with a mailbox, with <code>spawn</code>, <code>send</code> and&nbsp;<code>receive</code>.</li>
@@ -427,7 +427,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 <h3><span class="tnum">16</span> A type checker for lab 4&rsquo;s&nbsp;interpreter</h3>
 <p class="tmeta">Part 3 &middot; Sessions 4, 10 and 11, lab 4; the labs of sessions 10 and 11, on paper, work the typing rules and unification by&nbsp;hand</p>
 <p><strong>The question.</strong> Which terms does a checker reject before evaluation, which well-behaved terms does it still reject, and which further programs does let-polymorphism accept? Lab 4 runs any term. Once integers and booleans join the language, a term such as adding a function to a number gets stuck: the evaluator has no rule for it. The decision is types: what is checked, and&nbsp;when.</p>
-<p><strong>Before starting.</strong> The typing rules arrive in session 10 (11 November); the extended evaluator can be written&nbsp;before.</p>
+<p><strong>Before starting.</strong> The typing rules arrive in session 10 (18 November); the extended evaluator can be written&nbsp;before.</p>
 <p><strong>The core.</strong> Lab 4&rsquo;s small ML, given&nbsp;types.</p>
 <ol class="steps">
 <li>Lab 4&rsquo;s language extended with integers, booleans, <code>if</code> and <code>let</code>, as in the lab&rsquo;s extension &ldquo;a small&nbsp;ML&rdquo;.</li>
@@ -444,7 +444,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 <h3><span class="tnum">17</span> Binary decision diagrams: a canonical form behind a&nbsp;signature</h3>
 <p class="tmeta">Part 3 &middot; Sessions 2, 5 and&nbsp;12</p>
 <p><strong>The question.</strong> A boolean function has many decision diagrams but only one that is reduced and ordered: the variables tested in a fixed order, no node with two equal children, and no two equal nodes. When every node is built through one constructor that returns the existing node whenever an equal one exists (hash-consing), two diagrams of the same function are the same node in memory, and the equality of two functions is one pointer comparison. What must an abstract type hide so that no client can build a diagram that breaks this, and what does the client gain from it? The decision is data abstraction: an invariant kept by a&nbsp;signature.</p>
-<p><strong>Before starting.</strong> Session 12 introduces data abstraction on 25 November; the lecture notes of Andersen below explain the diagrams from the&nbsp;beginning.</p>
+<p><strong>Before starting.</strong> Session 12 introduces data abstraction on 2 December; the lecture notes of Andersen below explain the diagrams from the&nbsp;beginning.</p>
 <p><strong>The core.</strong> A small library of diagrams behind an abstract&nbsp;type.</p>
 <ol class="steps">
 <li>An abstract type of diagrams whose only constructor goes through a table of unique nodes, so that equal nodes are shared and no node has two equal&nbsp;children.</li>
