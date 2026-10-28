@@ -99,6 +99,11 @@ show();})();</script>
 function bars(){var b=0;document.querySelectorAll(".topbar,aside.rail,nav.nside-pane").forEach(function(e){
   if(getComputedStyle(e).display==="none")return;var r=e.getBoundingClientRect();
   if(r.top<=b+2&&r.bottom>b&&r.height<innerHeight/2)b=r.bottom;});return b;}
+/* the bars' height as --bars, so that an anchor's scroll-margin-top keeps a section's heading below
+   them; a page opened at a section is moved there again once the measure is known */
+function setBars(){document.documentElement.style.setProperty("--bars",bars()+"px");}
+setBars();addEventListener("resize",setBars);
+if(location.hash){var tgt=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(tgt)requestAnimationFrame(function(){setBars();tgt.scrollIntoView();});}
 /* the place is the last heading above the reading line and the distance below it, so that it
    holds when the text reflows (a phone turned, a wider window); the heading is found again by its name */
 function heads(){return [].slice.call(document.querySelectorAll("main .inner :is(h2,h3)"));}

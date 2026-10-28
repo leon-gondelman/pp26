@@ -101,6 +101,9 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
    page as the rail is, by the panes' tint (--pane, shared with the rail) and a gray rule of 1 px on the side that faces
    the page and one where it meets the bar above it (the top bar; on a phone the course's strip). */
 nav.nside-pane{box-sizing:border-box;background:var(--bg);z-index:5}
+/* a link to a section lands under the sticky bars, not behind them: the page's script measures the
+   bars (--bars) and every anchor keeps that much room above it (28 October, pp26-153) */
+[id]{scroll-margin-top:calc(var(--bars,0px) + 14px)}
 nav.nside-pane .nside-back{display:block;font:600 .86rem/1.3 var(--sans);color:var(--acc);text-decoration:none;
   padding:.4rem .6rem;border-radius:6px;background:var(--bg);border:0}
 nav.nside-pane .nside-cur,nav.nside-pane .nside-open,nav.nside-pane .nside-theme,nav.nside-pane .nside-home{display:none}
@@ -277,6 +280,11 @@ show();})();</script>
 function bars(){var b=0;document.querySelectorAll(".topbar,aside.rail,nav.nside-pane").forEach(function(e){
   if(getComputedStyle(e).display==="none")return;var r=e.getBoundingClientRect();
   if(r.top<=b+2&&r.bottom>b&&r.height<innerHeight/2)b=r.bottom;});return b;}
+/* the bars' height as --bars, so that an anchor's scroll-margin-top keeps a section's heading below
+   them; a page opened at a section is moved there again once the measure is known */
+function setBars(){document.documentElement.style.setProperty("--bars",bars()+"px");}
+setBars();addEventListener("resize",setBars);
+if(location.hash){var tgt=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(tgt)requestAnimationFrame(function(){setBars();tgt.scrollIntoView();});}
 /* the place is the last heading above the reading line and the distance below it, so that it
    holds when the text reflows (a phone turned, a wider window); the heading is found again by its name */
 function heads(){return [].slice.call(document.querySelectorAll("main .inner :is(h2,h3)"));}

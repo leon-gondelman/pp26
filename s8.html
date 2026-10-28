@@ -67,7 +67,7 @@ if(/[?&]palette=old/.test(location.search))document.documentElement.classList.a
 
 <section id="lecture">
   <h2>Lecture</h2>
-  <div class="mgrid"><div class="mcard soon"><span class="ic"><span class="num">1</span></span><span class="mid"><b>Determinism, choice and buffer capacity in message passing</b><span class="tx">The RC 4000 nucleus of 1969, Kahn&#x27;s process networks and their determinism, then Hoare&#x27;s CSP and Go: synchronous and buffered channels, select with a timeout, a reply channel, and a deadlock in which every goroutine waits.</span></span><span class="ft"><span class="chips"></span><span class="go">Coming soon</span></span></div><div class="mcard soon"><span class="ic"><span class="num">2</span></span><span class="mid"><b>Actors and mailboxes</b><span class="tx">Hewitt&#x27;s actor model as Agha formulated it, and Erlang: identity and mailbox, selective receive, a reply matched by a reference, and an update lost across two messages.</span></span><span class="ft"><span class="chips"></span><span class="go">Coming soon</span></span></div><div class="mcard wide"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg></span><span class="mid"><b><a href="#notes">Notes</a></b><span class="tx">Both blocks written out, with their figures, programs and&nbsp;sources.</span></span><span class="ft"><span class="chips"><a class="chipb" href="#block1">Block 1</a><a class="chipb" href="#block2">Block 2</a></span><span class="go">Read below &darr;</span></span></div></div>
+  <div class="mgrid"><div class="mcard"><span class="ic"><span class="num">1</span></span><span class="mid"><b><a href="https://leon-gondelman.github.io/pp26/slides/s8-message-passing-block-1.html">Determinism, choice and buffer capacity in message passing</a></b><span class="tx">The RC 4000 nucleus of 1969, Kahn&#x27;s process networks and their determinism, then Hoare&#x27;s CSP and Go: synchronous and buffered channels, select with a timeout, a reply channel, and a deadlock in which every goroutine waits.</span></span><span class="ft"><span class="chips"><a class="chipb" href="https://leon-gondelman.github.io/pp26/slides/s8-message-passing-block-1.pdf">PDF</a></span><span class="go">Slides &rarr;</span></span></div><div class="mcard soon"><span class="ic"><span class="num">2</span></span><span class="mid"><b>Actors and mailboxes</b><span class="tx">Hewitt&#x27;s actor model as Agha formulated it, and Erlang: identity and mailbox, selective receive, a reply matched by a reference, and an update lost across two messages.</span></span><span class="ft"><span class="chips"></span><span class="go">Coming soon</span></span></div><div class="mcard wide"><span class="ic"><svg class="el" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg></span><span class="mid"><b><a href="#notes">Notes</a></b><span class="tx">Both blocks written out, with their figures, programs and&nbsp;sources.</span></span><span class="ft"><span class="chips"><a class="chipb" href="#block1">Block 1</a><a class="chipb" href="#block2">Block 2</a></span><span class="go">Read below &darr;</span></span></div></div>
 </section>
 
 <section id="lab">
@@ -1332,6 +1332,9 @@ COPY &gt;&gt; COPY
    page as the rail is, by the panes' tint (--pane, shared with the rail) and a gray rule of 1 px on the side that faces
    the page and one where it meets the bar above it (the top bar; on a phone the course's strip). */
 nav.nside-pane{box-sizing:border-box;background:var(--bg);z-index:5}
+/* a link to a section lands under the sticky bars, not behind them: the page's script measures the
+   bars (--bars) and every anchor keeps that much room above it (28 October, pp26-153) */
+[id]{scroll-margin-top:calc(var(--bars,0px) + 14px)}
 nav.nside-pane .nside-back{display:block;font:600 .86rem/1.3 var(--sans);color:var(--acc);text-decoration:none;
   padding:.4rem .6rem;border-radius:6px;background:var(--bg);border:0}
 nav.nside-pane .nside-cur,nav.nside-pane .nside-open,nav.nside-pane .nside-theme,nav.nside-pane .nside-home{display:none}
@@ -1521,6 +1524,11 @@ show();})();</script>
 function bars(){var b=0;document.querySelectorAll(".topbar,aside.rail,nav.nside-pane").forEach(function(e){
   if(getComputedStyle(e).display==="none")return;var r=e.getBoundingClientRect();
   if(r.top<=b+2&&r.bottom>b&&r.height<innerHeight/2)b=r.bottom;});return b;}
+/* the bars' height as --bars, so that an anchor's scroll-margin-top keeps a section's heading below
+   them; a page opened at a section is moved there again once the measure is known */
+function setBars(){document.documentElement.style.setProperty("--bars",bars()+"px");}
+setBars();addEventListener("resize",setBars);
+if(location.hash){var tgt=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(tgt)requestAnimationFrame(function(){setBars();tgt.scrollIntoView();});}
 /* the place is the last heading above the reading line and the distance below it, so that it
    holds when the text reflows (a phone turned, a wider window); the heading is found again by its name */
 function heads(){return [].slice.call(document.querySelectorAll("main .inner :is(h2,h3)"));}
