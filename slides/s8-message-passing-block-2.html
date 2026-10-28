@@ -1359,7 +1359,7 @@ html.print-pdf .reveal .b2-defs > *, html.reveal-print .reveal .b2-defs > * { gr
 .reveal ol.b2-items li { margin-bottom: 14px; }
 .reveal ol.b2-items li.lit { color: var(--accent); font-weight: 500; }
 /* the figures of the story, on the slides: the svg of Sessions/Session Eight/figures (figs.py), driven by the clicks */
-.reveal .s8f { --ink: var(--fg); --ink2: #3E5257; --ink3: var(--muted); --bg: #FAFAFA; --line: var(--rule); --hw: #2A6F97; --hw-b: #EEF4F8; --acc: var(--accent); --orange: var(--accent); --sans: "Fira Sans", sans-serif; --mono: "Fira Mono", monospace; margin: 0 auto 40px auto; }
+.reveal .s8f { --ink: var(--fg); --ink2: #3E5257; --ink3: var(--muted); --bg: #FAFAFA; --line: var(--rule); --hw: #2A6F97; --hw-b: #EEF4F8; --acc: var(--accent); --orange: var(--accent); --sans: "Fira Sans", sans-serif; --mono: "Fira Mono", monospace; margin: 0 auto 48px auto; }
 .reveal .s8f svg { display: block; width: 100%; height: auto; overflow: visible; font-family: var(--sans); margin: 0 auto; }
 .reveal .s8f svg text { fill: var(--ink); font-size: 16px; }
 .reveal .s8f svg .t2, .reveal .s8f svg .t3 { fill: var(--ink); } /* labels in the slide's text colour, never lighter (slide rule 28), as block 1 */ .reveal .s8f svg .sm { font-size: 14px; }
@@ -1450,7 +1450,7 @@ html.print-pdf .reveal .b2-defs > *, html.reveal-print .reveal .b2-defs > * { gr
 </section>
 
 <section id="b2-toy">
-  <h2>Agha's three primitives in&nbsp;OCaml</h2>
+  <h2>Agha's actor primitives in&nbsp;OCaml</h2>
   <div class="cols b2-code">
     <div>
       <div class="car langcar" data-lang="ocaml">
@@ -1504,7 +1504,7 @@ $ ./toy_actor
     </div>
     <div>
       <div class="b2-defs">
-        <p class="fragment fade-out" data-fragment-index="0">On <code>Int k</code> the counter becomes a counter at <code>n + k</code>; on <code>Ask reply</code> it sends its count to the address given. Two increments and an <code>Ask</code> print&nbsp;5.</p>
+        <p class="fragment fade-out" data-fragment-index="0">On <code>Int k</code>, the counter becomes a counter at <code>n + k</code>. On <code>Ask reply</code>, it sends its count to the address given. Two increments and an <code>Ask</code> print&nbsp;5.</p>
         <p class="fragment current-visible" data-fragment-index="0"><b>A send only enqueues.</b> The sender continues at once; the message waits in the mailroom until <code>run</code> takes&nbsp;it.</p>
         <p class="fragment current-visible" data-fragment-index="1"><b>Each delivery runs to completion</b>, the <i>Isolated Turn Principle</i> of <a class="cite" href="https://soft.vub.ac.be/Publications/2016/vub-soft-tr-16-11.pdf" target="_blank" rel="noopener">De Koster et al. 2016</a>: within one turn there is no low-level data race and no deadlock (pages 33 to&nbsp;34).</p>
         <p class="fragment current-visible" data-fragment-index="2"><b>The counter has no mutable variable of its own.</b> Its state lives in the behaviour it becomes&nbsp;next.</p>
@@ -1666,9 +1666,9 @@ $ ./toy_actor
     <g data-on="2"><text x="0" y="285" text-anchor="start" data-hi="2">another order at R</text><rect x="255" y="255" width="100" height="46" rx="3" class="cell"/><rect x="375" y="255" width="100" height="46" rx="3" class="cell"/><rect x="495" y="255" width="100" height="46" rx="3" class="cell"/><rect x="615" y="255" width="100" height="46" rx="3" class="cell"/><rect x="260" y="260" width="90" height="36" rx="5" class="msg"/><text x="305" y="285" text-anchor="middle" class="mono">b1</text><rect x="380" y="260" width="90" height="36" rx="5" class="msg"/><text x="425" y="285" text-anchor="middle" class="mono">b2</text><rect x="500" y="260" width="90" height="36" rx="5" class="msg"/><text x="545" y="285" text-anchor="middle" class="mono">a1</text><rect x="620" y="260" width="90" height="36" rx="5" class="msg"/><text x="665" y="285" text-anchor="middle" class="mono">a2</text></g>
   </svg></div>
   <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">Erlang adds back one guarantee, as &ldquo;a design decision&rdquo;: messages between a given pair of processes arrive in the order sent (<a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a>, page&nbsp;25).</p>
+    <p class="fragment fade-out" data-fragment-index="0">Erlang adds back one guarantee, as &ldquo;a design decision&rdquo;: messages between a given pair of processes arrive in the order sent, for ordinary messages in the default mailbox (<a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a>, page&nbsp;25).</p>
     <p class="fragment current-visible" data-fragment-index="0">A's two messages arrive in the order A sent them, and B's in the order B sent&nbsp;them.</p>
-    <p class="fragment current-visible" data-fragment-index="1">Across different senders no order is guaranteed: how their messages interleave depends on the&nbsp;scheduling.</p>
+    <p class="fragment current-visible" data-fragment-index="1">Across different senders Erlang guarantees no order: how their messages interleave depends on the&nbsp;scheduling.</p>
   </div>
   
 </section>
@@ -1799,7 +1799,7 @@ end</code></pre>
 </section>
 
 <section id="b2-conversations">
-  <h2>One request and its reply in three&nbsp;systems</h2>
+  <h2>A request and its reply in the RC 4000, Go and&nbsp;Erlang</h2>
   <div class="s8f w1000"><svg class="s8fig" data-last="7" viewBox="0 0 640 330" role="img" aria-label="Three rows, RC 4000, Go and Erlang, each a client and a server with a request and a reply, the identity drawn as one cell" xmlns="http://www.w3.org/2000/svg"><text x="0" y="36" text-anchor="start" class="hd">RC 4000</text><rect x="70" y="42" width="80" height="34" rx="5" class="box"/><text x="110" y="65" text-anchor="middle" class="sm">client</text><rect x="480" y="42" width="80" height="34" rx="5" class="box"/><text x="520" y="65" text-anchor="middle" class="sm">server</text><path d="M150 50 L476 50" class="arr"/><text x="315" y="40" text-anchor="middle" class="sm t3">request</text><rect x="167" y="79" width="58" height="24" rx="3" class="cell"/><rect x="229" y="79" width="58" height="24" rx="3" class="cell"/><text x="167" y="118" text-anchor="start" class="sm t3">client&#x27;s queue</text><path d="M520 76 V91 L258 91" class="arr"/><g><rect x="169" y="80" width="54" height="22" rx="5" class="msg"/><text x="196" y="96" text-anchor="middle" class="mono">x</text></g><g data-on="1 2 3 4 5 6 7" data-hi="1 2" data-at="1:340,0;2:148,41;7:-72,41"><rect x="90" y="39" width="40" height="22" rx="5" class="ident"/><text x="110" y="55" text-anchor="middle" class="mono ident-t">b7</text></g><text x="620" y="118" text-anchor="end" class="sm" data-on="7" data-hi="7">the nucleus checks the identity</text><text x="0" y="140" text-anchor="start" class="hd">Go</text><rect x="70" y="146" width="80" height="34" rx="5" class="box"/><text x="110" y="169" text-anchor="middle" class="sm">client</text><rect x="480" y="146" width="80" height="34" rx="5" class="box"/><text x="520" y="169" text-anchor="middle" class="sm">server</text><path d="M150 154 L476 154" class="arr"/><text x="315" y="144" text-anchor="middle" class="sm t3">request</text><g data-on="3 4 5 6 7"><rect x="205" y="182" width="92" height="26" rx="4" class="ident"/><text x="251" y="200" text-anchor="middle" class="mono sm ident-t">reply</text></g><path d="M520 180 V195 L301 195" class="arr"/><path d="M205 195 L110 195 L110 184" class="arr"/><g data-on="4" data-at="4:-386,0"><rect x="507" y="184" width="26" height="22" rx="5" class="msg"/><text x="520" y="200" text-anchor="middle" class="mono">5</text></g><g data-on="3 4 5 6 7" data-hi="3 4" data-at="3:325,0"><rect x="79.5" y="143" width="61" height="22" rx="5" class="ident"/><text x="110" y="159" text-anchor="middle" class="mono ident-t">reply</text></g><text x="620" y="222" text-anchor="end" class="sm" data-on="7" data-hi="7">the program keeps it, by convention</text><text x="0" y="244" text-anchor="start" class="hd">Erlang</text><rect x="70" y="250" width="80" height="34" rx="5" class="box"/><text x="110" y="273" text-anchor="middle" class="sm">client</text><rect x="480" y="250" width="80" height="34" rx="5" class="box"/><text x="520" y="273" text-anchor="middle" class="sm">server</text><path d="M150 258 L476 258" class="arr"/><text x="315" y="248" text-anchor="middle" class="sm t3">request</text><rect x="167" y="287" width="58" height="24" rx="3" class="cell"/><rect x="229" y="287" width="58" height="24" rx="3" class="cell"/><text x="167" y="326" text-anchor="start" class="sm t3">client&#x27;s mailbox</text><path d="M520 284 V299 L258 299" class="arr"/><g><rect x="169" y="288" width="54" height="22" rx="5" class="msg"/><text x="196" y="304" text-anchor="middle" class="mono">{log}</text></g><g data-on="5 6 7" data-hi="5 6" data-at="5:340,0;6:148,41;7:-73.5,41"><rect x="88.5" y="247" width="43" height="22" rx="5" class="ident"/><text x="110" y="263" text-anchor="middle" class="mono ident-t">Ref</text></g><text x="620" y="326" text-anchor="end" class="sm" data-on="7" data-hi="7">the program keeps it, by convention</text></svg></div>
   <div class="b2-defs b2-cap">
     <p class="fragment fade-out" data-fragment-index="0">One client and one server in each system, nothing sent yet; the client's queue and mailbox already hold a message from some other process, x and&nbsp;{log}.</p>
@@ -1921,7 +1921,7 @@ end</code></pre>
 
 <section id="b2-fair-go">
   <h2>Go's <code>select</code> and eventual&nbsp;service</h2>
-  <div class="s8f w1100 b2-big"><svg class="s8fig" data-last="2" viewBox="0 0 960 290" role="img" aria-label="Runs of one select statement with three ready cases a, b and c; each run takes one of them; case c, ready throughout, is taken at the fifth run" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40" text-anchor="start" class="hd">runs of one <tspan class="mono">select</tspan></text><text x="360" y="40" text-anchor="middle">1</text><text x="460" y="40" text-anchor="middle">2</text><text x="560" y="40" text-anchor="middle">3</text><text x="660" y="40" text-anchor="middle">4</text><text x="760" y="40" text-anchor="middle" data-on="1 2">5</text><text x="860" y="40" text-anchor="middle" data-on="1 2">6</text><text x="290" y="108" text-anchor="end">ready case <tspan class="mono">a</tspan></text><text x="290" y="168" text-anchor="end">ready case <tspan class="mono">b</tspan></text><text x="290" y="228" text-anchor="end" data-hi="1">ready case <tspan class="mono">c</tspan></text><path d="M320 100 H900 M320 160 H900" class="ln"/><path d="M320 220 H900" class="ln" data-hi="1"/><g><circle cx="360" cy="100" r="9" class="hollow"/><circle cx="360" cy="160" r="11" class="dot"/><circle cx="360" cy="220" r="9" class="hollow"/><circle cx="460" cy="100" r="11" class="dot"/><circle cx="460" cy="160" r="9" class="hollow"/><circle cx="460" cy="220" r="9" class="hollow"/><circle cx="560" cy="100" r="9" class="hollow"/><circle cx="560" cy="160" r="11" class="dot"/><circle cx="560" cy="220" r="9" class="hollow"/><circle cx="660" cy="100" r="11" class="dot"/><circle cx="660" cy="160" r="9" class="hollow"/><circle cx="660" cy="220" r="9" class="hollow"/></g><g data-on="1 2"><circle cx="760" cy="100" r="9" class="hollow"/><circle cx="760" cy="160" r="9" class="hollow"/><circle cx="860" cy="100" r="11" class="dot"/><circle cx="860" cy="160" r="9" class="hollow"/><circle cx="860" cy="220" r="9" class="hollow"/></g><circle cx="760" cy="220" r="11" class="dot" data-on="1 2" data-hi="1"/><text x="900" y="272" text-anchor="end" data-on="1 2" data-hi="1">taken eventually, with probability 1</text></svg></div>
+  <div class="s8f w1100 b2-big"><svg class="s8fig" data-last="2" viewBox="0 0 960 290" role="img" aria-label="Runs of one select statement with three ready cases a, b and c; each run takes one of them; case c, ready throughout, is taken at the fifth run" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40" text-anchor="start" class="hd">runs of one <tspan class="mono">select</tspan></text><text x="360" y="40" text-anchor="middle">1</text><text x="460" y="40" text-anchor="middle">2</text><text x="560" y="40" text-anchor="middle">3</text><text x="660" y="40" text-anchor="middle">4</text><text x="760" y="40" text-anchor="middle" data-on="1 2">5</text><text x="860" y="40" text-anchor="middle" data-on="1 2">6</text><text x="290" y="108" text-anchor="end">ready case <tspan class="mono">a</tspan></text><text x="290" y="168" text-anchor="end">ready case <tspan class="mono">b</tspan></text><text x="290" y="228" text-anchor="end" data-hi="1">ready case <tspan class="mono">c</tspan></text><path d="M320 100 H900 M320 160 H900" class="ln"/><path d="M320 220 H900" class="ln" data-hi="1"/><g><circle cx="360" cy="100" r="9" class="hollow"/><circle cx="360" cy="160" r="11" class="dot"/><circle cx="360" cy="220" r="9" class="hollow"/><circle cx="460" cy="100" r="11" class="dot"/><circle cx="460" cy="160" r="9" class="hollow"/><circle cx="460" cy="220" r="9" class="hollow"/><circle cx="560" cy="100" r="9" class="hollow"/><circle cx="560" cy="160" r="11" class="dot"/><circle cx="560" cy="220" r="9" class="hollow"/><circle cx="660" cy="100" r="11" class="dot"/><circle cx="660" cy="160" r="9" class="hollow"/><circle cx="660" cy="220" r="9" class="hollow"/></g><g data-on="1 2"><circle cx="760" cy="100" r="9" class="hollow"/><circle cx="760" cy="160" r="9" class="hollow"/><circle cx="860" cy="100" r="11" class="dot"/><circle cx="860" cy="160" r="9" class="hollow"/><circle cx="860" cy="220" r="9" class="hollow"/></g><circle cx="760" cy="220" r="11" class="dot" data-on="1 2" data-hi="1"/><text x="900" y="272" text-anchor="end" data-on="1 2" data-hi="1">taken eventually, with probability 1, under two assumptions</text></svg></div>
   <div class="b2-defs b2-cap">
     <p class="fragment fade-out" data-fragment-index="0"><b>The rule of the specification.</b> Each time a <code>select</code> runs, one of its ready cases is chosen by uniform pseudo-random selection (<a class="cite" href="https://go.dev/ref/spec" target="_blank" rel="noopener">the Go specification</a>, “Select&nbsp;statements”).</p>
     <p class="fragment current-visible" data-fragment-index="0"><b>An inference, with probability&nbsp;1.</b> A case that stays ready is taken eventually, if the choices are independent and the goroutine runs the <code>select</code> again and again while the case stays&nbsp;ready.</p>
@@ -2030,7 +2030,7 @@ end</code></pre>
   <table class="b2-close" style="margin-top: 48px">
     <tr class="fragment" data-fragment-index="3"><td>Consistency with the&nbsp;story</td><td>The price of removing sharing is&nbsp;waiting.</td></tr>
     <tr class="fragment" data-fragment-index="4"><td>Uses of each primitive&nbsp;(§3.2)</td><td>Shared-memory primitives are used more often, so by the study's count message passing is even likelier to cause a blocking&nbsp;bug.</td></tr>
-    <tr class="fragment" data-fragment-index="5"><td>Not&nbsp;established</td><td>Whether message passing creates or prevents bugs&nbsp;overall.</td></tr>
+    <tr class="fragment" data-fragment-index="5"><td>Open&nbsp;question</td><td>Whether message passing creates or prevents bugs&nbsp;overall.</td></tr>
   </table>
   
 </section>
@@ -2087,7 +2087,7 @@ Found 1 data race(s)</pre>
   <table class="b2-close">
     <tr><td>A&nbsp;send</td><td>moves&nbsp;ownership</td></tr>
     <tr class="fragment" data-fragment-index="0"><td>What stays&nbsp;shared</td><td>an <code>Arc</code>, mutated only through a type that synchronizes its own&nbsp;access:<br>a&nbsp;<code>Mutex</code><br>an&nbsp;<code>RwLock</code><br>an&nbsp;atomic<br>a&nbsp;<code>OnceLock</code></td></tr>
-    <tr class="fragment" data-fragment-index="1"><td>Safe&nbsp;code</td><td>unsynchronized conflicting accesses forbidden; shared state not&nbsp;forbidden</td></tr>
+    <tr class="fragment" data-fragment-index="1"><td>Safe&nbsp;code</td><td>the type system forbids unsynchronized conflicting accesses, not shared&nbsp;state</td></tr>
     <tr class="fragment" data-fragment-index="2"><td>Unsound <code>unsafe</code>&nbsp;code</td><td>reopens the&nbsp;hole</td></tr>
   </table>
   
@@ -2139,7 +2139,7 @@ Found 1 data race(s)</pre>
 </section>
 
 <section id="b2-encoding-limits">
-  <h2>Limits of the encodings: mixed choice and&nbsp;fairness</h2>
+  <h2>Limits of the mutual encodings of channels and&nbsp;actors</h2>
   <p class="def"><b>Mixed choice</b>: a choice that waits on a send and a receive at&nbsp;once.</p>
   <table class="b2-cmp b2-sem">
     <tr><th></th><th>Mixed&nbsp;choice</th><th>Fairness</th></tr>
@@ -2193,7 +2193,7 @@ Found 1 data race(s)</pre>
 </section>
 
 <section id="b2-rc4000-column">
-  <h2>The RC 4000 between actors and&nbsp;channels</h2>
+  <h2>The RC 4000 compared with actors and&nbsp;channels</h2>
   <div class="s8f b2-big w1200"><svg class="s8fig" data-last="3" viewBox="0 0 1200 400" role="img" aria-label="The RC 4000 nucleus with its request queue and its identified replies; the request half leads to the actor column, the identified reply to a channel" xmlns="http://www.w3.org/2000/svg">
     <rect x="380" y="20" width="440" height="350" rx="10" class="room"/>
     <text x="600" y="58" text-anchor="middle" class="hd">RC 4000 nucleus (1969)</text>
