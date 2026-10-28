@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The relevance of message passing — Session 8</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --bg:#ffffff; --sunk:#f7f8fa;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
+  --line:#e6e9ef;
+  --acc:#211a52; --acc-l:#eeecf7;
+  --lab:#0d6b63; --lab-b:#d9f2ef;
+  --hw:#a2540a; --hw-b:#fbeeda; --orange:#c2410c;
+  --code:#fbfbfd;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1014; --sunk:#14171c;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+    --line:#23272e;
+    --acc:#a79cf5; --acc-l:#1b1930;
+    --lab:#6fd3c4; --lab-b:#0f2b29;
+    --hw:#e0a962; --hw-b:#2c2113; --orange:#fb923c;
+    --code:#111419;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1014; --sunk:#14171c;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+  --line:#23272e;
+  --acc:#a79cf5; --acc-l:#1b1930;
+  --lab:#6fd3c4; --lab-b:#0f2b29;
+  --hw:#e0a962; --hw-b:#2c2113; --orange:#fb923c;
+  --code:#111419;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{font-size:clamp(15.5px,0.55rem + 0.5vw,19px);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 var(--sans)}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 16px 4rem}
+.kicker{font:500 .78rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 .8rem}
+h1{font:600 2.5rem/1.15 var(--serif);margin:0 0 .8rem}
+h2{font:600 1.55rem/1.25 var(--serif);margin:2.4rem 0 1rem}
+p{margin:0 0 1rem;color:var(--ink2)}
+p,li,figcaption,h1,h2,h3{text-wrap:pretty}
+.lede{font:400 1.2rem/1.5 var(--serif);color:var(--ink)}
+code{font-family:var(--mono);font-size:.88em}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+figure{margin:1.6rem 0;padding:1.2rem;border:1px solid var(--line);border-radius:10px;background:var(--sunk)}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:.85rem;color:var(--ink3);margin-top:.7rem}
+svg text{font-family:var(--sans);fill:var(--ink)}
+svg .soft{fill:var(--ink3)}
+svg .mono{font-family:var(--mono)}
+.prop{display:inline-block;font:500 .72rem/1 var(--sans);padding:.25rem .45rem;border-radius:4px;background:var(--acc-l);color:var(--acc);margin-left:.3rem;vertical-align:.1rem}
+.src{font-size:.82rem;color:var(--ink3);margin:-.4rem 0 1.2rem}
+ol.ways,ul.ways{padding-left:1.4rem;margin:0 0 1rem}
+ol.ways li,ul.ways li{margin:0 0 .6rem;color:var(--ink2)}
+ol.ways b,ul.ways b{color:var(--ink);font-weight:600}
+.src a{margin-right:.8rem;white-space:nowrap}
+.note{font-size:.8rem;color:var(--ink3);margin-top:2.4rem;border-top:1px solid var(--line);padding-top:1rem}
+
+/* the five languages: a row of logos, the chosen one's text below */
+.box{border:1px solid var(--acc);border-radius:10px;overflow:hidden;margin:2.4rem 0 0;background:var(--bg)}
+p + .box{margin-top:1.4rem}      /* a box under its introducing sentence */
+.box + p{margin-top:2.4rem}      /* a sentence after a box starts a new part */
+.boxhead{font:500 1.3rem/1.25 var(--serif);margin:0;padding:.8rem 1.3rem;background:var(--acc);color:var(--bg)}
+.ptabs{display:grid;grid-template-columns:repeat(5,1fr);}
+.ptabs{background:var(--sunk);border-bottom:1px solid var(--line)}
+.pv{position:relative;display:flex;flex-direction:column;align-items:center;gap:.4rem;background:none;border:0;border-left:1px solid transparent;border-right:1px solid transparent;margin-bottom:-1px;
+  padding:.9rem .3rem .7rem;cursor:pointer;font:500 .8rem/1.2 var(--sans);color:var(--ink3);text-align:center}
+.pv img{width:2.6rem;height:2.6rem;border-radius:10px;background:var(--bg);border:1px solid var(--line);padding:2px;opacity:.75;transition:opacity .15s}
+.pv:hover img,.pv.on img{opacity:1}
+.pv:hover span{color:var(--ink2)}
+.pv.on{background:var(--bg);border-left-color:var(--line);border-right-color:var(--line);box-shadow:inset 0 3px 0 var(--acc)}
+.pv.on span{color:var(--ink);font-weight:600}
+.pbody{padding:1.1rem 1.3rem 1rem;display:grid}
+/* every panel in the same cell: the box takes the height of the tallest and keeps it */
+.pt{grid-area:1/1;visibility:hidden}.pt.on{visibility:visible}
+.pt h3{font:400 1.3rem/1.25 var(--serif);margin:0 0 .5rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.pt h3 img{width:1.8rem;height:1.8rem;border-radius:7px;border:1px solid var(--line);padding:1px;background:var(--bg)}
+.pt p{font-size:.93rem;margin:0 0 .6rem}
+.pt .links{font-size:.82rem}
+.pt .links a{margin-right:.8rem;white-space:nowrap}
+@media (max-width:560px){.pv{font-size:.68rem}.pv img{width:2.1rem;height:2.1rem}}
+/* the learning objectives */
+.goals-in{padding:.2rem 1.3rem 1.2rem}
+ol.goals + .glabel{margin-top:1.6rem;padding-top:1.3rem;border-top:1px solid var(--line)}
+.glabel{font:700 .9rem/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--orange);margin:1.1rem 0 1rem}
+ol.goals{list-style:none;counter-reset:g;padding:0;margin:0;display:grid;gap:.7rem}
+ol.goals[start="6"]{counter-reset:g 5}
+ol.goals > li{counter-increment:g;position:relative;padding-left:2.4rem;color:var(--ink2)}
+ol.goals > li::before{content:counter(g);position:absolute;left:0;top:.05rem;width:1.6rem;height:1.6rem;border-radius:50%;
+  background:var(--acc);color:var(--bg);font:600 .8rem/1.6rem var(--sans);text-align:center}
+ol.goals b{color:var(--ink)}
+ul.sub{list-style:none;padding:0;margin:.5rem 0 0;display:grid;gap:.45rem}
+ul.sub li{padding-left:0}
+.pv:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+a:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:2px}
+pre.out{margin:-.2rem 0 1.2rem;padding:.7rem 1rem;background:var(--code);border:1px solid var(--line);border-radius:8px;overflow-x:auto;font-size:.85rem;color:var(--ink)}
+figure .marks circle{fill:var(--acc-l);stroke:var(--acc);stroke-width:1.5}
+figure .marks .ln{stroke:var(--ink3);stroke-width:1.5;fill:none}
+figure .marks .q{fill:none;stroke:var(--ink3);stroke-width:1.5}
+figure .marks .slot{fill:var(--acc-l);stroke:var(--acc);stroke-width:1}
+figure .marks .ch{fill:var(--bg);stroke:var(--acc);stroke-width:1.5}
+</style>
+</head>
+<body>
+<main>
+
+<p class="kicker">Programming Paradigms · Session 8 ·&nbsp;Message&nbsp;passing</p>
+<h1>The relevance of message&nbsp;passing</h1>
+<p class="lede">Message passing is the model of concurrent computation in which processes share no
+data that can change and affect one another only by sending values: each process owns its state,
+and a message can be received only after it has been&nbsp;sent.</p>
+<p class="lede">In a shared-memory program, nondeterminism can enter at any conflicting, unordered
+access to shared data, and nothing in the program text marks which accesses those are. Message
+passing confines it to the points where processes meet. The central question of the session is how
+each of its systems resolves a contested communication: a point at which more than one process is
+ready and only one can be served&nbsp;next.</p>
+
+<h2>Three resolutions of a contested&nbsp;communication</h2>
+<p>The systems of the session give three answers. The first removes the contest altogether; the
+second and the third are the session's two blocks, each named by the resolution its languages make
+the&nbsp;default.</p>
+<ol class="ways">
+  <li><b>No contest.</b> In a Kahn process network (Kahn, 1974, in the account by
+  <a href="https://ptolemy.berkeley.edu/publications/papers/95/processNets/">Lee and Parks</a>, 1995)
+  every process is deterministic, every channel has one writer and one reader, a read waits on one
+  named channel, and no process chooses among its inputs. The sequence of values on every channel is
+  then the same under every fair schedule, and the network pays for it in waiting. A shell pipeline such as <code>grep x | sort | uniq</code>
+  is one with bounded pipes in place of Kahn's unbounded queues, which can make it wait or stall
+  but never change its&nbsp;output.</li>
+  <li><b>A guarded choice in the program.</b> In <a href="https://www.cs.cmu.edu/~crary/819-f09/Hoare78.pdf">Hoare's
+  CSP</a> (1978), in occam and in Go, the programmer marks a choice point, and the language takes
+  one of the partners ready there. A timeout is one more branch of the choice, with the clock as
+  the&nbsp;sender.</li>
+  <li><b>Arrival order in a queue.</b> In <a href="https://www.ijcai.org/Proceedings/73/Papers/027B.pdf">Hewitt's
+  actors</a> (1973) and in Erlang, senders drop their messages into one mailbox without waiting, and
+  the mailbox's order of arrival, not the program, settles a contest between senders. Erlang keeps
+  the order between each pair of processes; a receive takes the oldest message that matches one of
+  its patterns, and earlier messages that match none stay in the&nbsp;mailbox.</li>
+</ol>
+
+<figure>
+<svg viewBox="0 0 660 215" role="img" aria-label="Three panels. No contest: process A writes to its own channel and process B to its own, and receiver R reads them in a fixed order. Guarded choice: A and B both offer to R, and a choice point takes one ready partner. Arrival order: A and B send into one mailbox, and R is served in the order of arrival.">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink3)"/></marker></defs>
+  <g text-anchor="middle">
+    <text x="105" y="22" font-size="14" font-weight="600">No contest</text>
+    <text x="105" y="40" font-size="11" class="soft">Kahn networks</text>
+    <text x="330" y="22" font-size="14" font-weight="600">Guarded choice</text>
+    <text x="330" y="40" font-size="11" class="soft">CSP, occam, Go</text>
+    <text x="555" y="22" font-size="14" font-weight="600">Arrival order</text>
+    <text x="555" y="40" font-size="11" class="soft">actors, Erlang</text>
+  </g>
+  <g class="marks">
+    <!-- no contest: two channels, each with one writer and one reader -->
+    <line class="ln" x1="44" y1="74" x2="164" y2="101" marker-end="url(#ah)"/>
+    <line class="ln" x1="44" y1="136" x2="164" y2="109" marker-end="url(#ah)"/>
+    <circle cx="30" cy="72" r="14"/><circle cx="30" cy="138" r="14"/><circle cx="180" cy="105" r="14"/>
+    <!-- guarded choice: two offers, one choice point -->
+    <line class="ln" x1="269" y1="76" x2="335" y2="100" marker-end="url(#ah)"/>
+    <line class="ln" x1="269" y1="134" x2="335" y2="110" marker-end="url(#ah)"/>
+    <line class="ln" x1="355" y1="105" x2="389" y2="105" marker-end="url(#ah)"/>
+    <path class="ch" d="M345,93 L357,105 L345,117 L333,105 z"/>
+    <circle cx="255" cy="72" r="14"/><circle cx="255" cy="138" r="14"/><circle cx="405" cy="105" r="14"/>
+    <!-- arrival order: one mailbox -->
+    <line class="ln" x1="494" y1="76" x2="531" y2="99" marker-end="url(#ah)"/>
+    <line class="ln" x1="494" y1="134" x2="531" y2="111" marker-end="url(#ah)"/>
+    <rect class="q" x="535" y="93" width="58" height="24" rx="4"/>
+    <rect class="slot" x="540" y="98" width="14" height="14" rx="2"/>
+    <rect class="slot" x="557" y="98" width="14" height="14" rx="2"/>
+    <rect class="slot" x="574" y="98" width="14" height="14" rx="2"/>
+    <line class="ln" x1="593" y1="105" x2="614" y2="105" marker-end="url(#ah)"/>
+    <circle cx="480" cy="72" r="14"/><circle cx="480" cy="138" r="14"/><circle cx="630" cy="105" r="14"/>
+  </g>
+  <g text-anchor="middle" font-size="12" font-weight="600">
+    <text x="30" y="76">A</text><text x="30" y="142">B</text><text x="180" y="109">R</text>
+    <text x="255" y="76">A</text><text x="255" y="142">B</text><text x="405" y="109">R</text>
+    <text x="480" y="76">A</text><text x="480" y="142">B</text><text x="630" y="109">R</text>
+  </g>
+  <g text-anchor="middle" font-size="11" class="soft">
+    <text x="96" y="72" class="soft">channel a</text><text x="96" y="148" class="soft">channel b</text>
+    <text x="345" y="85" class="soft">select</text>
+    <text x="564" y="85" class="soft">mailbox</text>
+    <text x="105" y="180" class="soft">R reads a, then b:</text>
+    <text x="105" y="196" class="soft">one result for every schedule</text>
+    <text x="330" y="180" class="soft">the program marks the choice,</text>
+    <text x="330" y="196" class="soft">the language takes a ready partner</text>
+    <text x="555" y="180" class="soft">the mailbox merges the senders,</text>
+    <text x="555" y="196" class="soft">the order of arrival decides</text>
+  </g>
+</svg>
+<figcaption>The three resolutions of a contested communication, for two senders and one&nbsp;receiver.</figcaption>
+</figure>
+
+<h2>The RC 4000 nucleus, Copenhagen,&nbsp;1969</h2>
+<p>The earliest system of the session was built in Copenhagen. At Regnecentralen, the group of Per
+Brinch Hansen wrote for the RC 4000 computer a small nucleus whose basic means of communication between processes were messages; device handling
+and process control stayed inside it, and operating systems ran on top of it as ordinary&nbsp;processes. The paper,
+<a href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf">“The Nucleus of a
+Multiprogramming System”</a>, appeared in <i>Communications of the ACM</i> in April 1970, and the
+design is an early published form of the idea behind microkernels. Its primitive wait message
+serves a process's queue first come, first served, the third resolution, and two further primitives
+let a process serve the queue in any order; its replies travel back in the buffer of the request, a
+conversation identified and checked by the nucleus, which no other process can&nbsp;contest.</p>
+<p>The nucleus also shows where the shared memory went. Its pool of message buffers and its queues
+are touched by every process, through the nucleus, which runs each message primitive with interrupts
+disabled until it completes or suspends its caller: in effect one global lock around its message&nbsp;handling. A <a href="https://go.dev/src/runtime/chan.go">Go channel</a> today is a runtime structure with a buffer,
+queues of waiting goroutines and a lock. On one machine, message passing does not remove shared
+memory; it hides it in one trusted place, which has to be right only&nbsp;once.</p>
+
+<h2>The cost of message&nbsp;passing</h2>
+<p>Removing the shared data trades one kind of failure for another: waiting replaces racing. A
+handshake with no partner never completes, and a program in which every process waits is
+deadlocked; when every goroutine waits, Go's runtime stops the program with the message&nbsp;below. A study of 171 concurrency bugs in six
+large Go systems, by <a href="https://songlh.github.io/paper/go-study.pdf">Tu, Liu, Song and Zhang
+(ASPLOS 2019)</a>, found that message passing caused more of the blocking bugs than shared memory,
+and far fewer of the non-blocking&nbsp;ones.</p>
+<pre class="out"><code>fatal error: all goroutines are asleep - deadlock!</code></pre>
+<p>The lost update of sessions 6 and 7 returns as well, without any shared variable. Two clients
+that each read a counter server's value in one message and write it back plus one in another can
+lose an increment, although the server's own code is sequential. The repair is a protocol in which
+the invariant is carried by one&nbsp;message.</p>
+
+<p>Message passing is the model of Go and Erlang, of Rust's channels, of the browser's workers and
+of microkernels, whose line is generally seen to start with the&nbsp;nucleus. Actors are also libraries and language
+features: on the JVM (<a href="https://akka.io/">Akka</a> and <a href="https://pekko.apache.org/">Apache Pekko</a>, its fork of Akka&nbsp;2.6), in
+.NET (<a href="https://learn.microsoft.com/en-us/dotnet/orleans/overview">Orleans</a>), in Swift
+(<a href="https://www.swift.org/blog/swift-5.5-released/">since Swift 5.5, 2021</a>). The languages
+differ in what a message carries: after the send, a value may be shared, copied or moved, and a
+different party checks each&nbsp;case.</p>
+
+<div class="places box" id="places">
+ <h2 class="boxhead">Message passing, by language and&nbsp;system</h2>
+ <div class="ptabs" role="tablist" aria-label="Languages and systems">
+  <button class="pv on" role="tab" aria-selected="true" id="tab-go" data-k="go" aria-controls="pc-go">
+    <img src="https://github.com/golang.png?size=96" alt=""><span>Go</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-erl" data-k="erl" aria-controls="pc-erl">
+    <img src="https://github.com/erlang.png?size=96" alt=""><span>Erlang and Elixir</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-rust" data-k="rust" aria-controls="pc-rust">
+    <img src="https://github.com/rust-lang.png?size=96" alt=""><span>Rust</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-web" data-k="web" aria-controls="pc-web">
+    <img src="https://github.com/chromium.png?size=96" alt=""><span>The web browser</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-mk" data-k="mk" aria-controls="pc-mk">
+    <img src="https://github.com/seL4.png?size=96" alt=""><span>Microkernels</span></button>
+ </div>
+ <div class="pbody">
+    <div class="pt on" role="tabpanel" id="pc-go" aria-labelledby="tab-go">
+      <h3><img src="https://github.com/golang.png?size=96" alt="">Go<span class="prop">Guarded choice · sharing by&nbsp;convention</span></h3>
+      <p>Go, <a href="https://go.dev/doc/faq">made public in November 2009</a>, has channels and
+      <code>select</code> in the language; <a href="https://go.dev/ref/spec#Select_statements">its
+      specification</a> states that a select takes one of its ready cases by “a uniform pseudo-random
+      selection”. <a href="https://go.dev/doc/effective_go#sharing">Effective Go</a> gives the rule
+      “share memory by communicating”, and the rule is a convention: a pointer sent on a channel stays
+      shared, the compiler accepts the program, and the race detector reports only the races it observes
+      in an instrumented run.
+      <a href="https://github.com/kubernetes/community/blob/master/contributors/devel/development.md">Kubernetes</a>,
+      <a href="https://docs.docker.com/get-started/docker-overview/">Docker</a> and
+      <a href="https://github.com/etcd-io/etcd/blob/main/README.md">etcd</a> are written in&nbsp;Go.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-erl" aria-labelledby="tab-erl">
+      <h3><img src="https://github.com/erlang.png?size=96" alt="">Erlang and Elixir<span class="prop">Arrival order · copied&nbsp;values</span></h3>
+      <p>Erlang, whose <a href="https://www.labouseur.com/courses/erlang/history-of-erlang-armstrong.pdf">development
+      began at Ericsson in 1986</a> and which was
+      <a href="https://www.erlang-solutions.com/blog/twenty-years-of-open-source-erlang/">released as open
+      source in December 1998</a>, has processes with mailboxes as its unit of concurrency. The
+      virtual machine copies a message into the receiver's heap, except large binaries and literals, which it shares
+      by reference; since the data is immutable, no sharing can be observed; the
+      order between each pair of processes is kept; a send to the pid of a dead process returns normally, while a send to a registered name that no
+      longer exists raises <code>badarg</code>; a monitor turns a death into a <code>'DOWN'</code> message, where session 9&nbsp;begins.
+      <a href="https://www.erlang-factory.com/sfbay2014/rick-reed">WhatsApp's servers</a> and
+      <a href="https://www.rabbitmq.com/resources/erlang-exchange-talk-final/ex.html">RabbitMQ</a> are
+      built on Erlang; Elixir, on the same virtual machine, was the language of
+      <a href="https://discord.com/blog/how-discord-scaled-elixir-to-5-000-000-concurrent-users">Discord's
+      first prototype</a> and of the infrastructure that grew from&nbsp;it.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-rust" aria-labelledby="tab-rust">
+      <h3><img src="https://github.com/rust-lang.png?size=96" alt="">Rust<span class="prop">Move of ownership · compiler&nbsp;check</span></h3>
+      <p><a href="https://doc.rust-lang.org/book/ch16-02-message-passing.html">Rust's channels</a>
+      (<code>std::sync::mpsc</code>) move the value sent: the send takes ownership of it, and the
+      compiler rejects a use of the value after the send as a “borrow of moved value”. A value of a <code>Copy</code> type, an integer for instance, is
+      copied instead. A value that must
+      stay shared travels as an <code>Arc</code>, a counted handle, and can then be changed only through
+      a type that synchronizes its own access, such as a <code>Mutex</code>, an <code>RwLock</code> or an&nbsp;atomic. Session 12 states the rule of&nbsp;ownership.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-web" aria-labelledby="tab-web">
+      <h3><img src="https://github.com/chromium.png?size=96" alt="">The web browser<span class="prop">Copy or&nbsp;transfer</span></h3>
+      <p>A page's <a href="https://html.spec.whatwg.org/multipage/workers.html">web workers</a> share no
+      JavaScript objects with it and communicate with it by <code>postMessage</code>.
+      <a href="https://html.spec.whatwg.org/multipage/web-messaging.html">The HTML standard</a> copies the
+      message by structured cloning; an object in the transfer list, an <code>ArrayBuffer</code> for
+      instance, is moved instead and is no longer usable on the sending side: two of the three cases, a
+      copy and a move, in one call. Chromium itself is split into processes that communicate through the
+      message pipes of&nbsp;<a href="https://chromium.googlesource.com/chromium/src/+/main/mojo/README.md">Mojo</a>.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-mk" aria-labelledby="tab-mk">
+      <h3><img src="https://github.com/seL4.png?size=96" alt="">Microkernels<span class="prop">Message passing in the&nbsp;kernel</span></h3>
+      <p>The nucleus's design, a small kernel whose processes communicate by messages, is generally seen as the start of
+      the line of today's microkernels, although the nucleus kept device handling inside&nbsp;it. In <a href="https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.sys_arch/topic/ipc.html">QNX</a>,
+      message passing is the primary form of communication between processes, and BlackBerry states, in
+      <a href="https://www.sec.gov/Archives/edgar/data/0001070235/000107023526000115/bbry-20260831.htm">its
+      report for the quarter ended 31 August 2026</a>, that QNX runs in more than 275 million vehicles.
+      <a href="https://sel4.systems/About/seL4-whitepaper.pdf">seL4</a>, a member of the L4 family, became
+      in 2009 the first operating-system kernel with a machine-checked proof of functional correctness;
+      its threads communicate through kernel objects called&nbsp;<a href="https://docs.sel4.systems/Tutorials/ipc.html">endpoints</a>.</p>
+    </div>
+  </div>
+</div>
+
+<p>Message passing is also how AI systems are put together: the processes are workers on
+accelerators, model servers and agents, and the messages are tasks, results and tool&nbsp;calls.</p>
+
+<div class="places box" id="ai">
+ <h2 class="boxhead">Message passing and&nbsp;AI</h2>
+ <div class="ptabs" role="tablist" aria-label="Message passing in AI systems">
+  <button class="pv on" role="tab" aria-selected="true" id="tab-ray" data-k="ray" aria-controls="pc-ray">
+    <img src="https://github.com/ray-project.png?size=96" alt=""><span>Ray</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-agents" data-k="agents" aria-controls="pc-agents">
+    <img src="https://github.com/microsoft.png?size=96" alt=""><span>Agent frameworks</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-mcp" data-k="mcp" aria-controls="pc-mcp">
+    <img src="https://github.com/modelcontextprotocol.png?size=96" alt=""><span>Tool calls</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-graph" data-k="graph" aria-controls="pc-graph">
+    <img src="https://github.com/langchain-ai.png?size=96" alt=""><span>Agent graphs</span></button>
+  <button class="pv" role="tab" aria-selected="false" id="tab-serve" data-k="serve" aria-controls="pc-serve">
+    <img src="https://github.com/vllm-project.png?size=96" alt=""><span>Serving</span></button>
+ </div>
+ <div class="pbody">
+    <div class="pt on" role="tabpanel" id="pc-ray" aria-labelledby="tab-ray">
+      <h3><img src="https://github.com/ray-project.png?size=96" alt="">Ray<span class="prop">Actors</span></h3>
+      <p><a href="https://www.ray.io/">Ray</a>, which its own site calls “the framework behind ChatGPT”,
+      and which <a href="https://www.anyscale.com/blog/ray-summit-2022-stories-large-language-models">OpenAI
+      used to train its largest model</a>, has actors:
+      <a href="https://docs.ray.io/en/latest/ray-core/actors.html">an actor</a> is a stateful worker, an
+      instance of a class that runs in its own Python process, and a call of one of its methods is a
+      message sent to it. When delivery is no longer assumed, faults become the subject; session 9 starts from a crash on one&nbsp;machine.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-agents" aria-labelledby="tab-agents">
+      <h3><img src="https://github.com/microsoft.png?size=96" alt="">Agent frameworks<span class="prop">The actor&nbsp;model</span></h3>
+      <p>Microsoft's AutoGen, a framework for systems of cooperating AI agents, was rebuilt in January
+      2025 on <a href="https://devblogs.microsoft.com/autogen/autogen-reimagined-launching-autogen-0-4/">“a
+      scalable, event-driven actor framework”</a>, in which
+      <a href="https://www.microsoft.com/en-us/research/blog/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/">agents
+      communicate through asynchronous messages</a>. The actor model was itself proposed for artificial intelligence: Hewitt's paper of
+      1973 was titled <a href="https://www.ijcai.org/Proceedings/73/Papers/027B.pdf">“A Universal Modular
+      ACTOR Formalism for Artificial&nbsp;Intelligence”</a>.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-mcp" aria-labelledby="tab-mcp">
+      <h3><img src="https://github.com/modelcontextprotocol.png?size=96" alt="">Tool calls<span class="prop">Identified&nbsp;conversations</span></h3>
+      <p>An AI assistant calls its tools through the
+      <a href="https://modelcontextprotocol.io/specification/2025-06-18/basic">Model Context Protocol</a>,
+      whose messages are <a href="https://www.jsonrpc.org/specification">JSON-RPC 2.0</a>: a request
+      carries an id, and its response “MUST include the same ID”. The client matches each reply to its
+      request by that id, as an Erlang client matches a reference and the RC 4000 nucleus a buffer.
+      Google's <a href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/">Agent2Agent
+      protocol</a>, announced in April 2025 for messages between agents and
+      <a href="https://linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents">moved
+      to the Linux Foundation</a> in June 2025, is JSON-RPC 2.0 over HTTP as&nbsp;well.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-graph" aria-labelledby="tab-graph">
+      <h3><img src="https://github.com/langchain-ai.png?size=96" alt="">Agent graphs<span class="prop">Message passing between&nbsp;nodes</span></h3>
+      <p>In <a href="https://docs.langchain.com/oss/python/langgraph/graph-api">LangGraph</a>, a library for
+      workflows of language-model agents, a program is a graph of nodes, and its documentation states
+      that the underlying graph algorithm “uses message passing to define a general program”, after
+      Google's Pregel&nbsp;system.</p>
+    </div>
+    <div class="pt" role="tabpanel" id="pc-serve" aria-labelledby="tab-serve">
+      <h3><img src="https://github.com/vllm-project.png?size=96" alt="">Serving<span class="prop">Processes and&nbsp;sockets</span></h3>
+      <p><a href="https://docs.vllm.ai/en/latest/design/arch_overview.html">vLLM</a>, a server for
+      language-model inference, runs its API server and its engine core as separate processes that
+      communicate “via ZMQ sockets”, ZeroMQ's message queues: the requests that reach the server travel
+      as messages to the engine core, which schedules them on the&nbsp;GPU.</p>
+    </div>
+  </div>
+</div>
+
+<section class="goals-box box">
+  <h2 class="boxhead">Learning&nbsp;objectives</h2>
+  <div class="goals-in">
+  <p class="glabel">In the&nbsp;session</p>
+  <ol class="goals">
+    <li><b>Explain</b> where nondeterminism enters a program with shared memory, at any unordered
+    pair of conflicting accesses, and where it enters a program that passes messages: only where processes communicate,
+    provided they share nothing else, messages carry values rather than pointers, and no process
+    is nondeterministic inside&nbsp;itself.</li>
+    <li><b>Explain</b> why a Kahn process network, whose processes are deterministic and sequential,
+    with one writer and one reader per channel, blocking reads and no choice, produces the same
+    sequences on its channels under every fair schedule, and what it pays for that in&nbsp;waiting.</li>
+    <li><b>Classify</b> each communication point of a program as uncontested, resolved by a guarded
+    choice in the program, resolved by arrival order in a queue, or left to the runtime where the
+    language does not say, and <b>say</b> which outcomes
+    the program can therefore produce; <b>name</b> the two resolutions the RC 4000 nucleus&nbsp;used.</li>
+    <li><b>Recognize</b> a deadlock by waiting in a Go program, a state in which goroutines wait
+    forever for a communication that no goroutine will offer (Go's runtime reports it only when
+    every goroutine is blocked), and <b>name</b> its usual causes: a missing send, a missing
+    receive, a channel never&nbsp;closed.</li>
+    <li><b>State</b> what actor theory guarantees (eventual delivery, whole messages, one message
+    handled at a time, sends only to known addresses) and what it leaves out (order, a bound on
+    delay, a reply), and <b>state</b> that Erlang keeps the order of messages between each pair of processes, and
+    how a client process matches a reply to its request by a reference and a selective&nbsp;receive.</li>
+    <li><b>Explain</b> how a server that owns its state loses an update across two messages, a read
+    in one and a write in the next, without any shared variable, and why one message per operation
+    prevents&nbsp;it.</li>
+  </ol>
+  <p class="glabel">In the&nbsp;lab</p>
+  <p>The objectives of the lab are published with the&nbsp;lab.</p>
+  </div>
+</section>
+
+<p class="note">27 October 2026. Each claim about a current system is linked to its source in the
+text. Logos are the organizations' GitHub&nbsp;avatars.</p>
+
+</main>
+<script>
+// In each box, pointing at a logo, focusing it or tapping it shows its text below;
+// the arrow keys, Home and End move between the logos of a box.
+document.querySelectorAll(".places").forEach(box => {
+  const vs = [...box.querySelectorAll(".pv")];
+  const show = k => {
+    vs.forEach(v => {
+      const on = v.dataset.k === k;
+      v.classList.toggle("on", on);
+      v.setAttribute("aria-selected", on ? "true" : "false");
+      v.tabIndex = on ? 0 : -1;
+    });
+    box.querySelectorAll(".pt").forEach(p => p.classList.toggle("on", p.id === "pc-" + k));
+  };
+  vs.forEach((v, i) => {
+    ["mouseenter", "focus", "click"].forEach(e => v.addEventListener(e, () => show(v.dataset.k)));
+    v.addEventListener("keydown", e => {
+      const j = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: vs.length - 1 }[e.key];
+      if (j === undefined) return;
+      e.preventDefault();
+      vs[(j + vs.length) % vs.length].focus();
+    });
+  });
+  show(vs[0].dataset.k);
+});
+</script>
+</body>
+</html>
