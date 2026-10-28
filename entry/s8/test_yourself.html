@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test yourself — Session 8</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --page:#e9ebf0;
+  --bg:#ffffff; --sunk:#f7f8fa;
+  --ink:#0f1115; --ink2:#434a59; --ink3:#69717f;
+  --line:#e6e9ef; --rule:#cfd4dd; --th:#5c6b8a; --lno:#9aa3b2;
+  --acc:#211a52; --acc-t:#3d3383; --acc-l:#eeecf7;
+  --ok:#2f6f55; --ok-l:#e9f3ee;
+  --no:#9b3a3a; --no-l:#f7eaea;
+  --c-kw:#3d3383; --c-str:#2f6f55; --c-num:#8a5a12; --c-com:#8a909c;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#07090c;
+    --bg:#0e1014; --sunk:#14171c;
+    --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+    --line:#23272e; --rule:#3a404a; --th:#93a3c4; --lno:#6b7484;
+    --acc:#a79cf5; --acc-t:#bdb4ff; --acc-l:#1b1930;
+    --ok:#7cc4a3; --ok-l:#13261e;
+    --no:#e09a9a; --no-l:#2a1618;
+    --c-kw:#bdb4ff; --c-str:#7cc4a3; --c-num:#e0a962; --c-com:#79808d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#07090c;
+  --bg:#0e1014; --sunk:#14171c;
+  --ink:#e8eaef; --ink2:#a6adbb; --ink3:#79808d;
+  --line:#23272e; --rule:#3a404a; --th:#93a3c4; --lno:#6b7484;
+  --acc:#a79cf5; --acc-t:#bdb4ff; --acc-l:#1b1930;
+  --ok:#7cc4a3; --ok-l:#13261e;
+  --no:#e09a9a; --no-l:#2a1618;
+  --c-kw:#bdb4ff; --c-str:#7cc4a3; --c-num:#e0a962; --c-com:#79808d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{margin:0;font:500 16px/1.5 var(--sans);color:var(--ink);background:var(--page);
+  display:grid;place-items:center;padding:0;-webkit-font-smoothing:antialiased}
+code{font-family:var(--mono);font-size:.92em;background:var(--sunk);border:1px solid var(--line);border-radius:4px;padding:0 .3em}
+button{font-family:var(--sans)}
+
+/* The windows: designed at 1080 by 716, zoomed as a whole to fit the browser; upright screens get a scrolling page.
+   The top strip, the program, the question and the reason are four cards on the common background. */
+.app{width:1080px;height:716px;zoom:var(--z,1);display:flex;flex-direction:column;gap:10px}
+.card{background:var(--bg);border-radius:12px;box-shadow:0 6px 20px rgba(15,17,21,.07),0 0 0 1px var(--line)}
+body.embed{padding:0;background:var(--page)}
+
+.top{flex:none;display:flex;align-items:center;gap:16px;padding:10px 18px}
+.x{flex:none;width:28px;height:28px;border:0;background:none;color:var(--ink3);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
+.x:hover{background:var(--sunk);color:var(--ink)}
+.name{flex:none;font-weight:700;font-size:16px}
+.name span{color:var(--ink3);font-weight:400}
+.track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--acc);transition:width .35s ease}
+.stat{flex:none;font-size:20px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:2.6em;text-align:right}
+
+/* The quiz: the program on the left, the question and its options on the right, the reason in a bar below */
+.main{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:10px}
+.main.single{grid-template-rows:minmax(0,1fr)}
+.upper{display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:0;gap:10px}
+.main.single .upper{grid-template-columns:minmax(0,1fr)}
+.left{overflow:hidden;padding:22px 24px 16px}
+.right{padding:22px 20px 16px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.main.single .right,.main.single .bar{display:none}
+.bar{height:190px;padding:14px 24px 12px;overflow:hidden}
+.screen{display:none}.screen.on{display:block}
+
+/* Start and end */
+.intro{max-width:34rem;margin:14vh auto 0}
+.kicker{font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 10px}
+.intro h1,.end h1{font:700 2.4rem/1.15 var(--sans);letter-spacing:-.01em;margin:0 0 12px}
+.intro h1{margin-bottom:28px}
+.intro p,.end p{color:var(--ink2);margin:0 0 14px}
+.end{max-width:34rem;margin:5vh auto 0}
+.recap{list-style:none;padding:0;margin:18px 0 22px;border-top:1px solid var(--line)}
+.recap li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);color:var(--ink);font-weight:600;font-size:16px}
+.recap .m{width:1.2em;font-weight:700}
+.recap .m.ok{color:var(--ok)} .recap .m.no{color:var(--no)} .recap .m.sk{color:var(--ink3)}
+.row{display:flex;gap:10px}
+
+/* The question */
+.qno{font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 6px}
+.qtitle{font:700 28px/1.15 var(--sans);letter-spacing:-.01em;margin:0 0 8px}
+.qprompt{color:var(--ink2);font-weight:500;margin:0 0 18px;font-size:17px;line-height:1.5}
+.qprompt p{margin:0 0 8px}.qprompt p:last-child{margin-bottom:0}
+ul.gl{margin:0 0 10px;padding-left:1.2em}ul.gl li{margin:0 0 4px}ul.gl li::marker{color:var(--ink3)}
+.why ul.gl{margin:6px 0 10px}
+code{white-space:nowrap}
+pre{background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:14px 18px;overflow:hidden;margin:0;
+  font:500 15px/1.5 var(--mono);color:var(--ink)}
+.kw{color:var(--c-kw)} .str{color:var(--c-str)} .num{color:var(--c-num)} .com{color:var(--c-com)}
+
+/* Pseudo-code, in the layout of Ben-Ari's book: the global declarations, then one column per
+   thread with its local declarations and numbered statements, then what the main thread does. */
+.pseudo{display:table;margin:0 auto;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:14px 22px;
+  font:500 14.5px/1.5 var(--mono);color:var(--ink);white-space:pre}
+.pseudo .pc{text-align:center;padding:2px 0}
+.pseudo .pt{display:flex;justify-content:center}
+.pseudo .pt .col{padding:0 20px;border-left:1.5px solid var(--rule)}
+.pseudo .pt .col:first-child{border-left:0;padding-left:6px}
+.pseudo .pt .col:last-child{padding-right:6px}
+.pseudo .th{font-family:var(--sans);font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--th);margin:0 0 6px}
+.pseudo .lc{color:var(--ink3);margin-bottom:4px}
+.pseudo .pc+.pt,.pseudo .pt+.pc{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+.pseudo .no{display:inline-block;width:2.3em;color:var(--lno);font-weight:400}
+
+.ask{font-weight:700;font-size:17px;line-height:1.4;margin:0 0 12px}
+.opts{display:flex;flex-direction:column;gap:9px;min-height:0}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;background:var(--bg);color:var(--ink);
+  border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;font-size:15.5px;line-height:1.35;font-weight:600}
+.opt:hover:not(:disabled){border-color:var(--acc-t)}
+.opt .k{flex:none;width:24px;height:24px;border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink3)}
+.opt .t code{font-size:.9em;font-weight:500}
+.opt.sel{border-color:var(--acc-t);background:var(--acc-l)}
+.opt.sel .k{border-color:var(--acc-t);color:var(--acc-t)}
+.opt.ok{border-color:var(--ok);background:var(--ok-l)}
+.opt.ok .k{border-color:var(--ok);color:var(--ok)}
+.opt.no{border-color:var(--no);background:var(--no-l)}
+.opt.no .k{border-color:var(--no);color:var(--no)}
+.opt:disabled{cursor:default}
+.foot{margin-top:auto;display:flex;gap:8px;padding-top:14px}
+.btn{display:block;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;font-weight:700;font-size:16px;
+  background:var(--acc);color:#fff;flex:1 1 0;min-width:0}
+.btn:hover{opacity:.9}
+.btn:disabled{background:var(--line);color:var(--ink3);cursor:default;opacity:1}
+.btn.plain{background:var(--bg);color:var(--ink);border:1px solid var(--line);flex:0 0 auto;padding:10px 14px}
+.foot .btn{flex:1 1 0;padding:10px 8px}
+.btn.plain:disabled{background:var(--bg);color:var(--ink3);border-color:var(--line)}
+.row .btn{flex:0 0 auto}
+.hidden{display:none!important}
+
+/* The reason */
+.hint{color:var(--ink3);margin:0 0 6px;font-size:16px}
+.verdict{font-weight:700;font-size:17px;margin:0 0 6px}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--no)} .verdict span{font-weight:600;color:var(--ink)}
+.why{font-size:16px;line-height:1.5;font-weight:500;color:var(--ink);columns:2;column-gap:32px}
+.why p{margin:0 0 8px;break-inside:avoid}
+.qtitle,.qprompt,.ask,.opt .t,.why p{text-wrap:pretty}
+.ctoggle{display:none;background:none;border:0;padding:0;margin-top:12px;cursor:pointer;color:var(--acc-t);font-weight:700;font-size:15px;text-decoration:underline;text-underline-offset:3px}
+
+/* Upright screens: a scrolling page, the program, then the question, then the reason */
+body.portrait .app{width:430px;gap:8px;padding:8px}
+body.portrait .main{display:block;overflow-y:auto}
+body.portrait .upper{display:block}
+body.portrait .left{overflow:visible;padding:16px 18px 12px}
+body.portrait .right{overflow:visible;padding:14px 18px 14px;margin-top:8px}
+body.portrait .bar{height:auto;min-height:120px;padding:14px 18px 16px;margin-top:8px}
+body.portrait .foot{margin-top:14px}
+body.portrait pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;padding:12px 14px}
+body.portrait .pseudo{display:block;font-size:14px;padding:12px 14px}
+body.portrait .pseudo .pt{flex-direction:column}
+body.portrait .pseudo .pt .col{padding:8px 4px 4px;border-left:0;border-top:1px solid var(--line)}
+body.portrait .pseudo .pt .col:first-child{border-top:0;padding-top:0}
+body.portrait .why{columns:1}
+body.portrait .qtitle{font-size:24px}
+body.portrait .name{display:none}
+body.portrait .intro,body.portrait .end{margin-top:6vh}
+body.portrait .intro h1,body.portrait .end h1{font-size:2rem}
+body.portrait .row{flex-direction:column}
+body.portrait .ctoggle{display:none!important}
+</style>
+</head>
+<body>
+<div class="app" role="dialog" aria-label="Test yourself, session 8">
+  <div class="top card">
+    <button class="x" id="close" aria-label="Close">✕</button>
+    <div class="name">Test yourself <span>· Session 8</span></div>
+    <div class="track"><i id="prog"></i></div>
+    <div class="stat" id="stat"></div>
+  </div>
+
+  <div class="main single" id="main">
+    <div class="upper">
+      <div class="left card" id="scroll">
+        <section class="screen on" id="start">
+          <div class="intro">
+            <p class="kicker">Session 8 · Message&nbsp;passing</p>
+            <h1>Test yourself, before or after this&nbsp;session</h1>
+            <button class="btn" id="go" style="width:auto;padding:11px 28px">Start</button>
+          </div>
+        </section>
+
+        <section class="screen" id="quiz">
+          <p class="qno" id="qno"></p>
+          <h2 class="qtitle" id="qtitle"></h2>
+          <div class="qprompt" id="qprompt"></div>
+          <pre id="qcode"></pre>
+          <div class="pseudo" id="qpseudo"></div>
+          <button class="ctoggle" id="ctoggle">Show the program</button>
+        </section>
+
+        <section class="screen" id="end">
+          <div class="end">
+            <p class="kicker">Session 8 · Test&nbsp;yourself</p>
+            <h1 id="endtitle"></h1>
+            <p id="endmsg"></p>
+            <ul class="recap" id="recap"></ul>
+            <div class="row">
+              <button class="btn" id="again">Try again</button>
+              <button class="btn plain hidden" id="closeEnd">Close</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right card" id="right">
+        <div id="rightinner">
+          <p class="ask" id="qask"></p>
+          <div class="opts" id="opts"></div>
+        </div>
+        <div class="foot"><button class="btn plain" id="back" disabled>Back</button><button class="btn plain" id="skip">Skip</button><button class="btn" id="act" disabled>Next</button></div>
+      </aside>
+    </div>
+
+    <div class="bar card" id="sidebody"><div id="sideinner"></div></div>
+  </div>
+</div>
+
+<script>
+// BEGIN GEN — the sixteen questions, each a function returning it, so that the applet's loop
+// is session 7's; the questions are fixed, only the options are shuffled. A question: kind
+// (theory, go, erlang, pseudo), story (the sections of the story it rests on), title, prompt,
+// one of code (with lang, go or erlang), pseudo ({above, threads: [{name, local, lines}], below})
+// or neither, ask, options [{text, ok}], explain (HTML). The programs are run in demos/test/.
+function shuffle(xs) { for (let i = xs.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [xs[i], xs[j]] = [xs[j], xs[i]]; } return xs; }
+const ok = text => ({ text, ok: true }), no = text => ({ text, ok: false });
+
+const GENS = [
+
+  // 1 (Go). Two senders, with and without a contest
+  () => ({
+    kind: "go", story: "§4",
+    title: "Two senders, one channel or two",
+    prompt: "<ul class='gl'><li><code>make(chan string)</code> makes an unbuffered&nbsp;channel;</li><li><code>go f()</code> runs <code>f</code> in a new&nbsp;goroutine;</li><li><code>c &lt;- v</code> sends <code>v</code> on&nbsp;<code>c</code>;</li><li><code>&lt;-c</code> receives from&nbsp;<code>c</code>.</li></ul><p>Program 1 sends both words on one channel; program 2 gives each sender a channel of its&nbsp;own.</p>",
+    lang: "go",
+    code:
+`// program 1
+c := make(chan string)
+go func() { c <- "hello" }()
+go func() { c <- "world" }()
+fmt.Println(<-c, <-c)
+
+// program 2
+a, b := make(chan string), make(chan string)
+go func() { a <- "hello" }()
+go func() { b <- "world" }()
+fmt.Println(<-a, <-b)`,
+    ask: "Which outputs can each program print?",
+    options: [
+      ok("1: either order; 2: always <code>hello world</code>"),
+      no("both: either order, the scheduler starting goroutines in any order"),
+      no("both: always <code>hello world</code>, its goroutine being started first"),
+      no("1: always <code>hello world</code>; 2: either order, both goroutines starting together"),
+    ],
+    explain: `<p>Program 1 has two writers on one channel, a merge: either send can meet the first receive, so either word can come first, and nothing in the language fixes which. One runtime is lopsided: in this test's own recorded run of <code>q01_two_senders.go</code>, 3000 trials per setting on go1.27.1, <code>hello world</code> came 0 times at GOMAXPROCS 1, 12 at 2 and 23 at 12, so the order that reads naturally is the rare&nbsp;one.</p>
+<p>Program 2 has one writer and one reader per channel and no choice, Kahn's discipline: the first receive reads <code>a</code>, the second <code>b</code>, so the output never changes. The price is waiting: if <code>hello</code> is slow, main waits on <code>a</code> while <code>world</code> waits on&nbsp;<code>b</code>.</p>`,
+  }),
+
+  // 2 (theory). Where the shared memory went
+  () => ({
+    kind: "theory", story: "§3",
+    title: "Shared memory under message passing",
+    prompt: "Two goroutines, or two Erlang processes on one node, share no variable: each changes only its own data, and they communicate only by a channel or by messages.",
+    ask: "On one node, where does the implementation still share memory between them?",
+    options: [
+      ok("in the runtime: the structures that carry the messages, written on the sender's side and read on the receiver's"),
+      no("nowhere: each message is copied, so the two share no memory at all"),
+      no("nowhere on one node; only across machines, in the network's buffers"),
+      no("in each process: the receiver keeps a private copy of the sender's queue"),
+    ],
+    explain: `<p>"Nowhere" is right about the model: no process can read or write another's state. The question asks about the implementation: on one node a message passes through memory that one side writes and the other reads, guarded by a lock or atomic instructions. A Go channel, <code>hchan</code>, is one such object held by both sides: a buffer, waiting goroutines, a lock. An Erlang mailbox belongs to its receiver, but the sender's side appends to it while the receiver reads it; large binaries are shared outright between process heaps, unobservably, since they are&nbsp;immutable.</p>
+<p>The runtime shares on the program's behalf and has to be right only once; across machines there is nothing to share. The gain holds while messages carry values, not pointers (question&nbsp;14).</p>`,
+  }),
+
+  // 3 (theory). What keeps a Kahn network deterministic
+  () => ({
+    kind: "theory", story: "§4, §5, §8",
+    title: "Determinism of a Kahn network",
+    prompt: "A network of sequential, deterministic processes: each channel has one writer and one reader, a read waits until a value is there, and no process tests a channel or chooses among channels. Every fair run puts the same sequence of values on each channel.",
+    ask: "Which single change preserves the value order, even if execution stops after a prefix?",
+    options: [
+      ok("every channel bounded to one slot"),
+      no("a second writer on one of the channels"),
+      no("a process that checks for a value before reading, and otherwise does other work"),
+      no("a process that stamps each value with the time it read it"),
+    ],
+    explain: `<p>Lee and Parks (1995) list five ways to make a Kahn network nondeterministic: a test of a channel for emptiness, a process nondeterministic inside itself, several writers on a channel, several readers, shared variables. Options 2 to 4 are three of them; the clock makes a process nondeterministic inside&nbsp;itself.</p>
+<p>A bound changes waiting, never a value. A one-slot channel is itself a Kahn network, its free slot travelling back to the writer on a second channel, so every fair run of the bounded network gives the same sequences. Where the network has a cycle, paths that fork and rejoin, or a reader that stops reading before its writer stops writing, they can be shorter than the unbounded network's (question 4), and each is a prefix of&nbsp;it.</p>`,
+  }),
+
+  // 4 (pseudo-code). A fork and a rejoin over bounded channels
+  () => ({
+    kind: "pseudo", story: "§4, §8",
+    title: "Bounded channels in a network that forks and rejoins",
+    prompt: "A send waits while its channel is full, a receive while it is empty; every process that can take a step eventually takes it.",
+    pseudo: {
+      above: ["channels a, b, each of capacity 1"],
+      threads: [
+        { name: "process P", local: "", lines: [["p1", "for i from 1 to 3:"], ["p2", "  send i on a"], ["p3", "  send i on b"]] },
+        { name: "process R", local: "integer x", lines: [["r1", "do 3 times:"], ["r2", "  x ← receive on b"], ["r3", "  print x"], ["r4", "do 3 times:"], ["r5", "  x ← receive on a"], ["r6", "  print x"]] },
+      ],
+      below: [],
+    },
+    ask: "What does R print with capacity 1?",
+    options: [
+      ok("<code>1</code>, then P and R wait for ever"),
+      no("<code>1 2 3</code>, then P and R wait for ever"),
+      no("<code>1 2 3 1 2 3</code>, then both finish: a buffer changes no output"),
+      no("nothing: P waits at its first send"),
+    ],
+    explain: `<p>P puts 1 in a and 1 in b; R takes 1 from b and prints it. P's next send waits on a, still full, which R reads only later; R waits on b, which P reaches only after that send. Each waits for the other. The Go version ends in <code>all goroutines are asleep - deadlock!</code> after 1; with two slots after 1 2; with three it prints all six, as unbounded channels&nbsp;do.</p>
+<p>The bound cut the output short and changed no value: each printed prefix is the unbounded output's. Here the stall comes from paths that fork and rejoin; a straight pipeline whose reader keeps reading only&nbsp;waits.</p>`,
+  }),
+
+  // 5 (theory). The RC 4000's two resolutions
+  () => ({
+    kind: "theory", story: "§5, §6",
+    title: "Two resolutions in the RC 4000 nucleus",
+    prompt: "<p>Several clients use one&nbsp;server.</p><ul class='gl'><li>a client calls <code>send message(server, m)</code>, which returns a buffer at&nbsp;once,</li><li>and later <code>wait&nbsp;answer(buf)</code>;</li><li>the server loops on <code>wait&nbsp;message</code>,</li><li>then <code>send answer(buf,&nbsp;result)</code>.</li></ul>",
+    ask: "Which resolution serves the requests, and which the replies?",
+    options: [
+      ok("requests: arrival order in one queue; replies: no contest, identified by buffer"),
+      no("requests: a guarded choice by the server; replies: arrival order in the client's queue"),
+      no("both: arrival order, one queue per process for requests and for replies"),
+      no("requests: no contest, each client having a buffer of its own; replies: arrival order"),
+    ],
+    explain: `<p>Requests from every client land in the server's one queue, and <code>wait message</code> serves them first come, first served: the mailbox family's resolution, four years before Hewitt's actors. Two further primitives let a server serve its queue in another&nbsp;order.</p>
+<p>A reply travels back in the request's own buffer, and the client waits for that buffer by its identity; the nucleus checks sender and receiver on every answer. Nobody competes for it: no contest, by identification. Go's reply channel and Erlang's reference reuse the&nbsp;idea.</p>`,
+  }),
+
+  // 6 (pseudo-code). A reply waited for by its buffer
+  () => ({
+    kind: "pseudo", story: "§6",
+    title: "An identified reply in the RC 4000 nucleus",
+    prompt: "Both answers are delivered into C's queue. S1 works for a long time; S2 answers at once.",
+    pseudo: {
+      above: ["nucleus: a pool of buffers, one queue per process"],
+      threads: [
+        { name: "process C", local: "buffer b1, b2", lines: [["c1", "b1 ← send message(S1, m)"], ["c2", "b2 ← send message(S2, m)"], ["c3", "x ← wait answer(b1)"], ["c4", "print x"]] },
+        { name: "process S1", local: "buffer b", lines: [["s1", "m, b ← wait message"], ["s2", "work for a long time"], ["s3", "send answer(b, \"from S1\")"]] },
+        { name: "process S2", local: "buffer b", lines: [["t1", "m, b ← wait message"], ["t2", "send answer(b, \"from S2\")"]] },
+      ],
+      below: [],
+    },
+    ask: "What does C print?",
+    options: [
+      ok("<code>from S1</code>, although S2's answer arrives first"),
+      no("<code>from S2</code>, the first answer to arrive"),
+      no("nothing: S2's answer is first in C's queue and blocks it"),
+      no("either answer, depending on which server runs first"),
+    ],
+    explain: `<p>S2's answer arrives first and stays in C's queue; <code>wait answer(b1)</code> passes over it and returns when b1 holds S1's answer. The 1970 paper calls the choice of a buffer "the creation of an identification of a conversation", and the nucleus stores sender and receiver in each buffer and checks&nbsp;them.</p>
+<p>A selective wait by identity: a later <code>wait answer(b2)</code> takes S2's answer. Erlang does the same with a reference (question 13), checked by the program's pattern instead of the&nbsp;nucleus.</p>`,
+  }),
+
+  // 7 (pseudo-code). An exchange that needs a buffer
+  () => ({
+    kind: "pseudo", story: "§7, §8",
+    title: "An exchange over synchronous channels",
+    prompt: "A and B each send a value to the other, then receive one.",
+    pseudo: {
+      above: ["channels ab, ba"],
+      threads: [
+        { name: "process A", local: "integer y", lines: [["p1", "send 1 on ab"], ["p2", "y ← receive on ba"], ["p3", "print y"]] },
+        { name: "process B", local: "integer x", lines: [["q1", "send 2 on ba"], ["q2", "x ← receive on ab"], ["q3", "print x"]] },
+      ],
+      below: [],
+    },
+    ask: "What happens with capacity 0, and with capacity 1?",
+    options: [
+      ok("capacity 0: both wait for ever at their sends; capacity 1: A prints 2, B prints 1"),
+      no("either capacity: A prints 2, B prints 1, the two sends meeting each other"),
+      no("either capacity: both wait for ever"),
+      no("capacity 0: one of them prints, the one whose send the scheduler takes first"),
+    ],
+    explain: `<p>With capacity 0 a send completes only when a receive on the same channel meets it. A waits for a receive on ab that B reaches only after its own send, which waits for A's receive on ba: a cycle of waiting. Go reports <code>all goroutines are asleep - deadlock!</code>; with one slot each send completes into the slot, and both&nbsp;print.</p>
+<p>The repair at capacity 0 is the order: B first receives on ab, which meets A's send, then sends on ba, which meets A's receive. What a handshake buys: when A's send returns, B has the value; after a buffered send, A knows only that it is&nbsp;queued.</p>`,
+  }),
+
+  // 8 (Go). A select with a timeout
+  () => ({
+    kind: "go", story: "§7, §12",
+    title: "A select with a timeout",
+    prompt: "<ul class='gl'><li><code>&lt;-c</code> receives from channel <code>c</code>, and <code>c &lt;- v</code> sends <code>v</code> on&nbsp;it;</li><li><code>select</code> waits until one of its cases can proceed and runs that&nbsp;one;</li><li><code>time.After(d)</code> gives a channel that receives a value after&nbsp;<code>d</code>.</li></ul><p>The reply comes after 200 ms; the select gives up after 100 ms; main reaches the select at&nbsp;once.</p>",
+    lang: "go",
+    code:
+`reply := make(chan int)
+go func() {
+    time.Sleep(200 * time.Millisecond)
+    reply <- 42
+}()
+select {
+case r := <-reply:
+    fmt.Println(r)
+case <-time.After(100 * time.Millisecond):
+    fmt.Println("timeout")
+}
+// main goes on with other work`,
+    ask: "What does it print, and what becomes of the goroutine that sends 42?",
+    options: [
+      ok("<code>timeout</code>; the sender stays blocked at <code>reply &lt;- 42</code> while the program goes on"),
+      no("<code>timeout</code>, then <code>42</code>, once the reply arrives and the select takes it"),
+      no("<code>42</code>: the timer is a hint, and the select waits for the reply"),
+      no("<code>timeout</code>; the send of 42 panics, since the select it was meant for has ended"),
+    ],
+    explain: `<p>A timeout is one more branch of the choice, with the clock as an extra sender; at 100 ms only that case can proceed. The reply channel is unbuffered and nothing receives on it again, so the send of 42 can never complete; the recorded run, 300 ms later, still counted 2 goroutines alive, main included. A missing receive, one of the blocking bugs Tu et al. found in real Go&nbsp;code.</p>
+<p>The repair is <code>make(chan int, 1)</code>: the late send completes into the slot and the goroutine ends. A send panics only on a closed&nbsp;channel.</p>`,
+  }),
+
+  // 9 (pseudo-code). Hoare's example of fairness
+  () => ({
+    kind: "pseudo", story: "§7, §10",
+    title: "Guarded choice and fairness",
+    prompt: "<code>choose</code> takes one branch whose guard holds; a receive guard holds when its partner is ready to send. X is ready from the start.",
+    pseudo: {
+      above: [],
+      threads: [
+        { name: "process X", local: "", lines: [["p1", "send stop to Y"]] },
+        { name: "process Y", local: "integer n ← 0;  boolean on ← true", lines: [["q1", "while on:"], ["q2", "  choose:"], ["q3", "    receive stop from X → on ← false"], ["q4", "    or true → n ← n + 1"], ["q5", "print n"]] },
+      ],
+      below: [],
+    },
+    ask: "Is Y certain to halt in CSP, as Hoare defined it in 1978?",
+    options: [
+      ok("no: the choice may take the counter branch every time"),
+      no("yes: a ready receive is preferred to a branch without communication"),
+      no("yes, and it prints 0, since X is ready from the start"),
+      no("no: X and Y deadlock, each waiting for the other"),
+    ],
+    explain: `<p>Hoare's own example. The counter branch is enabled on every iteration, and the language allows an implementation to choose it every time, so the receive of stop may never happen. A fair implementation would have to complete programs with unbounded nondeterminism, so Hoare left fairness out: "a proof of correctness must not rely on this&nbsp;property".</p>
+<p>Actor theory assumes the opposite, eventual delivery: Clinger's counter, stopped by a message certain to arrive, always halts, at a count with no bound. Go's specification promises a uniform random choice among the ready cases at each <code>select</code>, and nothing about eventual&nbsp;service.</p>`,
+  }),
+
+  // 10 (pseudo-code). An actor counter, three messages
+  () => ({
+    kind: "pseudo", story: "§9",
+    title: "An actor counter and the order of arrival",
+    prompt: "C handles one message per turn; <code>become</code> sets its behavior for the next message. One process, M, sends the three messages in the order shown.",
+    pseudo: {
+      above: ["C starts as counter(0)"],
+      threads: [
+        { name: "actor C", local: "", lines: [["c1", "counter(n), on a message:"], ["c2", "  add k → become counter(n + k)"], ["c3", "  ask r → send value n to r"]] },
+        { name: "process M", local: "", lines: [["m1", "send add 2 to C"], ["m2", "send add 3 to C"], ["m3", "send ask P to C"]] },
+        { name: "actor P", local: "", lines: [["r1", "value v → print v"]] },
+      ],
+      below: [],
+    },
+    ask: "Which values can P print, under actor theory and in Erlang?",
+    options: [
+      ok("actor theory: 0, 2, 3 or 5; Erlang: 5"),
+      no("5 under both: each turn runs to completion before the next"),
+      no("0, 2, 3 or 5 under both: neither keeps the order of messages"),
+      no("actor theory: 5; Erlang: 0, 2, 3 or 5, its receive being selective"),
+    ],
+    explain: `<p>Actor theory leaves the order of arrival arbitrary (Agha, 1985). If the ask arrives first, P prints 0; after one addition, 2 or 3; after both, 5. No other value: a turn is isolated, so no message is ever half&nbsp;handled.</p>
+<p>Erlang adds one guarantee as a design decision, the order between a given pair of processes (Armstrong, 2003): the three messages from M arrive in the order sent, and P prints 5. Sent by three different processes, they could interleave, and Erlang would allow all four&nbsp;values.</p>`,
+  }),
+
+  // 11 (Erlang). Selective receive
+  () => ({
+    kind: "erlang", story: "§9",
+    title: "Selective receive",
+    prompt: "<code>Pid ! Msg</code> sends Msg to the process Pid, and <code>self()</code> is the running process: the process sends three messages to its own mailbox, then runs three receives.",
+    lang: "erlang",
+    code:
+`self() ! {a, 1},
+self() ! {b, 2},
+self() ! {a, 3},
+receive {b, X} -> io:format("~p~n", [X]) end,
+receive {a, Y} -> io:format("~p~n", [Y]) end,
+receive {a, Z} -> io:format("~p~n", [Z]) end.`,
+    ask: "What does it print?",
+    options: [
+      ok("2, 1, 3"),
+      no("nothing: the oldest message, <code>{a, 1}</code>, does not match, and the receive waits"),
+      no("2, then it waits for ever: the first receive discarded <code>{a, 1}</code>"),
+      no("2, 3, 1: each receive takes the newest matching message"),
+    ],
+    explain: `<p>A <code>receive</code> scans the mailbox from the oldest message and takes the first one that matches; the others stay where they are, in their order. The first receive takes <code>{b, 2}</code> from behind <code>{a, 1}</code>; the next two find <code>{a, 1}</code>, then <code>{a,&nbsp;3}</code>.</p>
+<p>A mailbox is therefore not a queue read from the front: a selective receive is a guarded choice over the messages already arrived. The merge of the senders decides what is in the mailbox, the patterns what is&nbsp;taken.</p>`,
+  }),
+
+  // 12 (Erlang). The lost update without shared memory
+  () => ({
+    kind: "erlang", story: "§9",
+    title: "The lost update across two messages",
+    prompt: "<ul class='gl'><li><code>Pid ! Msg</code> sends <code>Msg</code> to the process&nbsp;<code>Pid</code>;</li><li><code>{get, From}</code> is a tuple, and names in capitals are&nbsp;variables;</li><li><code>receive</code> waits for a message that matches one of its&nbsp;patterns;</li><li><code>counter</code> calls itself with its new state to wait for the next&nbsp;one.</li></ul><p>The counter starts at 0. Each of two clients runs the last two lines once; once the counter has handled both sets, its value is&nbsp;read.</p>",
+    lang: "erlang",
+    code:
+`counter(N) ->
+    receive
+        {get, From} -> From ! {value, N}, counter(N);
+        {set, M}    -> counter(M)
+    end.
+
+%% each of two clients:
+C ! {get, self()},
+receive {value, V} -> C ! {set, V + 1} end.`,
+    ask: "Which final values are possible?",
+    options: [
+      ok("1 or 2"),
+      no("2 only: the counter handles one message at a time"),
+      no("2 only: Erlang keeps the order of each client's messages"),
+      no("0, 1 or 2"),
+    ],
+    explain: `<p>Both clients may receive <code>{value, 0}</code> before either sets; both then set 1. If one client's set comes before the other's get, the value is 2. The counter handles one message at a time and no memory is shared, so this is no data race: it is a race between messages, the read-modify-write spanning two of&nbsp;them.</p>
+<p>Each client's order is kept, and that does not help: the merge of the two clients' messages is free. 0 is impossible, every set writing at least 1. The repair makes the operation one message, <code>{incr}</code>. The loss is no rare window: in this test's own recorded run of <code>counter.erl</code> on Erlang/OTP 29, 2950 of 3000 trials lost the&nbsp;increment.</p>`,
+  }),
+
+  // 13 (Erlang). A reply matched by its sender only
+  () => ({
+    kind: "erlang", story: "§9",
+    title: "A reply among other messages",
+    prompt: "<ul class='gl'><li><code>{request, self(), Data}</code> is a tuple carrying the client's own&nbsp;address;</li><li><code>receive {reply, R} -&gt; R end</code> waits for a message of that&nbsp;shape;</li><li>A and B each answer a request with <code>From ! {reply,&nbsp;Result}</code>.</li></ul><p>B's reply reaches the client's mailbox before A's. The client means to take A's&nbsp;reply.</p>",
+    lang: "erlang",
+    code:
+`A ! {request, self(), Data},
+B ! {request, self(), Data},
+receive {reply, R} -> R end`,
+    ask: "Which reply does the receive take?",
+    options: [
+      ok("B's: the receive takes the first matching message in the mailbox"),
+      no("A's: Erlang keeps all messages in the order they were sent"),
+      no("A's: a reply matches the request that was sent first"),
+      no("A's: the receive takes the newest matching message in the mailbox"),
+    ],
+    explain: `<p>The receive takes the first message in the mailbox that matches <code>{reply, R}</code>, and both replies match. Erlang keeps order per pair of processes: A to the client is one pair, B to the client another, and nothing orders the two pairs, so the order of the requests decides&nbsp;nothing.</p>
+<p>The repair identifies the&nbsp;conversation:</p><ul class='gl'><li><code>Ref = make_ref()</code> travels in the&nbsp;request;</li><li>A answers <code>{reply, Ref,&nbsp;Result}</code>;</li><li>the client receives <code>{reply, Ref, R}</code>, which only A's reply&nbsp;matches.</li></ul><p>The RC 4000's buffer (question 6) did the same, checked by the nucleus; here the program's pattern checks&nbsp;it.</p>`,
+  }),
+
+  // 14 (Go). What a sent pointer becomes
+  () => ({
+    kind: "go", story: "§9, §12",
+    title: "A pointer sent on a channel",
+    prompt: "<ul class='gl'><li><code>make(chan *Account)</code> makes an unbuffered channel of account&nbsp;pointers;</li><li><code>go func() {…}()</code> runs the function in a new&nbsp;goroutine;</li><li><code>&lt;-c</code> receives, and <code>c &lt;- p</code>&nbsp;sends;</li><li><code>&amp;Account{…}</code> makes an account and gives a pointer to&nbsp;it.</li></ul><p>main sends the pointer, then sets the balance to&nbsp;0.</p>",
+    lang: "go",
+    code:
+`type Account struct{ Balance int }
+
+c := make(chan *Account)
+done := make(chan bool)
+go func() {
+    a := <-c
+    fmt.Println(a.Balance)
+    done <- true
+}()
+p := &Account{Balance: 100}
+c <- p
+p.Balance = 0
+<-done`,
+    ask: "What do the compiler and the race detector say?",
+    options: [
+      ok("the compiler accepts it; <code>go run -race</code> reports a data race on <code>Balance</code>"),
+      no("the compiler rejects the write after the send"),
+      no("no race: the send copied the account"),
+      no("no race: the unbuffered send makes the receiver read <code>Balance</code> before main writes it"),
+    ],
+    explain: `<p>A channel passes the value it is given, and here the value is a pointer: after the send both goroutines reach the same account. By the Go memory model the receive is synchronized before the send completes, and that orders neither the receiver's later read of <code>Balance</code> nor main's later write against the other: they race, and the read may see 100 or 0. <code>go vet</code> is silent; the race detector reports the data race, and the recorded run printed&nbsp;100.</p>
+<p>"Share by communicating" is a convention. Erlang copies the data of a message, except large binaries and literals, which are immutable and shared; Rust moves a value that is not <code>Copy</code>, and the compiler rejects a use after the&nbsp;send.</p>`,
+  }),
+
+  // 15 (theory). Reading the bug study's table
+  () => ({
+    kind: "theory", story: "§12",
+    title: "The bug study of Tu, Liu, Song and Zhang",
+    prompt: "A study of 2019 (ASPLOS) classified 171 concurrency bugs from six Go systems by effect and by cause. Of 85 blocking bugs (goroutines wait for ever), 58% came from message passing and 42% from shared memory; of 86 non-blocking bugs (a wrong result or a crash), 20% from message passing and 80% from shared memory.",
+    ask: "What follows from these figures?",
+    options: [
+      ok("in these systems, most message-passing bugs were blocking"),
+      no("in these systems, message-passing bugs were less likely to block than shared-memory bugs"),
+      no("message passing is the more error-prone of the two in general"),
+      no("in these systems, most shared-memory bugs were blocking"),
+    ],
+    explain: `<p>The figures are shares within each effect, and the key needs the counts behind them: 58% of 85 is some 49 blocking and 20% of 86 some 17 non-blocking message-passing bugs, so some 49 of about 66 were blocking. Shared memory gives some 36 blocking and 69 non-blocking, so its bugs were mostly non-blocking: option 4 is false. Shared-memory primitives are used more often, so the totals, 66 against 105, are no&nbsp;rate.</p>
+<p>Nothing follows outside six Go systems. The study reads its result "contrary to the common belief that message passing is less error-prone": the price of removing sharing is&nbsp;waiting.</p>`,
+  }),
+
+  // 16 (theory). The rule of Go's select
+  () => ({
+    kind: "theory", story: "§5, §7, §10",
+    title: "A select with two ready cases and a default",
+    prompt: "A Go <code>select</code> has a receive case on channel a, a receive case on channel b, and a <code>default</code> branch. When it runs, a and b each hold a value.",
+    ask: "Which branch runs, and what does the language fix?",
+    options: [
+      ok("a's case or b's, chosen uniformly at random; never default"),
+      no("a's case: the cases are tried in the order written"),
+      no("default: it is the branch that never has to wait"),
+      no("the case whose value reached its channel first"),
+    ],
+    explain: `<p>The specification: if one or more cases can proceed, a single one is chosen "via a uniform pseudo-random selection"; only if none can, <code>default</code> runs. The recorded 10000 runs on go1.27.1, one sample of that rule, took a's case 5025 times, b's 4975 times, default never. A <code>select</code> is the channel family's guarded choice, the one point where the program lets a contest in, and with two ready cases it shows both outcomes by rule, not by a runtime's bias (question&nbsp;1).</p>
+<p>A <code>default</code> makes the select a test for emptiness, one of the ways nondeterminism enters a Kahn network (question 3). The random choice is made anew each time; the specification promises nothing about a case being taken eventually (question&nbsp;9).</p>`,
+  }),
+];
+// END GEN
+
+// The applet.
+const $ = id => document.getElementById(id);
+const APP = document.querySelector(".app");
+const embedded = new URLSearchParams(location.search).has("embed") || window.self !== window.top;
+if (embedded) document.body.classList.add("embed");
+let qs = [], i = 0, score = 0, results = [], sels = [], state = "start";   // start | ask | shown | end
+const HINT = `<p class="hint">Choose an answer: the reason appears&nbsp;here.</p><p class="hint">Keys 1 to 4; S skips; Enter or → moves on; ← goes back. Only an answer is&nbsp;final.</p>`;
+
+const LANGS = {
+  go: { com: "//", kw: /\b(package|import|func|go|chan|make|select|case|default|type|struct|var|for|range|return|if|else|int|string|bool|true|false|nil)\b/ },
+  erlang: { com: "%", kw: /\b(receive|after|end|fun|case|of|when|self|spawn|make_ref)\b/ },
+};
+function hl(src, lang) {
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const { com: mark, kw: KW } = LANGS[lang] || LANGS.go;
+  return src.split("\n").map(line => {
+    const c = line.indexOf(mark);
+    const body = c >= 0 ? line.slice(0, c) : line, com = c >= 0 ? line.slice(c) : "";
+    const out = esc(body).replace(new RegExp(`("[^"]*")|${KW.source}|\\b(\\d[\\d_]*)\\b`, "g"),
+      (m, str, kw, num) => str ? `<span class="str">${str}</span>` : kw ? `<span class="kw">${kw}</span>` : `<span class="num">${num}</span>`);
+    return out + (com ? `<span class="com">${esc(com)}</span>` : "");
+  }).join("\n");
+}
+function pseudo(p) {
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const block = lines => lines.length ? `<div class="pc">${lines.map(esc).join("\n")}</div>` : "";
+  const col = t => `<div class="col"><div class="th">${esc(t.name)}</div>` +
+    (t.local ? `<div class="lc">${esc(t.local)}</div>` : "") +
+    t.lines.map(([n, l]) => `<span class="no">${n}:</span>${esc(l)}`).join("\n") + `</div>`;
+  return block(p.above) + `<div class="pt">${p.threads.map(col).join("")}</div>` + block(p.below);
+}
+
+// Fitting: zoom the whole window to the browser; if a panel still overflows, shrink only its text.
+function fit() {
+  const portrait = innerWidth < 760 || innerWidth / innerHeight < 0.8;
+  document.body.classList.toggle("portrait", portrait);
+  const W = 1080, H = 700, pad = embedded ? 0 : 32;
+  let z = portrait ? innerWidth / 430 : Math.min((innerWidth - pad) / W, (innerHeight - pad) / H, 1.2);
+  document.documentElement.style.setProperty("--z", z);
+  APP.style.height = portrait ? `${innerHeight / z}px` : "";   // upright: the whole screen, under the zoom
+  fitPanels();
+}
+function shrink(box, inner) {
+  if (!inner) return;
+  let k = 1; inner.style.zoom = 1;
+  while (box.scrollHeight > box.clientHeight + 1 && k > 0.6) { k -= 0.03; inner.style.zoom = k; }
+}
+function fitWidth(el) {
+  if (!el || el.classList.contains("hidden")) return;
+  let k = 1; el.style.zoom = 1;
+  const room = () => el.parentElement.getBoundingClientRect().width - 2 * parseFloat(getComputedStyle(el.parentElement).paddingLeft);
+  while (el.getBoundingClientRect().width > room() + 1 && k > 0.5) { k -= 0.03; el.style.zoom = k; }
+}
+function fitPanels() {
+  if (document.body.classList.contains("portrait")) {
+    for (const el of [$("qpseudo"), document.querySelector(".screen.on"), $("rightinner"), $("sideinner")]) if (el) el.style.zoom = 1;
+    return;
+  }
+  fitWidth($("qpseudo"));
+  shrink($("scroll"), document.querySelector(".screen.on"));
+  shrink($("right"), $("rightinner"));
+  shrink($("sidebody"), $("sideinner"));
+}
+addEventListener("resize", fit);
+
+$("ctoggle").onclick = () => {
+  const on = APP.classList.toggle("showcode");
+  $("ctoggle").textContent = on ? "Show the reason" : "Show the program";
+  fitPanels();
+};
+function screen(id) {
+  for (const s of ["start", "quiz", "end"]) $(s).classList.toggle("on", s === id);
+  $("main").classList.toggle("single", id !== "quiz");
+  $("scroll").scrollTop = 0; $("main").scrollTop = 0;
+}
+function status() {
+  $("prog").style.width = `${100 * results.filter(r => r !== undefined).length / GENS.length}%`;
+  $("stat").textContent = `${score}/${GENS.length}`;
+}
+
+function begin() {
+  qs = GENS.map(g => { const q = g(); if (!q.fixed) q.options = shuffle(q.options); return q; });
+  i = 0; score = 0; results = []; sels = [];
+  screen("quiz"); render();
+}
+// Renders question i in its recorded state: open, skipped, or answered. Only an answer is final
+// in a run: an answered question is shown as it was left and nothing in it can be changed. An open
+// or skipped question can be answered whenever it is shown; Skip only marks it and moves on.
+function render() {
+  const q = qs[i], done = typeof results[i] === "boolean", live = !done;
+  state = live ? "ask" : "shown";
+  APP.classList.toggle("answered", done); APP.classList.remove("showcode"); $("ctoggle").textContent = "Show the program";
+  $("qno").textContent = `Question ${i + 1} of ${qs.length}`;
+  $("qtitle").innerHTML = q.title;
+  $("qprompt").innerHTML = q.prompt;
+  $("qcode").innerHTML = hl(q.code || "", q.lang); $("qcode").classList.toggle("hidden", !q.code);
+  $("qpseudo").innerHTML = q.pseudo ? pseudo(q.pseudo) : ""; $("qpseudo").classList.toggle("hidden", !q.pseudo);
+  $("ctoggle").classList.toggle("hidden", !q.code && !q.pseudo);
+  $("qask").innerHTML = q.ask;
+  $("opts").innerHTML = "";
+  const skipped = results[i] === "skip", chosen = sels[i];
+  q.options.forEach((o, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = `<span class="k">${k + 1}</span><span class="t">${o.text}</span>`;
+    b.onclick = () => choose(k);
+    if (done) { b.disabled = true; if (o.ok) b.classList.add("ok"); else if (k === chosen) b.classList.add("no"); }
+    $("opts").appendChild(b);
+  });
+  if (skipped) $("sideinner").innerHTML = `<p class="verdict"><span>Skipped, for&nbsp;now.</span></p>` + HINT;
+  else if (live) $("sideinner").innerHTML = HINT;
+  else {
+    const right = results[i];
+    $("sideinner").innerHTML =
+      `<p class="verdict ${right ? "ok" : "no"}">${right ? "✓ Correct" : "✗ Not this one"}` +
+      (right ? "" : ` <span>· the answer: ${q.options.find(o => o.ok).text}</span>`) + `</p>` +
+      `<div class="why">${q.explain}</div>`;
+  }
+  $("back").disabled = i === 0;
+  $("skip").disabled = done;
+  $("act").textContent = i + 1 < qs.length ? "Next" : "See the result"; $("act").disabled = false;
+  $("sidebody").scrollTop = 0; $("main").scrollTop = 0;
+  status(); fitPanels();
+}
+function choose(k) {
+  if (state !== "ask" || typeof results[i] === "boolean") return;
+  sels[i] = k;
+  const right = qs[i].options[k].ok;
+  if (right) score++;
+  results[i] = right;
+  render();
+  if (document.body.classList.contains("portrait")) $("sidebody").scrollIntoView({ block: "nearest" });
+}
+function skip() {                 // marks the question skipped and moves on; it can still be answered
+  if (state !== "ask") return;
+  sels[i] = -1; results[i] = "skip";
+  next();
+}
+function next() {                 // always moves on; an open question stays open, Back returns to it
+  if (state !== "ask" && state !== "shown") return;
+  i++; i < qs.length ? render() : finish();
+}
+function back() {
+  if (i > 0 && state !== "start" && state !== "end") { i--; render(); }
+}
+function finish() {
+  state = "end"; APP.classList.remove("answered", "showcode"); screen("end");
+  const n = qs.length, skipped = qs.filter((q, k) => results[k] === "skip" || results[k] === undefined).length;
+  $("endtitle").textContent = `${score}/${n} questions right`;
+  $("endmsg").innerHTML =
+    (skipped ? `${skipped} skipped or left open. ` : "") +
+    (score === n ? "Every answer holds. The session adds the history behind them, from the RC 4000 of 1969 to Kahn, Hoare, Hewitt and Armstrong, and the resolution of a contested communication as the axis that orders them."
+    : score >= n - 3 ? "Most of it holds. The session states each point as one of three resolutions of a contested communication, and the lab builds each primitive on one lock."
+    : "Each of these is a point of the session: where the shared memory went, the network without a contest, the three resolutions, the deadlock by waiting, the race between messages.");
+  $("recap").innerHTML = qs.map((q, k) =>
+    `<li><span class="m ${results[k] === true ? "ok" : results[k] === false ? "no" : "sk"}">${results[k] === true ? "✓" : results[k] === false ? "✗" : "–"}</span>${k + 1}.&nbsp;${q.title}</li>`).join("");
+  $("closeEnd").classList.toggle("hidden", !embedded);
+  status(); fitPanels();
+}
+function close() {
+  if (embedded) parent.postMessage({ applet: "close" }, "*");
+  else { state = "start"; results = []; sels = []; score = 0; screen("start"); status(); }
+}
+$("go").onclick = begin;
+$("again").onclick = begin;
+$("act").onclick = next;
+$("skip").onclick = skip;
+$("back").onclick = back;
+$("close").onclick = close;
+$("closeEnd").onclick = close;
+document.addEventListener("keydown", e => {
+  if (state === "ask" && /^[1-4]$/.test(e.key)) choose(+e.key - 1);
+  else if (state === "ask" && /^[sS]$/.test(e.key)) skip();
+  else if (e.key === "ArrowLeft") back();
+  else if (e.key === "ArrowRight") next();
+  else if (e.key === "Enter") {
+    if (state === "start" || state === "end") { e.preventDefault(); begin(); }
+    else { e.preventDefault(); next(); }
+  }
+  else if (e.key === "Escape" && embedded) close();
+});
+status();
+fit();
+</script>
+</body>
+</html>
