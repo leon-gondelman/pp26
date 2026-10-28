@@ -1503,15 +1503,15 @@ balance = b + 50;     // both write 150</code></pre></div>
   <div class="cols b1-photo-cols">
     <div>
       <ul class="b1-dates">
-        <li><b class="accent">1967</b>: Regnecentralen's <b class="accent">RC 4000</b>; its first prototype monitored an ammonia plant at Puławy in&nbsp;Poland.</li>
-        <li class="fragment" data-fragment-index="0"><b class="accent">1969</b>: a group led by <b class="accent">Per Brinch Hansen</b> finished its multiprogramming system (<a class="cite" href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf" target="_blank" rel="noopener">Brinch Hansen, April&nbsp;1970</a>): not a conventional operating system but a small <b class="accent">nucleus</b> with <b class="accent">three jobs</b>, in the paper's&nbsp;words:
+        <li style="position: relative; left: 760px; top: 514px"><b class="accent">1967</b>: Regnecentralen's <b class="accent">RC 4000</b>; its first prototype monitored an ammonia plant at Puławy in&nbsp;Poland.</li>
+        <li class="fragment" data-fragment-index="0" style="position: relative; left: -26px; top: -144px"><b class="accent">1969</b>: a group led by <b class="accent">Per Brinch Hansen</b> finished its multiprogramming system (<a class="cite" href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf" target="_blank" rel="noopener">Brinch Hansen, April&nbsp;1970</a>): not a conventional operating system but a small <b class="accent">nucleus</b> with <b class="accent">three jobs</b>, in the paper's&nbsp;words:
           <ol>
             <li>the <b>simulation</b> of&nbsp;processes;</li>
             <li><b>communication</b> among&nbsp;processes;</li>
             <li>the <b>creation, control and removal</b> of&nbsp;processes.</li>
           </ol>
         </li>
-        <li class="fragment" data-fragment-index="1"><b class="accent">Messages</b> were its <b class="accent">basic means of communication</b> between processes; operating systems and user programs ran on top as ordinary&nbsp;processes.</li>
+        <li class="fragment" data-fragment-index="1" style="position: relative; left: -22px; top: -80px"><b class="accent">Messages</b> were its <b class="accent">basic means of communication</b> between processes; operating systems and user programs ran on top as ordinary&nbsp;processes.</li>
       </ul>
     </div>
     <div>
@@ -1528,7 +1528,7 @@ balance = b + 50;     // both write 150</code></pre></div>
     <li class="fragment" data-fragment-index="0">Having learned semaphores, he withheld them from processes and gave them&nbsp;messages.</li>
   </ul>
   <div class="box fragment" data-fragment-index="0">The semaphore concept alone "does not fulfill our requirements of safety and efficiency in a dynamic environment in which some processes may turn out to be black sheep and break the rules of the game" (page&nbsp;239).</div>
-  <p class="fragment" data-fragment-index="1">The machine returns twice in this block: for where its shared memory went (part 2), and for the two resolutions it uses at once (the conversation slide of part 4, and the&nbsp;appendix).</p>
+  <p class="fragment" data-fragment-index="1">The RC 4000 returns twice in this block: for <em>where</em> its shared memory went (part 2), and for <em>how</em> it resolves a contested communication (the conversation slide of part 4, and the appendix).</p>
   
 </section>
 
@@ -1651,7 +1651,7 @@ balance = b + 50;     // both write 150</code></pre></div>
 <section id="b1-pipelines">
   <h2>Unix pipelines as Kahn&nbsp;networks</h2>
   <p>A plain shell pipeline is a Kahn network with bounded pipes: each pipe has one writer and one reader, and each program is deterministic, reading one input and writing one output. Five command lines, run on the lecture&nbsp;machine:</p>
-  <pre class="b1-sketch b1-sh" data-lines="0:0;1:1;2:2;3:3;4:4"><code class="language-bash">seq 1 100000 | grep 7 | sort -r | head -5
+  <pre class="b1-sketch b1-sh" data-lines="0:0;1:1;2:2;3:3;4:4" style="font-size: 1.137em"><code class="language-bash">seq 1 100000 | grep 7 | sort -r | head -5
 seq 5 | while read x; do sleep 0.$RANDOM; echo $x; done | awk '{print $1*$1}'
 printf 'b\nZ\na\nB\nA\n' | LC_ALL=C sort
 (dd if=/dev/zero bs=1k count=200 2>/dev/null; echo 'writer done' >&2) | (sleep 3; wc -c)
@@ -1668,7 +1668,7 @@ printf 'b\nZ\na\nB\nA\n' | LC_ALL=C sort
 
 <section id="b1-limits">
   <h2>The limits of a deterministic&nbsp;network</h2>
-  <p>A deterministic network&nbsp;cannot:</p>
+  <p>A deterministic network <span class="hl">cannot</span>:</p>
   <ol class="b1-list">
     <li>serve whichever client asks&nbsp;first;</li>
     <li>give up after a&nbsp;timeout;</li>
