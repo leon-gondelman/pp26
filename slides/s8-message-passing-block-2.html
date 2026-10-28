@@ -1398,6 +1398,9 @@ html.print-pdf .reveal .b2-defs > *, html.reveal-print .reveal .b2-defs > * { gr
 .reveal .s8f.b2-big svg text { font-size: 23px; } .reveal .s8f.b2-big svg .sm { font-size: 22px; } .reveal .s8f.b2-big svg .mono { font-size: 22px; }
 .reveal .s8f.b2-big svg .k, .reveal .s8f.b2-big svg .k2 { stroke-width: 2.2; } .reveal .s8f.b2-big svg .k3 { stroke-width: 1.8; } .reveal .s8f.b2-big svg .box, .reveal .s8f.b2-big svg .cell { stroke-width: 1.8; }
 .reveal table.b2-cmp.b2-sem td:first-child { width: 24%; }
+/* the link to the appendix, as session 7's: the button a.apx (theme.css), and one line beside it saying what is there */
+.reveal .b2-apx-say { position: absolute; left: 226px; bottom: 10px; font-size: 24px; line-height: 29px; color: var(--fg); }
+html.print-pdf .reveal .b2-apx-say, html.reveal-print .reveal .b2-apx-say { display: none; }
 /* a table row that appears on a click draws no rule lines before it appears */
 .reveal table tr.fragment:not(.visible) > :is(td, th) { border-color: transparent; }
 </style>
@@ -1424,10 +1427,10 @@ html.print-pdf .reveal .b2-defs > *, html.reveal-print .reveal .b2-defs > * { gr
   </table>
   
 </section>
-<!-- part 9 (first half: Hewitt, Agha, the toy, the pictures, the guarantees, the two arguments) -->
+<!-- part 7 (first half: Hewitt, Agha, the toy, the pictures, the guarantees, the two arguments) -->
 
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 9</div>
+  <div class="eyebrow">PART 7</div>
   <h1>Actors and mailboxes: asynchronous sends into a mailbox in arrival&nbsp;order</h1>
   <div class="sub">Hewitt 1973, Agha 1985, Erlang; the second family of message&nbsp;passing</div>
   
@@ -1441,7 +1444,7 @@ html.print-pdf .reveal .b2-defs > *, html.reveal-print .reveal .b2-defs > * { gr
     <g data-on="3"><text x="690" y="30" text-anchor="start" class="hd" data-hi="3">Erlang, 1986</text><text x="690" y="62" text-anchor="start">Ericsson; fault tolerance</text><rect x="690" y="110" width="60" height="40" rx="5" class="box"/><text x="720" y="138" text-anchor="middle">P</text><rect x="690" y="190" width="60" height="40" rx="5" class="box"/><text x="720" y="218" text-anchor="middle">Q</text><rect x="800" y="152" width="32" height="36" rx="3" class="cell"/><rect x="836" y="152" width="32" height="36" rx="3" class="cell"/><rect x="872" y="152" width="32" height="36" rx="3" class="cell"/><rect x="840" y="156" width="24" height="28" rx="4" class="msg"/><rect x="876" y="156" width="24" height="28" rx="4" class="msg"/><path d="M750 130 L796 162" class="arr"/><path d="M750 210 L796 180" class="arr"/><path d="M904 170 L936 170" class="arr"/><rect x="940" y="150" width="60" height="40" rx="5" class="box"/><text x="970" y="178" text-anchor="middle">R</text><text x="852" y="226" text-anchor="middle">mailbox</text></g>
   </svg></div>
   <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0"><b>Arrival order in a queue</b>, the third resolution of part 5, is the one the RC 4000 gave for requests: senders put messages into one mailbox, and the order of arrival determines which is served&nbsp;first.</p>
+    <p class="fragment fade-out" data-fragment-index="0"><b>Arrival order in a queue</b>, the third resolution of part 4, is the one the RC 4000 gave for requests: senders put messages into one mailbox, and the order of arrival determines which is served&nbsp;first.</p>
     <p class="fragment current-visible" data-fragment-index="0"><b>Actors, 1973.</b> The actor model began in artificial intelligence, not in operating systems: <a class="cite" href="https://www.ijcai.org/Proceedings/73/Papers/027B.pdf" target="_blank" rel="noopener">Hewitt, Bishop and Steiger 1973</a>, out of Hewitt's earlier work on Planner; as far as is known, independently of the RC&nbsp;4000.</p>
     <p class="fragment current-visible" data-fragment-index="1">Computation as a society of agents: &ldquo;The model becomes a cooperating society of &lsquo;little men&rsquo; each of whom can address others with whom it is acquainted&rdquo; (page 236); &ldquo;Every actor should act for himself or delegate the responsibility&rdquo; (page&nbsp;238).</p>
     <p class="fragment current-visible" data-fragment-index="2"><b>Erlang, 1986.</b> After the RC 4000 and the actors, Erlang reached the same answer at Ericsson, for another reason: fault&nbsp;tolerance.</p>
@@ -1528,130 +1531,64 @@ $ ./toy_actor
 </section>
 
 <section id="b2-pictures">
-  <h2>Actors compared with worker pools and&nbsp;objects</h2>
-  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="2" viewBox="0 0 1000 262" role="img" aria-label="Three drawings: three actors each with a mailbox of its own; a worker pool, three workers pulling from one common pile; an object, called and returning, beside an actor sent a message that carries the sender's address and answering with a send" xmlns="http://www.w3.org/2000/svg">
-    <g data-on="1 2"><text x="0" y="30" text-anchor="start" class="hd" data-hi="1">worker pool</text><rect x="10" y="66" width="110" height="150" rx="3" class="cell"/><rect x="20" y="78" width="90" height="30" rx="5" class="msg"/><rect x="20" y="124" width="90" height="30" rx="5" class="msg"/><rect x="20" y="170" width="90" height="30" rx="5" class="msg"/><path d="M120 141 L196 80" class="arr"/><path d="M120 141 L196 141" class="arr"/><path d="M120 141 L196 202" class="arr"/><rect x="200" y="60" width="90" height="40" rx="5" class="box"/><text x="245" y="87" text-anchor="middle">worker</text><rect x="200" y="121" width="90" height="40" rx="5" class="box"/><text x="245" y="148" text-anchor="middle">worker</text><rect x="200" y="182" width="90" height="40" rx="5" class="box"/><text x="245" y="209" text-anchor="middle">worker</text><text x="0" y="252" text-anchor="start">a common pile</text></g>
-    <g><text x="350" y="30" text-anchor="start" class="hd" data-hi="0">actors</text><rect x="350" y="64" width="32" height="32" rx="3" class="cell"/><rect x="386" y="64" width="32" height="32" rx="3" class="cell"/><path d="M422 80 L486 80" class="arr"/><rect x="490" y="60" width="120" height="40" rx="5" class="box"/><text x="550" y="88" text-anchor="middle">actor A</text><rect x="350" y="125" width="32" height="32" rx="3" class="cell"/><rect x="386" y="125" width="32" height="32" rx="3" class="cell"/><path d="M422 141 L486 141" class="arr"/><rect x="490" y="121" width="120" height="40" rx="5" class="box"/><text x="550" y="149" text-anchor="middle">actor B</text><rect x="350" y="186" width="32" height="32" rx="3" class="cell"/><rect x="386" y="186" width="32" height="32" rx="3" class="cell"/><path d="M422 202 L486 202" class="arr"/><rect x="490" y="182" width="120" height="40" rx="5" class="box"/><text x="550" y="210" text-anchor="middle">actor C</text><text x="350" y="252" text-anchor="start">a mailbox each</text></g>
-    <g data-on="2"><text x="680" y="30" text-anchor="start" class="hd" data-hi="2">object and actor</text><rect x="680" y="60" width="110" height="40" rx="5" class="box"/><text x="735" y="88" text-anchor="middle">caller</text><rect x="880" y="60" width="110" height="40" rx="5" class="box"/><text x="935" y="88" text-anchor="middle">object</text><path d="M790 72 L876 72" class="arr"/><text x="833" y="58" text-anchor="middle" class="sm">call</text><path d="M880 90 L794 90" class="arr2"/><text x="833" y="120" text-anchor="middle" class="sm">return</text><rect x="680" y="170" width="110" height="40" rx="5" class="box"/><text x="735" y="198" text-anchor="middle">sender</text><rect x="880" y="170" width="110" height="40" rx="5" class="box"/><text x="935" y="198" text-anchor="middle">actor</text><rect x="790" y="140" width="90" height="28" rx="5" class="msg"/><text x="835" y="160" text-anchor="middle" class="sm">address</text><path d="M790 182 L876 182" class="arr"/><path d="M880 200 L794 200" class="arr"/><text x="835" y="234" text-anchor="middle" class="sm">answer by a send</text></g>
+  <h2>Actors compared with worker pools, objects and Erlang's&nbsp;processes</h2>
+  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="3" viewBox="0 0 1000 262" role="img" aria-label="Three drawings: three actors each with a mailbox of its own; a worker pool, three workers pulling from one common pile; an object, called and returning, beside an actor sent a message that carries the sender's address and answering with a send" xmlns="http://www.w3.org/2000/svg">
+    <g data-on="1 2 3"><text x="0" y="30" text-anchor="start" class="hd" data-hi="1">worker pool</text><rect x="10" y="66" width="110" height="150" rx="3" class="cell"/><rect x="20" y="78" width="90" height="30" rx="5" class="msg"/><rect x="20" y="124" width="90" height="30" rx="5" class="msg"/><rect x="20" y="170" width="90" height="30" rx="5" class="msg"/><path d="M120 141 L196 80" class="arr"/><path d="M120 141 L196 141" class="arr"/><path d="M120 141 L196 202" class="arr"/><rect x="200" y="60" width="90" height="40" rx="5" class="box"/><text x="245" y="87" text-anchor="middle">worker</text><rect x="200" y="121" width="90" height="40" rx="5" class="box"/><text x="245" y="148" text-anchor="middle">worker</text><rect x="200" y="182" width="90" height="40" rx="5" class="box"/><text x="245" y="209" text-anchor="middle">worker</text><text x="0" y="252" text-anchor="start">a common pile</text></g>
+    <g data-hi="3"><text x="350" y="30" text-anchor="start" class="hd" data-hi="0">actors</text><rect x="350" y="64" width="32" height="32" rx="3" class="cell"/><rect x="386" y="64" width="32" height="32" rx="3" class="cell"/><path d="M422 80 L486 80" class="arr"/><rect x="490" y="60" width="120" height="40" rx="5" class="box"/><text x="550" y="88" text-anchor="middle">actor A</text><rect x="350" y="125" width="32" height="32" rx="3" class="cell"/><rect x="386" y="125" width="32" height="32" rx="3" class="cell"/><path d="M422 141 L486 141" class="arr"/><rect x="490" y="121" width="120" height="40" rx="5" class="box"/><text x="550" y="149" text-anchor="middle">actor B</text><rect x="350" y="186" width="32" height="32" rx="3" class="cell"/><rect x="386" y="186" width="32" height="32" rx="3" class="cell"/><path d="M422 202 L486 202" class="arr"/><rect x="490" y="182" width="120" height="40" rx="5" class="box"/><text x="550" y="210" text-anchor="middle">actor C</text><text x="350" y="252" text-anchor="start">a mailbox each</text></g>
+    <g data-on="2 3"><text x="680" y="30" text-anchor="start" class="hd" data-hi="2">object and actor</text><rect x="680" y="60" width="110" height="40" rx="5" class="box"/><text x="735" y="88" text-anchor="middle">caller</text><rect x="880" y="60" width="110" height="40" rx="5" class="box"/><text x="935" y="88" text-anchor="middle">object</text><path d="M790 72 L876 72" class="arr"/><text x="833" y="58" text-anchor="middle" class="sm">call</text><path d="M880 90 L794 90" class="arr2"/><text x="833" y="120" text-anchor="middle" class="sm">return</text><rect x="680" y="170" width="110" height="40" rx="5" class="box"/><text x="735" y="198" text-anchor="middle">sender</text><rect x="880" y="170" width="110" height="40" rx="5" class="box"/><text x="935" y="198" text-anchor="middle">actor</text><rect x="790" y="140" width="90" height="28" rx="5" class="msg"/><text x="835" y="160" text-anchor="middle" class="sm">address</text><path d="M790 182 L876 182" class="arr"/><path d="M880 200 L794 200" class="arr"/><text x="835" y="234" text-anchor="middle" class="sm">answer by a send</text></g>
   </svg></div>
   <div class="b2-defs b2-cap">
     <p class="fragment fade-out" data-fragment-index="0">An actor has its own identity, its own address and private state, and a mailbox of its own. Two familiar pictures misrepresent this, and both are&nbsp;wrong.</p>
     <p class="fragment current-visible" data-fragment-index="0"><b>Not a worker pool</b>, interchangeable labour pulling work from a common pile: an actor is closer to a person with a mailbox of their own. In the kitchen, each cook has an order spike of their own, the ticket is pinned on <i>that</i> cook's spike, and only that cook reads it, in the order the tickets were&nbsp;pinned.</p>
     <p class="fragment current-visible" data-fragment-index="1"><b>Not an object.</b> An actor resembles an object that can be written to but never called: nothing returns, and a sender that needs an answer puts its own address in the&nbsp;message.</p>
+    <p class="fragment current-visible" data-fragment-index="2"><b>Classic actor and Erlang process.</b> A classic actor is a handler that the runtime calls once per message; an Erlang process is a loop that blocks in <code>receive</code> (<a class="cite" href="https://soft.vub.ac.be/Publications/2016/vub-soft-tr-16-11.pdf" target="_blank" rel="noopener">De Koster et al. 2016</a>, pages 33,&nbsp;35).</p>
   </div>
-  
-</section>
-
-<section id="b2-classic-erlang">
-  <h2>Classic actors and Erlang's&nbsp;processes</h2>
-  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="2" viewBox="0 0 1000 256" role="img" aria-label="Three structures beside a mailbox: an RC 4000 process looping through wait and handle; a classic actor, a handler that the runtime calls once per message, with become recording the next behaviour; an Erlang process looping through receive and handle" xmlns="http://www.w3.org/2000/svg">
-    <g><text x="0" y="28" text-anchor="start" class="hd" data-hi="0">RC 4000 process</text><text x="48" y="100" text-anchor="middle" class="sm">mailbox</text><rect x="0" y="110" width="30" height="32" rx="3" class="cell"/><rect x="33" y="110" width="30" height="32" rx="3" class="cell"/><rect x="66" y="110" width="30" height="32" rx="3" class="cell"/><path d="M96 120 L146 90" class="arr"/><rect x="150" y="60" width="120" height="40" rx="5" class="box"/><text x="210" y="88" text-anchor="middle">wait</text><path d="M210 100 L210 156" class="arr"/><rect x="150" y="160" width="120" height="40" rx="5" class="box"/><text x="210" y="188" text-anchor="middle">handle</text><path d="M270 180 C310 180 310 80 274 80" class="arr"/><text x="150" y="244" text-anchor="middle">wait, handle, wait again</text></g>
-    <g data-on="1 2"><text x="340" y="28" text-anchor="start" class="hd" data-hi="1">classic actor</text><text x="388" y="100" text-anchor="middle" class="sm">mailbox</text><rect x="340" y="110" width="30" height="32" rx="3" class="cell"/><rect x="373" y="110" width="30" height="32" rx="3" class="cell"/><rect x="406" y="110" width="30" height="32" rx="3" class="cell"/><path d="M436 120 L486 90" class="arr"/><rect x="490" y="60" width="120" height="40" rx="5" class="box"/><text x="550" y="88" text-anchor="middle">runtime</text><path d="M550 100 L550 156" class="arr"/><rect x="490" y="160" width="120" height="40" rx="5" class="box"/><text x="550" y="188" text-anchor="middle">handler</text><path d="M610 180 C650 180 650 80 614 80" class="arr2"/><text x="490" y="244" text-anchor="middle">become: next behaviour</text></g>
-    <g data-on="2"><text x="680" y="28" text-anchor="start" class="hd" data-hi="2">Erlang process</text><text x="728" y="100" text-anchor="middle" class="sm">mailbox</text><rect x="680" y="110" width="30" height="32" rx="3" class="cell"/><rect x="713" y="110" width="30" height="32" rx="3" class="cell"/><rect x="746" y="110" width="30" height="32" rx="3" class="cell"/><path d="M776 120 L826 90" class="arr"/><rect x="830" y="60" width="120" height="40" rx="5" class="box"/><text x="890" y="88" text-anchor="middle" class="mono">receive</text><path d="M890 100 L890 156" class="arr"/><rect x="830" y="160" width="120" height="40" rx="5" class="box"/><text x="890" y="188" text-anchor="middle">handle</text><path d="M950 180 C990 180 990 80 954 80" class="arr"/><text x="830" y="244" text-anchor="middle" class="mono">loop(State)</text></g>
-  </svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0"><b>An RC 4000 process</b> is a thread in a loop beside its mailbox: wait, handle, wait&nbsp;again.</p>
-    <p class="fragment current-visible" data-fragment-index="0"><b>A classic actor</b> inverts that structure: no loop, never waits; a handler that the runtime calls once per message, and <code>become</code> records the behaviour for the next message. Classic actors are therefore event handlers, a state machine written by hand, which is why programming with them resembles asynchronous&nbsp;programming.</p>
-    <p class="fragment current-visible" data-fragment-index="1"><b>An Erlang process</b> restores the loop: it loops, blocks in <code>receive</code>, and passes its state through recursion. That is the split between Classic Actors and the Processes family (<a class="cite" href="https://soft.vub.ac.be/Publications/2016/vub-soft-tr-16-11.pdf" target="_blank" rel="noopener">De Koster et al. 2016</a>, pages 33,&nbsp;35).</p>
-  </div>
+  <a class="apx" href="#/b2-apx-classic-erlang">appendix</a><span class="b2-apx-say">the RC 4000's loop, the classic actor's handler and Erlang's loop, drawn side by&nbsp;side</span>
   
 </section>
 
 <section id="b2-guarantees">
-  <h2>The guarantees of actor&nbsp;theory</h2>
-  <p>A model in which a send returns at once has to state what happens to the message&nbsp;afterwards.</p>
-  <table class="b2-cmp">
-    <tr><th>Guaranteed</th><th>Source</th></tr>
-    <tr class="fragment" data-fragment-index="0"><td>Every message sent is eventually delivered, after an arbitrary but finite&nbsp;delay</td><td><a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>, page&nbsp;23</td></tr>
-    <tr class="fragment" data-fragment-index="1"><td>A message arrives whole, an aim the model states rather than a guarantee it&nbsp;proves</td><td><a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>, page&nbsp;20</td></tr>
-    <tr class="fragment" data-fragment-index="2"><td>One turn is isolated: no low-level race or deadlock inside&nbsp;it</td><td><a class="cite" href="https://soft.vub.ac.be/Publications/2016/vub-soft-tr-16-11.pdf" target="_blank" rel="noopener">De Koster et al. 2016</a>, pages&nbsp;33–34</td></tr>
-    <tr class="fragment" data-fragment-index="3"><td>A message is received only after it is&nbsp;sent</td><td>causality; <a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a>, page 26, states the same&nbsp;principle</td></tr>
-    <tr class="fragment" data-fragment-index="4"><td>An actor sends to the actors it is acquainted&nbsp;with</td><td><a class="cite" href="https://www.ijcai.org/Proceedings/73/Papers/027B.pdf" target="_blank" rel="noopener">Hewitt 1973</a>, page 236, as a&nbsp;metaphor</td></tr>
-  </table>
-  
-</section>
-
-<section id="b2-limits">
-  <h2>The limits of the&nbsp;guarantees</h2>
-  <div class="cols">
+  <h2>The guarantees of actor theory and their&nbsp;limits</h2>
+  <div class="cols" style="grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);">
     <div>
-      <p>Actor theory does not&nbsp;guarantee:</p>
+      <p><b>Guaranteed</b></p>
       <ul>
-        <li>arrival order, which is arbitrary (<a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>, page&nbsp;22);</li>
-        <li>a bound on the&nbsp;delay;</li>
-        <li>a&nbsp;reply;</li>
-        <li>that a delivered message is "meaningfully processed" (pages 23 to&nbsp;24);</li>
-        <li>freedom from races and deadlocks across several messages (<a class="cite" href="https://soft.vub.ac.be/Publications/2016/vub-soft-tr-16-11.pdf" target="_blank" rel="noopener">De Koster et al. 2016</a>, page&nbsp;34).</li>
+        <li style="font-size: 30px; margin-bottom: 24px;" class="fragment" data-fragment-index="0">every message sent is eventually delivered, after an arbitrary but finite delay (<a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>, page&nbsp;23);</li>
+        <li style="font-size: 30px; margin-bottom: 24px;" class="fragment" data-fragment-index="1">a message arrives whole, an aim the model states rather than a guarantee it proves (page&nbsp;20);</li>
+        <li style="font-size: 30px; margin-bottom: 24px;" class="fragment" data-fragment-index="2">one turn is isolated: no low-level race or deadlock inside it (<a class="cite" href="https://soft.vub.ac.be/Publications/2016/vub-soft-tr-16-11.pdf" target="_blank" rel="noopener">De Koster et al. 2016</a>, pages&nbsp;33–34);</li>
+        <li style="font-size: 30px; margin-bottom: 24px;" class="fragment" data-fragment-index="3">a message is received only after it is sent (causality; <a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a>, page&nbsp;26);</li>
+        <li style="font-size: 30px; margin-bottom: 24px;" class="fragment" data-fragment-index="4">an actor sends to the actors it is acquainted with (<a class="cite" href="https://www.ijcai.org/Proceedings/73/Papers/027B.pdf" target="_blank" rel="noopener">Hewitt 1973</a>, page 236, as a&nbsp;metaphor).</li>
       </ul>
     </div>
-    <div>
-      <table class="b2-cmp fragment" data-fragment-index="0">
-        <tr><th></th><th>TCP</th><th>actor&nbsp;model</th></tr>
-        <tr><td>order</td><td>kept per&nbsp;connection</td><td>none&nbsp;guaranteed</td></tr>
-        <tr><td>delivery</td><td>obtained by&nbsp;retransmission</td><td>assumed</td></tr>
-      </table>
-      <p class="def fragment" data-fragment-index="1">"Delivery guaranteed" is an idealization of the model, not a TCP-like protocol. Agha defends it the way a semantics defends an infinite stack: unbounded buffers do not exist physically, but the model abstracts from such limits (page&nbsp;23).</p>
+    <div class="fragment" data-fragment-index="5">
+      <p><b>Not&nbsp;guaranteed</b></p>
+      <ul>
+        <li style="font-size: 30px; margin-bottom: 24px;">arrival order, which is arbitrary (Agha 1985, page&nbsp;22);</li>
+        <li style="font-size: 30px; margin-bottom: 24px;">a bound on the&nbsp;delay;</li>
+        <li style="font-size: 30px; margin-bottom: 24px;">a&nbsp;reply;</li>
+        <li style="font-size: 30px; margin-bottom: 24px;">that a delivered message is "meaningfully processed" (pages 23 to&nbsp;24);</li>
+        <li style="font-size: 30px; margin-bottom: 24px;">freedom from races and deadlocks across several messages (De Koster et al. 2016, page&nbsp;34).</li>
+      </ul>
     </div>
   </div>
+  <a class="apx" href="#/b2-apx-tcp">appendix</a><span class="b2-apx-say">delivery in TCP and in the actor model, and Agha's infinite&nbsp;stack</span>
   
 </section>
 
-<section id="b2-agha-argument">
-  <h2>Agha's argument for asynchronous&nbsp;communication</h2>
-  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="2" viewBox="0 0 1000 236" role="img" aria-label="Three drawings: a sender and a receiver exchanging sends; an actor sending to itself through a buffer; a typist sending through a buffer to an editor" xmlns="http://www.w3.org/2000/svg">
-    <g><text x="0" y="30" text-anchor="start" class="hd" data-hi="0">no action at a distance</text><rect x="0" y="80" width="110" height="44" rx="5" class="box"/><text x="55" y="110" text-anchor="middle">sender</text><rect x="200" y="80" width="110" height="44" rx="5" class="box"/><text x="255" y="110" text-anchor="middle">receiver</text><path d="M110 92 L196 92" class="arr"/><path d="M200 112 L114 112" class="arr"/><text x="155" y="222" text-anchor="middle">readiness learned by a send</text></g>
-    <g data-on="1 2"><text x="345" y="30" text-anchor="start" class="hd" data-hi="1">a send to itself</text><rect x="445" y="80" width="110" height="44" rx="5" class="box"/><text x="500" y="110" text-anchor="middle">actor</text><rect x="475" y="150" width="50" height="32" rx="3" class="cell"/><rect x="484" y="155" width="32" height="22" rx="4" class="msg"/><path d="M555 102 C615 102 615 166 529 166" class="arr"/><path d="M475 166 C415 166 415 102 441 102" class="arr"/><text x="500" y="222" text-anchor="middle">needs a buffer</text></g>
-    <g data-on="2"><text x="680" y="30" text-anchor="start" class="hd" data-hi="2">a fast sender</text><rect x="680" y="80" width="90" height="44" rx="5" class="box"/><text x="725" y="110" text-anchor="middle">typist</text><rect x="800" y="86" width="30" height="32" rx="3" class="cell"/><rect x="832" y="86" width="30" height="32" rx="3" class="cell"/><rect x="864" y="86" width="30" height="32" rx="3" class="cell"/><rect x="805" y="91" width="20" height="22" rx="4" class="msg"/><rect x="837" y="91" width="20" height="22" rx="4" class="msg"/><rect x="869" y="91" width="20" height="22" rx="4" class="msg"/><path d="M770 102 L796 102" class="arr"/><path d="M894 102 L916 102" class="arr"/><rect x="920" y="80" width="80" height="44" rx="5" class="box"/><text x="960" y="110" text-anchor="middle">editor</text><text x="840" y="222" text-anchor="middle">not held to one character</text></g>
+<section id="b2-async-arguments">
+  <h2>Agha's and Armstrong's arguments for asynchronous&nbsp;sends</h2>
+  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="2" viewBox="0 0 1000 190" role="img" aria-label="Two drawings: a sender and a receiver that learn of each other only by sends; a sender whose synchronous send to a faulty receiver would block it, and whose asynchronous send goes out without a confirmation" xmlns="http://www.w3.org/2000/svg">
+    <g><text x="0" y="30" text-anchor="start" class="hd" data-hi="0">no action at a distance</text><rect x="0" y="80" width="130" height="44" rx="5" class="box"/><text x="65" y="110" text-anchor="middle">sender</text><rect x="260" y="80" width="130" height="44" rx="5" class="box"/><text x="325" y="110" text-anchor="middle">receiver</text><path d="M130 92 L256 92" class="arr"/><path d="M260 112 L134 112" class="arr"/><text x="195" y="180" text-anchor="middle">readiness learned by a send</text></g>
+    <g data-on="1 2"><text x="560" y="30" text-anchor="start" class="hd" data-hi="1 2">fault isolation</text><rect x="560" y="80" width="130" height="44" rx="5" class="box"/><text x="625" y="110" text-anchor="middle">sender</text><rect x="820" y="80" width="180" height="44" rx="5" class="box"/><text x="910" y="110" text-anchor="middle">faulty receiver</text><path d="M690 102 L816 102" class="arr"/></g>
+    <g data-on="1" data-hi="1"><path d="M625 128 L625 150" class="wait"/><text x="780" y="180" text-anchor="middle">a synchronous send would block the sender</text></g>
+    <g data-on="2" data-hi="2"><rect x="723" y="56" width="60" height="30" rx="5" class="msg"/><text x="780" y="180" text-anchor="middle" class="hd">send and pray</text></g>
   </svg></div>
   <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">Where part 7 gave the reasons for the handshake, <a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a> argues the opposite (pages 19 to 22). &ldquo;Intuitively, there can be no action at a distance.&rdquo; A sender can only know a receiver is ready by first sending it something, so synchronous communication is always built on asynchronous&nbsp;communication.</p>
-    <p class="fragment current-visible" data-fragment-index="0">Without buffering, an actor cannot send a message to itself, and recursive computation requires&nbsp;that.</p>
-    <p class="fragment current-visible" data-fragment-index="1">A fast sender, a typist faster than an editor, should not be held to one character at a&nbsp;time.</p>
+    <p class="fragment fade-out" data-fragment-index="0"><b><a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a></b> (pages 19 to 22): &ldquo;Intuitively, there can be no action at a distance.&rdquo; A sender can only know a receiver is ready by first sending it something, so synchronous communication is always built on asynchronous&nbsp;communication.</p>
+    <p class="fragment current-visible" data-fragment-index="0"><b><a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a></b>, from fault isolation: &ldquo;If process communication is synchronous then a software error in the receiver of a message could indefinitely block the sender of the message destroying the property of isolation&rdquo; (page&nbsp;23).</p>
+    <p class="fragment current-visible" data-fragment-index="1">Delivery is then not guaranteed, across nodes or to a dead process; Armstrong calls the result &ldquo;send and pray&rdquo; (page&nbsp;25).</p>
   </div>
-  
-</section>
-
-<section id="b2-armstrong">
-  <h2>Armstrong's argument from fault&nbsp;isolation</h2>
-  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="5" viewBox="0 0 1000 200" role="img" aria-label="The four steps of Armstrong's argument as a chain of boxes, fault isolation, share nothing, asynchronous send, delivery not guaranteed, leading to send and pray" xmlns="http://www.w3.org/2000/svg">
-    <g data-hi="1"><text x="0" y="36" text-anchor="start" class="hd">1</text><rect x="0" y="50" width="220" height="80" rx="5" class="box"/><text x="110" y="98" text-anchor="middle">fault isolation</text></g>
-    <path d="M220 90 L249 90" class="arr"/>
-    <g data-hi="2"><text x="253" y="36" text-anchor="start" class="hd">2</text><rect x="253" y="50" width="220" height="80" rx="5" class="box"/><text x="363" y="98" text-anchor="middle">share nothing</text></g>
-    <path d="M473 90 L502 90" class="arr"/>
-    <g data-hi="3"><text x="506" y="36" text-anchor="start" class="hd">3</text><rect x="506" y="50" width="220" height="80" rx="5" class="box"/><text x="616" y="98" text-anchor="middle">asynchronous send</text></g>
-    <path d="M726 90 L755 90" class="arr"/>
-    <g data-hi="4"><text x="759" y="36" text-anchor="start" class="hd">4</text><rect x="759" y="50" width="220" height="80" rx="5" class="box"/><text x="869" y="84" text-anchor="middle">delivery not</text><text x="869" y="112" text-anchor="middle">guaranteed</text></g>
-    <g data-on="5" data-hi="5"><path d="M869 130 L869 156" class="arr"/><text x="869" y="188" text-anchor="middle" class="hd">send and pray</text></g>
-  </svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">Erlang, developed at Ericsson from 1986 with first experiments in 1987, arrived by an independent route at semantics like the actor model's: a design convergence, not a derivation from actor theory, with fault tolerance as its motive. <a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a> sets out the&nbsp;argument.</p>
-    <p class="fragment current-visible" data-fragment-index="0"><b>1.</b> The essential problem in a fault-tolerant system is fault isolation: errors in a faulty module must not reach a correct one (page&nbsp;17).</p>
-    <p class="fragment current-visible" data-fragment-index="1"><b>2.</b> Any shared resource lets an error in one process corrupt it, so processes share nothing (pages 19,&nbsp;23).</p>
-    <p class="fragment current-visible" data-fragment-index="2"><b>3.</b> Message passing must be asynchronous: &ldquo;If process communication is synchronous then a software error in the receiver of a message could indefinitely block the sender of the message destroying the property of isolation&rdquo; (page&nbsp;23).</p>
-    <p class="fragment current-visible" data-fragment-index="3"><b>4.</b> Delivery is not guaranteed, across nodes or to a dead process; the sender can learn that a message arrived only from a confirmation sent back (pages&nbsp;22–23).</p>
-    <p class="fragment current-visible" data-fragment-index="4">Armstrong calls the result &ldquo;send and pray&rdquo; (page&nbsp;25).</p>
-  </div>
-  
-</section>
-
-<section id="b2-gaps">
-  <h2>The gaps in Armstrong's&nbsp;argument</h2>
-  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="1" viewBox="0 0 1000 200" role="img" aria-label="The chain of Armstrong's argument, with a mark under step 3, no timeout assumed, and then under step 2, the node's memory" xmlns="http://www.w3.org/2000/svg">
-    <g><text x="0" y="36" text-anchor="start" class="hd">1</text><rect x="0" y="50" width="220" height="80" rx="5" class="box"/><text x="110" y="98" text-anchor="middle">fault isolation</text></g>
-    <path d="M220 90 L249 90" class="arr"/>
-    <g data-hi="1"><text x="253" y="36" text-anchor="start" class="hd">2</text><rect x="253" y="50" width="220" height="80" rx="5" class="box"/><text x="363" y="98" text-anchor="middle">share nothing</text></g>
-    <path d="M473 90 L502 90" class="arr"/>
-    <g data-hi="0"><text x="506" y="36" text-anchor="start" class="hd">3</text><rect x="506" y="50" width="220" height="80" rx="5" class="box"/><text x="616" y="98" text-anchor="middle">asynchronous send</text></g>
-    <path d="M726 90 L755 90" class="arr"/>
-    <g><text x="759" y="36" text-anchor="start" class="hd">4</text><rect x="759" y="50" width="220" height="80" rx="5" class="box"/><text x="869" y="84" text-anchor="middle">delivery not</text><text x="869" y="112" text-anchor="middle">guaranteed</text></g>
-    <g><path d="M869 130 L869 156" class="arr"/><text x="869" y="188" text-anchor="middle" class="hd">send and pray</text></g>
-    <g data-hi="0"><path d="M616 134 L616 154" class="k"/><text x="616" y="184" text-anchor="middle">no timeout assumed</text></g>
-    <g data-on="1" data-hi="1"><path d="M363 134 L363 154" class="k"/><text x="363" y="184" text-anchor="middle">the node's memory</text></g>
-  </svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0"><b>No timeout.</b> Step 3 assumes a synchronous send with no timeout, which a timed send would&nbsp;bound.</p>
-    <p class="fragment current-visible" data-fragment-index="0"><b>One shared resource left.</b> An unbounded mailbox leaves the node's memory, which a stuck receiver's mailbox can exhaust for every process. Armstrong concedes a version of this himself, for operating-system processes that share one CPU and one memory, calling isolation &ldquo;only true to a first approximation&rdquo; (<a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a>, page&nbsp;17).</p>
-  </div>
+  <a class="apx" href="#/b2-apx-agha">appendix</a><span class="b2-apx-say">Agha's three reasons, and Armstrong's four steps with their two gaps, on two&nbsp;slides</span>
   
 </section>
 
@@ -1706,18 +1643,7 @@ $ ./toy_actor
     </div>
   </div>
   <style>.reveal pre.out.b2-run span.lit { color: #FFFFFF; font-weight: 600; }</style>
-  
-</section>
-
-<section id="b2-dead-partner">
-  <h2>A send to a dead partner, in Erlang and on the RC&nbsp;4000</h2>
-  <table class="b2-cmp b2-sem">
-    <tr><th>Send</th><th>Outcome</th></tr>
-    <tr><td>Erlang, to the pid of a dead&nbsp;process</td><td>returns normally; nothing reports the&nbsp;loss</td></tr>
-    <tr class="fragment" data-fragment-index="0" data-lit="0"><td>Erlang, to a name no longer&nbsp;registered</td><td>raises <code>badarg</code> (<code>registered_send.erl</code>, run on record, OTP&nbsp;29)</td></tr>
-    <tr class="fragment" data-fragment-index="1" data-lit="1"><td>RC&nbsp;4000</td><td>a dummy&nbsp;answer</td></tr>
-    <tr class="fragment" data-fragment-index="2" data-lit="2"><td>Erlang, with a&nbsp;monitor</td><td>the partner's death becomes an ordinary message in the mailbox, <code>{'DOWN', Ref, process, Pid, Reason}</code> (the <a class="cite" href="https://www.erlang.org/doc/system/ref_man_processes.html" target="_blank" rel="noopener">Erlang reference&nbsp;manual</a>)</td></tr>
-  </table>
+  <a class="apx" href="#/b2-apx-dead-partner">appendix</a><span class="b2-apx-say">a send to a dead partner: a name no longer registered, the RC&nbsp;4000's dummy answer, a&nbsp;monitor</span>
   
 </section>
 
@@ -1742,7 +1668,7 @@ receive {value, V} -> C ! {set, V + 1} end.</code></pre></div>
       </div>
     </div>
     <div>
-      <p>The lost update of section 2 returns without any shared variable: not as a data race, since no two accesses conflict, but as a race between&nbsp;messages.</p>
+      <p>The lost update of part 2 returns without any shared variable: not as a data race, since no two accesses conflict, but as a race between&nbsp;messages.</p>
       <p class="fragment" data-fragment-index="0">A counter process owns its state,&nbsp;<code>N</code>.</p>
       <p class="fragment" data-fragment-index="1">Two clients each read it, then write it back plus&nbsp;one.</p>
     </div>
@@ -1777,27 +1703,6 @@ run(3000): final value 1 (lost): 2953, final value 2: 47</pre>
   
 </section>
 
-<section id="b2-reply-ref">
-  <h2>The reply matched by a&nbsp;reference</h2>
-  <div class="cols b2-code">
-    <div>
-      <pre class="b2-sketch" data-lines="0,1:0;2:1;3:1,2"><code class="language-erlang">Ref = make_ref(),
-Server ! {request, self(), Ref, Data},
-receive
-    {reply, Ref, Result} -> Result
-after 1000 -> timeout
-end</code></pre>
-    </div>
-    <div>
-      <p>The mailbox that merges requests also receives&nbsp;replies.</p>
-      <p class="fragment" data-fragment-index="0">The request carries a unique reference, <code>Ref</code>, in place of the RC 4000's buffer&nbsp;identity.</p>
-      <p class="fragment" data-fragment-index="1">The reply comes back into the same mailbox as every other message; the selective <code>receive</code> finds it by&nbsp;<code>Ref</code>.</p>
-      <p class="fragment" data-fragment-index="2">The program's pattern checks the identity, where on the RC 4000 the nucleus checked&nbsp;it.</p>
-    </div>
-  </div>
-  
-</section>
-
 <section id="b2-conversations">
   <h2>A request and its reply in the RC 4000, Go and&nbsp;Erlang</h2>
   <div class="s8f w1000"><svg class="s8fig" data-last="7" viewBox="0 0 640 330" role="img" aria-label="Three rows, RC 4000, Go and Erlang, each a client and a server with a request and a reply, the identity drawn as one cell" xmlns="http://www.w3.org/2000/svg"><text x="0" y="36" text-anchor="start" class="hd">RC 4000</text><rect x="70" y="42" width="80" height="34" rx="5" class="box"/><text x="110" y="65" text-anchor="middle" class="sm">client</text><rect x="480" y="42" width="80" height="34" rx="5" class="box"/><text x="520" y="65" text-anchor="middle" class="sm">server</text><path d="M150 50 L476 50" class="arr"/><text x="315" y="40" text-anchor="middle" class="sm t3">request</text><rect x="167" y="79" width="58" height="24" rx="3" class="cell"/><rect x="229" y="79" width="58" height="24" rx="3" class="cell"/><text x="167" y="118" text-anchor="start" class="sm t3">client&#x27;s queue</text><path d="M520 76 V91 L258 91" class="arr"/><g><rect x="169" y="80" width="54" height="22" rx="5" class="msg"/><text x="196" y="96" text-anchor="middle" class="mono">x</text></g><g data-on="1 2 3 4 5 6 7" data-hi="1 2" data-at="1:340,0;2:148,41;7:-72,41"><rect x="90" y="39" width="40" height="22" rx="5" class="ident"/><text x="110" y="55" text-anchor="middle" class="mono ident-t">b7</text></g><text x="620" y="118" text-anchor="end" class="sm" data-on="7" data-hi="7">the nucleus checks the identity</text><text x="0" y="140" text-anchor="start" class="hd">Go</text><rect x="70" y="146" width="80" height="34" rx="5" class="box"/><text x="110" y="169" text-anchor="middle" class="sm">client</text><rect x="480" y="146" width="80" height="34" rx="5" class="box"/><text x="520" y="169" text-anchor="middle" class="sm">server</text><path d="M150 154 L476 154" class="arr"/><text x="315" y="144" text-anchor="middle" class="sm t3">request</text><g data-on="3 4 5 6 7"><rect x="205" y="182" width="92" height="26" rx="4" class="ident"/><text x="251" y="200" text-anchor="middle" class="mono sm ident-t">reply</text></g><path d="M520 180 V195 L301 195" class="arr"/><path d="M205 195 L110 195 L110 184" class="arr"/><g data-on="4" data-at="4:-386,0"><rect x="507" y="184" width="26" height="22" rx="5" class="msg"/><text x="520" y="200" text-anchor="middle" class="mono">5</text></g><g data-on="3 4 5 6 7" data-hi="3 4" data-at="3:325,0"><rect x="79.5" y="143" width="61" height="22" rx="5" class="ident"/><text x="110" y="159" text-anchor="middle" class="mono ident-t">reply</text></g><text x="620" y="222" text-anchor="end" class="sm" data-on="7" data-hi="7">the program keeps it, by convention</text><text x="0" y="244" text-anchor="start" class="hd">Erlang</text><rect x="70" y="250" width="80" height="34" rx="5" class="box"/><text x="110" y="273" text-anchor="middle" class="sm">client</text><rect x="480" y="250" width="80" height="34" rx="5" class="box"/><text x="520" y="273" text-anchor="middle" class="sm">server</text><path d="M150 258 L476 258" class="arr"/><text x="315" y="248" text-anchor="middle" class="sm t3">request</text><rect x="167" y="287" width="58" height="24" rx="3" class="cell"/><rect x="229" y="287" width="58" height="24" rx="3" class="cell"/><text x="167" y="326" text-anchor="start" class="sm t3">client&#x27;s mailbox</text><path d="M520 284 V299 L258 299" class="arr"/><g><rect x="169" y="288" width="54" height="22" rx="5" class="msg"/><text x="196" y="304" text-anchor="middle" class="mono">{log}</text></g><g data-on="5 6 7" data-hi="5 6" data-at="5:340,0;6:148,41;7:-73.5,41"><rect x="88.5" y="247" width="43" height="22" rx="5" class="ident"/><text x="110" y="263" text-anchor="middle" class="mono ident-t">Ref</text></g><text x="620" y="326" text-anchor="end" class="sm" data-on="7" data-hi="7">the program keeps it, by convention</text></svg></div>
@@ -1811,6 +1716,7 @@ end</code></pre>
     <p class="fragment current-visible" data-fragment-index="5">The answer comes back into the client's mailbox beside other messages, tagged with Ref, and the receive's pattern picks it&nbsp;out.</p>
     <p class="fragment current-visible" data-fragment-index="6">The client takes its reply past the other message, by its identity, and who checks that identity: in the RC 4000 the nucleus; in Go the program, by convention; in Erlang the client's own&nbsp;pattern.</p>
   </div>
+  <a class="apx" href="#/b2-apx-reply-ref">appendix</a><span class="b2-apx-say">the Erlang client's code: a request with a reference, a selective receive with a&nbsp;timeout</span>
   
 </section>
 
@@ -1824,19 +1730,7 @@ end</code></pre>
     <tr class="fragment" data-fragment-index="2" data-lit="2"><td>Erlang</td><td>per pair of processes (<a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a>), for ordinary messages and the default mailbox; with priority messages enabled (OTP 28.0 and later), two messages of one sender can stand in the queue out of their sending order; selective receive can take a later message first (the <a class="cite" href="https://www.erlang.org/doc/system/ref_man_processes.html" target="_blank" rel="noopener">Erlang reference&nbsp;manual</a>)</td></tr>
     <tr class="fragment" data-fragment-index="3" data-lit="3"><td>RC&nbsp;4000</td><td>one queue per process; two primitives allow any order (<a class="cite" href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf" target="_blank" rel="noopener">Brinch Hansen&nbsp;1970</a>)</td></tr>
   </table>
-  
-</section>
-
-<section id="b2-order-figure">
-  <h2>Sending order, arrival order and receiving&nbsp;order</h2>
-  <div class="s8f w1100"><svg class="s8fig" data-last="4" viewBox="0 0 640 284" role="img" aria-label="Three rows of the same three messages, sent, arrived and received, joined by lines" xmlns="http://www.w3.org/2000/svg"><g data-on="0 1 2 3"><text x="0" y="61" text-anchor="start" class="sm t2">sent</text><text x="0" y="151" text-anchor="start" class="sm t2">arrived</text><text x="0" y="241" text-anchor="start" class="sm t2">received</text></g><g data-on="0 1 2"><g><rect x="139" y="43" width="122" height="26" rx="5" class="msg"/><text x="200" y="61" text-anchor="middle" class="mono">first</text></g><g><rect x="319" y="43" width="122" height="26" rx="5" class="msg"/><text x="380" y="61" text-anchor="middle" class="mono">second</text></g><g><rect x="499" y="43" width="122" height="26" rx="5" class="msg"/><text x="560" y="61" text-anchor="middle" class="mono">{urgent, 3}</text></g></g><g data-on="3"><g><rect x="139" y="43" width="122" height="26" rx="5" class="msg"/><text x="200" y="61" text-anchor="middle" class="mono">&quot;first&quot;</text></g><g><rect x="319" y="43" width="122" height="26" rx="5" class="msg"/><text x="380" y="61" text-anchor="middle" class="mono">&quot;second&quot;</text></g><g><rect x="499" y="43" width="122" height="26" rx="5" class="msg"/><text x="560" y="61" text-anchor="middle" class="mono">&quot;urgent&quot;</text></g></g><g data-on="1 2"><path d="M200 71 L200 131" class="k draw"/><path d="M380 71 L380 131" class="k draw"/><path d="M560 71 L560 131" class="k draw"/><g><rect x="139" y="133" width="122" height="26" rx="5" class="msg"/><text x="200" y="151" text-anchor="middle" class="mono">first</text></g><g><rect x="319" y="133" width="122" height="26" rx="5" class="msg"/><text x="380" y="151" text-anchor="middle" class="mono">second</text></g><g><rect x="499" y="133" width="122" height="26" rx="5" class="msg"/><text x="560" y="151" text-anchor="middle" class="mono">{urgent, 3}</text></g></g><path d="M560 161 L200 221" class="k draw" data-on="2" data-hi="2"/><g data-on="2"><rect x="139" y="223" width="122" height="26" rx="5" class="msg"/><text x="200" y="241" text-anchor="middle" class="mono">{urgent, 3}</text></g><text x="200" y="270" text-anchor="middle" class="mono sm t3" data-on="2">receive {urgent, N}</text><path d="M200 161 L380 221" class="k draw" data-on="2"/><g data-on="2"><rect x="319" y="223" width="122" height="26" rx="5" class="msg"/><text x="380" y="241" text-anchor="middle" class="mono">first</text></g><text x="380" y="270" text-anchor="middle" class="mono sm t3" data-on="2">receive first</text><path d="M380 161 L560 221" class="k draw" data-on="2"/><g data-on="2"><rect x="499" y="223" width="122" height="26" rx="5" class="msg"/><text x="560" y="241" text-anchor="middle" class="mono">second</text></g><text x="560" y="270" text-anchor="middle" class="mono sm t3" data-on="2">receive second</text><g data-on="3"><path d="M200 71 L200 131" class="k"/><path d="M380 71 L380 131" class="k"/><path d="M560 71 L560 131" class="k"/><path d="M200 161 L200 221" class="k"/><path d="M380 161 L380 221" class="k"/><path d="M560 161 L560 221" class="k"/><g><rect x="139" y="133" width="122" height="26" rx="5" class="msg"/><text x="200" y="151" text-anchor="middle" class="mono">&quot;first&quot;</text></g><g><rect x="319" y="133" width="122" height="26" rx="5" class="msg"/><text x="380" y="151" text-anchor="middle" class="mono">&quot;second&quot;</text></g><g><rect x="499" y="133" width="122" height="26" rx="5" class="msg"/><text x="560" y="151" text-anchor="middle" class="mono">&quot;urgent&quot;</text></g><g><rect x="139" y="223" width="122" height="26" rx="5" class="msg"/><text x="200" y="241" text-anchor="middle" class="mono">&quot;first&quot;</text></g><g><rect x="319" y="223" width="122" height="26" rx="5" class="msg"/><text x="380" y="241" text-anchor="middle" class="mono">&quot;second&quot;</text></g><g><rect x="499" y="223" width="122" height="26" rx="5" class="msg"/><text x="560" y="241" text-anchor="middle" class="mono">&quot;urgent&quot;</text></g><text x="380" y="270" text-anchor="middle" class="sm" data-hi="3">a Go channel: in the order sent</text></g><g data-on="4"><circle cx="170" cy="70" r="5" class="dot"/><circle cx="214" cy="70" r="5" class="dot"/><circle cx="258" cy="70" r="5" class="dot"/><circle cx="170" cy="200" r="5" class="hollow"/><circle cx="214" cy="200" r="5" class="hollow"/><circle cx="258" cy="200" r="5" class="hollow"/><path d="M170 76 L170 194" class="k"/><path d="M214 76 L214 194" class="k"/><path d="M258 76 L258 194" class="k"/></g><g data-on="4"><circle cx="330" cy="70" r="5" class="dot"/><circle cx="374" cy="70" r="5" class="dot"/><circle cx="418" cy="70" r="5" class="dot"/><circle cx="330" cy="200" r="5" class="hollow"/><circle cx="374" cy="200" r="5" class="hollow"/><circle cx="418" cy="200" r="5" class="hollow"/><path d="M374 76 L330 194" class="k"/><path d="M330 76 L374 194" class="k"/><path d="M418 76 L418 194" class="k"/></g><g data-on="4"><circle cx="490" cy="70" r="5" class="dot"/><circle cx="534" cy="70" r="5" class="dot"/><circle cx="578" cy="70" r="5" class="dot"/><circle cx="490" cy="200" r="5" class="hollow"/><circle cx="534" cy="200" r="5" class="hollow"/><circle cx="578" cy="200" r="5" class="hollow"/><path d="M578 76 L490 194" class="k"/><path d="M534 76 L534 194" class="k"/><path d="M490 76 L578 194" class="k"/></g><text x="380" y="266" text-anchor="middle" class="sm" data-on="4" data-hi="4">the actor model: any arrival order</text><text x="0" y="75" text-anchor="start" class="sm t2" data-on="4">sent</text><text x="0" y="205" text-anchor="start" class="sm t2" data-on="4">arrived</text></svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">One process sends itself first, second and {urgent,&nbsp;3}.</p>
-    <p class="fragment current-visible" data-fragment-index="0">Erlang keeps the order between one sender and one receiver for ordinary messages: they arrive in the order sent, so the lines run&nbsp;straight.</p>
-    <p class="fragment current-visible" data-fragment-index="1">The selective receive takes {urgent, 3} first, past the two earlier messages, as the recorded run of mailbox.erl shows: the orange line is the message taken out of order, the other two shift right, and the crossing is the pattern's doing, not the&nbsp;transport's.</p>
-    <p class="fragment current-visible" data-fragment-index="2">A Go channel with one sender and one receiver: the order sent is the order received, and nothing&nbsp;crosses.</p>
-    <p class="fragment current-visible" data-fragment-index="3">The actor model leaves arrival order arbitrary: any of the six orders may arrive, three drawn&nbsp;here.</p>
-  </div>
+  <a class="apx" href="#/b2-apx-order-figure">appendix</a><span class="b2-apx-say">the figure of sending, arrival and receiving order: Erlang, a Go channel, the actor&nbsp;model</span>
   
 </section>
 
@@ -1849,23 +1743,12 @@ end</code></pre>
     <p class="fragment current-visible" data-fragment-index="1">A Go channel passes the value it is given, so a sent pointer stays&nbsp;shared.</p>
     <p class="fragment current-visible" data-fragment-index="2">Rust moves ownership with the send for a value that is not <code>Copy</code>; a <code>Copy</code> value is copied, and an <code>Arc</code> moves a handle to data that stays shared (<a class="cite" href="https://doc.rust-lang.org/book/" target="_blank" rel="noopener">the Rust book</a>, 16.2 and 16.3;&nbsp;<a class="cite" href="https://doc.rust-lang.org/std/sync/struct.Arc.html" target="_blank" rel="noopener"><code>std::sync::Arc</code></a>).</p>
   </div>
-  
-</section>
-
-<section id="b2-duplicates">
-  <h2>Duplicates across a&nbsp;network</h2>
-  <div class="s8f w1200 b2-big"><svg class="s8fig" data-last="3" viewBox="0 0 960 300" role="img" aria-label="Two panels: on one node, one send and one arrival; across a network, a call and its retry, both arriving at the callee, the second suppressed" xmlns="http://www.w3.org/2000/svg"><text x="200" y="30" text-anchor="middle" class="hd">one node</text><text x="90" y="70" text-anchor="middle" class="sm">sender</text><text x="310" y="70" text-anchor="middle" class="sm">receiver</text><path d="M90 84 V262" class="lane"/><path d="M310 84 V262" class="lane"/><path d="M90 110 L306 160" class="arr"/><rect x="322" y="148" width="50" height="28" rx="5" class="msg"/><text x="347" y="169" text-anchor="middle" class="mono">m</text><text x="322" y="206" text-anchor="start" class="sm">one arrival</text><text x="720" y="30" text-anchor="middle" class="hd">across a network</text><text x="580" y="70" text-anchor="middle" class="sm">caller</text><text x="860" y="70" text-anchor="middle" class="sm">callee</text><path d="M580 84 V262" class="lane"/><path d="M860 84 V262" class="lane"/><g data-on="1 2 3"><path d="M580 110 L856 160" class="arr"/><text x="690" y="116" text-anchor="middle" class="sm">call</text><rect x="868" y="146" width="70" height="28" rx="5" class="msg"/><text x="903" y="167" text-anchor="middle" class="mono">call</text><path d="M580 190 L856 240" class="arr"/><text x="690" y="196" text-anchor="middle" class="sm">retry</text></g><g data-on="1 2 3" data-hi="1"><rect x="868" y="226" width="70" height="28" rx="5" class="msg"/><text x="903" y="247" text-anchor="middle" class="mono">call</text></g><text x="903" y="290" text-anchor="middle" class="sm" data-on="1" data-hi="1">duplicate</text><path d="M866 254 L940 226" class="k" data-on="2 3" data-hi="2 3"/><text x="903" y="290" text-anchor="middle" class="sm" data-on="2 3" data-hi="2 3">suppressed</text></svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">On one node, nothing in the systems of this section creates&nbsp;duplicates.</p>
-    <p class="fragment current-visible" data-fragment-index="0">Duplicates arrive with retries across a&nbsp;network.</p>
-    <p class="fragment current-visible" data-fragment-index="1">The remote procedure call protocol of <a class="cite" href="https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf" target="_blank" rel="noopener">Birrell and Nelson&nbsp;(1984)</a> suppressed&nbsp;them.</p>
-    <p class="fragment current-visible" data-fragment-index="2">After an exception, the call had run "either once or not at all—the user is not told which" (<a class="cite" href="https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf" target="_blank" rel="noopener">Birrell and Nelson 1984</a>, p.&nbsp;49).</p>
-  </div>
+  <a class="apx" href="#/b2-apx-duplicates">appendix</a><span class="b2-apx-say">duplicates across a network, and the remote procedure call of Birrell and&nbsp;Nelson</span>
   
 </section>
 
 <section id="b2-actor-family">
-  <h2>Summary of part&nbsp;9</h2>
+  <h2>Summary of part&nbsp;7</h2>
   <p>The actor family, as the section has settled&nbsp;it:</p>
   <table class="b2-close">
     <tr><td>The&nbsp;send</td><td>returns at once, into the mailbox of one named&nbsp;receiver</td></tr>
@@ -1876,35 +1759,27 @@ end</code></pre>
   <div class="box fragment" data-fragment-index="3">Left to the next section: fairness, of which the assumed delivery is one form, and how the two families state&nbsp;it.</div>
   
 </section>
-<!-- part 10 -->
+<!-- part 8 -->
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 10</div>
+  <div class="eyebrow">PART 8</div>
   <h1>Fairness: eventual choice and eventual&nbsp;delivery</h1>
-  <div class="sub">CSP (1978), actor theory, Go's <code>select</code> and Erlang's&nbsp;manual</div>
+  <div class="sub">CSP (1978), actor theory and Erlang's&nbsp;manual</div>
   
 </section>
 
-<section id="b2-fair-csp">
-  <h2>Fairness in CSP&nbsp;(1978)</h2>
-  <div class="s8f w1200 b2-big"><svg class="s8fig" data-last="3" viewBox="0 0 960 260" role="img" aria-label="Processes X and Y; X offers stop() to Y, and Y loops between taking the stop and incrementing a counter" xmlns="http://www.w3.org/2000/svg"><g><rect x="40" y="130" width="120" height="60" rx="6" class="box"/><text x="100.0" y="168.0" text-anchor="middle" class="hd">X</text></g><g><rect x="600" y="130" width="120" height="60" rx="6" class="box"/><text x="660.0" y="168.0" text-anchor="middle" class="hd">Y</text></g><path d="M160 160 H596" class="arr2" data-hi="1"/><text x="378" y="146" text-anchor="middle" class="mono" data-hi="1">stop()</text><path d="M160 160 H596" class="wait" data-on="2 3" data-hi="2"/><text x="378" y="200" text-anchor="middle" data-on="2 3" data-hi="2">X passed over forever</text><path d="M630 130 C 610 50, 730 50, 710 130" class="arr" data-hi="1 2"/><text x="670" y="52" text-anchor="middle" data-hi="1 2">increment the counter</text><text x="660" y="236" text-anchor="middle" class="mono" data-on="2 3" data-hi="2">counter: 1, 2, 3, …</text></svg></div>
+<section id="b2-fair-choice">
+  <h2>Fairness in CSP and in actor&nbsp;theory</h2>
+  <div class="cols b2-pair">
+    <div class="s8f b2-big" style="width:100%"><svg class="s8fig" data-last="5" viewBox="0 0 640 300" role="img" aria-label="CSP: processes X and Y; X offers stop() to Y, and Y loops between taking the stop and incrementing a counter; an unfair choice passes X over forever" xmlns="http://www.w3.org/2000/svg"><text x="0" y="28" text-anchor="start" class="hd">CSP: a choice between offers</text><g><rect x="10" y="150" width="110" height="60" rx="6" class="box"/><text x="65" y="188" text-anchor="middle" class="hd">X</text></g><g><rect x="420" y="150" width="110" height="60" rx="6" class="box"/><text x="475" y="188" text-anchor="middle" class="hd">Y</text></g><path d="M120 180 H416" class="arr2" data-hi="1"/><text x="268" y="166" text-anchor="middle" class="mono" data-hi="1">stop()</text><path d="M120 180 H416" class="wait" data-on="2 3 4 5" data-hi="2"/><text x="268" y="240" text-anchor="middle" data-on="2 3 4 5" data-hi="2">X passed over forever</text><path d="M450 150 C 430 70, 540 70, 520 150" class="arr" data-hi="1 2"/><text x="475" y="60" text-anchor="middle" data-hi="1 2">increment the counter</text><text x="475" y="282" text-anchor="middle" class="mono" data-on="2 3 4 5" data-hi="2">counter: 1, 2, 3, …</text></svg></div>
+    <div class="s8f b2-big" style="width:100%"><svg class="s8fig" data-last="5" viewBox="0 0 640 320" role="img" aria-label="Actor theory: a sender and a counter; a stop message in transit reaches the counter, which halts at any of infinitely many counts" xmlns="http://www.w3.org/2000/svg"><text x="0" y="28" text-anchor="start" class="hd">Actor theory: eventual delivery</text><g><rect x="0" y="150" width="120" height="56" rx="6" class="box"/><text x="60" y="186" text-anchor="middle" class="hd">sender</text></g><g><rect x="410" y="150" width="150" height="56" rx="6" class="box"/><text x="485" y="186" text-anchor="middle" class="hd">counter</text></g><path d="M120 178 H404" class="arr2"/><text x="262" y="140" text-anchor="middle">eventual delivery</text><g data-at="5:180,0" data-hi="5"><rect x="140" y="162" width="72" height="32" rx="5" class="msg"/><text x="176" y="185" text-anchor="middle" class="mono">stop</text></g><path d="M445 150 C 425 70, 545 70, 525 150" class="arr" data-on="4 5" data-hi="4"/><text x="485" y="60" text-anchor="middle" data-on="4 5" data-hi="4">increment</text><text x="572" y="186" text-anchor="start" data-on="5" data-hi="5">halts</text><g data-on="5" data-hi="5"><text x="0" y="272" text-anchor="start">halts at</text><path d="M100 266 H580" class="k3"/><circle cx="130" cy="266" r="7" class="hollow"/><text x="130" y="304" text-anchor="middle">0</text><circle cx="190" cy="266" r="7" class="hollow"/><text x="190" y="304" text-anchor="middle">1</text><circle cx="250" cy="266" r="7" class="hollow"/><text x="250" y="304" text-anchor="middle">2</text><circle cx="310" cy="266" r="7" class="hollow"/><text x="310" y="304" text-anchor="middle">3</text><circle cx="370" cy="266" r="7" class="hollow"/><text x="370" y="304" text-anchor="middle">4</text><circle cx="430" cy="266" r="7" class="hollow"/><text x="430" y="304" text-anchor="middle">5</text><circle cx="490" cy="266" r="7" class="hollow"/><text x="490" y="304" text-anchor="middle">6</text><circle cx="550" cy="266" r="7" class="hollow"/><text x="550" y="304" text-anchor="middle">7</text><text x="606" y="272" text-anchor="middle">…</text></g></svg></div>
+  </div>
   <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">CSP has no messages in transit, so nothing can be lost; its fairness question concerns&nbsp;choice.</p>
+    <p class="fragment fade-out" data-fragment-index="0">Fairness concerns whether a ready communication eventually happens: a question of choice in CSP, which has no messages in transit, and of delivery in actor&nbsp;theory.</p>
     <p class="fragment current-visible" data-fragment-index="0"><b>Hoare's example.</b> X sends <code>stop()</code> while Y loops, either receiving the stop or incrementing a&nbsp;counter.</p>
     <p class="fragment current-visible" data-fragment-index="1"><b>An unfair implementation.</b> An implementation that always prefers the counter passes X over&nbsp;forever.</p>
     <p class="fragment current-visible" data-fragment-index="2"><b>Hoare's refusal.</b> The language does not forbid that, because the implementation would then have to complete programs with unbounded nondeterminism; so “a proof of correctness must not rely on this property” (<a class="cite" href="https://www.cs.cmu.edu/~crary/819-f09/Hoare78.pdf" target="_blank" rel="noopener">Hoare, 1978</a>, page&nbsp;676).</p>
-  </div>
-  
-</section>
-
-<section id="b2-fair-actors">
-  <h2>Eventual delivery in actor&nbsp;theory</h2>
-  <p class="def"><b>Unbounded nondeterminism</b>: a program can be certain to terminate yet have infinitely many possible&nbsp;results.</p>
-  <div class="s8f w1100 b2-big"><svg class="s8fig" data-last="3" viewBox="0 0 960 320" role="img" aria-label="A sender and a counter; a stop message in transit reaches the counter, which halts at any of infinitely many counts" xmlns="http://www.w3.org/2000/svg"><g><rect x="20" y="110" width="130" height="56" rx="6" class="box"/><text x="85.0" y="146.0" text-anchor="middle" class="hd">sender</text></g><g><rect x="600" y="110" width="160" height="56" rx="6" class="box"/><text x="680.0" y="146.0" text-anchor="middle" class="hd">counter</text></g><path d="M150 138 H594" class="arr2"/><text x="372" y="100" text-anchor="middle">eventual delivery</text><g data-at="2:330,0" data-hi="2"><rect x="180" y="122" width="80" height="32" rx="5" class="msg"/><text x="220" y="145" text-anchor="middle" class="mono">stop</text></g><path d="M640 110 C 620 30, 740 30, 720 110" class="arr" data-on="1 2 3" data-hi="1"/><text x="680" y="36" text-anchor="middle" data-on="1 2 3" data-hi="1">increment</text><text x="780" y="146" text-anchor="start" data-on="2 3" data-hi="2">halts</text><g data-on="2 3" data-hi="2"><text x="20" y="268" text-anchor="start">halts at</text><path d="M200 262 H860" class="k3"/><circle cx="240" cy="262" r="7" class="hollow"/><text x="240" y="300" text-anchor="middle">0</text><circle cx="320" cy="262" r="7" class="hollow"/><text x="320" y="300" text-anchor="middle">1</text><circle cx="400" cy="262" r="7" class="hollow"/><text x="400" y="300" text-anchor="middle">2</text><circle cx="480" cy="262" r="7" class="hollow"/><text x="480" y="300" text-anchor="middle">3</text><circle cx="560" cy="262" r="7" class="hollow"/><text x="560" y="300" text-anchor="middle">4</text><circle cx="640" cy="262" r="7" class="hollow"/><text x="640" y="300" text-anchor="middle">5</text><circle cx="720" cy="262" r="7" class="hollow"/><text x="720" y="300" text-anchor="middle">6</text><circle cx="800" cy="262" r="7" class="hollow"/><text x="800" y="300" text-anchor="middle">7</text><text x="900" y="268" text-anchor="middle">…</text></g></svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">In actor theory, the guarantee of eventual delivery is a fairness assumption, and it brings unbounded&nbsp;nondeterminism.</p>
-    <p class="fragment current-visible" data-fragment-index="0"><b>Clinger's example.</b> A counter increments until a “stop” message&nbsp;arrives.</p>
-    <p class="fragment current-visible" data-fragment-index="1"><b>Termination with infinitely many results.</b> The stop is guaranteed to arrive, so the counter always halts, but at any number at&nbsp;all.</p>
-    <p class="fragment current-visible" data-fragment-index="2"><b>The dispute.</b> Dijkstra held that unbounded nondeterminism could not be implemented; Hewitt and Clinger argued that real arbiters behave exactly that&nbsp;way.</p>
+    <p class="fragment current-visible" data-fragment-index="3"><b>Clinger's example.</b> In actor theory, the guarantee of eventual delivery is a fairness assumption: a counter increments until a “stop” message&nbsp;arrives.</p>
+    <p class="fragment current-visible" data-fragment-index="4"><b>Unbounded nondeterminism.</b> The stop is guaranteed to arrive, so the counter always halts, but at any number at all: a program certain to terminate, with infinitely many possible&nbsp;results.</p>
   </div>
   
 </section>
@@ -1916,62 +1791,16 @@ end</code></pre>
     <tr class="fragment" data-fragment-index="0"><td>A ready message is eventually taken or&nbsp;delivered</td><td>not&nbsp;guaranteed</td><td>guaranteed</td><td>arrives after a positive time, unless the receiver has terminated or the alias is&nbsp;inactive</td><td>not&nbsp;guaranteed</td></tr>
     <tr class="fragment" data-fragment-index="1"><td>A message can be&nbsp;lost</td><td>no such thing&nbsp;exists</td><td>no, by&nbsp;assumption</td><td>only one sent through an inactive alias, dropped before the&nbsp;queue</td><td>yes</td></tr>
   </table>
+  <div class="box fragment" data-fragment-index="2">The last column of the table, a dead process or another node, is where delivery itself can&nbsp;fail.</div>
+  <a class="apx" href="#/b2-apx-fair-go">appendix</a><span class="b2-apx-say">what Go's specification states of a <code>select</code>, and Erlang's manual of arrival, two&nbsp;slides</span>
   
 </section>
 
-<section id="b2-fair-go">
-  <h2>Go's <code>select</code> and eventual&nbsp;service</h2>
-  <div class="s8f w1100 b2-big"><svg class="s8fig" data-last="2" viewBox="0 0 960 290" role="img" aria-label="Runs of one select statement with three ready cases a, b and c; each run takes one of them; case c, ready throughout, is taken at the fifth run" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40" text-anchor="start" class="hd">runs of one <tspan class="mono">select</tspan></text><text x="360" y="40" text-anchor="middle">1</text><text x="460" y="40" text-anchor="middle">2</text><text x="560" y="40" text-anchor="middle">3</text><text x="660" y="40" text-anchor="middle">4</text><text x="760" y="40" text-anchor="middle" data-on="1 2">5</text><text x="860" y="40" text-anchor="middle" data-on="1 2">6</text><text x="290" y="108" text-anchor="end">ready case <tspan class="mono">a</tspan></text><text x="290" y="168" text-anchor="end">ready case <tspan class="mono">b</tspan></text><text x="290" y="228" text-anchor="end" data-hi="1">ready case <tspan class="mono">c</tspan></text><path d="M320 100 H900 M320 160 H900" class="ln"/><path d="M320 220 H900" class="ln" data-hi="1"/><g><circle cx="360" cy="100" r="9" class="hollow"/><circle cx="360" cy="160" r="11" class="dot"/><circle cx="360" cy="220" r="9" class="hollow"/><circle cx="460" cy="100" r="11" class="dot"/><circle cx="460" cy="160" r="9" class="hollow"/><circle cx="460" cy="220" r="9" class="hollow"/><circle cx="560" cy="100" r="9" class="hollow"/><circle cx="560" cy="160" r="11" class="dot"/><circle cx="560" cy="220" r="9" class="hollow"/><circle cx="660" cy="100" r="11" class="dot"/><circle cx="660" cy="160" r="9" class="hollow"/><circle cx="660" cy="220" r="9" class="hollow"/></g><g data-on="1 2"><circle cx="760" cy="100" r="9" class="hollow"/><circle cx="760" cy="160" r="9" class="hollow"/><circle cx="860" cy="100" r="11" class="dot"/><circle cx="860" cy="160" r="9" class="hollow"/><circle cx="860" cy="220" r="9" class="hollow"/></g><circle cx="760" cy="220" r="11" class="dot" data-on="1 2" data-hi="1"/><text x="900" y="272" text-anchor="end" data-on="1 2" data-hi="1">taken eventually, with probability 1, under two assumptions</text></svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0"><b>The rule of the specification.</b> Each time a <code>select</code> runs, one of its ready cases is chosen by uniform pseudo-random selection (<a class="cite" href="https://go.dev/ref/spec" target="_blank" rel="noopener">the Go specification</a>, “Select&nbsp;statements”).</p>
-    <p class="fragment current-visible" data-fragment-index="0"><b>An inference, with probability&nbsp;1.</b> A case that stays ready is taken eventually, if the choices are independent and the goroutine runs the <code>select</code> again and again while the case stays&nbsp;ready.</p>
-    <p class="fragment current-visible" data-fragment-index="1"><b>Not stated by the specification.</b> Eventual service of a ready case, and any order among blocked senders on one&nbsp;channel.</p>
-  </div>
-  
-</section>
-
-<section id="b2-fair-erlang">
-  <h2>Arrival in Erlang's&nbsp;manual</h2>
-  <div class="s8f w1200 b2-big"><svg class="s8fig" data-last="4" viewBox="0 0 960 370" role="img" aria-label="Four rows, each a process P sending to a process R: arrival in R's queue, a terminated receiver, an inactive alias, and two messages kept in order across nodes" xmlns="http://www.w3.org/2000/svg"><g data-on="0 1 2 3 4"><g><rect x="20" y="26" width="70" height="48" rx="6" class="box"/><text x="55.0" y="58.0" text-anchor="middle" class="hd">P</text></g><g data-hi="3"><rect x="600" y="30" width="50" height="40" class="cell"/><rect x="650" y="30" width="50" height="40" class="cell"/><rect x="700" y="30" width="50" height="40" class="cell"/></g><g><rect x="760" y="26" width="70" height="48" rx="6" class="box"/><text x="795.0" y="58.0" text-anchor="middle" class="hd">R</text></g><path d="M90 50 H594" class="arr"/><text x="340" y="36" text-anchor="middle" data-on="0 1 2 4">arrives after a positive time</text></g><text x="340" y="36" text-anchor="middle" data-on="3" data-hi="3">in the queue; handling is R’s own doing</text><g data-hi="3"><rect x="704" y="34" width="42" height="32" rx="5" class="msg"/><text x="725" y="57" text-anchor="middle" class="mono">m</text></g><g data-on="1 2 3 4"><g><rect x="20" y="116" width="70" height="48" rx="6" class="box"/><text x="55.0" y="148.0" text-anchor="middle" class="hd">P</text></g><g><rect x="600" y="120" width="50" height="40" class="cell"/><rect x="650" y="120" width="50" height="40" class="cell"/><rect x="700" y="120" width="50" height="40" class="cell"/></g><g data-hi="1"><rect x="760" y="116" width="70" height="48" rx="6" class="box"/><text x="795.0" y="148.0" text-anchor="middle" class="hd">R</text></g><path d="M90 140 H560" class="arr"/><text x="340" y="126" text-anchor="middle">receiver terminated, or channel down</text></g><g data-on="1 2 3 4" data-hi="1"><rect x="760" y="116" width="70" height="48" rx="6" class="box"/><rect x="760" y="116" width="70" height="48" rx="6" class="hatch"/><path d="M782 127 L808 153 M808 127 L782 153" class="k"/></g><g data-on="2 3 4"><g><rect x="20" y="206" width="70" height="48" rx="6" class="box"/><text x="55.0" y="238.0" text-anchor="middle" class="hd">P</text></g><g><rect x="600" y="210" width="50" height="40" class="cell"/><rect x="650" y="210" width="50" height="40" class="cell"/><rect x="700" y="210" width="50" height="40" class="cell"/></g><g><rect x="760" y="206" width="70" height="48" rx="6" class="box"/><text x="795.0" y="238.0" text-anchor="middle" class="hd">R</text></g><path d="M90 230 H560" class="arr"/><text x="340" y="216" text-anchor="middle">inactive alias: dropped before the queue</text></g><g data-on="2 3 4" data-hi="2"><path d="M565 217 L591 243 M591 217 L565 243" class="k"/></g><g data-on="4"><g><rect x="20" y="296" width="70" height="48" rx="6" class="box"/><text x="55.0" y="328.0" text-anchor="middle" class="hd">P</text></g><g><rect x="600" y="300" width="50" height="40" class="cell"/><rect x="650" y="300" width="50" height="40" class="cell"/><rect x="700" y="300" width="50" height="40" class="cell"/></g><g><rect x="760" y="296" width="70" height="48" rx="6" class="box"/><text x="795.0" y="328.0" text-anchor="middle" class="hd">R</text></g><path d="M90 320 H594" class="arr"/><text x="340" y="306" text-anchor="middle">one pair, two nodes: order kept</text></g><g data-on="4" data-hi="4"><path d="M545 288 V352" class="lane"/><rect x="654" y="304" width="42" height="32" rx="5" class="msg"/><text x="675" y="327" text-anchor="middle" class="mono">m2</text><rect x="704" y="304" width="42" height="32" rx="5" class="msg"/><text x="725" y="327" text-anchor="middle" class="mono">m1</text></g></svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0"><b>Arrival.</b> A signal to a process arrives after an unspecified but positive time (<a class="cite" href="https://www.erlang.org/doc/system/ref_man_processes.html" target="_blank" rel="noopener">the Erlang/OTP reference manual</a>,&nbsp;“Processes”).</p>
-    <p class="fragment current-visible" data-fragment-index="0"><b>The named exceptions.</b> A terminated receiver; a distribution channel that goes&nbsp;down.</p>
-    <p class="fragment current-visible" data-fragment-index="1"><b>The inactive alias.</b> A message sent through an inactive alias is dropped before it enters the&nbsp;queue.</p>
-    <p class="fragment current-visible" data-fragment-index="2"><b>Arrival without handling.</b> Arrival says nothing about the process handling the&nbsp;message.</p>
-    <p class="fragment current-visible" data-fragment-index="3"><b>Order per pair.</b> The order between one pair of processes is kept, even across&nbsp;nodes.</p>
-  </div>
-  
-</section>
-
-<section id="b2-fair-settled">
-  <h2>Fairness in the two&nbsp;families</h2>
-  <table class="b2-close" style="font-size:34px">
-    <tr><td>CSP</td><td>no guarantee that a ready communication eventually&nbsp;happens</td></tr>
-    <tr class="fragment" data-fragment-index="0"><td>Actor&nbsp;theory</td><td>delivery&nbsp;assumed</td></tr>
-    <tr class="fragment" data-fragment-index="1"><td><a class="cite" href="https://go.dev/ref/spec" target="_blank" rel="noopener">Go's&nbsp;specification</a></td><td>a uniform pseudo-random choice among the ready&nbsp;cases</td></tr>
-    <tr class="fragment" data-fragment-index="2"><td><a class="cite" href="https://www.erlang.org/doc/system/ref_man_processes.html" target="_blank" rel="noopener">Erlang's&nbsp;manual</a></td><td>arrival after an unspecified but positive time, with its exceptions&nbsp;named</td></tr>
-  </table>
-  <div class="box fragment" data-fragment-index="3">The last column of the table, a dead process or another node, is where delivery itself can&nbsp;fail.</div>
-  
-</section>
-
-<!-- part 11 -->
+<!-- part 9 -->
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 11</div>
+  <div class="eyebrow">PART 9</div>
   <h1>The delivery assumption: the boundary with session&nbsp;9</h1>
-  <div class="sub">A death reported on one runtime; what session 9&nbsp;changes</div>
-  
-</section>
-
-<section id="b2-death">
-  <h2>A death reported on one&nbsp;runtime</h2>
-  <div class="s8f w1200 b2-big" style="width:1300px"><svg class="s8fig" data-last="3" viewBox="0 0 960 300" role="img" aria-label="Three panels: the RC 4000 nucleus returns a dummy answer for a removed receiver; an Erlang monitor turns a death into a DOWN message; a plain send to a dead process reports nothing" xmlns="http://www.w3.org/2000/svg"><text x="150" y="30" text-anchor="middle" class="hd">RC 4000 nucleus</text><text x="480" y="30" text-anchor="middle" class="hd">Erlang monitor</text><text x="810" y="30" text-anchor="middle" class="hd" data-on="3">plain send in Erlang</text><path d="M315 10 V300" class="ln"/><path d="M645 10 V300" class="ln"/><g><rect x="20" y="90" width="80" height="48" rx="6" class="box"/><text x="60" y="122" text-anchor="middle" class="hd">S</text></g><g><rect x="200" y="90" width="80" height="48" rx="6" class="box"/><text x="240" y="122" text-anchor="middle" class="hd">R</text></g><path d="M100 114 H196" class="arr"/><g data-on="1 2 3" data-hi="1"><rect x="200" y="90" width="80" height="48" rx="6" class="box"/><rect x="200" y="90" width="80" height="48" rx="6" class="hatch"/><path d="M227 101 L253 127 M253 101 L227 127" class="k"/></g><g><rect x="20" y="236" width="260" height="48" rx="6" class="box"/><text x="150" y="268" text-anchor="middle" class="hd">nucleus</text></g><g data-on="1 2 3" data-hi="1"><path d="M60 236 V144" class="arr"/><text x="76" y="196" text-anchor="start">dummy answer</text></g><g><rect x="350" y="90" width="80" height="48" rx="6" class="box"/><text x="390" y="122" text-anchor="middle" class="hd">P</text></g><g><rect x="530" y="90" width="80" height="48" rx="6" class="box"/><text x="570" y="122" text-anchor="middle" class="hd">R</text></g><path d="M430 114 H526" class="arr2"/><text x="480" y="76" text-anchor="middle">monitor</text><g data-on="2 3" data-hi="2"><rect x="530" y="90" width="80" height="48" rx="6" class="box"/><rect x="530" y="90" width="80" height="48" rx="6" class="hatch"/><path d="M557 101 L583 127 M583 101 L557 127" class="k"/><path d="M570 138 V214 H436" class="arr"/><rect x="352" y="198" width="80" height="32" rx="5" class="msg"/><text x="392" y="221" text-anchor="middle" class="mono">DOWN</text></g><g data-on="3" data-hi="3"><g><rect x="680" y="90" width="80" height="48" rx="6" class="box"/><text x="720" y="122" text-anchor="middle" class="hd">P</text></g><rect x="860" y="90" width="80" height="48" rx="6" class="box"/><rect x="860" y="90" width="80" height="48" rx="6" class="hatch"/><path d="M887 101 L913 127 M913 101 L887 127" class="k"/><path d="M760 114 H856" class="arr"/><text x="810" y="221" text-anchor="middle">no report</text></g></svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">On one runtime, a death can be reported&nbsp;exactly.</p>
-    <p class="fragment current-visible" data-fragment-index="0"><b>The RC 4000.</b> The nucleus returned a dummy answer (<a class="cite" href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf" target="_blank" rel="noopener">Brinch Hansen, 1970</a>, pages 239 to&nbsp;240).</p>
-    <p class="fragment current-visible" data-fragment-index="1"><b>Erlang.</b> A monitor turns a death into a <code>DOWN</code> message (<a class="cite" href="https://www.erlang.org/doc/apps/erts/erlang.html" target="_blank" rel="noopener">the module <code>erlang</code></a>,&nbsp;<code>monitor/2</code>).</p>
-    <p class="fragment current-visible" data-fragment-index="2"><b>A plain send.</b> A plain send to a dead process reports&nbsp;nothing.</p>
-  </div>
+  <div class="sub">Delivery on one node, a death reported where requested, and what session 9&nbsp;changes</div>
   
 </section>
 
@@ -1983,10 +1812,11 @@ end</code></pre>
     <p class="fragment current-visible" data-fragment-index="0"><b>Arrival.</b> Every message sent to a live process reaches its&nbsp;queue.</p>
     <p class="fragment current-visible" data-fragment-index="1"><b>The one exception.</b> A message sent through an inactive alias is dropped before the&nbsp;queue.</p>
     <p class="fragment current-visible" data-fragment-index="2"><b>Handling.</b> Whether the process handles the message is its own&nbsp;doing.</p>
-    <p class="fragment current-visible" data-fragment-index="3"><b>A death reported where requested.</b> The runtime reports a death exactly where the program requests the report: an Erlang monitor’s <code>DOWN</code>, or the RC 4000’s dummy&nbsp;answer.</p>
+    <p class="fragment current-visible" data-fragment-index="3"><b>A death reported where requested.</b> The runtime reports a death exactly where the program requests the report: an Erlang monitor turns it into a <code>DOWN</code> message (<a class="cite" href="https://www.erlang.org/doc/apps/erts/erlang.html" target="_blank" rel="noopener">the module erlang</a>, <code>monitor/2</code>); the RC 4000’s nucleus returned a dummy answer (<a class="cite" href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf" target="_blank" rel="noopener">Brinch Hansen, 1970</a>, pages 239 to&nbsp;240).</p>
     <p class="fragment current-visible" data-fragment-index="4"><b>A plain send.</b> A plain send to a dead process reports&nbsp;nothing.</p>
     <p class="fragment current-visible" data-fragment-index="5"><b>A teaching assumption.</b> The RC 4000’s paper states it for a live receiver on one machine (<a class="cite" href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf" target="_blank" rel="noopener">Brinch Hansen, 1970</a>); neither <a class="cite" href="https://www.erlang.org/doc/system/ref_man_processes.html" target="_blank" rel="noopener">Erlang’s manual</a> nor <a class="cite" href="https://go.dev/ref/spec" target="_blank" rel="noopener">Go’s specification</a> states it as&nbsp;such.</p>
   </div>
+  <a class="apx" href="#/b2-apx-death">appendix</a><span class="b2-apx-say">a death reported on one runtime: the RC&nbsp;4000's nucleus, Erlang's monitor, a plain&nbsp;send</span>
   
 </section>
 
@@ -2001,11 +1831,11 @@ end</code></pre>
   </div>
   
 </section>
-<!-- part 12 -->
+<!-- part 10 -->
 <section class="part" data-background-color="#23373B">
-  <div class="eyebrow">PART 12</div>
+  <div class="eyebrow">PART 10</div>
   <h1>The cost of message passing, and the relation between channels and&nbsp;actors</h1>
-  <div class="sub">the bug study of six Go systems; sharing let back in; the π-calculus and its two limits; the earlier accounts; channels against&nbsp;actors</div>
+  <div class="sub">the bug study of six Go systems; sharing let back in; the π-calculus and its two limits; channels against&nbsp;actors</div>
   
 </section>
 
@@ -2036,7 +1866,7 @@ end</code></pre>
 </section>
 
 <section id="b2-shared-pointer">
-  <h2>A pointer sent on a Go&nbsp;channel</h2>
+  <h2>Sharing through a sent&nbsp;pointer</h2>
   <div class="cols b2-code">
     <div>
       <div class="car langcar">
@@ -2078,30 +1908,19 @@ sender's final balance: 200
 Found 1 data race(s)</pre>
     </div>
   </div>
-  
-</section>
-
-<section id="b2-rust-sharing">
-  <h2>Sharing after a send in safe&nbsp;Rust</h2>
-  <p>Safe Rust closes the data-race hole, not the sharing (<a class="cite" href="https://doc.rust-lang.org/book/" target="_blank" rel="noopener"><i>The Rust Programming Language</i></a>, chapter 16;&nbsp;<a class="cite" href="https://doc.rust-lang.org/std/sync/struct.Arc.html" target="_blank" rel="noopener"><code>std::sync::Arc</code></a>).</p>
-  <table class="b2-close">
-    <tr><td>A&nbsp;send</td><td>moves&nbsp;ownership</td></tr>
-    <tr class="fragment" data-fragment-index="0"><td>What stays&nbsp;shared</td><td>an <code>Arc</code>, mutated only through a type that synchronizes its own&nbsp;access:<br>a&nbsp;<code>Mutex</code><br>an&nbsp;<code>RwLock</code><br>an&nbsp;atomic<br>a&nbsp;<code>OnceLock</code></td></tr>
-    <tr class="fragment" data-fragment-index="1"><td>Safe&nbsp;code</td><td>the type system forbids unsynchronized conflicting accesses, not shared&nbsp;state</td></tr>
-    <tr class="fragment" data-fragment-index="2"><td>Unsound <code>unsafe</code>&nbsp;code</td><td>reopens the&nbsp;hole</td></tr>
-  </table>
+  <a class="apx" href="#/b2-apx-rust-sharing">appendix</a><span class="b2-apx-say">sharing after a send in safe Rust: what a send moves, what stays shared, what reopens the&nbsp;hole</span>
   
 </section>
 
 <section id="b2-pi-calculus">
-  <h2>Channels and actors in the&nbsp;π-calculus</h2>
-  <div class="s8f b2-big w1100"><svg class="s8fig" data-last="3" viewBox="0 0 1100 470" role="img" aria-label="A channel name sent on a channel; an actor's address drawn as a channel with one reader; a channel drawn as an actor that holds a queue; translations both ways" xmlns="http://www.w3.org/2000/svg">
+  <h2>Mutual encodings of channels and actors and their&nbsp;limits</h2>
+  <div class="s8f b2-big w1100"><svg class="s8fig" data-last="5" viewBox="0 0 1100 470" role="img" aria-label="A channel name sent on a channel; an actor's address drawn as a channel with one reader; a channel drawn as an actor that holds a queue; translations both ways, and the two limits of the translations: mixed choice and fairness" xmlns="http://www.w3.org/2000/svg">
     <rect x="330" y="10" width="110" height="56" rx="6" class="box"/><text x="385" y="46" text-anchor="middle">P</text>
     <rect x="660" y="10" width="110" height="56" rx="6" class="box"/><text x="715" y="46" text-anchor="middle">Q</text>
     <path d="M442 38 H656" class="arr"/>
     <rect x="515" y="20" width="70" height="36" rx="6" class="msg"/><text x="550" y="46" text-anchor="middle" class="mono">a</text>
     <text x="550" y="98" text-anchor="middle">the channel name a, sent on the channel&nbsp;c</text>
-    <g data-on="1 2 3" data-hi="1">
+    <g data-on="1 2 3 4 5" data-hi="1">
       <text x="285" y="160" text-anchor="middle" class="hd">an actor's address</text>
       <rect x="40" y="185" width="110" height="50" rx="6" class="box"/><text x="95" y="218" text-anchor="middle">sender</text>
       <rect x="40" y="275" width="110" height="50" rx="6" class="box"/><text x="95" y="308" text-anchor="middle">sender</text>
@@ -2111,7 +1930,7 @@ Found 1 data race(s)</pre>
       <rect x="420" y="230" width="110" height="50" rx="6" class="box"/><text x="475" y="263" text-anchor="middle">actor</text>
       <text x="285" y="362" text-anchor="middle">one reader: the survey's port</text>
     </g>
-    <g data-on="2 3" data-hi="2">
+    <g data-on="2 3 4 5" data-hi="2">
       <text x="835" y="160" text-anchor="middle" class="hd">a channel</text>
       <rect x="580" y="185" width="110" height="50" rx="6" class="box"/><text x="635" y="218" text-anchor="middle">sender</text>
       <rect x="580" y="275" width="110" height="50" rx="6" class="box"/><text x="635" y="308" text-anchor="middle">sender</text>
@@ -2123,110 +1942,23 @@ Found 1 data race(s)</pre>
       <path d="M942 240 L976 214" class="arr"/><path d="M942 280 L976 298" class="arr"/>
       <text x="835" y="362" text-anchor="middle">an actor that holds a queue</text>
     </g>
-    <g data-on="3" data-hi="3">
+    <g data-on="3 4 5" data-hi="3">
       <path d="M300 384 C 420 414, 700 414, 820 384" class="arr"/>
       <path d="M820 400 C 700 434, 420 434, 300 400" class="arr"/>
-      <text x="560" y="462" text-anchor="middle">translations, in the calculi studied</text>
     </g>
+    <text x="560" y="462" text-anchor="middle" data-on="3">translations, in the calculi studied</text>
+    <text x="560" y="462" text-anchor="middle" data-on="4" data-hi="4">mixed choice: no uniform encoding</text>
+    <text x="560" y="462" text-anchor="middle" data-on="5" data-hi="5">fairness: carried across by neither translation</text>
   </svg></div>
   <div class="b2-defs b2-cap">
     <p class="fragment fade-out" data-fragment-index="0">In <a class="cite" href="https://www.cis.upenn.edu/~stevez/cis670/pdfs/pi-calculus.pdf" target="_blank" rel="noopener">Milner, Parrow and Walker</a>'s π-calculus (1992), channel names are values that can themselves be sent on&nbsp;channels.</p>
     <p class="fragment current-visible" data-fragment-index="0">An actor's address is a channel with exactly one reader, the survey's port (<a class="cite" href="https://www.cs.cornell.edu/fbs/publications/LangSurv.pdf" target="_blank" rel="noopener">Andrews and Schneider 1983</a>, page&nbsp;26).</p>
     <p class="fragment current-visible" data-fragment-index="1">A channel can in turn be written as an actor that holds a&nbsp;queue.</p>
     <p class="fragment current-visible" data-fragment-index="2">In the calculi studied, each family can be translated into the other (asynchronous channels without choice, in <a class="cite" href="https://drops.dagstuhl.de/storage/00lipics/lipics-vol074-ecoop2017/LIPIcs.ECOOP.2017.11/LIPIcs.ECOOP.2017.11.pdf" target="_blank" rel="noopener">Fowler, Lindley and Wadler 2017</a>), with what a translation preserves depending on&nbsp;it.</p>
+    <p class="fragment current-visible" data-fragment-index="3"><b>Mixed choice</b>, a choice that waits on a send and a receive at once, has no uniform encoding in the asynchronous π-calculus (<a class="cite" href="https://arxiv.org/abs/cs/9809008" target="_blank" rel="noopener">Palamidessi 1997</a>); a choice among inputs only can be encoded (<a class="cite" href="https://www.brics.dk/RS/99/42/BRICS-RS-99-42.pdf" target="_blank" rel="noopener">Nestmann and Pierce&nbsp;1996</a>), and Go's <code>select</code> offers mixed&nbsp;choice.</p>
+    <p class="fragment current-visible" data-fragment-index="4">No fairness assumption is carried across by the translations studied: Go's channels guarantee no eventual delivery, actor theory assumes it (<a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>), so fairness has to be assumed on each side&nbsp;separately.</p>
   </div>
-  
-</section>
-
-<section id="b2-encoding-limits">
-  <h2>Limits of the mutual encodings of channels and&nbsp;actors</h2>
-  <p class="def"><b>Mixed choice</b>: a choice that waits on a send and a receive at&nbsp;once.</p>
-  <table class="b2-cmp b2-sem">
-    <tr><th></th><th>Mixed&nbsp;choice</th><th>Fairness</th></tr>
-    <tr class="fragment" data-fragment-index="0"><td>The calculi&nbsp;studied</td><td>no uniform encoding in the asynchronous π-calculus that preserves a reasonable semantics (<a class="cite" href="https://arxiv.org/abs/cs/9809008" target="_blank" rel="noopener">Palamidessi 1997</a>); a choice among inputs only can be encoded (<a class="cite" href="https://www.brics.dk/RS/99/42/BRICS-RS-99-42.pdf" target="_blank" rel="noopener">Nestmann and Pierce&nbsp;1996</a>)</td><td>no fairness assumption carried across by the translations&nbsp;studied</td></tr>
-    <tr class="fragment" data-fragment-index="1"><td>Go</td><td><code>select</code> offers&nbsp;it</td><td>channels guarantee no eventual&nbsp;delivery</td></tr>
-    <tr class="fragment" data-fragment-index="2"><td>Actors</td><td>pure actors cannot express it&nbsp;directly</td><td>eventual delivery assumed (<a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>, page&nbsp;23)</td></tr>
-  </table>
-  <div class="box fragment" data-fragment-index="3">Fairness has to be assumed on each side&nbsp;separately.</div>
-  
-</section>
-
-<section id="b2-mixed-choice-survey">
-  <h2>Mixed choice in the survey of&nbsp;1983</h2>
-  <div class="s8f b2-big w1100"><svg class="s8fig" data-last="1" viewBox="0 0 1100 320" role="img" aria-label="The survey's open problem on the left, Palamidessi's result and uniformity criterion on the right, joined by a dashed arrow: the lecture's link" xmlns="http://www.w3.org/2000/svg">
-    <rect x="20" y="20" width="440" height="280" rx="8" class="box"/>
-    <text x="240" y="70" text-anchor="middle" class="hd">the survey (1983), page 29</text>
-    <text x="240" y="128" text-anchor="middle">send and receive statements</text>
-    <text x="240" y="160" text-anchor="middle">in the same guards:</text>
-    <text x="240" y="240" text-anchor="middle">“an active research area”</text>
-    <g data-on="1" data-hi="1">
-      <path d="M464 160 H636" class="arr2"/>
-      <text x="550" y="140" text-anchor="middle" class="sm">the lecture's link</text>
-    </g>
-    <g data-on="1">
-      <rect x="640" y="20" width="440" height="280" rx="8" class="box"/>
-      <text x="860" y="70" text-anchor="middle" class="hd">Palamidessi (1997)</text>
-      <text x="860" y="128" text-anchor="middle">no uniform encoding</text>
-      <text x="860" y="160" text-anchor="middle">of mixed choice</text>
-      <text x="860" y="212" text-anchor="middle">uniformity (§6): a distributed</text>
-      <text x="860" y="244" text-anchor="middle">implementation without</text>
-      <text x="860" y="276" text-anchor="middle">a central coordinator</text>
-    </g>
-  </svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">Mixed choice is the problem of send and receive statements in the same guards, which the 1983 survey called "an active research area" (<a class="cite" href="https://www.cs.cornell.edu/fbs/publications/LangSurv.pdf" target="_blank" rel="noopener">Andrews and Schneider</a>, page&nbsp;29).</p>
-    <p class="fragment current-visible" data-fragment-index="0"><a class="cite" href="https://arxiv.org/abs/cs/9809008" target="_blank" rel="noopener">Palamidessi</a>'s uniformity criterion models a distributed implementation without a central coordinator (§6); reading the survey's problem as that requirement is the lecture's own&nbsp;link.</p>
-  </div>
-  
-</section>
-
-<section id="b2-earlier-accounts">
-  <h2>Earlier accounts of the lecture's&nbsp;argument</h2>
-  <table class="b2-close">
-    <tr><td style="width: 32%"><a class="cite" href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-1.pdf" target="_blank" rel="noopener">Lee</a> (2006), <i>The Problem with&nbsp;Threads</i></td><td>threads "wildly nondeterministic" (page 5); Kahn networks deterministic by their blocking reads (page&nbsp;11)<span class="fragment" data-fragment-index="0"><br>nondeterminism "explicit in programs" (page 15), for example an explicit "NondeterministicMerge" (page&nbsp;11)</span></td></tr>
-    <tr class="fragment" data-fragment-index="1"><td><a class="cite" href="https://ptolemy.berkeley.edu/publications/papers/95/processNets/proceedings.pdf" target="_blank" rel="noopener">Lee and Parks</a> (1995), <i>Dataflow Process&nbsp;Networks</i></td><td>§2.2: the ways nondeterminism enters a Kahn network, the list of part&nbsp;5</td></tr>
-    <tr class="fragment" data-fragment-index="2"><td><a class="cite" href="https://webperso.info.ucl.ac.be/~pvr/book.html" target="_blank" rel="noopener">Van Roy and Haridi</a> (2004), <i>CTM</i>, chapters 4 to&nbsp;5</td><td>deterministic dataflow first, then ports, since in client/server "the order of the requests cannot be determined in advance" (UCLouvain's <a class="cite" href="https://webperso.info.ucl.ac.be/~pvr/linfo1131-cours5Hand.pdf" target="_blank" rel="noopener">LINFO1131</a>, lecture&nbsp;5)</td></tr>
-    <tr class="fragment" data-fragment-index="3"><td><a class="cite" href="https://drops.dagstuhl.de/storage/00lipics/lipics-vol074-ecoop2017/LIPIcs.ECOOP.2017.11/LIPIcs.ECOOP.2017.11.pdf" target="_blank" rel="noopener">Fowler, Lindley and Wadler</a>&nbsp;(2017)</td><td>typed translations between asynchronous channels without choice and actors; input-guarded choice added, its emulation by actors left&nbsp;open</td></tr>
-    <tr class="fragment" data-fragment-index="4"><td>The lecture's&nbsp;addition</td><td>the RC 4000<br>the resolution of a contest as the comparison's&nbsp;axis</td></tr>
-  </table>
-  
-</section>
-
-<section id="b2-rc4000-column">
-  <h2>The RC 4000 compared with actors and&nbsp;channels</h2>
-  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="3" viewBox="0 0 1200 400" role="img" aria-label="The RC 4000 nucleus with its request queue and its identified replies; the request half leads to the actor column, the identified reply to a channel" xmlns="http://www.w3.org/2000/svg">
-    <rect x="380" y="20" width="440" height="350" rx="10" class="room"/>
-    <text x="600" y="58" text-anchor="middle" class="hd">RC 4000 nucleus (1969)</text>
-    <path d="M412 108 L516 140" class="arr"/><path d="M412 196 L516 164" class="arr"/>
-    <rect x="520" y="130" width="50" height="44" class="cell"/><rect x="570" y="130" width="50" height="44" class="cell"/><rect x="620" y="130" width="50" height="44" class="cell"/>
-    <path d="M672 152 H696" class="arr"/>
-    <rect x="700" y="127" width="90" height="50" rx="6" class="box"/><text x="745" y="160" text-anchor="middle">P</text>
-    <text x="600" y="222" text-anchor="middle">requests: one queue,</text>
-    <text x="600" y="252" text-anchor="middle" data-hi="2">served in arrival order</text>
-    <g data-on="1 2 3">
-      <rect x="420" y="272" width="90" height="50" rx="6" class="box"/><text x="465" y="305" text-anchor="middle">S</text>
-      <rect x="700" y="272" width="90" height="50" rx="6" class="box"/><text x="745" y="305" text-anchor="middle">P</text>
-      <path d="M698 297 H514" class="arr"/>
-      <rect x="550" y="279" width="110" height="36" rx="6" class="ident"/><text x="605" y="305" text-anchor="middle" class="ident-t">buffer</text>
-      <text x="600" y="352" text-anchor="middle" data-hi="2">replies: identified, not contested</text>
-    </g>
-    <g data-on="3" data-hi="3">
-      <path d="M376 152 H326" class="arr"/>
-      <rect x="20" y="100" width="300" height="104" rx="8" class="box"/>
-      <text x="170" y="142" text-anchor="middle" class="hd">the actor column</text>
-      <text x="170" y="178" text-anchor="middle">the request half</text>
-      <path d="M824 297 H874" class="arr"/>
-      <rect x="880" y="245" width="300" height="104" rx="8" class="box"/>
-      <text x="1030" y="287" text-anchor="middle" class="hd">a channel</text>
-      <text x="1030" y="323" text-anchor="middle">the identified reply</text>
-    </g>
-  </svg></div>
-  <div class="b2-defs b2-cap">
-    <p class="fragment fade-out" data-fragment-index="0">The machine of 1969 belongs in the actor column for its requests: one queue per process, served in arrival&nbsp;order.</p>
-    <p class="fragment current-visible" data-fragment-index="0">Its replies are identified conversations that no process contests, the idea that Go's reply channel and Erlang's reference both&nbsp;reuse.</p>
-    <p class="fragment current-visible" data-fragment-index="1">One system used two of the three resolutions by default; its two further primitives also let a program&nbsp;choose.</p>
-    <p class="fragment current-visible" data-fragment-index="2">The lecture's two blocks are the identified reply taken to its full form as a channel, and the request half taken to its full&nbsp;form.</p>
-  </div>
+  <a class="apx" href="#/b2-apx-encoding-limits">appendix</a><span class="b2-apx-say">the two limits for the calculi, Go and actors, as a table; mixed choice in the survey of 1983 and Palamidessi's&nbsp;criterion</span>
   
 </section>
 
@@ -2241,7 +1973,9 @@ Found 1 data race(s)</pre>
     <tr class="fragment" data-fragment-index="2"><td>Buffer</td><td>often bounded&nbsp;(backpressure)</td><td>conceptually&nbsp;unbounded</td></tr>
     <tr class="fragment" data-fragment-index="2"><td>Failure</td><td>not in the model&nbsp;(Go)</td><td>usually built in&nbsp;(Erlang)</td></tr>
     <tr class="fragment" data-fragment-index="2"><td>Across&nbsp;machines</td><td>usually&nbsp;local</td><td>addresses often work across&nbsp;nodes</td></tr>
+    <tr class="fragment" data-fragment-index="3"><td>The RC 4000&nbsp;(1969)</td><td>its replies: identified, not&nbsp;contested</td><td>its requests: one queue, served in arrival&nbsp;order</td></tr>
   </table>
+  <a class="apx" href="#/b2-apx-rc4000">appendix</a><span class="b2-apx-say">the RC 4000's nucleus drawn: its request queue, its identified replies, the two blocks as their full&nbsp;forms</span>
   
 </section>
 
@@ -2293,13 +2027,297 @@ Found 1 data race(s)</pre>
   </svg></div>
   <div class="b2-defs b2-cap">
     <p class="fragment fade-out" data-fragment-index="0">Message passing does not abolish the scheduler: it confines the scheduler's choices that can reach the results to the meeting&nbsp;points.</p>
-    <p class="fragment current-visible" data-fragment-index="0">This holds as long as processes share nothing by any other route, messages carry values, the runtime delivers them as part 11 assumes, and no process is nondeterminate inside&nbsp;itself.</p>
+    <p class="fragment current-visible" data-fragment-index="0">This holds as long as processes share nothing by any other route, messages carry values, the runtime delivers them as part 9 assumes, and no process is nondeterminate inside&nbsp;itself.</p>
     <p class="fragment current-visible" data-fragment-index="1">Kahn's networks show what happens if no meeting point is ever&nbsp;contested.</p>
     <p class="fragment current-visible" data-fragment-index="2">CSP and Go let the programmer write the contest&nbsp;down.</p>
     <p class="fragment current-visible" data-fragment-index="3">The RC 4000, actors and Erlang let the system settle it by&nbsp;merging.</p>
     <p class="fragment current-visible" data-fragment-index="4">On one node, in every runtime of this story, and in any runtime whose processes share one address space, the shared memory is still there, hidden in one trusted&nbsp;place.</p>
     <p class="fragment current-visible" data-fragment-index="5">The cost is paid in waiting, and in races between messages, which the protocol must rule&nbsp;out.</p>
   </div>
+  <a class="apx" href="#/b2-apx-earlier-accounts">appendix</a><span class="b2-apx-say">earlier accounts of the lecture's argument: Lee, Lee and Parks, Van Roy and Haridi, Fowler, Lindley and&nbsp;Wadler</span>
+  
+</section>
+
+<!-- appendix -->
+<section class="part" data-background-color="#23373B">
+  <div class="eyebrow">APPENDIX</div>
+  <h1>Details of block&nbsp;2</h1>
+  <div class="sub">supporting slides, each reached by the appendix button of a slide of the lecture, each with a button&nbsp;back</div>
+  
+</section>
+<section id="b2-apx-classic-erlang">
+  <h2>The RC 4000 process, the classic actor and the Erlang&nbsp;process</h2>
+  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="2" viewBox="0 0 1000 256" role="img" aria-label="Three structures beside a mailbox: an RC 4000 process looping through wait and handle; a classic actor, a handler that the runtime calls once per message, with become recording the next behaviour; an Erlang process looping through receive and handle" xmlns="http://www.w3.org/2000/svg">
+    <g><text x="0" y="28" text-anchor="start" class="hd" data-hi="0">RC 4000 process</text><text x="48" y="100" text-anchor="middle" class="sm">mailbox</text><rect x="0" y="110" width="30" height="32" rx="3" class="cell"/><rect x="33" y="110" width="30" height="32" rx="3" class="cell"/><rect x="66" y="110" width="30" height="32" rx="3" class="cell"/><path d="M96 120 L146 90" class="arr"/><rect x="150" y="60" width="120" height="40" rx="5" class="box"/><text x="210" y="88" text-anchor="middle">wait</text><path d="M210 100 L210 156" class="arr"/><rect x="150" y="160" width="120" height="40" rx="5" class="box"/><text x="210" y="188" text-anchor="middle">handle</text><path d="M270 180 C310 180 310 80 274 80" class="arr"/><text x="150" y="244" text-anchor="middle">wait, handle, wait again</text></g>
+    <g data-on="1 2"><text x="340" y="28" text-anchor="start" class="hd" data-hi="1">classic actor</text><text x="388" y="100" text-anchor="middle" class="sm">mailbox</text><rect x="340" y="110" width="30" height="32" rx="3" class="cell"/><rect x="373" y="110" width="30" height="32" rx="3" class="cell"/><rect x="406" y="110" width="30" height="32" rx="3" class="cell"/><path d="M436 120 L486 90" class="arr"/><rect x="490" y="60" width="120" height="40" rx="5" class="box"/><text x="550" y="88" text-anchor="middle">runtime</text><path d="M550 100 L550 156" class="arr"/><rect x="490" y="160" width="120" height="40" rx="5" class="box"/><text x="550" y="188" text-anchor="middle">handler</text><path d="M610 180 C650 180 650 80 614 80" class="arr2"/><text x="490" y="244" text-anchor="middle">become: next behaviour</text></g>
+    <g data-on="2"><text x="680" y="28" text-anchor="start" class="hd" data-hi="2">Erlang process</text><text x="728" y="100" text-anchor="middle" class="sm">mailbox</text><rect x="680" y="110" width="30" height="32" rx="3" class="cell"/><rect x="713" y="110" width="30" height="32" rx="3" class="cell"/><rect x="746" y="110" width="30" height="32" rx="3" class="cell"/><path d="M776 120 L826 90" class="arr"/><rect x="830" y="60" width="120" height="40" rx="5" class="box"/><text x="890" y="88" text-anchor="middle" class="mono">receive</text><path d="M890 100 L890 156" class="arr"/><rect x="830" y="160" width="120" height="40" rx="5" class="box"/><text x="890" y="188" text-anchor="middle">handle</text><path d="M950 180 C990 180 990 80 954 80" class="arr"/><text x="830" y="244" text-anchor="middle" class="mono">loop(State)</text></g>
+  </svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0"><b>An RC 4000 process</b> is a thread in a loop beside its mailbox: wait, handle, wait&nbsp;again.</p>
+    <p class="fragment current-visible" data-fragment-index="0"><b>A classic actor</b> inverts that structure: no loop, never waits; a handler that the runtime calls once per message, and <code>become</code> records the behaviour for the next message. Classic actors are therefore event handlers, a state machine written by hand, which is why programming with them resembles asynchronous&nbsp;programming.</p>
+    <p class="fragment current-visible" data-fragment-index="1"><b>An Erlang process</b> restores the loop: it loops, blocks in <code>receive</code>, and passes its state through recursion. That is the split between Classic Actors and the Processes family (<a class="cite" href="https://soft.vub.ac.be/Publications/2016/vub-soft-tr-16-11.pdf" target="_blank" rel="noopener">De Koster et al. 2016</a>, pages 33,&nbsp;35).</p>
+  </div>
+  <a class="apx back" href="#/b2-pictures">back</a>
+  
+</section>
+
+<section id="b2-apx-tcp">
+  <h2>Delivery in TCP and in the actor&nbsp;model</h2>
+  <table class="b2-cmp">
+    <tr><th></th><th>TCP</th><th>actor&nbsp;model</th></tr>
+    <tr><td>order</td><td>kept per&nbsp;connection</td><td>none&nbsp;guaranteed</td></tr>
+    <tr><td>delivery</td><td>obtained by&nbsp;retransmission</td><td>assumed</td></tr>
+  </table>
+  <p class="def fragment" data-fragment-index="0">"Delivery guaranteed" is an idealization of the model, not a TCP-like protocol. Agha defends it the way a semantics defends an infinite stack: unbounded buffers do not exist physically, but the model abstracts from such limits (<a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>, page&nbsp;23).</p>
+  <a class="apx back" href="#/b2-guarantees">back</a>
+  
+</section>
+
+<section id="b2-apx-agha">
+  <h2>Agha's argument for asynchronous&nbsp;communication</h2>
+  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="2" viewBox="0 0 1000 236" role="img" aria-label="Three drawings: a sender and a receiver exchanging sends; an actor sending to itself through a buffer; a typist sending through a buffer to an editor" xmlns="http://www.w3.org/2000/svg">
+    <g><text x="0" y="30" text-anchor="start" class="hd" data-hi="0">no action at a distance</text><rect x="0" y="80" width="110" height="44" rx="5" class="box"/><text x="55" y="110" text-anchor="middle">sender</text><rect x="200" y="80" width="110" height="44" rx="5" class="box"/><text x="255" y="110" text-anchor="middle">receiver</text><path d="M110 92 L196 92" class="arr"/><path d="M200 112 L114 112" class="arr"/><text x="155" y="222" text-anchor="middle">readiness learned by a send</text></g>
+    <g data-on="1 2"><text x="345" y="30" text-anchor="start" class="hd" data-hi="1">a send to itself</text><rect x="445" y="80" width="110" height="44" rx="5" class="box"/><text x="500" y="110" text-anchor="middle">actor</text><rect x="475" y="150" width="50" height="32" rx="3" class="cell"/><rect x="484" y="155" width="32" height="22" rx="4" class="msg"/><path d="M555 102 C615 102 615 166 529 166" class="arr"/><path d="M475 166 C415 166 415 102 441 102" class="arr"/><text x="500" y="222" text-anchor="middle">needs a buffer</text></g>
+    <g data-on="2"><text x="680" y="30" text-anchor="start" class="hd" data-hi="2">a fast sender</text><rect x="680" y="80" width="90" height="44" rx="5" class="box"/><text x="725" y="110" text-anchor="middle">typist</text><rect x="800" y="86" width="30" height="32" rx="3" class="cell"/><rect x="832" y="86" width="30" height="32" rx="3" class="cell"/><rect x="864" y="86" width="30" height="32" rx="3" class="cell"/><rect x="805" y="91" width="20" height="22" rx="4" class="msg"/><rect x="837" y="91" width="20" height="22" rx="4" class="msg"/><rect x="869" y="91" width="20" height="22" rx="4" class="msg"/><path d="M770 102 L796 102" class="arr"/><path d="M894 102 L916 102" class="arr"/><rect x="920" y="80" width="80" height="44" rx="5" class="box"/><text x="960" y="110" text-anchor="middle">editor</text><text x="840" y="222" text-anchor="middle">not held to one character</text></g>
+  </svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0">Where part 5 gave the reasons for the handshake, <a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a> argues the opposite (pages 19 to 22). &ldquo;Intuitively, there can be no action at a distance.&rdquo; A sender can only know a receiver is ready by first sending it something, so synchronous communication is always built on asynchronous&nbsp;communication.</p>
+    <p class="fragment current-visible" data-fragment-index="0">Without buffering, an actor cannot send a message to itself, and recursive computation requires&nbsp;that.</p>
+    <p class="fragment current-visible" data-fragment-index="1">A fast sender, a typist faster than an editor, should not be held to one character at a&nbsp;time.</p>
+  </div>
+  <a class="apx back" href="#/b2-async-arguments">back</a>
+  
+</section>
+
+<section id="b2-apx-armstrong">
+  <h2>Armstrong's argument from fault isolation and its&nbsp;gaps</h2>
+  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="7" viewBox="0 0 1000 200" role="img" aria-label="The four steps of Armstrong's argument as a chain of boxes, fault isolation, share nothing, asynchronous send, delivery not guaranteed, leading to send and pray; then a mark under step 3, no timeout assumed, and under step 2, the node's memory" xmlns="http://www.w3.org/2000/svg">
+    <g data-hi="1"><text x="0" y="36" text-anchor="start" class="hd">1</text><rect x="0" y="50" width="220" height="80" rx="5" class="box"/><text x="110" y="98" text-anchor="middle">fault isolation</text></g>
+    <path d="M220 90 L249 90" class="arr"/>
+    <g data-hi="2 7"><text x="253" y="36" text-anchor="start" class="hd">2</text><rect x="253" y="50" width="220" height="80" rx="5" class="box"/><text x="363" y="98" text-anchor="middle">share nothing</text></g>
+    <path d="M473 90 L502 90" class="arr"/>
+    <g data-hi="3 6"><text x="506" y="36" text-anchor="start" class="hd">3</text><rect x="506" y="50" width="220" height="80" rx="5" class="box"/><text x="616" y="98" text-anchor="middle">asynchronous send</text></g>
+    <path d="M726 90 L755 90" class="arr"/>
+    <g data-hi="4"><text x="759" y="36" text-anchor="start" class="hd">4</text><rect x="759" y="50" width="220" height="80" rx="5" class="box"/><text x="869" y="84" text-anchor="middle">delivery not</text><text x="869" y="112" text-anchor="middle">guaranteed</text></g>
+    <g data-on="5 6 7" data-hi="5"><path d="M869 130 L869 156" class="arr"/><text x="869" y="188" text-anchor="middle" class="hd">send and pray</text></g>
+    <g data-on="6 7" data-hi="6"><path d="M616 134 L616 154" class="k"/><text x="616" y="184" text-anchor="middle">no timeout assumed</text></g>
+    <g data-on="7" data-hi="7"><path d="M363 134 L363 154" class="k"/><text x="363" y="184" text-anchor="middle">the node's memory</text></g>
+  </svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0">Erlang, developed at Ericsson from 1986 with first experiments in 1987, arrived by an independent route at semantics like the actor model's: a design convergence, not a derivation from actor theory, with fault tolerance as its motive. <a class="cite" href="https://erlang.org/download/armstrong_thesis_2003.pdf" target="_blank" rel="noopener">Armstrong 2003</a> sets out the&nbsp;argument.</p>
+    <p class="fragment current-visible" data-fragment-index="0"><b>1.</b> The essential problem in a fault-tolerant system is fault isolation: errors in a faulty module must not reach a correct one (page&nbsp;17).</p>
+    <p class="fragment current-visible" data-fragment-index="1"><b>2.</b> Any shared resource lets an error in one process corrupt it, so processes share nothing (pages 19,&nbsp;23).</p>
+    <p class="fragment current-visible" data-fragment-index="2"><b>3.</b> Message passing must be asynchronous: &ldquo;If process communication is synchronous then a software error in the receiver of a message could indefinitely block the sender of the message destroying the property of isolation&rdquo; (page&nbsp;23).</p>
+    <p class="fragment current-visible" data-fragment-index="3"><b>4.</b> Delivery is not guaranteed, across nodes or to a dead process; the sender can learn that a message arrived only from a confirmation sent back (pages&nbsp;22–23).</p>
+    <p class="fragment current-visible" data-fragment-index="4">Armstrong calls the result &ldquo;send and pray&rdquo; (page&nbsp;25).</p>
+    <p class="fragment current-visible" data-fragment-index="5"><b>No timeout.</b> Step 3 assumes a synchronous send with no timeout, which a timed send would&nbsp;bound.</p>
+    <p class="fragment current-visible" data-fragment-index="6"><b>One shared resource left.</b> An unbounded mailbox leaves the node's memory, which a stuck receiver's mailbox can exhaust for every process. Armstrong concedes a version of this himself, for operating-system processes that share one CPU and one memory, calling isolation &ldquo;only true to a first approximation&rdquo; (page&nbsp;17).</p>
+  </div>
+  <a class="apx back" href="#/b2-async-arguments">back</a>
+  
+</section>
+<section id="b2-apx-dead-partner">
+  <h2>A send to a dead partner, in Erlang and on the RC&nbsp;4000</h2>
+  <table class="b2-cmp b2-sem">
+    <tr><th>Send</th><th>Outcome</th></tr>
+    <tr><td>Erlang, to the pid of a dead&nbsp;process</td><td>returns normally; nothing reports the&nbsp;loss</td></tr>
+    <tr class="fragment" data-fragment-index="0" data-lit="0"><td>Erlang, to a name no longer&nbsp;registered</td><td>raises <code>badarg</code> (<code>registered_send.erl</code>, run on record, OTP&nbsp;29)</td></tr>
+    <tr class="fragment" data-fragment-index="1" data-lit="1"><td>RC&nbsp;4000</td><td>a dummy&nbsp;answer</td></tr>
+    <tr class="fragment" data-fragment-index="2" data-lit="2"><td>Erlang, with a&nbsp;monitor</td><td>the partner's death becomes an ordinary message in the mailbox, <code>{'DOWN', Ref, process, Pid, Reason}</code> (the <a class="cite" href="https://www.erlang.org/doc/system/ref_man_processes.html" target="_blank" rel="noopener">Erlang reference&nbsp;manual</a>)</td></tr>
+  </table>
+  <a class="apx back" href="#/b2-mailbox">back</a>
+  
+</section>
+
+<section id="b2-apx-reply-ref">
+  <h2>The reply matched by a&nbsp;reference</h2>
+  <div class="cols b2-code">
+    <div>
+      <pre class="b2-sketch" data-lines="0,1:0;2:1;3:1,2"><code class="language-erlang">Ref = make_ref(),
+Server ! {request, self(), Ref, Data},
+receive
+    {reply, Ref, Result} -> Result
+after 1000 -> timeout
+end</code></pre>
+    </div>
+    <div>
+      <p>The mailbox that merges requests also receives&nbsp;replies.</p>
+      <p class="fragment" data-fragment-index="0">The request carries a unique reference, <code>Ref</code>, in place of the RC 4000's buffer&nbsp;identity.</p>
+      <p class="fragment" data-fragment-index="1">The reply comes back into the same mailbox as every other message; the selective <code>receive</code> finds it by&nbsp;<code>Ref</code>.</p>
+      <p class="fragment" data-fragment-index="2">The program's pattern checks the identity, where on the RC 4000 the nucleus checked&nbsp;it.</p>
+    </div>
+  </div>
+  <a class="apx back" href="#/b2-conversations">back</a>
+  
+</section>
+
+<section id="b2-apx-order-figure">
+  <h2>Sending order, arrival order and receiving&nbsp;order</h2>
+  <div class="s8f w1100"><svg class="s8fig" data-last="4" viewBox="0 0 640 284" role="img" aria-label="Three rows of the same three messages, sent, arrived and received, joined by lines" xmlns="http://www.w3.org/2000/svg"><g data-on="0 1 2 3"><text x="0" y="61" text-anchor="start" class="sm t2">sent</text><text x="0" y="151" text-anchor="start" class="sm t2">arrived</text><text x="0" y="241" text-anchor="start" class="sm t2">received</text></g><g data-on="0 1 2"><g><rect x="139" y="43" width="122" height="26" rx="5" class="msg"/><text x="200" y="61" text-anchor="middle" class="mono">first</text></g><g><rect x="319" y="43" width="122" height="26" rx="5" class="msg"/><text x="380" y="61" text-anchor="middle" class="mono">second</text></g><g><rect x="499" y="43" width="122" height="26" rx="5" class="msg"/><text x="560" y="61" text-anchor="middle" class="mono">{urgent, 3}</text></g></g><g data-on="3"><g><rect x="139" y="43" width="122" height="26" rx="5" class="msg"/><text x="200" y="61" text-anchor="middle" class="mono">&quot;first&quot;</text></g><g><rect x="319" y="43" width="122" height="26" rx="5" class="msg"/><text x="380" y="61" text-anchor="middle" class="mono">&quot;second&quot;</text></g><g><rect x="499" y="43" width="122" height="26" rx="5" class="msg"/><text x="560" y="61" text-anchor="middle" class="mono">&quot;urgent&quot;</text></g></g><g data-on="1 2"><path d="M200 71 L200 131" class="k draw"/><path d="M380 71 L380 131" class="k draw"/><path d="M560 71 L560 131" class="k draw"/><g><rect x="139" y="133" width="122" height="26" rx="5" class="msg"/><text x="200" y="151" text-anchor="middle" class="mono">first</text></g><g><rect x="319" y="133" width="122" height="26" rx="5" class="msg"/><text x="380" y="151" text-anchor="middle" class="mono">second</text></g><g><rect x="499" y="133" width="122" height="26" rx="5" class="msg"/><text x="560" y="151" text-anchor="middle" class="mono">{urgent, 3}</text></g></g><path d="M560 161 L200 221" class="k draw" data-on="2" data-hi="2"/><g data-on="2"><rect x="139" y="223" width="122" height="26" rx="5" class="msg"/><text x="200" y="241" text-anchor="middle" class="mono">{urgent, 3}</text></g><text x="200" y="270" text-anchor="middle" class="mono sm t3" data-on="2">receive {urgent, N}</text><path d="M200 161 L380 221" class="k draw" data-on="2"/><g data-on="2"><rect x="319" y="223" width="122" height="26" rx="5" class="msg"/><text x="380" y="241" text-anchor="middle" class="mono">first</text></g><text x="380" y="270" text-anchor="middle" class="mono sm t3" data-on="2">receive first</text><path d="M380 161 L560 221" class="k draw" data-on="2"/><g data-on="2"><rect x="499" y="223" width="122" height="26" rx="5" class="msg"/><text x="560" y="241" text-anchor="middle" class="mono">second</text></g><text x="560" y="270" text-anchor="middle" class="mono sm t3" data-on="2">receive second</text><g data-on="3"><path d="M200 71 L200 131" class="k"/><path d="M380 71 L380 131" class="k"/><path d="M560 71 L560 131" class="k"/><path d="M200 161 L200 221" class="k"/><path d="M380 161 L380 221" class="k"/><path d="M560 161 L560 221" class="k"/><g><rect x="139" y="133" width="122" height="26" rx="5" class="msg"/><text x="200" y="151" text-anchor="middle" class="mono">&quot;first&quot;</text></g><g><rect x="319" y="133" width="122" height="26" rx="5" class="msg"/><text x="380" y="151" text-anchor="middle" class="mono">&quot;second&quot;</text></g><g><rect x="499" y="133" width="122" height="26" rx="5" class="msg"/><text x="560" y="151" text-anchor="middle" class="mono">&quot;urgent&quot;</text></g><g><rect x="139" y="223" width="122" height="26" rx="5" class="msg"/><text x="200" y="241" text-anchor="middle" class="mono">&quot;first&quot;</text></g><g><rect x="319" y="223" width="122" height="26" rx="5" class="msg"/><text x="380" y="241" text-anchor="middle" class="mono">&quot;second&quot;</text></g><g><rect x="499" y="223" width="122" height="26" rx="5" class="msg"/><text x="560" y="241" text-anchor="middle" class="mono">&quot;urgent&quot;</text></g><text x="380" y="270" text-anchor="middle" class="sm" data-hi="3">a Go channel: in the order sent</text></g><g data-on="4"><circle cx="170" cy="70" r="5" class="dot"/><circle cx="214" cy="70" r="5" class="dot"/><circle cx="258" cy="70" r="5" class="dot"/><circle cx="170" cy="200" r="5" class="hollow"/><circle cx="214" cy="200" r="5" class="hollow"/><circle cx="258" cy="200" r="5" class="hollow"/><path d="M170 76 L170 194" class="k"/><path d="M214 76 L214 194" class="k"/><path d="M258 76 L258 194" class="k"/></g><g data-on="4"><circle cx="330" cy="70" r="5" class="dot"/><circle cx="374" cy="70" r="5" class="dot"/><circle cx="418" cy="70" r="5" class="dot"/><circle cx="330" cy="200" r="5" class="hollow"/><circle cx="374" cy="200" r="5" class="hollow"/><circle cx="418" cy="200" r="5" class="hollow"/><path d="M374 76 L330 194" class="k"/><path d="M330 76 L374 194" class="k"/><path d="M418 76 L418 194" class="k"/></g><g data-on="4"><circle cx="490" cy="70" r="5" class="dot"/><circle cx="534" cy="70" r="5" class="dot"/><circle cx="578" cy="70" r="5" class="dot"/><circle cx="490" cy="200" r="5" class="hollow"/><circle cx="534" cy="200" r="5" class="hollow"/><circle cx="578" cy="200" r="5" class="hollow"/><path d="M578 76 L490 194" class="k"/><path d="M534 76 L534 194" class="k"/><path d="M490 76 L578 194" class="k"/></g><text x="380" y="266" text-anchor="middle" class="sm" data-on="4" data-hi="4">the actor model: any arrival order</text><text x="0" y="75" text-anchor="start" class="sm t2" data-on="4">sent</text><text x="0" y="205" text-anchor="start" class="sm t2" data-on="4">arrived</text></svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0">One process sends itself first, second and {urgent,&nbsp;3}.</p>
+    <p class="fragment current-visible" data-fragment-index="0">Erlang keeps the order between one sender and one receiver for ordinary messages: they arrive in the order sent, so the lines run&nbsp;straight.</p>
+    <p class="fragment current-visible" data-fragment-index="1">The selective receive takes {urgent, 3} first, past the two earlier messages, as the recorded run of mailbox.erl shows: the orange line is the message taken out of order, the other two shift right, and the crossing is the pattern's doing, not the&nbsp;transport's.</p>
+    <p class="fragment current-visible" data-fragment-index="2">A Go channel with one sender and one receiver: the order sent is the order received, and nothing&nbsp;crosses.</p>
+    <p class="fragment current-visible" data-fragment-index="3">The actor model leaves arrival order arbitrary: any of the six orders may arrive, three drawn&nbsp;here.</p>
+  </div>
+  <a class="apx back" href="#/b2-order">back</a>
+  
+</section>
+
+<section id="b2-apx-duplicates">
+  <h2>Duplicates across a&nbsp;network</h2>
+  <div class="s8f w1200 b2-big"><svg class="s8fig" data-last="3" viewBox="0 0 960 300" role="img" aria-label="Two panels: on one node, one send and one arrival; across a network, a call and its retry, both arriving at the callee, the second suppressed" xmlns="http://www.w3.org/2000/svg"><text x="200" y="30" text-anchor="middle" class="hd">one node</text><text x="90" y="70" text-anchor="middle" class="sm">sender</text><text x="310" y="70" text-anchor="middle" class="sm">receiver</text><path d="M90 84 V262" class="lane"/><path d="M310 84 V262" class="lane"/><path d="M90 110 L306 160" class="arr"/><rect x="322" y="148" width="50" height="28" rx="5" class="msg"/><text x="347" y="169" text-anchor="middle" class="mono">m</text><text x="322" y="206" text-anchor="start" class="sm">one arrival</text><text x="720" y="30" text-anchor="middle" class="hd">across a network</text><text x="580" y="70" text-anchor="middle" class="sm">caller</text><text x="860" y="70" text-anchor="middle" class="sm">callee</text><path d="M580 84 V262" class="lane"/><path d="M860 84 V262" class="lane"/><g data-on="1 2 3"><path d="M580 110 L856 160" class="arr"/><text x="690" y="116" text-anchor="middle" class="sm">call</text><rect x="868" y="146" width="70" height="28" rx="5" class="msg"/><text x="903" y="167" text-anchor="middle" class="mono">call</text><path d="M580 190 L856 240" class="arr"/><text x="690" y="196" text-anchor="middle" class="sm">retry</text></g><g data-on="1 2 3" data-hi="1"><rect x="868" y="226" width="70" height="28" rx="5" class="msg"/><text x="903" y="247" text-anchor="middle" class="mono">call</text></g><text x="903" y="290" text-anchor="middle" class="sm" data-on="1" data-hi="1">duplicate</text><path d="M866 254 L940 226" class="k" data-on="2 3" data-hi="2 3"/><text x="903" y="290" text-anchor="middle" class="sm" data-on="2 3" data-hi="2 3">suppressed</text></svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0">On one node, nothing in the systems of this section creates&nbsp;duplicates.</p>
+    <p class="fragment current-visible" data-fragment-index="0">Duplicates arrive with retries across a&nbsp;network.</p>
+    <p class="fragment current-visible" data-fragment-index="1">The remote procedure call protocol of <a class="cite" href="https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf" target="_blank" rel="noopener">Birrell and Nelson&nbsp;(1984)</a> suppressed&nbsp;them.</p>
+    <p class="fragment current-visible" data-fragment-index="2">After an exception, the call had run "either once or not at all—the user is not told which" (<a class="cite" href="https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf" target="_blank" rel="noopener">Birrell and Nelson 1984</a>, p.&nbsp;49).</p>
+  </div>
+  <a class="apx back" href="#/b2-carries">back</a>
+  
+</section>
+<section id="b2-apx-fair-go">
+  <h2>Go's <code>select</code> and eventual&nbsp;service</h2>
+  <div class="s8f w1100 b2-big"><svg class="s8fig" data-last="2" viewBox="0 0 960 290" role="img" aria-label="Runs of one select statement with three ready cases a, b and c; each run takes one of them; case c, ready throughout, is taken at the fifth run" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40" text-anchor="start" class="hd">runs of one <tspan class="mono">select</tspan></text><text x="360" y="40" text-anchor="middle">1</text><text x="460" y="40" text-anchor="middle">2</text><text x="560" y="40" text-anchor="middle">3</text><text x="660" y="40" text-anchor="middle">4</text><text x="760" y="40" text-anchor="middle" data-on="1 2">5</text><text x="860" y="40" text-anchor="middle" data-on="1 2">6</text><text x="290" y="108" text-anchor="end">ready case <tspan class="mono">a</tspan></text><text x="290" y="168" text-anchor="end">ready case <tspan class="mono">b</tspan></text><text x="290" y="228" text-anchor="end" data-hi="1">ready case <tspan class="mono">c</tspan></text><path d="M320 100 H900 M320 160 H900" class="ln"/><path d="M320 220 H900" class="ln" data-hi="1"/><g><circle cx="360" cy="100" r="9" class="hollow"/><circle cx="360" cy="160" r="11" class="dot"/><circle cx="360" cy="220" r="9" class="hollow"/><circle cx="460" cy="100" r="11" class="dot"/><circle cx="460" cy="160" r="9" class="hollow"/><circle cx="460" cy="220" r="9" class="hollow"/><circle cx="560" cy="100" r="9" class="hollow"/><circle cx="560" cy="160" r="11" class="dot"/><circle cx="560" cy="220" r="9" class="hollow"/><circle cx="660" cy="100" r="11" class="dot"/><circle cx="660" cy="160" r="9" class="hollow"/><circle cx="660" cy="220" r="9" class="hollow"/></g><g data-on="1 2"><circle cx="760" cy="100" r="9" class="hollow"/><circle cx="760" cy="160" r="9" class="hollow"/><circle cx="860" cy="100" r="11" class="dot"/><circle cx="860" cy="160" r="9" class="hollow"/><circle cx="860" cy="220" r="9" class="hollow"/></g><circle cx="760" cy="220" r="11" class="dot" data-on="1 2" data-hi="1"/><text x="900" y="272" text-anchor="end" data-on="1 2" data-hi="1">taken eventually, with probability 1, under two assumptions</text></svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0"><b>The rule of the specification.</b> Each time a <code>select</code> runs, one of its ready cases is chosen by uniform pseudo-random selection (<a class="cite" href="https://go.dev/ref/spec" target="_blank" rel="noopener">the Go specification</a>, “Select&nbsp;statements”).</p>
+    <p class="fragment current-visible" data-fragment-index="0"><b>An inference, with probability&nbsp;1.</b> A case that stays ready is taken eventually, if the choices are independent and the goroutine runs the <code>select</code> again and again while the case stays&nbsp;ready.</p>
+    <p class="fragment current-visible" data-fragment-index="1"><b>Not stated by the specification.</b> Eventual service of a ready case, and any order among blocked senders on one&nbsp;channel.</p>
+  </div>
+  <a class="apx back" href="#/b2-fair-table">back</a>
+  
+</section>
+
+<section id="b2-apx-fair-erlang">
+  <h2>Arrival in Erlang's&nbsp;manual</h2>
+  <div class="s8f w1200 b2-big"><svg class="s8fig" data-last="4" viewBox="0 0 960 370" role="img" aria-label="Four rows, each a process P sending to a process R: arrival in R's queue, a terminated receiver, an inactive alias, and two messages kept in order across nodes" xmlns="http://www.w3.org/2000/svg"><g data-on="0 1 2 3 4"><g><rect x="20" y="26" width="70" height="48" rx="6" class="box"/><text x="55.0" y="58.0" text-anchor="middle" class="hd">P</text></g><g data-hi="3"><rect x="600" y="30" width="50" height="40" class="cell"/><rect x="650" y="30" width="50" height="40" class="cell"/><rect x="700" y="30" width="50" height="40" class="cell"/></g><g><rect x="760" y="26" width="70" height="48" rx="6" class="box"/><text x="795.0" y="58.0" text-anchor="middle" class="hd">R</text></g><path d="M90 50 H594" class="arr"/><text x="340" y="36" text-anchor="middle" data-on="0 1 2 4">arrives after a positive time</text></g><text x="340" y="36" text-anchor="middle" data-on="3" data-hi="3">in the queue; handling is R’s own doing</text><g data-hi="3"><rect x="704" y="34" width="42" height="32" rx="5" class="msg"/><text x="725" y="57" text-anchor="middle" class="mono">m</text></g><g data-on="1 2 3 4"><g><rect x="20" y="116" width="70" height="48" rx="6" class="box"/><text x="55.0" y="148.0" text-anchor="middle" class="hd">P</text></g><g><rect x="600" y="120" width="50" height="40" class="cell"/><rect x="650" y="120" width="50" height="40" class="cell"/><rect x="700" y="120" width="50" height="40" class="cell"/></g><g data-hi="1"><rect x="760" y="116" width="70" height="48" rx="6" class="box"/><text x="795.0" y="148.0" text-anchor="middle" class="hd">R</text></g><path d="M90 140 H560" class="arr"/><text x="340" y="126" text-anchor="middle">receiver terminated, or channel down</text></g><g data-on="1 2 3 4" data-hi="1"><rect x="760" y="116" width="70" height="48" rx="6" class="box"/><rect x="760" y="116" width="70" height="48" rx="6" class="hatch"/><path d="M782 127 L808 153 M808 127 L782 153" class="k"/></g><g data-on="2 3 4"><g><rect x="20" y="206" width="70" height="48" rx="6" class="box"/><text x="55.0" y="238.0" text-anchor="middle" class="hd">P</text></g><g><rect x="600" y="210" width="50" height="40" class="cell"/><rect x="650" y="210" width="50" height="40" class="cell"/><rect x="700" y="210" width="50" height="40" class="cell"/></g><g><rect x="760" y="206" width="70" height="48" rx="6" class="box"/><text x="795.0" y="238.0" text-anchor="middle" class="hd">R</text></g><path d="M90 230 H560" class="arr"/><text x="340" y="216" text-anchor="middle">inactive alias: dropped before the queue</text></g><g data-on="2 3 4" data-hi="2"><path d="M565 217 L591 243 M591 217 L565 243" class="k"/></g><g data-on="4"><g><rect x="20" y="296" width="70" height="48" rx="6" class="box"/><text x="55.0" y="328.0" text-anchor="middle" class="hd">P</text></g><g><rect x="600" y="300" width="50" height="40" class="cell"/><rect x="650" y="300" width="50" height="40" class="cell"/><rect x="700" y="300" width="50" height="40" class="cell"/></g><g><rect x="760" y="296" width="70" height="48" rx="6" class="box"/><text x="795.0" y="328.0" text-anchor="middle" class="hd">R</text></g><path d="M90 320 H594" class="arr"/><text x="340" y="306" text-anchor="middle">one pair, two nodes: order kept</text></g><g data-on="4" data-hi="4"><path d="M545 288 V352" class="lane"/><rect x="654" y="304" width="42" height="32" rx="5" class="msg"/><text x="675" y="327" text-anchor="middle" class="mono">m2</text><rect x="704" y="304" width="42" height="32" rx="5" class="msg"/><text x="725" y="327" text-anchor="middle" class="mono">m1</text></g></svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0"><b>Arrival.</b> A signal to a process arrives after an unspecified but positive time (<a class="cite" href="https://www.erlang.org/doc/system/ref_man_processes.html" target="_blank" rel="noopener">the Erlang/OTP reference manual</a>,&nbsp;“Processes”).</p>
+    <p class="fragment current-visible" data-fragment-index="0"><b>The named exceptions.</b> A terminated receiver; a distribution channel that goes&nbsp;down.</p>
+    <p class="fragment current-visible" data-fragment-index="1"><b>The inactive alias.</b> A message sent through an inactive alias is dropped before it enters the&nbsp;queue.</p>
+    <p class="fragment current-visible" data-fragment-index="2"><b>Arrival without handling.</b> Arrival says nothing about the process handling the&nbsp;message.</p>
+    <p class="fragment current-visible" data-fragment-index="3"><b>Order per pair.</b> The order between one pair of processes is kept, even across&nbsp;nodes.</p>
+  </div>
+  <a class="apx back" href="#/b2-fair-table">back</a>
+  
+</section>
+
+<section id="b2-apx-death">
+  <h2>A death reported on one&nbsp;runtime</h2>
+  <div class="s8f w1200 b2-big" style="width:1300px"><svg class="s8fig" data-last="3" viewBox="0 0 960 300" role="img" aria-label="Three panels: the RC 4000 nucleus returns a dummy answer for a removed receiver; an Erlang monitor turns a death into a DOWN message; a plain send to a dead process reports nothing" xmlns="http://www.w3.org/2000/svg"><text x="150" y="30" text-anchor="middle" class="hd">RC 4000 nucleus</text><text x="480" y="30" text-anchor="middle" class="hd">Erlang monitor</text><text x="810" y="30" text-anchor="middle" class="hd" data-on="3">plain send in Erlang</text><path d="M315 10 V300" class="ln"/><path d="M645 10 V300" class="ln"/><g><rect x="20" y="90" width="80" height="48" rx="6" class="box"/><text x="60" y="122" text-anchor="middle" class="hd">S</text></g><g><rect x="200" y="90" width="80" height="48" rx="6" class="box"/><text x="240" y="122" text-anchor="middle" class="hd">R</text></g><path d="M100 114 H196" class="arr"/><g data-on="1 2 3" data-hi="1"><rect x="200" y="90" width="80" height="48" rx="6" class="box"/><rect x="200" y="90" width="80" height="48" rx="6" class="hatch"/><path d="M227 101 L253 127 M253 101 L227 127" class="k"/></g><g><rect x="20" y="236" width="260" height="48" rx="6" class="box"/><text x="150" y="268" text-anchor="middle" class="hd">nucleus</text></g><g data-on="1 2 3" data-hi="1"><path d="M60 236 V144" class="arr"/><text x="76" y="196" text-anchor="start">dummy answer</text></g><g><rect x="350" y="90" width="80" height="48" rx="6" class="box"/><text x="390" y="122" text-anchor="middle" class="hd">P</text></g><g><rect x="530" y="90" width="80" height="48" rx="6" class="box"/><text x="570" y="122" text-anchor="middle" class="hd">R</text></g><path d="M430 114 H526" class="arr2"/><text x="480" y="76" text-anchor="middle">monitor</text><g data-on="2 3" data-hi="2"><rect x="530" y="90" width="80" height="48" rx="6" class="box"/><rect x="530" y="90" width="80" height="48" rx="6" class="hatch"/><path d="M557 101 L583 127 M583 101 L557 127" class="k"/><path d="M570 138 V214 H436" class="arr"/><rect x="352" y="198" width="80" height="32" rx="5" class="msg"/><text x="392" y="221" text-anchor="middle" class="mono">DOWN</text></g><g data-on="3" data-hi="3"><g><rect x="680" y="90" width="80" height="48" rx="6" class="box"/><text x="720" y="122" text-anchor="middle" class="hd">P</text></g><rect x="860" y="90" width="80" height="48" rx="6" class="box"/><rect x="860" y="90" width="80" height="48" rx="6" class="hatch"/><path d="M887 101 L913 127 M913 101 L887 127" class="k"/><path d="M760 114 H856" class="arr"/><text x="810" y="221" text-anchor="middle">no report</text></g></svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0">On one runtime, a death can be reported&nbsp;exactly.</p>
+    <p class="fragment current-visible" data-fragment-index="0"><b>The RC 4000.</b> The nucleus returned a dummy answer (<a class="cite" href="https://www.read.seas.harvard.edu/cs161/2019/pdf/hansen70nucleus.pdf" target="_blank" rel="noopener">Brinch Hansen, 1970</a>, pages 239 to&nbsp;240).</p>
+    <p class="fragment current-visible" data-fragment-index="1"><b>Erlang.</b> A monitor turns a death into a <code>DOWN</code> message (<a class="cite" href="https://www.erlang.org/doc/apps/erts/erlang.html" target="_blank" rel="noopener">the module <code>erlang</code></a>,&nbsp;<code>monitor/2</code>).</p>
+    <p class="fragment current-visible" data-fragment-index="2"><b>A plain send.</b> A plain send to a dead process reports&nbsp;nothing.</p>
+  </div>
+  <a class="apx back" href="#/b2-assumption">back</a>
+  
+</section>
+<!-- appendix of part 10 -->
+<section id="b2-apx-rust-sharing">
+  <h2>Sharing after a send in safe&nbsp;Rust</h2>
+  <p>Safe Rust closes the data-race hole, not the sharing (<a class="cite" href="https://doc.rust-lang.org/book/" target="_blank" rel="noopener"><i>The Rust Programming Language</i></a>, chapter 16;&nbsp;<a class="cite" href="https://doc.rust-lang.org/std/sync/struct.Arc.html" target="_blank" rel="noopener"><code>std::sync::Arc</code></a>).</p>
+  <table class="b2-close">
+    <tr><td>A&nbsp;send</td><td>moves&nbsp;ownership</td></tr>
+    <tr class="fragment" data-fragment-index="0"><td>What stays&nbsp;shared</td><td>an <code>Arc</code>, mutated only through a type that synchronizes its own&nbsp;access:<br>a&nbsp;<code>Mutex</code><br>an&nbsp;<code>RwLock</code><br>an&nbsp;atomic<br>a&nbsp;<code>OnceLock</code></td></tr>
+    <tr class="fragment" data-fragment-index="1"><td>Safe&nbsp;code</td><td>the type system forbids unsynchronized conflicting accesses, not shared&nbsp;state</td></tr>
+    <tr class="fragment" data-fragment-index="2"><td>Unsound <code>unsafe</code>&nbsp;code</td><td>reopens the&nbsp;hole</td></tr>
+  </table>
+  <a class="apx back" href="#/b2-shared-pointer">back</a>
+  
+</section>
+<section id="b2-apx-encoding-limits">
+  <h2>Limits of the mutual encodings of channels and&nbsp;actors</h2>
+  <p class="def"><b>Mixed choice</b>: a choice that waits on a send and a receive at&nbsp;once.</p>
+  <table class="b2-cmp b2-sem">
+    <tr><th></th><th>Mixed&nbsp;choice</th><th>Fairness</th></tr>
+    <tr class="fragment" data-fragment-index="0"><td>The calculi&nbsp;studied</td><td>no uniform encoding in the asynchronous π-calculus that preserves a reasonable semantics (<a class="cite" href="https://arxiv.org/abs/cs/9809008" target="_blank" rel="noopener">Palamidessi 1997</a>); a choice among inputs only can be encoded (<a class="cite" href="https://www.brics.dk/RS/99/42/BRICS-RS-99-42.pdf" target="_blank" rel="noopener">Nestmann and Pierce&nbsp;1996</a>)</td><td>no fairness assumption carried across by the translations&nbsp;studied</td></tr>
+    <tr class="fragment" data-fragment-index="1"><td>Go</td><td><code>select</code> offers&nbsp;it</td><td>channels guarantee no eventual&nbsp;delivery</td></tr>
+    <tr class="fragment" data-fragment-index="2"><td>Actors</td><td>pure actors cannot express it&nbsp;directly</td><td>eventual delivery assumed (<a class="cite" href="https://dspace.mit.edu/handle/1721.1/6952" target="_blank" rel="noopener">Agha 1985</a>, page&nbsp;23)</td></tr>
+  </table>
+  <div class="box fragment" data-fragment-index="3">Fairness has to be assumed on each side&nbsp;separately.</div>
+  <a class="apx back" href="#/b2-pi-calculus">back</a>
+  
+</section>
+<section id="b2-apx-mixed-choice-survey">
+  <h2>Mixed choice in the survey of&nbsp;1983</h2>
+  <div class="s8f b2-big w1100"><svg class="s8fig" data-last="1" viewBox="0 0 1100 320" role="img" aria-label="The survey's open problem on the left, Palamidessi's result and uniformity criterion on the right, joined by a dashed arrow: the lecture's link" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="20" width="440" height="280" rx="8" class="box"/>
+    <text x="240" y="70" text-anchor="middle" class="hd">the survey (1983), page 29</text>
+    <text x="240" y="128" text-anchor="middle">send and receive statements</text>
+    <text x="240" y="160" text-anchor="middle">in the same guards:</text>
+    <text x="240" y="240" text-anchor="middle">“an active research area”</text>
+    <g data-on="1" data-hi="1">
+      <path d="M464 160 H636" class="arr2"/>
+      <text x="550" y="140" text-anchor="middle" class="sm">the lecture's link</text>
+    </g>
+    <g data-on="1">
+      <rect x="640" y="20" width="440" height="280" rx="8" class="box"/>
+      <text x="860" y="70" text-anchor="middle" class="hd">Palamidessi (1997)</text>
+      <text x="860" y="128" text-anchor="middle">no uniform encoding</text>
+      <text x="860" y="160" text-anchor="middle">of mixed choice</text>
+      <text x="860" y="212" text-anchor="middle">uniformity (§6): a distributed</text>
+      <text x="860" y="244" text-anchor="middle">implementation without</text>
+      <text x="860" y="276" text-anchor="middle">a central coordinator</text>
+    </g>
+  </svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0">Mixed choice is the problem of send and receive statements in the same guards, which the 1983 survey called "an active research area" (<a class="cite" href="https://www.cs.cornell.edu/fbs/publications/LangSurv.pdf" target="_blank" rel="noopener">Andrews and Schneider</a>, page&nbsp;29).</p>
+    <p class="fragment current-visible" data-fragment-index="0"><a class="cite" href="https://arxiv.org/abs/cs/9809008" target="_blank" rel="noopener">Palamidessi</a>'s uniformity criterion models a distributed implementation without a central coordinator (§6); reading the survey's problem as that requirement is the lecture's own&nbsp;link.</p>
+  </div>
+  <a class="apx back" href="#/b2-pi-calculus">back</a>
+  
+</section>
+<section id="b2-apx-rc4000">
+  <h2>The RC 4000 compared with actors and&nbsp;channels</h2>
+  <div class="s8f b2-big w1200"><svg class="s8fig" data-last="3" viewBox="0 0 1200 400" role="img" aria-label="The RC 4000 nucleus with its request queue and its identified replies; the request half leads to the actor column, the identified reply to a channel" xmlns="http://www.w3.org/2000/svg">
+    <rect x="380" y="20" width="440" height="350" rx="10" class="room"/>
+    <text x="600" y="58" text-anchor="middle" class="hd">RC 4000 nucleus (1969)</text>
+    <path d="M412 108 L516 140" class="arr"/><path d="M412 196 L516 164" class="arr"/>
+    <rect x="520" y="130" width="50" height="44" class="cell"/><rect x="570" y="130" width="50" height="44" class="cell"/><rect x="620" y="130" width="50" height="44" class="cell"/>
+    <path d="M672 152 H696" class="arr"/>
+    <rect x="700" y="127" width="90" height="50" rx="6" class="box"/><text x="745" y="160" text-anchor="middle">P</text>
+    <text x="600" y="222" text-anchor="middle">requests: one queue,</text>
+    <text x="600" y="252" text-anchor="middle" data-hi="2">served in arrival order</text>
+    <g data-on="1 2 3">
+      <rect x="420" y="272" width="90" height="50" rx="6" class="box"/><text x="465" y="305" text-anchor="middle">S</text>
+      <rect x="700" y="272" width="90" height="50" rx="6" class="box"/><text x="745" y="305" text-anchor="middle">P</text>
+      <path d="M698 297 H514" class="arr"/>
+      <rect x="550" y="279" width="110" height="36" rx="6" class="ident"/><text x="605" y="305" text-anchor="middle" class="ident-t">buffer</text>
+      <text x="600" y="352" text-anchor="middle" data-hi="2">replies: identified, not contested</text>
+    </g>
+    <g data-on="3" data-hi="3">
+      <path d="M376 152 H326" class="arr"/>
+      <rect x="20" y="100" width="300" height="104" rx="8" class="box"/>
+      <text x="170" y="142" text-anchor="middle" class="hd">the actor column</text>
+      <text x="170" y="178" text-anchor="middle">the request half</text>
+      <path d="M824 297 H874" class="arr"/>
+      <rect x="880" y="245" width="300" height="104" rx="8" class="box"/>
+      <text x="1030" y="287" text-anchor="middle" class="hd">a channel</text>
+      <text x="1030" y="323" text-anchor="middle">the identified reply</text>
+    </g>
+  </svg></div>
+  <div class="b2-defs b2-cap">
+    <p class="fragment fade-out" data-fragment-index="0">The machine of 1969 belongs in the actor column for its requests: one queue per process, served in arrival&nbsp;order.</p>
+    <p class="fragment current-visible" data-fragment-index="0">Its replies are identified conversations that no process contests, the idea that Go's reply channel and Erlang's reference both&nbsp;reuse.</p>
+    <p class="fragment current-visible" data-fragment-index="1">One system used two of the three resolutions by default; its two further primitives also let a program&nbsp;choose.</p>
+    <p class="fragment current-visible" data-fragment-index="2">The lecture's two blocks are the identified reply taken to its full form as a channel, and the request half taken to its full&nbsp;form.</p>
+  </div>
+  <a class="apx back" href="#/b2-actors-channels">back</a>
+  
+</section>
+<section id="b2-apx-earlier-accounts">
+  <h2>Earlier accounts of the lecture's&nbsp;argument</h2>
+  <table class="b2-close">
+    <tr><td style="width: 32%"><a class="cite" href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-1.pdf" target="_blank" rel="noopener">Lee</a> (2006), <i>The Problem with&nbsp;Threads</i></td><td>threads "wildly nondeterministic" (page 5); Kahn networks deterministic by their blocking reads (page&nbsp;11)<span class="fragment" data-fragment-index="0"><br>nondeterminism "explicit in programs" (page 15), for example an explicit "NondeterministicMerge" (page&nbsp;11)</span></td></tr>
+    <tr class="fragment" data-fragment-index="1"><td><a class="cite" href="https://ptolemy.berkeley.edu/publications/papers/95/processNets/proceedings.pdf" target="_blank" rel="noopener">Lee and Parks</a> (1995), <i>Dataflow Process&nbsp;Networks</i></td><td>§2.2: the ways nondeterminism enters a Kahn network, the list of part&nbsp;4</td></tr>
+    <tr class="fragment" data-fragment-index="2"><td><a class="cite" href="https://webperso.info.ucl.ac.be/~pvr/book.html" target="_blank" rel="noopener">Van Roy and Haridi</a> (2004), <i>CTM</i>, chapters 4 to&nbsp;5</td><td>deterministic dataflow first, then ports, since in client/server "the order of the requests cannot be determined in advance" (UCLouvain's <a class="cite" href="https://webperso.info.ucl.ac.be/~pvr/linfo1131-cours5Hand.pdf" target="_blank" rel="noopener">LINFO1131</a>, lecture&nbsp;5)</td></tr>
+    <tr class="fragment" data-fragment-index="3"><td><a class="cite" href="https://drops.dagstuhl.de/storage/00lipics/lipics-vol074-ecoop2017/LIPIcs.ECOOP.2017.11/LIPIcs.ECOOP.2017.11.pdf" target="_blank" rel="noopener">Fowler, Lindley and Wadler</a>&nbsp;(2017)</td><td>typed translations between asynchronous channels without choice and actors; input-guarded choice added, its emulation by actors left&nbsp;open</td></tr>
+    <tr class="fragment" data-fragment-index="4"><td>The lecture's&nbsp;addition</td><td>the RC 4000<br>the resolution of a contest as the comparison's&nbsp;axis</td></tr>
+  </table>
+  <a class="apx back" href="#/b2-summary">back</a>
   
 </section>
 
