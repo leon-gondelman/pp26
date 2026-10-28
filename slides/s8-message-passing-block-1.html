@@ -1422,6 +1422,21 @@ html.print-pdf .reveal .b1-defs > *, html.reveal-print .reveal .b1-defs > * { gr
   
 </section>
 
+<section id="b1-previously">
+  <h2>Previously: shared memory and the scheduler (session&nbsp;7)</h2>
+  <pre class="b1-sketch" data-lines="1:0;2:1"><code class="language-java">// two threads run this at once, from balance = 100
+int b = balance;      // both may read 100
+balance = b + 50;     // both write 150</code></pre>
+  <ol class="b1-items">
+    <li class="fragment" data-fragment-index="0" data-lit="0">Threads share memory; the scheduler decides how their steps&nbsp;interleave.</li>
+    <li class="fragment" data-fragment-index="1" data-lit="1">Any conflicting, unordered access can change the&nbsp;result.</li>
+    <li class="fragment" data-fragment-index="2" data-lit="2">Nothing in the program text marks which accesses those&nbsp;are.</li>
+  </ol>
+  <div class="s8f w1000 fragment" data-fragment-index="1"><svg class="s8fig" data-last="0" viewBox="20 312 910 140" role="img" aria-label="The six schedules of the two deposits: two end at 200, four at 150" xmlns="http://www.w3.org/2000/svg"><g><rect x="30" y="322" width="130" height="86" rx="5" class="cell"/><path d="M62 346 L62 384 L128 346 L128 384" class="k"/><circle cx="62" cy="346" r="4" class="dot"/><circle cx="62" cy="384" r="4" class="dot"/><circle cx="128" cy="346" r="4" class="dot"/><circle cx="128" cy="384" r="4" class="dot"/><text x="95" y="440" text-anchor="middle" class="mono">200</text></g><g class="hi"><rect x="182" y="322" width="130" height="86" rx="5" class="cell"/><path d="M214 346 L280 346 L214 384 L280 384" class="k2"/><circle cx="214" cy="346" r="4" class="dot"/><circle cx="280" cy="346" r="4" class="dot"/><circle cx="214" cy="384" r="4" class="dot"/><circle cx="280" cy="384" r="4" class="dot"/><text x="247" y="440" text-anchor="middle" class="mono">150</text></g><g class="hi"><rect x="334" y="322" width="130" height="86" rx="5" class="cell"/><path d="M366 346 L432 346 L432 384 L366 384" class="k2"/><circle cx="366" cy="346" r="4" class="dot"/><circle cx="432" cy="346" r="4" class="dot"/><circle cx="432" cy="384" r="4" class="dot"/><circle cx="366" cy="384" r="4" class="dot"/><text x="399" y="440" text-anchor="middle" class="mono">150</text></g><g class="hi"><rect x="486" y="322" width="130" height="86" rx="5" class="cell"/><path d="M584 346 L518 346 L518 384 L584 384" class="k2"/><circle cx="584" cy="346" r="4" class="dot"/><circle cx="518" cy="346" r="4" class="dot"/><circle cx="518" cy="384" r="4" class="dot"/><circle cx="584" cy="384" r="4" class="dot"/><text x="551" y="440" text-anchor="middle" class="mono">150</text></g><g class="hi"><rect x="638" y="322" width="130" height="86" rx="5" class="cell"/><path d="M736 346 L670 346 L736 384 L670 384" class="k2"/><circle cx="736" cy="346" r="4" class="dot"/><circle cx="670" cy="346" r="4" class="dot"/><circle cx="736" cy="384" r="4" class="dot"/><circle cx="670" cy="384" r="4" class="dot"/><text x="703" y="440" text-anchor="middle" class="mono">150</text></g><g><rect x="790" y="322" width="130" height="86" rx="5" class="cell"/><path d="M888 346 L888 384 L822 346 L822 384" class="k"/><circle cx="888" cy="346" r="4" class="dot"/><circle cx="888" cy="384" r="4" class="dot"/><circle cx="822" cy="346" r="4" class="dot"/><circle cx="822" cy="384" r="4" class="dot"/><text x="855" y="440" text-anchor="middle" class="mono">200</text></g></svg></div>
+  <p class="def b1-ask fragment" data-fragment-index="3">This block takes the shared data away. What remains of the scheduler's choice comes down to two parameters: how a contested communication is resolved, and how much a channel&nbsp;holds.</p>
+  
+</section>
+
 <section id="b1-plan">
   <h2>The topics of the two blocks and the&nbsp;lab</h2>
   <table class="b1-close">
