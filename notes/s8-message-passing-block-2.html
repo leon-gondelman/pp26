@@ -536,14 +536,14 @@ nav.nside-pane .nside-short{display:inline}
 <li>Message passing must be asynchronous: &quot;If process communication is synchronous then a software error in the receiver of a message could indefinitely block the sender of the message destroying the property of isolation&quot;<sup><a href="#b2-src-armstrong2003">4</a></sup> (p.&nbsp;23).</li>
 <li>Delivery is not guaranteed (across nodes, or to a dead process; section 10). The sender can learn that a message arrived only from a confirmation sent back<sup><a href="#b2-src-armstrong2003">4</a></sup> (pp.&nbsp;22–23).</li>
 </ol>
-<p>Armstrong calls the result &quot;send and pray&quot;<sup><a href="#b2-src-armstrong2003">4</a></sup> (p. 25). The argument has two gaps. Step 3 assumes a synchronous send with no timeout, which a timed send would bound. And an unbounded mailbox leaves one shared resource, the node's memory, which a stuck receiver's mailbox can exhaust for every process; Armstrong concedes a version of this himself, for operating-system processes that share one CPU and one memory, calling isolation &quot;only true to a first approximation&quot;<sup><a href="#b2-src-armstrong2003">4</a></sup> (p. 17). Erlang then adds back one guarantee as &quot;a design decision&quot;: messages between a given pair of processes arrive in the order sent<sup><a href="#b2-src-armstrong2003">4</a></sup> (p. 25). Across different senders no order is guaranteed, and how their messages interleave depends on the&nbsp;scheduling.</p>
+<p>Armstrong calls the result &quot;send and pray&quot;<sup><a href="#b2-src-armstrong2003">4</a></sup> (p. 25). The argument has two gaps. Step 3 assumes a synchronous send with no timeout, which a timed send would bound. And an unbounded mailbox leaves one shared resource, the node's memory, which a stuck receiver's mailbox can exhaust for every process; Armstrong concedes a version of this himself, for operating-system processes that share one CPU and one memory, calling isolation &quot;only true to a first approximation&quot;<sup><a href="#b2-src-armstrong2003">4</a></sup> (p. 17). Erlang then adds back one guarantee as &quot;a design decision&quot;: messages between a given pair of processes arrive in the order sent<sup><a href="#b2-src-armstrong2003">4</a></sup> (p. 25). The reference manual states that guarantee for signals; in the message queue it holds for ordinary messages and the default mailbox, since a receiver that has enabled priority messages, as of OTP 28.0, queues them ahead of ordinary ones, so that two messages from one sender can stand in the queue in another order than they were sent<sup><a href="#b2-src-erlang-otp-docs">5</a></sup> (&quot;Processes&quot;). Across different senders no order is guaranteed, and how their messages interleave depends on the&nbsp;scheduling.</p>
 <h3 id="mailbox-semantics-in-erlang">Mailbox semantics in&nbsp;Erlang</h3>
 <p>The semantics are observable in a running system, for ordinary messages and the default mailbox; since OTP 28.0 a process may enable priority messages, which are queued ahead of ordinary ones<sup><a href="#b2-src-erlang-otp-docs">5</a></sup>, and the text leaves them aside. The recorded run of <code>mailbox.erl</code> exhibits four&nbsp;behaviours:</p>
 <ul>
 <li>A send returns before any process&nbsp;receives.</li>
 <li>Each sender's own order is&nbsp;kept.</li>
 <li>A selective <code>receive</code> takes a matching message from behind two earlier ones, so a mailbox is not a queue read from the front. <span class="xref-pending" data-xref="lab8">In the lab</span>, the quest's extra adds selective receive to the&nbsp;mailbox.</li>
-<li>A send to the pid of a dead process returns normally and nothing reports the loss; a send to a registered name that no longer exists raises <code>badarg</code> (run, OTP&nbsp;29).</li>
+<li>A send to the pid of a dead process returns normally and nothing reports the loss; a send to a registered name that no longer exists raises <code>badarg</code> (<code>registered_send.erl</code>, run on record, OTP&nbsp;29).</li>
 </ul>
 <p>The last point is where Erlang and the RC 4000 differ: the RC 4000 returns a dummy answer. With a monitor, a partner's death becomes an ordinary message, <code>{'DOWN', Ref, process, Pid,&nbsp;Reason}</code><sup><a href="#b2-src-erlang-otp-docs">5</a></sup>.</p>
 <h3 id="the-lost-update-across-two-messages">The lost update across two&nbsp;messages</h3>
@@ -593,7 +593,7 @@ nav.nside-pane .nside-short{display:inline}
 </tr>
 <tr>
 <td>Erlang</td>
-<td>per pair of processes<sup><a href="#b2-src-armstrong2003">4</a></sup>; selective receive can take a later message&nbsp;first<sup><a href="#b2-src-erlang-otp-docs">5</a></sup></td>
+<td>per pair of processes<sup><a href="#b2-src-armstrong2003">4</a></sup>, for ordinary messages and the default mailbox; with priority messages enabled (OTP 28.0 and later), two messages of one sender can stand in the queue out of their sending order<sup><a href="#b2-src-erlang-otp-docs">5</a></sup>; selective receive can take a later message&nbsp;first<sup><a href="#b2-src-erlang-otp-docs">5</a></sup></td>
 </tr>
 <tr>
 <td>RC&nbsp;4000</td>
@@ -609,7 +609,7 @@ nav.nside-pane .nside-short{display:inline}
 <li>Rust moves ownership with the send for a value that is not <code>Copy</code>; a <code>Copy</code> value is copied, and an <code>Arc</code> moves a handle to data that stays shared<sup><a href="#b2-src-rust-book">9</a>,<a href="#b2-src-rust-std-docs">10</a></sup> (16.2 and 16.3;&nbsp;<code>std::sync::Arc</code>).</li>
 </ul>
 <p>On one node, nothing in the systems of this section creates duplicates. Duplicates arrive with retries across a network; Birrell and Nelson's protocol suppressed them, and after an exception the call had run &quot;either once or not at all--the user is not told which&quot;<sup><a href="#b2-src-birrell-nelson1984">11</a></sup> (p.&nbsp;49).</p>
-<p>The section has settled the actor family: a send that returns at once into the mailbox of one named receiver, an order of arrival that the model leaves arbitrary and Erlang fixes per pair of processes, a delivery that the model assumes, and a race between messages that takes the place of the data race. What it leaves to the next section is fairness, of which the assumed delivery is one form, and how the two families state&nbsp;it.</p>
+<p>The section has settled the actor family: a send that returns at once into the mailbox of one named receiver, an order of arrival that the model leaves arbitrary and Erlang fixes per pair of processes for ordinary messages, a delivery that the model assumes, and a race between messages that takes the place of the data race. What it leaves to the next section is fairness, of which the assumed delivery is one form, and how the two families state&nbsp;it.</p>
 <hr />
 </section>
 
