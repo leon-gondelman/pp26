@@ -46,12 +46,12 @@ let () =
   let b = V.create () in
   let ta = Tvar a in
   let tb = Tvar b in
-  assert (head ta = ta);
-  assert (head tb = tb);
+  assert (head ta == ta);
+  assert (head tb == tb);
   let ty = Tarrow (ta, tb) in
   a.def <- Some tb;
-  assert (head ta = tb);
-  assert (head tb = tb);
+  assert (head ta == tb);
+  assert (head tb == tb);
   b.def <- Some Tint;
   assert (head ta = Tint);
   assert (head tb = Tint);
@@ -98,11 +98,11 @@ let () =
   let ty = Tarrow (ta, tb) in
   assert (occur a ty);
   assert (occur b ty);
-  (* unifie 'a-> 'b et int->int *)
+  (* unifies 'a-> 'b and int->int *)
   unify ty (Tarrow (Tint, Tint));
   assert (canon ta = Tint);
   assert (canon ty = Tarrow (Tint, Tint));
-  (* unifie 'c et int->int *)
+  (* unifies 'c and int->int *)
   let c = V.create () in
   let tc = Tvar c in
   unify tc ty;
@@ -122,16 +122,10 @@ let () =
 
 module Vset = Set.Make(V)
 
-type schema = { vars : Vset.t; typ : typ }
-
-
 let rec fvars t = match head t with
   | Tint -> Vset.empty
   | Tarrow (t1, t2) | Tproduct (t1, t2) -> Vset.union (fvars t1) (fvars t2)
   | Tvar v -> Vset.singleton v
-
-let norm_varset s =
-  Vset.fold (fun v s -> Vset.union (fvars (Tvar v)) s) s Vset.empty
 
 let () =
   assert (Vset.is_empty (fvars (Tarrow (Tint, Tint))));
@@ -141,6 +135,11 @@ let () =
   assert (Vset.equal (fvars ty) (Vset.singleton a));
   unify ty (Tarrow (Tint, Tint));
   assert (Vset.is_empty (fvars ty))
+
+type schema = { vars : Vset.t; typ : typ }
+
+let norm_varset s =
+  Vset.fold (fun v s -> Vset.union (fvars (Tvar v)) s) s Vset.empty
 
 module Smap = Map.Make(String)
 
@@ -217,7 +216,7 @@ let rec w env e = match e with
 
 let typeof e = canon (w empty e)
 
-(* positifs *)
+(* positive tests *)
 
 (* 1 : int *)
 let () = assert (typeof (Const 1) = Tint)
@@ -269,7 +268,7 @@ let () =
         V.equal v1 v3 && V.equal v2 v4
     | _ -> false)
 
-(* negatifs *)
+(* negative tests *)
 
 let cant_type e =
   try let _ = typeof e in false with UnificationFailure _ -> true

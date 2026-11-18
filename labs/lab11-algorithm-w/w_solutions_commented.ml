@@ -102,12 +102,12 @@ let () =
   let b = V.create () in
   let ta = Tvar a in
   let tb = Tvar b in
-  assert (head ta = ta);
-  assert (head tb = tb);
+  assert (head ta == ta);
+  assert (head tb == tb);
   let ty = Tarrow (ta, tb) in
   a.def <- Some tb;
-  assert (head ta = tb);
-  assert (head tb = tb);
+  assert (head ta == tb);
+  assert (head tb == tb);
   b.def <- Some Tint;
   assert (head ta = Tint);
   assert (head tb = Tint);
@@ -179,11 +179,11 @@ let () =
   let ty = Tarrow (ta, tb) in
   assert (occur a ty);
   assert (occur b ty);
-  (* unifie 'a-> 'b et int->int *)
+  (* unifies 'a-> 'b and int->int *)
   unify ty (Tarrow (Tint, Tint));
   assert (canon ta = Tint);
   assert (canon ty = Tarrow (Tint, Tint));
-  (* unifie 'c et int->int *)
+  (* unifies 'c and int->int *)
   let c = V.create () in
   let tc = Tvar c in
   unify tc ty;
@@ -212,27 +212,12 @@ let () =
    operations. The sets are immutable. *)
 module Vset = Set.Make(V)
 
-(* A type scheme: the type typ, in which the variables of the set vars
-   are the quantified ones. With vars = {'a} and typ = 'a -> 'a the scheme
-   is "for all 'a, 'a -> 'a". A scheme with an empty set is an ordinary
-   type. *)
-type schema = { vars : Vset.t; typ : typ }
-
-
 (* The free variables of a type: its undefined variables. head removes
    the defined ones before each inspection. *)
 let rec fvars t = match head t with
   | Tint -> Vset.empty
   | Tarrow (t1, t2) | Tproduct (t1, t2) -> Vset.union (fvars t1) (fvars t2)
   | Tvar v -> Vset.singleton v
-
-(* A set of variables recorded earlier can be out of date: unification
-   may have defined some of them since. norm_varset replaces each variable
-   v of the set by the free variables of Tvar v: v itself when v is
-   still undefined, the variables of its definition otherwise. Vset.fold
-   calls the function on each element, with the set built so far. *)
-let norm_varset s =
-  Vset.fold (fun v s -> Vset.union (fvars (Tvar v)) s) s Vset.empty
 
 let () =
   assert (Vset.is_empty (fvars (Tarrow (Tint, Tint))));
@@ -245,6 +230,20 @@ let () =
 
 (* ---------------------------------------------------------------------- *)
 (* Question 4. Typing environment *)
+
+(* A type scheme: the type typ, in which the variables of the set vars
+   are the quantified ones. With vars = {'a} and typ = 'a -> 'a the scheme
+   is "for all 'a, 'a -> 'a". A scheme with an empty set is an ordinary
+   type. *)
+type schema = { vars : Vset.t; typ : typ }
+
+(* A set of variables recorded earlier can be out of date: unification
+   may have defined some of them since. norm_varset replaces each variable
+   v of the set by the free variables of Tvar v: v itself when v is
+   still undefined, the variables of its definition otherwise. Vset.fold
+   calls the function on each element, with the set built so far. *)
+let norm_varset s =
+  Vset.fold (fun v s -> Vset.union (fvars (Tvar v)) s) s Vset.empty
 
 (* Map.Make is the functor of dictionaries: Smap is a module of immutable
    dictionaries with strings as keys, and schema Smap.t is the type of
@@ -395,7 +394,7 @@ let rec w env e = match e with
 (* The type of a closed expression, normalized by canon. *)
 let typeof e = canon (w empty e)
 
-(* positifs *)
+(* positive tests *)
 
 (* 1 : int *)
 let () = assert (typeof (Const 1) = Tint)
@@ -454,7 +453,7 @@ let () =
         V.equal v1 v3 && V.equal v2 v4
     | _ -> false)
 
-(* negatifs *)
+(* negative tests *)
 
 (* true when the typing of e fails on a unification. *)
 let cant_type e =
