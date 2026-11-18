@@ -60,8 +60,9 @@ end
    long as there is one. The pattern  Tvar { def = Some t }  matches a
    defined variable, whatever its id (a record pattern may leave fields
    out). The result is never a defined variable: it is Tint, an arrow, a
-   product or an undefined variable. Every function below calls head
-   before it looks at the shape of a type. *)
+   product or an undefined variable. The functions of the algorithm
+   (occur, unify, fvars, find) call head before they look at the shape of
+   a type; the printers do not, and show a defined variable as it is. *)
 let rec head t = match t with
   | Tvar { def = Some t } -> head t
   | t -> t
@@ -78,7 +79,7 @@ let rec canon t = match head t with
 (* tests *)
 (* Three mutually recursive printers, for the module Format: the
    directive %a takes a printer and a value. A defined variable is printed
-   with its definition, '1 := int. *)
+   with its definition, ('1 := int). *)
 let rec pp_typ fmt t = match t with
   | Tproduct (t1, t2) -> Format.fprintf fmt "%a *@ %a" pp_atom t1 pp_atom t2
   | Tarrow (t1, t2) -> Format.fprintf fmt "%a ->@ %a" pp_atom t1 pp_typ t2
@@ -258,6 +259,7 @@ module Smap = Map.Make(String)
    braces. *)
 type env = { bindings : schema Smap.t; fvars : Vset.t }
 
+(* The environment with no entry. *)
 let empty = { bindings = Smap.empty; fvars = Vset.empty }
 
 (* add gen x t env returns the environment env extended with x of type
@@ -338,7 +340,8 @@ type expression =
   | Let of string * expression * expression
 
 (* w env e returns the type of e in the environment env, or raises
-   UnificationFailure. The type returned may contain variables defined on
+   UnificationFailure when e is ill-typed (Not_found for a variable that
+   is not bound, Failure for an unknown operator). The type returned may contain variables defined on
    the way; typeof below normalizes it. One case for each construct:
 
      - Var x: an instance of the scheme of x (instantiation);
@@ -353,7 +356,7 @@ type expression =
      - App (e1, e2): the type t1 of e1 has to be an arrow from the type
        t2 of e2 to some result. A fresh variable v stands for that result,
        unifying t1 with t2 -> v finds it, and v is the type of the
-       application. Every type error of mini-ML is a failure of this
+       application. Every type mismatch of mini-ML is a failure of this
        unification;
      - Let (x, e1, e2): the type of e1 is generalized, and e2 is typed
        with x bound to the scheme. This is the one place where
@@ -441,7 +444,7 @@ let () =
 
 (* app = fun f x -> let y = f x in y : ('a -> 'b) -> 'a -> 'b *)
 (* The type of y contains a variable that is free in the environment,
-   through the types of f and x: it is not generalized. *)
+   through the type of f: it is not generalized. *)
 let () =
   let ty =
     typeof (Fun ("f", Fun ("x", Let ("y", App (Var "f", Var "x"), Var "y"))))
@@ -453,6 +456,7 @@ let () =
 
 (* negatifs *)
 
+(* true when the typing of e fails on a unification. *)
 let cant_type e =
   try let _ = typeof e in false with UnificationFailure _ -> true
 

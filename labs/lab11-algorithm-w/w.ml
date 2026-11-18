@@ -1,7 +1,7 @@
 (* Lab Session: Algorithm W (by Jean-Christophe Filliatre)
 
    The file the quest starts from: the types and the code that the page
-   gives, a hole for each function to write, and the tests of the page.
+   gives, a hole for each definition to write, and the tests of the page.
    A hole is the expression  failwith "TODO" . *)
 
 (* ---------------------------------------------------------------------- *)
