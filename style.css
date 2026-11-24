@@ -796,6 +796,8 @@ table.sessions td.ttl{padding-right:.8rem}
   table.sessions td.labhead .lw{display:block;margin-top:.5rem;padding-top:0}
   /* a session not out yet shows its lab's two lines, without files */
   table.sessions td.mat.labhead:has(.lab-m){display:block}
+  /* a session with one line in place of materials (not given, help, to be announced) shows it */
+  table.sessions td.mat.labhead:has(>.dim){display:block;margin-top:.5rem;white-space:normal}
   .screen.tail>section{scroll-snap-align:start}
   footer.site{scroll-snap-align:end}
 }
